@@ -3,7 +3,7 @@
 
 #include <cmath>
 #include "Matrix.hpp"
-#include "Vector.hpp"
+#include "VectorClass.hpp"
 
 namespace JEBMath { namespace Transforms {
 
