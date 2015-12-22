@@ -15,12 +15,14 @@ add_subdirectory(Externals)
 set(PUBLIC_HEADERS_XYZ
     Xyz/Matrix.hpp
     Xyz/Vector.hpp
+    Xyz/Xyz.hpp
     )
 
 set(PUBLIC_HEADERS_FUNDAMENTALS
     Xyz/Fundamentals/MatrixClass.hpp
     Xyz/Fundamentals/MatrixFunctions.hpp
     Xyz/Fundamentals/MatrixOperators.hpp
+    Xyz/Fundamentals/Transforms.hpp
     Xyz/Fundamentals/VectorClass.hpp
     Xyz/Fundamentals/VectorFunctions.hpp
     Xyz/Fundamentals/VectorOperators.hpp
