@@ -10,7 +10,7 @@
 #include "../../Externals/Ytest/Ytest.hpp"
 #include "../../Xyz/Utilities/Utilities.hpp"
 
-namespace H = Xyz::HomogeneousTranforms;
+namespace H = Xyz::HomogeneousTransforms;
 namespace TH =  Xyz::TransposedHomogeneousTransforms;
 
 namespace Ytest

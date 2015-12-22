@@ -83,30 +83,28 @@ namespace Xyz { namespace Transforms {
     }
 }}
 
-namespace Xyz { namespace HomogeneousTranforms {
+namespace Xyz { namespace HomogeneousTransforms {
 
-    template <unsigned N, typename T>
-    Matrix<T, N> scale(T s)
+    template <typename T>
+    Matrix<T, 3> scale(T s)
     {
-        Matrix<T, N> m;
-        for (unsigned i = 0; i < N - 1; ++i)
-            m[i][i] = s;
-        m[N - 1][N - 1] = 1;
-        return m;
-    }
-
-    template <unsigned N, typename T>
-    Matrix<T, N + 1> scale(const Vector<T, N>& s)
-    {
-        Matrix<T, N> m;
-        for (unsigned i = 0; i < N; ++i)
-            m[i][i] = s[i];
-        m[N][N] = 1;
-        return m;
+        return Matrix<T, 3>{
+                s, 0, 0,
+                0, s, 0,
+                0, 0, 1};
     }
 
     template <typename T>
-    Matrix <T, 3> rotate3(T angle)
+    Matrix<T, 3> scale3(const Vector<T, 2>& s)
+    {
+        return Matrix<T, 3>{
+                s[0], 0, 0,
+                0, s[1], 0,
+                0, 0, 1};
+    }
+
+    template <typename T>
+    Matrix<T, 3> rotate3(T angle)
     {
         auto c = std::cos(angle);
         auto s = std::sin(angle);
@@ -114,6 +112,35 @@ namespace Xyz { namespace HomogeneousTranforms {
                 c, -s, 0,
                 s, c, 0,
                 0, 0, 1};
+    }
+
+    template <typename T>
+    Matrix<T, 3> translate3(const Vector<T, 2>& offsets)
+    {
+        return Matrix<T, 4>{
+                1, 0, offsets[0],
+                0, 1, offsets[1],
+                0, 0, 1};
+    }
+
+    template <typename T>
+    Matrix<T, 4> scale4(T s)
+    {
+        return Matrix<T, 4>{
+                s, 0, 0, 0,
+                0, s, 0, 0,
+                0, 0, s, 0,
+                0, 0, 0, 1};
+    }
+
+    template <typename T>
+    Matrix<T, 4> scale4(const Vector<T, 3>& s)
+    {
+        return Matrix<T, 4>{
+                s[0], 0, 0, 0,
+                0, s[1], 0, 0,
+                0, 0, s[2], 0,
+                0, 0, 0, 1};
     }
 
     template <typename T>
@@ -166,15 +193,6 @@ namespace Xyz { namespace HomogeneousTranforms {
                 cy[0] + sa[2], cy[1] + c, cy[2] - sa[0], 0,
                 cz[0] - sa[1], cz[1] + sa[0], cz[2] + c, 0,
                 0, 0, 0, 1};
-    }
-
-    template <typename T>
-    Matrix<T, 3> translate3(const Vector<T, 2>& offsets)
-    {
-        return Matrix<T, 4>{
-                1, 0, offsets[0],
-                0, 1, offsets[1],
-                0, 0, 1};
     }
 
     template <typename T>
