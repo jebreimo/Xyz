@@ -22,6 +22,7 @@ set(PUBLIC_HEADERS_FUNDAMENTALS
     Xyz/Fundamentals/MatrixClass.hpp
     Xyz/Fundamentals/MatrixFunctions.hpp
     Xyz/Fundamentals/MatrixOperators.hpp
+    Xyz/Fundamentals/Projections.hpp
     Xyz/Fundamentals/Transforms.hpp
     Xyz/Fundamentals/VectorClass.hpp
     Xyz/Fundamentals/VectorFunctions.hpp
@@ -47,7 +48,6 @@ if (HAS_YTEST)
     set(CTEST_OUTPUT_ON_FAILURE 1)
     add_subdirectory(UnitTest)
 endif (HAS_YTEST)
-
 
 install(FILES ${PUBLIC_HEADERS_XYZ}
     DESTINATION include/${PROJECT_NAME})
