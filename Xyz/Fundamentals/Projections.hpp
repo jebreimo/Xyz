@@ -8,19 +8,28 @@
 #pragma once
 
 #include "MatrixClass.hpp"
+#include "VectorFunctions.hpp"
 
 namespace Xyz
 {
     template <typename T>
-    Matrix<T, 4> makePerspectiveProjection(const Vector<T, 3>& center,
-                                           const Vector<T, 3>& size)
+    Matrix<T, 4> lookat(const Vector<T, 3>& cameraPos,
+                        const Vector<T, 3>& centerPos,
+                        const Vector<T, 3>& up)
     {
-        auto l = center[0] - size[0] * T(0.5);
-        auto r = center[0] + size[0] * T(0.5);
-        auto b = center[1] - size[1] * T(0.5);
-        auto t = center[1] + size[1] * T(0.5);
-        auto n = center[2] - size[2] * T(0.5);
-        auto f = center[2] + size[2] * T(0.5);
+        auto f = getUnit(centerPos - cameraPos);
+        auto s = cross(f, getUnit(up));
+        auto u = cross(s, f);
+        return Matrix<T, 4>{
+                s[0], u[0], f[0], -cameraPos[0],
+                s[1], u[1], f[1], -cameraPos[1],
+                s[2], u[2], f[2], -cameraPos[2],
+                0, 0, 0, 1};
+    }
+
+    template <typename T>
+    Matrix<T, 4> makeFrustum(T l, T r, T b, T t, T n, T f)
+    {
         return Matrix<T, 4>{
                 2 * n / (r - l),  0,  (r + l) / (r - l),  0,
                 0,  2 * n / (t - b),  (t + b) / (t - b),  0,
@@ -29,15 +38,8 @@ namespace Xyz
     }
 
     template <typename T>
-    Matrix<T, 4> makeOrthogonalProjection(const Vector<T, 3>& center,
-                                          const Vector<T, 3>& size)
+    Matrix<T, 4> makeOrthogonal(T l, T r, T b, T t, T n, T f)
     {
-        auto l = center[0] - size[0] * T(0.5);
-        auto r = center[0] + size[0] * T(0.5);
-        auto b = center[1] - size[1] * T(0.5);
-        auto t = center[1] + size[1] * T(0.5);
-        auto n = center[2] - size[2] * T(0.5);
-        auto f = center[2] + size[2] * T(0.5);
         return Matrix<T, 4> {
                 2 / (r - l),  0,  0,  -(r + l) / (r - l),
                 0,  2 / (t - b),  0,  -(t + b) / (t - b),

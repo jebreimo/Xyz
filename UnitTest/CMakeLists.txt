@@ -14,7 +14,9 @@ set(SOURCE_FILES
     main.cpp
     Fundamentals/test_Matrix.cpp
     Fundamentals/test_Vector.cpp
-    ../Xyz/Vector.hpp Fundamentals/test_Transforms.cpp)
+    Fundamentals/test_Transforms.cpp
+    Fundamentals/test_Projections.cpp
+    Fundamentals/YtestUtilities.hpp)
 
 add_executable(${PROJECT_NAME}
     ${SOURCE_FILES})
