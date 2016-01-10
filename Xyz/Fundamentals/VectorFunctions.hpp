@@ -70,8 +70,21 @@ namespace Xyz {
         return getLengthSquared(u - v) <= epsilon * epsilon;
     }
 
+    template <unsigned N>
+    bool areEquivalent(const Vector<float, N>& u, const Vector<float, N>& v,
+                       float epsilon = 1e-12)
+    {
+        return getLengthSquared(u - v) <= epsilon * epsilon;
+    }
+
     template<typename T, unsigned N>
     double getLength(const Vector<T, N>& v)
+    {
+        return std::sqrt(getLengthSquared(v));
+    }
+
+    template <unsigned N>
+    float getLength(const Vector<float, N>& v)
     {
         return std::sqrt(getLengthSquared(v));
     }
@@ -82,14 +95,32 @@ namespace Xyz {
         return (u * v) / std::sqrt(getLengthSquared(u) * getLengthSquared(v));
     }
 
+    template <unsigned N>
+    float getCosAngle(const Vector<float, N>& u, const Vector<float, N>& v)
+    {
+        return (u * v) / std::sqrt(getLengthSquared(u) * getLengthSquared(v));
+    }
+
     template<typename T, typename U, unsigned N>
     double getAngle(const Vector<T, N>& u, const Vector<U, N>& v)
     {
         return std::acos(getCosAngle(u, v));
     }
 
+    template <unsigned N>
+    float getAngle(const Vector<float, N>& u, const Vector<float, N>& v)
+    {
+        return std::acos(getCosAngle(u, v));
+    }
+
     template<typename T, unsigned N>
     Vector<double, N> getUnit(const Vector<T, N>& v)
+    {
+        return v / getLength(v);
+    }
+
+    template <unsigned N>
+    Vector<float, N> getUnit(const Vector<float, N>& v)
     {
         return v / getLength(v);
     }
@@ -131,6 +162,14 @@ namespace Xyz {
 
     template<typename T>
     Vector<double, 2> getRotated(const Vector<T, 2>& v, double radians)
+    {
+        auto c = std::cos(radians);
+        auto s = std::sin(radians);
+        return vector2(v[0] * c - v[1] * s, v[0] * s + v[1] * c);
+    }
+
+    inline Vector<float, 2> getRotated(const Vector<float, 2>& v,
+                                       float radians)
     {
         auto c = std::cos(radians);
         auto s = std::sin(radians);
