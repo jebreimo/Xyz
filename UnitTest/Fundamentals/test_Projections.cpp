@@ -19,7 +19,20 @@ namespace {
         Y_EQUAL(w, Xyz::vector4(-9, -9, -9, 9));
     }
 
+    void test_LookAt()
+    {
+        auto m = Xyz::makeLookAt<double>(Xyz::vector3(5, 2, 3),
+                                         Xyz::vector3(1, 8, 3),
+                                         Xyz::vector3(0, 0, 1));
+        auto result = m * Xyz::vector4(1.5, 4.0, 3.0, 1.0);
+        auto expected = Xyz::vector4(-std::sqrt(1 + 1.5 * 1.5),
+                                     0.0,
+                                     -std::sqrt(2 * 2 + 3 * 3),
+                                     1.0);
+        Y_EQUAL(result, expected);
+    }
+
     Y_SUBTEST("Fundamentals",
-              test_PerspectiveProjection
-    );
+              test_PerspectiveProjection,
+              test_LookAt);
 }
