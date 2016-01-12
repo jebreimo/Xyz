@@ -30,6 +30,7 @@ set(PUBLIC_HEADERS_FUNDAMENTALS
     )
 
 set(PUBLIC_HEADERS_UTILITIES
+    Xyz/Utilities/Clamp.hpp
     Xyz/Utilities/Constants.hpp
     Xyz/Utilities/Utilities.hpp
     )
