@@ -27,6 +27,15 @@ namespace Xyz {
         return u;
     }
 
+    template<typename T, typename U>
+    auto cross(const Vector<T, 3>& a, const Vector<U, 3>& b)
+    -> Vector<decltype(a[0] * b[0]), 3>
+    {
+        return vector3(a[1] * b[2] - a[2] * b[1],
+                       a[2] * b[0] - a[0] * b[2],
+                       a[0] * b[1] - a[1] * b[0]);
+    }
+
     template<typename T, typename U, unsigned N>
     auto div(const Vector<T, N>& u, const Vector<U, N>& v)
     -> Vector<decltype(u[0] / v[0]), N>
@@ -151,15 +160,6 @@ namespace Xyz {
         return vector2(-v[1], v[0]);
     }
 
-    template<typename T, typename U>
-    auto cross(const Vector<T, 3>& a, const Vector<U, 3>& b)
-    -> Vector<decltype(a[0] * b[0]), 3>
-    {
-        return vector3(a[1] * b[2] - a[2] * b[1],
-                       a[2] * b[0] - a[0] * b[2],
-                       a[0] * b[1] - a[1] * b[0]);
-    }
-
     template<typename T>
     Vector<double, 2> getRotated(const Vector<T, 2>& v, double radians)
     {
@@ -174,6 +174,17 @@ namespace Xyz {
         auto c = std::cos(radians);
         auto s = std::sin(radians);
         return vector2(v[0] * c - v[1] * s, v[0] * s + v[1] * c);
+    }
+
+    template<typename T, unsigned N>
+    bool isNull(Vector<T, N>& v, double epsilon = 1e-12)
+    {
+        for (auto n: v)
+        {
+            if (fabs(n) > 1e-12)
+                return false;
+        }
+        return true;
     }
 
     template<typename T, unsigned N>
@@ -197,42 +208,42 @@ namespace Xyz {
     template<typename T, unsigned N>
     T& getY(Vector<T, N>& v)
     {
-        static_assert(N > 1, "Vectordoesn't have a y-coordinate.");
+        static_assert(N > 1, "Vector doesn't have a y-coordinate.");
         return v[1];
     }
 
     template<typename T, unsigned N>
     T getY(const Vector<T, N>& v)
     {
-        static_assert(N > 1, "Vectordoesn't have a y-coordinate.");
+        static_assert(N > 1, "Vector doesn't have a y-coordinate.");
         return v[1];
     }
 
     template<typename T, unsigned N>
     void setY(Vector<T, N>& v, T y)
     {
-        static_assert(N > 1, "Vectordoesn't have a y-coordinate.");
+        static_assert(N > 1, "Vector doesn't have a y-coordinate.");
         v[1] = y;
     }
 
     template<typename T, unsigned N>
     T& getZ(Vector<T, N>& v)
     {
-        static_assert(N > 2, "Vectordoesn't have a z-coordinate.");
+        static_assert(N > 2, "Vectord oesn't have a z-coordinate.");
         return v[2];
     }
 
     template<typename T, unsigned N>
     T getZ(const Vector<T, N>& v)
     {
-        static_assert(N > 2, "Vectordoesn't have a z-coordinate.");
+        static_assert(N > 2, "Vector doesn't have a z-coordinate.");
         return v[2];
     }
 
     template<typename T, unsigned N>
     void setZ(Vector<T, N>& v, T z)
     {
-        static_assert(N > 2, "Vectordoesn't have a z-coordinate.");
+        static_assert(N > 2, "Vector doesn't have a z-coordinate.");
         v[2] = z;
     }
 
@@ -272,7 +283,7 @@ namespace Xyz {
     template<typename T, unsigned N>
     void setXYZW(Vector<T, N>& v, T x, T y, T z, T w)
     {
-        static_assert(N > 3, "Vectorhas less than four coordinates.");
+        static_assert(N > 3, "Vector has less than four coordinates.");
         setX(v, x);
         setY(v, y);
         setZ(v, z);
