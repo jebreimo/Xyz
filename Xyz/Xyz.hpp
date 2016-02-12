@@ -15,4 +15,7 @@
 #include "Fundamentals/VectorClass.hpp"
 #include "Fundamentals/VectorFunctions.hpp"
 #include "Fundamentals/VectorOperators.hpp"
+#include "Geometry/Intersection.hpp"
+#include "Geometry/Line.hpp"
+#include "Geometry/LineSegment.hpp"
 #include "Utilities/Utilities.hpp"

@@ -151,19 +151,19 @@ namespace Xyz {
     }
 
     template<typename T>
-    Vector<T, 2> vector2(T x, T y)
+    Vector<T, 2> makeVector(T x, T y)
     {
         return Vector<T, 2>({x, y});
     }
 
     template<typename T>
-    Vector<T, 3> vector3(T x, T y, T z)
+    Vector<T, 3> makeVector(T x, T y, T z)
     {
         return Vector<T, 3>({x, y, z});
     }
 
     template<typename T>
-    Vector<T, 4> vector4(T x, T y, T z, T w)
+    Vector<T, 4> makeVector(T x, T y, T z, T w)
     {
         return Vector<T, 4>({x, y, z, w});
     }

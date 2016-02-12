@@ -94,7 +94,7 @@ void test_MatrixVectorMultiplication()
     Y_EQUAL(v * m, product2);
 }
 
-Y_SUBTEST("Geometry",
+Y_SUBTEST("Fundamentals",
           test_Basics,
           test_Transpose,
           test_MatrixMatrixAddition,

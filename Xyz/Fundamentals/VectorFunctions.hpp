@@ -31,9 +31,9 @@ namespace Xyz {
     auto cross(const Vector<T, 3>& a, const Vector<U, 3>& b)
     -> Vector<decltype(a[0] * b[0]), 3>
     {
-        return vector3(a[1] * b[2] - a[2] * b[1],
-                       a[2] * b[0] - a[0] * b[2],
-                       a[0] * b[1] - a[1] * b[0]);
+        return makeVector(a[1] * b[2] - a[2] * b[1],
+                          a[2] * b[0] - a[0] * b[2],
+                          a[0] * b[1] - a[1] * b[0]);
     }
 
     template<typename T, typename U, unsigned N>
@@ -157,7 +157,7 @@ namespace Xyz {
     template<typename T>
     Vector<T, 2> getNormal(const Vector<T, 2>& v)
     {
-        return vector2(-v[1], v[0]);
+        return makeVector(-v[1], v[0]);
     }
 
     template<typename T>
@@ -165,7 +165,7 @@ namespace Xyz {
     {
         auto c = std::cos(radians);
         auto s = std::sin(radians);
-        return vector2(v[0] * c - v[1] * s, v[0] * s + v[1] * c);
+        return makeVector(v[0] * c - v[1] * s, v[0] * s + v[1] * c);
     }
 
     inline Vector<float, 2> getRotated(const Vector<float, 2>& v,
@@ -173,7 +173,7 @@ namespace Xyz {
     {
         auto c = std::cos(radians);
         auto s = std::sin(radians);
-        return vector2(v[0] * c - v[1] * s, v[0] * s + v[1] * c);
+        return makeVector(v[0] * c - v[1] * s, v[0] * s + v[1] * c);
     }
 
     template<typename T, unsigned N>

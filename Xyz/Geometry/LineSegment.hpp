@@ -1,89 +1,127 @@
-#ifndef JEB_MATH_LINESEGMENT_HPP
-#define JEB_MATH_LINESEGMENT_HPP
+//****************************************************************************
+// Copyright © 2016 Jan Erik Breimo. All rights reserved.
+// Created by Jan Erik Breimo on 2016-02-07.
+//
+// This file is distributed under the BSD License.
+// License text is included with the source distribution.
+//****************************************************************************
+#pragma once
+#include "../Vector.hpp"
+#include "../Utilities/Clamp.hpp"
 
-#include "Vector.hpp"
+namespace Xyz {
 
-namespace JEBMath {
-
-template <typename T, unsigned N>
-class LineSegment
-{
-public:
-    LineSegment()
-    {}
-
-    LineSegment(const Vector<T, N>& start, const Vector<T, N>& end)
-        : m_Start(start),
-          m_End(end)
-    {}
-
-    const Vector<T, N>& getEnd() const
+    template <typename T, unsigned N>
+    class LineSegment
     {
-        return m_End;
+    public:
+        LineSegment()
+        {}
+
+        LineSegment(const Vector<T, N>& start, const Vector<T, N>& end)
+            : m_Start(start),
+              m_End(end)
+        {}
+
+        const Vector<T, N>& end() const
+        {
+            return m_End;
+        }
+
+        void setEnd(const Vector<T, N>& end)
+        {
+            m_End = end;
+        }
+
+        const Vector<T, N>& start() const
+        {
+            return m_Start;
+        }
+
+        void setStart(const Vector<T, N>& start)
+        {
+            m_Start = start;
+        }
+    private:
+        Vector<T, N> m_Start;
+        Vector<T, N> m_End;
+    };
+
+    template <typename T, unsigned N>
+    const Vector<T, N>& getStart(const LineSegment<T, N>& line)
+    {
+        return line.start();
     }
 
-    void setEnd(const Vector<T, N>& end)
+    template <typename T, unsigned N>
+    const Vector<T, N>& getEnd(const LineSegment<T, N>& line)
     {
-        m_End = end;
+        return line.end();
     }
 
-    const Vector<T, N>& getStart() const
+    template <typename T, unsigned N>
+    Vector<T, N> getVector(const LineSegment<T, N>& line)
     {
-        return m_Start;
+        return getEnd(line) - getStart(line);
     }
 
-    void setStart(const Vector<T, N>& start)
+    template <typename T, unsigned N>
+    std::ostream& operator<<(std::ostream& os, const LineSegment<T, N>& line)
     {
-        m_Start = start;
+        return os << "{\"start\": " << getStart(line)
+                  << ", \"end\": " << getEnd(line) << "}";
     }
 
-    Vector<T, N> getVector() const
+    template <typename T, unsigned N>
+    Vector<T, N> getPointAtT(const LineSegment<T, N>& line, double t)
     {
-        return m_End - m_Start;
+        return getStart(line) + getVector(line) * t;
     }
 
-    Vector<T, N> getPointAtT(double t) const
+    template <typename T, unsigned N>
+    T getCoordinateAtT(const LineSegment<T, N>& line, size_t coord, double t)
     {
-        return m_Start + getVector() * t;
+        auto v0 = getStart(line)[coord];
+        auto v1 = getEnd(line)[coord];
+        return v0 + static_cast<T>(t * (v1 - v0));
     }
 
-    T getXAtT(double t) const
+    template <typename T, unsigned N>
+    LineSegment<T, N> makeLineSegment(const Vector<T, N>& start,
+                                      const Vector<T, N>& end)
     {
-        return m_Start.x() + T((m_End.x() - m_Start.x()) * t);
+        return LineSegment<T, N>(start, end);
     }
 
-    T getYAtT(double t) const
+    template <typename T, unsigned N>
+    double getLength(const LineSegment<T, N>& line)
     {
-        return m_Start.y() + T((m_End.y() - m_Start.y()) * t);
+        return getLength(getVector(line));
     }
-private:
-    Vector<T, N> m_Start;
-    Vector<T, N> m_End;
-};
 
-template <typename T, unsigned N>
-std::ostream& operator<<(std::ostream& os, const LineSegment<T, N>& line);
+    template <typename T, unsigned N>
+    LineSegment<T, N> getReverse(const LineSegment<T, N>& line)
+    {
+        return LineSegment<T, N>(getEnd(line), getStart(line));
+    }
 
-template <typename T, unsigned N>
-LineSegment<T, N> makeLineSegment(const Vector<T, N>& start,
-                                  const Vector<T, N>& end);
+    template <typename T, unsigned N>
+    Vector<T, N> getNearestPoint(const LineSegment<T, N>& line,
+                                 const Vector<T, N>& point)
+    {
+        auto divisor = getLengthSquared(getVector(line));
+        auto t = (point - getStart(line)) * getVector(line) / divisor;
+        return getPointAtT(line, getClamped(t, 0.0, 1.0));
+    }
 
-template <typename T, unsigned N>
-double getLength(const LineSegment<T, N>& line);
-
-template <typename T, unsigned N>
-LineSegment<T, N> getReverse(const LineSegment<T, N>& line);
-
-template <typename T, unsigned N>
-Vector<T, N> getNearestPoint(const LineSegment<T, N>& line,
-                             const Vector<T, N>& point);
-
-template <typename T>
-Vector<T, 2> getRelativePosition(const LineSegment<T, 2>& line,
-                                 const Vector<T, 2>& point);
+    template <typename T>
+    Vector<T, 2> getRelativePosition(const LineSegment<T, 2>& line,
+                                     const Vector<T, 2>& point)
+    {
+        auto lv = getVector(line);
+        auto len = getLengthSquared(lv);
+        auto pv = point - getStart(line);
+        return makeVector<T>(lv * pv / len, getNormal(lv) * pv / len);
+    }
 
 }
-
-#include "LineSegment-impl.hpp"
-
-#endif

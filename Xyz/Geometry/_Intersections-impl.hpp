@@ -95,7 +95,7 @@ BiIt findIntersection(LineSegment<double, 2> lineSeg,
 }
 
 template <typename T>
-Side::Enum getide(const Line<T, 2>& l, const Vector<T, 2>& p)
+Side::Enum getSide(const Line<T, 2>& l, const Vector<T, 2>& p)
 {
     auto tmp = getNormal(l.getVector()) * (p - l.getPoint());
     if (tmp > 0)

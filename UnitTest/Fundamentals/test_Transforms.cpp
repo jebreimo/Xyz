@@ -16,24 +16,24 @@ namespace {
     void test_HomoRotateZ4()
     {
         auto trans = H::rotateZ4(Xyz::toRadians(90.0));
-        auto v = trans * Xyz::vector4(1, 1, 1, 1);
-        Y_EQUAL(v, Xyz::vector4(-1, 1, 1, 1));
+        auto v = trans * Xyz::makeVector(1, 1, 1, 1);
+        Y_EQUAL(v, Xyz::makeVector(-1, 1, 1, 1));
     }
 
     void test_HomoTransposeZ4()
     {
-        auto trans = H::translate4(Xyz::vector3(1.0, 2.0, 3.0));
-        auto v = trans * Xyz::vector4(1, 1, 1, 1);
-        Y_EQUAL(v, Xyz::vector4(2, 3, 4, 1));
+        auto trans = H::translate4(Xyz::makeVector(1.0, 2.0, 3.0));
+        auto v = trans * Xyz::makeVector(1, 1, 1, 1);
+        Y_EQUAL(v, Xyz::makeVector(2, 3, 4, 1));
     }
 
     void test_Something()
     {
         auto trans = multiplyTransposed(H::rotateZ4(Xyz::toRadians(90.0)),
                                         TH::translate4(
-                                                Xyz::vector3(1, 2, 3)));
-        auto v = trans * Xyz::vector4(1, 1, 1, 1);
-        Y_EQUAL(v, Xyz::vector4(-3, 2, 4, 1));
+                                                Xyz::makeVector(1, 2, 3)));
+        auto v = trans * Xyz::makeVector(1, 1, 1, 1);
+        Y_EQUAL(v, Xyz::makeVector(-3, 2, 4, 1));
     }
 
     Y_SUBTEST("Fundamentals",

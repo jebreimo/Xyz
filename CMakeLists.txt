@@ -29,6 +29,12 @@ set(PUBLIC_HEADERS_FUNDAMENTALS
     Xyz/Fundamentals/VectorOperators.hpp
     )
 
+set(PUBLIC_HEADERS_GEOMETRY
+    Xyz/Geometry/Intersection.hpp
+    Xyz/Geometry/Line.hpp
+    Xyz/Geometry/LineSegment.hpp
+    )
+
 set(PUBLIC_HEADERS_UTILITIES
     Xyz/Utilities/Clamp.hpp
     Xyz/Utilities/Constants.hpp
@@ -38,6 +44,7 @@ set(PUBLIC_HEADERS_UTILITIES
 set(PUBLIC_HEADERS
     ${PUBLIC_HEADERS_XYZ}
     ${PUBLIC_HEADERS_FUNDAMENTALS}
+    ${PUBLIC_HEADERS_GEOMETRY}
     ${PUBLIC_HEADERS_UTILITIES}
     )
 
@@ -54,5 +61,7 @@ install(FILES ${PUBLIC_HEADERS_XYZ}
     DESTINATION include/${PROJECT_NAME})
 install(FILES ${PUBLIC_HEADERS_FUNDAMENTALS}
     DESTINATION include/${PROJECT_NAME}/Fundamentals)
+install(FILES ${PUBLIC_HEADERS_GEOMETRY}
+    DESTINATION include/${PROJECT_NAME}/Geometry)
 install(FILES ${PUBLIC_HEADERS_UTILITIES}
     DESTINATION include/${PROJECT_NAME}/Utilities)

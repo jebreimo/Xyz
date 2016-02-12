@@ -95,12 +95,18 @@ namespace Xyz { namespace HomogeneousTransforms {
     }
 
     template <typename T>
-    Matrix<T, 3> scale3(const Vector<T, 2>& s)
+    Matrix<T, 3> scale3(T sx, T sy)
     {
         return Matrix<T, 3>{
-                s[0], 0, 0,
-                0, s[1], 0,
+                sx, 0, 0,
+                0, sy, 0,
                 0, 0, 1};
+    }
+
+    template <typename T>
+    Matrix<T, 3> scale3(const Vector<T, 2>& s)
+    {
+        return scale3(s[0], s[1]);
     }
 
     template <typename T>
@@ -115,12 +121,18 @@ namespace Xyz { namespace HomogeneousTransforms {
     }
 
     template <typename T>
+    Matrix<T, 3> translate3(T x, T y)
+    {
+        return Matrix<T, 3>{
+                1, 0, x,
+                0, 1, y,
+                0, 0, 1};
+    }
+
+    template <typename T>
     Matrix<T, 3> translate3(const Vector<T, 2>& offsets)
     {
-        return Matrix<T, 4>{
-                1, 0, offsets[0],
-                0, 1, offsets[1],
-                0, 0, 1};
+        return translate3(offsets[0], offsets[1]);
     }
 
     template <typename T>
@@ -134,13 +146,19 @@ namespace Xyz { namespace HomogeneousTransforms {
     }
 
     template <typename T>
-    Matrix<T, 4> scale4(const Vector<T, 3>& s)
+    Matrix<T, 4> scale4(T sx, T sy, T sz)
     {
         return Matrix<T, 4>{
-                s[0], 0, 0, 0,
-                0, s[1], 0, 0,
-                0, 0, s[2], 0,
+                sx, 0, 0, 0,
+                0, sy, 0, 0,
+                0, 0, sz, 0,
                 0, 0, 0, 1};
+    }
+
+    template <typename T>
+    Matrix<T, 4> scale4(const Vector<T, 3>& s)
+    {
+        return scale4(s[0], s[1], s[2]);
     }
 
     template <typename T>
@@ -196,13 +214,19 @@ namespace Xyz { namespace HomogeneousTransforms {
     }
 
     template <typename T>
-    Matrix<T, 4> translate4(const Vector<T, 3>& offsets)
+    Matrix<T, 4> translate4(T x, T y, T z)
     {
         return Matrix<T, 4>{
-                1, 0, 0, offsets[0],
-                0, 1, 0, offsets[1],
-                0, 0, 1, offsets[2],
+                1, 0, 0, x,
+                0, 1, 0, y,
+                0, 0, 1, z,
                 0, 0, 0, 1};
+    }
+
+    template <typename T>
+    Matrix<T, 4> translate4(const Vector<T, 3>& offsets)
+    {
+        return translate4(offsets[0], offsets[1], offsets[2]);
     }
 
 }}
