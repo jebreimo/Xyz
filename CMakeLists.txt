@@ -10,7 +10,7 @@ project(Xyz)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-add_subdirectory(Externals)
+add_subdirectory(Submodules)
 
 set(PUBLIC_HEADERS_XYZ
     Xyz/Matrix.hpp

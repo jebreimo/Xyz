@@ -8,7 +8,7 @@
 #include "../../Xyz/Matrix.hpp"
 
 #include <cmath>
-#include "../../Externals/Ytest/Ytest.hpp"
+#include "../../Submodules/Ytest/Ytest.hpp"
 //#include "../../Xyz/Utilities/Utilities.hpp"
 
 namespace {

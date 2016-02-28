@@ -8,7 +8,7 @@
 #pragma once
 
 #include "../../Xyz/Xyz.hpp"
-#include "../../Externals/Ytest/Ytest.hpp"
+#include "../../Submodules/Ytest/Ytest.hpp"
 
 namespace Ytest {
 

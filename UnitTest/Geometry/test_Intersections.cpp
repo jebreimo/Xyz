@@ -6,7 +6,7 @@
 // License text is included with the source distribution.
 //****************************************************************************
 #include "../../Xyz/Xyz.hpp"
-#include "../../Externals/Ytest/Ytest.hpp"
+#include "../../Submodules/Ytest/Ytest.hpp"
 
 namespace {
     using namespace Xyz;

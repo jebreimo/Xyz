@@ -6,4 +6,4 @@
 // License text is included with the source distribution.
 //****************************************************************************
 #define Y_MAIN
-#include "../Externals/Ytest/Ytest.hpp"
+#include "../Submodules/Ytest/Ytest.hpp"
