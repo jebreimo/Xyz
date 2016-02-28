@@ -30,9 +30,10 @@ set(PUBLIC_HEADERS_FUNDAMENTALS
     )
 
 set(PUBLIC_HEADERS_GEOMETRY
-    Xyz/Geometry/Intersection.hpp
+    Xyz/Geometry/LineIntersections.hpp
     Xyz/Geometry/Line.hpp
     Xyz/Geometry/LineSegment.hpp
+    Xyz/Geometry/Triangle.hpp
     )
 
 set(PUBLIC_HEADERS_UTILITIES

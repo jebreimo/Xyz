@@ -8,8 +8,15 @@
 #pragma once
 #include <cmath>
 #include "VectorClass.hpp"
+#include "../Utilities/Constants.hpp"
 
 namespace Xyz {
+
+    template <typename T>
+    Vector<T, 2> getNormal(const Vector<T, 2>& v)
+    {
+        return makeVector(-v[1], v[0]);
+    }
 
     template<typename T, typename U, unsigned N>
     Vector<T, N>& assignDiv(Vector<T, N>& u, const Vector<U, N>& v)
@@ -110,16 +117,33 @@ namespace Xyz {
         return (u * v) / std::sqrt(getLengthSquared(u) * getLengthSquared(v));
     }
 
+    /** @brief Returns the smallest angle between @a u and @a v.
+      * @return A value in the range 0 <= angle <= pi.
+      */
     template<typename T, typename U, unsigned N>
     double getAngle(const Vector<T, N>& u, const Vector<U, N>& v)
     {
         return std::acos(getCosAngle(u, v));
     }
 
+    /** @brief Returns the smallest angle between @a u and @a v.
+      * @return A value in the range 0 <= angle <= pi.
+      */
     template <unsigned N>
     float getAngle(const Vector<float, N>& u, const Vector<float, N>& v)
     {
         return std::acos(getCosAngle(u, v));
+    }
+
+    template <typename T, typename U>
+    double getCounterclockwiseAngle(const Vector<T, 2>& u,
+                                    const Vector<U, 2>& v)
+    {
+        auto angle = getAngle(u, v);
+        if (getNormal(u) * v >= 0)
+            return angle;
+        else
+            return 2 * Pi - angle;
     }
 
     template<typename T, unsigned N>
@@ -152,12 +176,6 @@ namespace Xyz {
     {
         clamp(v, min, max);
         return v;
-    }
-
-    template<typename T>
-    Vector<T, 2> getNormal(const Vector<T, 2>& v)
-    {
-        return makeVector(-v[1], v[0]);
     }
 
     template<typename T>

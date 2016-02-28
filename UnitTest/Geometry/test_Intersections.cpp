@@ -1,3 +1,10 @@
+//****************************************************************************
+// Copyright © 2016 Jan Erik Breimo. All rights reserved.
+// Created by Jan Erik Breimo on 13.02.2016
+//
+// This file is distributed under the BSD License.
+// License text is included with the source distribution.
+//****************************************************************************
 #include "../../Xyz/Xyz.hpp"
 #include "../../Externals/Ytest/Ytest.hpp"
 
@@ -33,12 +40,10 @@ namespace {
     {
         auto a = makeLineSegment<int>(-4, -2, 4, 2);
         auto b = makeLineSegment<int>(3, -9, -1, 3);
-        auto intersection = getIntersectionFactors(a, b, 1e-10);
+        auto intersection = getIntersectionPositions(a, b, 1e-10);
         Y_EQUAL(std::get<0>(intersection), LineRelationship::INTERSECTING);
         Y_EQUAL(std::get<1>(intersection), 0.5);
         Y_EQUAL(std::get<2>(intersection), 0.75);
-//        Y_ASSERT(intersects(a, getReverse(b), 0));
-//        Y_ASSERT(intersects(getReverse(a), b, 0));
     }
 
 //static void test_Overlap()

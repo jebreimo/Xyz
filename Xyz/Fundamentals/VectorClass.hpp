@@ -169,7 +169,7 @@ namespace Xyz {
     }
 
     template<typename T, typename U, unsigned N>
-    Vector<T, N> vector(const Vector<U, N>& v)
+    Vector<T, N> makeVector(const Vector<U, N>& v)
     {
         return Vector<T, N>(v);
     }
