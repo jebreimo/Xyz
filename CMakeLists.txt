@@ -8,7 +8,7 @@
 cmake_minimum_required(VERSION 2.8)
 project(Xyz)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall")
 
 add_subdirectory(Submodules)
 
@@ -38,6 +38,7 @@ set(PUBLIC_HEADERS_GEOMETRY
 
 set(PUBLIC_HEADERS_UTILITIES
     Xyz/Utilities/Clamp.hpp
+    Xyz/Utilities/Comparisons.hpp
     Xyz/Utilities/Constants.hpp
     Xyz/Utilities/Utilities.hpp
     )

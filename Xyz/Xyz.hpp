@@ -18,4 +18,5 @@
 #include "Geometry/LineIntersections.hpp"
 #include "Geometry/Line.hpp"
 #include "Geometry/LineSegment.hpp"
+#include "Geometry/Triangle.hpp"
 #include "Utilities/Utilities.hpp"
