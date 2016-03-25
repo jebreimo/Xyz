@@ -109,8 +109,42 @@ namespace Xyz {
             return m_Values.data();
         }
 
+        static const Matrix& identity()
+        {
+            static auto matrix = Matrix();
+            if (matrix[N - 1][N - 1] == 0)
+            {
+                for (auto i = 0; i < N; ++i)
+                    matrix[i][i] = 1;
+            }
+            return matrix;
+        }
     private:
         std::array<T, N * N> m_Values;
     };
+
+    template<typename T, unsigned N>
+    const T* begin(const Matrix<T, N>& m)
+    {
+        return m.begin();
+    }
+
+    template<typename T, unsigned N>
+    const T* end(const Matrix<T, N>& m)
+    {
+        return m.end();
+    }
+
+    template<typename T, unsigned N>
+    T* begin(Matrix<T, N>& m)
+    {
+        return m.begin();
+    }
+
+    template<typename T, unsigned N>
+    T* end(Matrix<T, N>& m)
+    {
+        return m.end();
+    }
 
 }

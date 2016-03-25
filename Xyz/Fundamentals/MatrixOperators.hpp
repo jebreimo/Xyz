@@ -26,6 +26,12 @@ namespace Xyz {
     }
 
     template<typename T, typename U, unsigned N>
+    bool operator!=(const Matrix<T, N>& a, const Matrix<U, N>& b)
+    {
+        return !(a == b);
+    }
+
+    template<typename T, typename U, unsigned N>
     Matrix<T, N>& operator+=(Matrix<T, N>& a, const Matrix<U, N>& b)
     {
         auto dataA = a.data();
