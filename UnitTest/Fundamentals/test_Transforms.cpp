@@ -10,35 +10,32 @@
 #include "YtestUtilities.hpp"
 
 namespace {
-    namespace H = Xyz::HomogeneousTransforms;
-    namespace TH =  Xyz::TransposedHomogeneousTransforms;
-
-    void test_HomoRotateZ4()
+    void test_RotateZ()
     {
-        auto trans = H::rotateZ4(Xyz::toRadians(90.0));
-        auto v = trans * Xyz::makeVector(1, 1, 1, 1);
-        Y_EQUAL(v, Xyz::makeVector(-1, 1, 1, 1));
+        auto trans = Xyz::rotateZ(Xyz::toRadians(90.0));
+        auto v = trans * Xyz::makeVector<double>(1, 1, 1, 1);
+        Y_EQUAL(v, Xyz::makeVector<double>(-1, 1, 1, 1));
     }
 
-    void test_HomoTransposeZ4()
+    void test_Translate4()
     {
-        auto trans = H::translate4(Xyz::makeVector(1.0, 2.0, 3.0));
-        auto v = trans * Xyz::makeVector(1, 1, 1, 1);
-        Y_EQUAL(v, Xyz::makeVector(2, 3, 4, 1));
+        auto trans = Xyz::translate4(1.0, 2.0, 3.0);
+        auto v = trans * Xyz::makeVector<double>(1, 1, 1, 1);
+        Y_EQUAL(v, Xyz::makeVector<double>(2, 3, 4, 1));
     }
 
-    void test_Something()
+    void test_RotateZ_and_TransposedTranslate4()
     {
-        auto trans = multiplyTransposed(H::rotateZ4(Xyz::toRadians(90.0)),
-                                        TH::translate4(
-                                                Xyz::makeVector(1, 2, 3)));
-        auto v = trans * Xyz::makeVector(1, 1, 1, 1);
-        Y_EQUAL(v, Xyz::makeVector(-3, 2, 4, 1));
+        auto trans = multiplyTransposed(
+                Xyz::rotateZ(Xyz::toRadians(90.0)),
+                Xyz::transposedTranslate4<double>(1, 2, 3));
+        auto v = trans * Xyz::makeVector<double>(1, 1, 1, 1);
+        Y_EQUAL(v, Xyz::makeVector<double>(-3, 2, 4, 1));
     }
 
     Y_SUBTEST("Fundamentals",
-              test_HomoRotateZ4,
-              test_HomoTransposeZ4,
-              test_Something);
+              test_RotateZ,
+              test_Translate4,
+              test_RotateZ_and_TransposedTranslate4);
 
 }

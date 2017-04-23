@@ -11,8 +11,8 @@
 #include "Line.hpp"
 #include "LineSegment.hpp"
 
-namespace Xyz {
-
+namespace Xyz
+{
     enum class LineRelationship
     {
         /* Lines or line segments are parallel, but not co-linear.
@@ -52,7 +52,7 @@ namespace Xyz {
     {
         typedef std::tuple<LineRelationship, double, double> Result;
         auto vA = getVector(a);
-        auto nB = getNormal(getVector(b));
+        auto nB = normal(getVector(b));
 
         auto denominator = static_cast<double>(vA * nB);
         if (equal<double>(denominator, 0, epsilon))
@@ -63,7 +63,7 @@ namespace Xyz {
                 return Result(LineRelationship::NONINTERSECTING, 0.0, 0.0);
         }
 
-        auto nA = getNormal(getVector(a));
+        auto nA = normal(getVector(a));
         auto vAB = getPoint(b) - getPoint(a);
         return Result(LineRelationship::INTERSECTING,
                       vAB * nB / denominator,
@@ -83,8 +83,8 @@ namespace Xyz {
             return ip;
         }
         else if (std::get<0>(ip) == LineRelationship::INTERSECTING
-                 && inRange<double>(0, std::get<1>(ip), 1, epsilon)
-                 && inRange<double>(0, std::get<2>(ip), 1, epsilon))
+                 && between<double>(0, std::get<1>(ip), 1, epsilon)
+                 && between<double>(0, std::get<2>(ip), 1, epsilon))
         {
             return ip;
         }

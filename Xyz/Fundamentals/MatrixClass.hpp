@@ -10,25 +10,25 @@
 #include <initializer_list>
 #include <stdexcept>
 
-namespace Xyz {
-
-    template<typename T, unsigned N>
+namespace Xyz
+{
+    template<typename T, unsigned M, unsigned N>
     class Matrix
     {
     public:
-        static unsigned rows()
+        constexpr static unsigned rows()
+        {
+            return M;
+        }
+
+        constexpr static unsigned cols()
         {
             return N;
         }
 
-        static unsigned cols()
+        constexpr static unsigned size()
         {
-            return N;
-        }
-
-        static unsigned size()
-        {
-            return N * N;
+            return M * N;
         }
 
         Matrix()
@@ -46,14 +46,14 @@ namespace Xyz {
         }
 
         template<typename U>
-        Matrix(U (& arr)[N * N])
+        Matrix(U (& arr)[M * N])
         {
             for (auto dst = begin(); dst != end(); ++dst, ++arr)
                 *dst = T(*arr);
         }
 
         template<typename U>
-        explicit Matrix(const Matrix<U, N>& other)
+        explicit Matrix(const Matrix<U, M, N>& other)
         {
             auto src = other.begin();
             for (auto dst = begin(); dst != end(); ++dst, ++src)
@@ -61,7 +61,7 @@ namespace Xyz {
         }
 
         template<typename U>
-        Matrix<T, N>& operator=(const Matrix<U, N>& other)
+        Matrix& operator=(const Matrix<U, M, N>& other)
         {
             auto src = other.begin();
             for (auto dst = begin(); dst != end(); ++dst, ++src)
@@ -109,42 +109,53 @@ namespace Xyz {
             return m_Values.data();
         }
 
-        static const Matrix& identity()
-        {
-            static auto matrix = Matrix();
-            if (matrix[N - 1][N - 1] == 0)
-            {
-                for (auto i = 0; i < N; ++i)
-                    matrix[i][i] = 1;
-            }
-            return matrix;
-        }
+        //static const Matrix& identity()
+        //{
+        //    static auto matrix = Matrix();
+        //    if (matrix[N - 1][N - 1] == 0)
+        //    {
+        //        for (auto i = 0; i < N; ++i)
+        //            matrix[i][i] = 1;
+        //    }
+        //    return matrix;
+        //}
     private:
-        std::array<T, N * N> m_Values;
+        std::array<T, M * N> m_Values;
     };
 
-    template<typename T, unsigned N>
-    const T* begin(const Matrix<T, N>& m)
+    template<typename T, unsigned M, unsigned N>
+    const T* begin(const Matrix<T, M, N>& m)
     {
         return m.begin();
     }
 
-    template<typename T, unsigned N>
-    const T* end(const Matrix<T, N>& m)
+    template<typename T, unsigned M, unsigned N>
+    const T* end(const Matrix<T, M, N>& m)
     {
         return m.end();
     }
 
-    template<typename T, unsigned N>
-    T* begin(Matrix<T, N>& m)
+    template<typename T, unsigned M, unsigned N>
+    T* begin(Matrix<T, M, N>& m)
     {
         return m.begin();
     }
 
-    template<typename T, unsigned N>
-    T* end(Matrix<T, N>& m)
+    template<typename T, unsigned M, unsigned N>
+    T* end(Matrix<T, M, N>& m)
     {
         return m.end();
     }
 
+    template <typename T, unsigned N>
+    Matrix<T, N, N> makeIdentityMatrix()
+    {
+        static Matrix<T, N, N> matrix;
+        if (matrix[0][0] == 0)
+        {
+            for (auto i = 0; i < N; ++i)
+                matrix[i][i] = 1;
+        }
+        return matrix;
+    }
 }

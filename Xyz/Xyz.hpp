@@ -7,14 +7,10 @@
 //****************************************************************************
 #pragma once
 
-#include "Fundamentals/MatrixClass.hpp"
-#include "Fundamentals/MatrixFunctions.hpp"
-#include "Fundamentals/MatrixOperators.hpp"
+#include "Matrix.hpp"
+#include "Vector.hpp"
 #include "Fundamentals/Projections.hpp"
-#include "Fundamentals/Transforms.hpp"
-#include "Fundamentals/VectorClass.hpp"
-#include "Fundamentals/VectorFunctions.hpp"
-#include "Fundamentals/VectorOperators.hpp"
+#include "Fundamentals/Transformations.hpp"
 #include "Geometry/LineIntersections.hpp"
 #include "Geometry/Line.hpp"
 #include "Geometry/LineSegment.hpp"

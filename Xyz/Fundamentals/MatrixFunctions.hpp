@@ -7,11 +7,12 @@
 //****************************************************************************
 #pragma once
 #include "MatrixClass.hpp"
+#include <type_traits>
 
-namespace Xyz {
-
+namespace Xyz
+{
     template<typename T, unsigned N>
-    void transpose(Matrix<T, N>& m)
+    void transpose(Matrix<T, N, N>& m)
     {
         for (auto i = 0u; i < N; ++i)
         {
@@ -20,35 +21,47 @@ namespace Xyz {
         }
     }
 
-    template<typename T, unsigned N>
-    Matrix<T, N> transposed(Matrix<T, N>& m)
+    template<typename T, unsigned M, unsigned N,
+             typename std::enable_if<M == N, int>::type = 0>
+    Matrix<T, N, M> transposed(Matrix<T, M, N>& m)
     {
-        Matrix<T, N> t;
+        Matrix<T, N, M> result;
         for (auto i = 0u; i < N; ++i)
         {
             for (auto j = 0u; j < N; ++j)
-                t[i][j] = m[j][i];
+                result[i][j] = m[j][i];
         }
-        return t;
+        return result;
     }
 
-    template<typename T, typename U, unsigned N>
-    auto multiplyTransposed(const Matrix<T, N>& a, const Matrix<U, N>& b)
-    -> Matrix<decltype(T() * U()), N>
+    template <typename T, unsigned M, unsigned N,
+              typename std::enable_if<M != N, int>::type = 0>
+    Matrix<T, N, M> transposed(const Matrix<T, M, N>& m)
     {
-        typedef decltype(T() * U()) ResType;
-        Matrix<ResType, N> c;
+        Matrix<T, N, M> result;
         for (auto i = 0u; i < N; ++i)
+        {
+            for (auto j = 0u; j < M; ++j)
+                result[i][j] = m[j][i];
+        }
+        return result;
+    }
+
+    template<typename T, unsigned M, unsigned N, unsigned O>
+    Matrix<T, M, O> multiplyTransposed(const Matrix<T, M, N>& a,
+                                       const Matrix<T, O, N>& b)
+    {
+        Matrix<T, M, O> result;
+        for (auto i = 0u; i < M; ++i)
         {
             for (auto j = 0u; j < N; ++j)
             {
-                ResType v = 0;
+                T v = 0;
                 for (auto k = 0u; k < N; ++k)
                     v += a[i][k] * b[j][k];
-                c[i][j] = v;
+                result[i][j] = v;
             }
         }
-        return c;
+        return result;
     }
-
 }

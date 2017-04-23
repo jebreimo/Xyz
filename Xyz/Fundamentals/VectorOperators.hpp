@@ -10,13 +10,13 @@
 #include <type_traits>
 #include "VectorClass.hpp"
 
-namespace Xyz {
-
+namespace Xyz
+{
 #define XYZ_TYPE_OF(expr) \
     typename std::remove_cv<decltype(expr)>::type
 
-    template <typename T, typename U, unsigned N>
-    bool operator==(const Vector<T, N>& u, const Vector<U, N>& v)
+    template <typename T, unsigned N>
+    bool operator==(const Vector<T, N>& u, const Vector<T, N>& v)
     {
         for (unsigned i = 0; i < N; ++i)
         {
@@ -26,14 +26,14 @@ namespace Xyz {
         return true;
     }
 
-    template <typename T, typename U, unsigned N>
-    bool operator!=(const Vector<T, N>& u, const Vector<U, N>& v)
+    template <typename T, unsigned N>
+    bool operator!=(const Vector<T, N>& u, const Vector<T, N>& v)
     {
         return !(u == v);
     }
 
-    template <typename T, typename U, unsigned N>
-    Vector<T, N>& operator+=(Vector<T, N>& u, const Vector<U, N>& v)
+    template <typename T, unsigned N>
+    Vector<T, N>& operator+=(Vector<T, N>& u, const Vector<T, N>& v)
     {
         for (unsigned i = 0; i < N; ++i)
             u[i] += v[i];
@@ -48,8 +48,8 @@ namespace Xyz {
         return u;
     }
 
-    template <typename T, typename U, unsigned N>
-    Vector<T, N>& operator-=(Vector<T, N>& u, const Vector<U, N>& v)
+    template <typename T, unsigned N>
+    Vector<T, N>& operator-=(Vector<T, N>& u, const Vector<T, N>& v)
     {
         for (unsigned i = 0; i < N; ++i)
             u[i] -= v[i];
@@ -94,79 +94,71 @@ namespace Xyz {
         return -Vector<T, N>(v);
     }
 
-    template <typename T, typename U, unsigned N>
-    auto operator+(const Vector<T, N>& u, const Vector<U, N>& v)
-        -> Vector<XYZ_TYPE_OF(u[0] + v[0]), N>
+    template <typename T, unsigned N>
+    Vector<T, N> operator+(const Vector<T, N>& u, const Vector<T, N>& v)
     {
-        Vector<XYZ_TYPE_OF(u[0] + v[0]), N> w;
+        Vector<T, N> w;
         for (unsigned i = 0; i < N; ++i)
             w[i] = u[i] + v[i];
         return w;
     }
 
     template <typename T, typename U, unsigned N>
-    auto operator+(const Vector<T, N>& u, U scalar)
-        -> Vector<XYZ_TYPE_OF(u[0] + scalar), N>
+    Vector<T, N> operator+(const Vector<T, N>& u, U scalar)
     {
-        Vector<XYZ_TYPE_OF(u[0] + scalar), N> w;
+        Vector<T, N> w;
         for (unsigned i = 0; i < N; ++i)
             w[i] = u[i] + scalar;
         return w;
     }
 
-    template <typename T, typename U, unsigned N>
-    auto operator-(const Vector<T, N>& u, const Vector<U, N>& v)
-        -> Vector<XYZ_TYPE_OF(u[0] - v[0]), N>
+    template <typename T, unsigned N>
+    Vector<T, N> operator-(const Vector<T, N>& u, const Vector<T, N>& v)
     {
-        Vector<XYZ_TYPE_OF(u[0] - v[0]), N> w;
+        Vector<T, N> w;
         for (unsigned i = 0; i < N; ++i)
             w[i] = u[i] - v[i];
         return w;
     }
 
     template <typename T, typename U, unsigned N>
-    auto operator-(const Vector<T, N>& u, U scalar)
-        -> Vector<XYZ_TYPE_OF(u[0] - scalar), N>
+    Vector<T, N> operator-(const Vector<T, N>& u, U scalar)
     {
-        Vector<XYZ_TYPE_OF(u[0] - scalar), N> w;
+        Vector<T, N> w;
         for (unsigned i = 0; i < N; ++i)
             w[i] = u[i] - scalar;
         return w;
     }
 
     template <typename T, typename U, unsigned N>
-    auto operator/(const Vector<T, N>& u, U scalar)
-        -> Vector<XYZ_TYPE_OF(u[0] / scalar), N>
+    Vector<T, N> operator/(const Vector<T, N>& u, U scalar)
     {
-        Vector<XYZ_TYPE_OF(u[0] / scalar), N> w;
+        Vector<T, N> w;
         for (unsigned i = 0; i < N; ++i)
             w[i] = u[i] / scalar;
         return w;
     }
 
-    template <typename T, typename U, unsigned N>
-    auto operator*(const Vector<T, N>& u, const Vector<U, N>& v)
-        -> XYZ_TYPE_OF(u[0] * v[0])
+    template <typename T, unsigned N>
+    T operator*(const Vector<T, N>& u, const Vector<T, N>& v)
     {
-        auto result = T() * U();
+        T result = 0;
         for (unsigned i = 0; i < N; ++i)
             result += u[i] * v[i];
         return result;
     }
 
     template <typename T, typename U, unsigned N>
-    auto operator*(const Vector<T, N>& u, U scalar)
-        -> Vector<XYZ_TYPE_OF(u[0] * scalar), N>
+    Vector<T, N> operator*(const Vector<T, N>& u, U scalar)
     {
-        Vector<XYZ_TYPE_OF(u[0] * scalar), N> w;
+        Vector<T, N> w;
         for (unsigned i = 0; i < N; ++i)
             w[i] = u[i] * scalar;
         return w;
     }
 
     template <typename T, typename U, unsigned N>
-    auto operator*(U scalar, const Vector<T, N>& v)
-        -> Vector<XYZ_TYPE_OF(v[0] + scalar), N>
+    Vector<T, N> operator*(U scalar, const Vector<T, N>& v)
     {
         return v * scalar;
     }
@@ -180,5 +172,4 @@ namespace Xyz {
             os << ", " << *it;
         return os << "]";
     }
-
 }

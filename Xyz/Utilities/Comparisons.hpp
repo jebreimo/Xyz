@@ -10,8 +10,8 @@
 #include <cstdlib>
 #include "Constants.hpp"
 
-namespace Xyz {
-
+namespace Xyz
+{
     template <typename T>
     bool equal(T a, T b, T tolerance)
     {
@@ -42,6 +42,12 @@ namespace Xyz {
         return equal(a, b, DoubleTolerance);
     }
 
+    template <>
+    inline bool equal(float a, float b)
+    {
+        return equal(a, b, FloatTolerance);
+    }
+
     template <typename T>
     bool less(T a, T b, T tolerance)
     {
@@ -69,15 +75,27 @@ namespace Xyz {
     template <typename T>
     bool between(T from, T value, T to, T tolerance)
     {
-        return greater(value, from, tolerance) &&
-               less(value, to, tolerance);
+        return greaterOrEqual(value, from, tolerance)
+               && lessOrEqual(value, to, tolerance);
     }
 
     template <typename T>
-    bool inRange(T from, T value, T to, T tolerance)
+    bool betweenExEx(T from, T value, T to, T tolerance)
     {
-        return greaterOrEqual(value, from, tolerance) &&
-               lessOrEqual(value, to, tolerance);
+        return greater(value, from, tolerance) && less(value, to, tolerance);
     }
 
+    template <typename T>
+    bool betweenIncEx(T from, T value, T to, T tolerance)
+    {
+        return greaterOrEqual(value, from, tolerance)
+               && less(value, to, tolerance);
+    }
+
+    template <typename T>
+    bool betweenExInc(T from, T value, T to, T tolerance)
+    {
+        return greater(value, from, tolerance)
+               && lessOrEqual(value, to, tolerance);
+    }
 }

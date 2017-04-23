@@ -9,8 +9,8 @@
 #include <cmath>
 #include "Constants.hpp"
 
-namespace Xyz {
-
+namespace Xyz
+{
     template<typename T>
     T getSign(T value)
     {
@@ -39,5 +39,4 @@ namespace Xyz {
         else
             return divisor - (-dividend % divisor);
     }
-
 }

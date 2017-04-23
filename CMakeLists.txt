@@ -23,7 +23,7 @@ set(PUBLIC_HEADERS_FUNDAMENTALS
     Xyz/Fundamentals/MatrixFunctions.hpp
     Xyz/Fundamentals/MatrixOperators.hpp
     Xyz/Fundamentals/Projections.hpp
-    Xyz/Fundamentals/Transforms.hpp
+    Xyz/Fundamentals/Transformations.hpp
     Xyz/Fundamentals/VectorClass.hpp
     Xyz/Fundamentals/VectorFunctions.hpp
     Xyz/Fundamentals/VectorOperators.hpp

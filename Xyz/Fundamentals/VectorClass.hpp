@@ -10,8 +10,8 @@
 #include <initializer_list>
 #include <stdexcept>
 
-namespace Xyz {
-
+namespace Xyz
+{
     template<typename T, unsigned N>
     class Vector
     {
