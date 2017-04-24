@@ -23,7 +23,9 @@ set(SOURCE_FILES
     Fundamentals/test_Projections.cpp
     Fundamentals/test_Transforms.cpp
     Fundamentals/test_Vector.cpp
-    Geometry/test_Intersections.cpp Geometry/test_Triangle.cpp)
+#    Geometry/test_Distance.cpp
+    Geometry/test_Intersections.cpp
+    Geometry/test_Triangle.cpp Geometry/test_LineClipping.cpp.cpp)
 
 add_executable(${PROJECT_NAME}
     ${SOURCE_FILES}

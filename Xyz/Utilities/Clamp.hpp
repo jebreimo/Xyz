@@ -9,8 +9,8 @@
 #include <cmath>
 #include "Constants.hpp"
 
-namespace Xyz {
-
+namespace Xyz
+{
     template <typename T>
     T getClamped(T value, T min, T max)
     {
@@ -53,5 +53,4 @@ namespace Xyz {
         for (auto it = first; it != last; ++it)
             Xyz::clamp(*it, newMin, newMax);
     }
-
 }

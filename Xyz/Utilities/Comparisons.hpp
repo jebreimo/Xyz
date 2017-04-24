@@ -39,13 +39,13 @@ namespace Xyz
     template <>
     inline bool equal(double a, double b)
     {
-        return equal(a, b, DoubleTolerance);
+        return equal(a, b, DOUBLE_TOLERANCE);
     }
 
     template <>
     inline bool equal(float a, float b)
     {
-        return equal(a, b, FloatTolerance);
+        return equal(a, b, FLOAT_TOLERANCE);
     }
 
     template <typename T>

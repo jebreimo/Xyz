@@ -11,23 +11,23 @@
 #include <cstdint>
 //#include "JEBMath/JEBMathDefinitions.hpp"
 
-namespace Xyz {
+namespace Xyz
+{
+    constexpr size_t INVALID_INDEX = SIZE_MAX;
+    constexpr double INVALID_DOUBLE = -DBL_MAX;
+    constexpr double DOUBLE_TOLERANCE = 1e-9;
+    constexpr float FLOAT_TOLERANCE = 1e-5;
 
-    constexpr size_t InvalidIndex = SIZE_MAX;
-    constexpr double InvalidDouble = -DBL_MAX;
-    constexpr double DoubleTolerance = 1e-9;
-    constexpr float FloatTolerance = 1e-5;
-
-    constexpr double Pi = 3.1415926535897932384626433832795;
+    constexpr double PI_64 = 3.1415926535897932384626433832795;
+    constexpr float PI_32 = 3.1415926535897932384626433832795;
 
     static inline bool isValid(double v)
     {
-        return v != InvalidDouble;
+        return v != INVALID_DOUBLE;
     }
 
     static inline bool isValid(size_t v)
     {
-        return v != InvalidIndex;
+        return v != INVALID_INDEX;
     }
-
 }

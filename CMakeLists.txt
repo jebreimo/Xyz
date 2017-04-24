@@ -30,9 +30,11 @@ set(PUBLIC_HEADERS_FUNDAMENTALS
     )
 
 set(PUBLIC_HEADERS_GEOMETRY
-    Xyz/Geometry/LineIntersections.hpp
     Xyz/Geometry/Line.hpp
+    Xyz/Geometry/LineClipping.hpp
+    Xyz/Geometry/LineLineIntersection.hpp
     Xyz/Geometry/LineSegment.hpp
+    Xyz/Geometry/Rectangle.hpp
     Xyz/Geometry/Triangle.hpp
     )
 
@@ -40,6 +42,7 @@ set(PUBLIC_HEADERS_UTILITIES
     Xyz/Utilities/Clamp.hpp
     Xyz/Utilities/Comparisons.hpp
     Xyz/Utilities/Constants.hpp
+    Xyz/Utilities/RandomGenerator.hpp
     Xyz/Utilities/Utilities.hpp
     )
 
@@ -50,7 +53,13 @@ set(PUBLIC_HEADERS
     ${PUBLIC_HEADERS_UTILITIES}
     )
 
-add_library(${PROJECT_NAME} INTERFACE)
+set(SOURCE_FILES
+    Xyz/Utilities/RandomGenerator.cpp
+    )
+
+add_library(${PROJECT_NAME} STATIC
+    ${PUBLIC_HEADERS}
+    ${SOURCE_FILES})
 
 target_sources(${PROJECT_NAME} INTERFACE ${PUBLIC_HEADERS})
 

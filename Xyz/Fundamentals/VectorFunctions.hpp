@@ -139,7 +139,7 @@ namespace Xyz
         if (normal(u) * v >= 0)
             return angle;
         else
-            return 2 * Pi - angle;
+            return 2 * PI_64 - angle;
     }
 
     template<typename T, unsigned N>

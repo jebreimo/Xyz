@@ -22,14 +22,26 @@ namespace Xyz
             return T(0);
     }
 
-    constexpr double toRadians(double degrees)
+    template <typename T>
+    constexpr double toRadians(T degrees)
     {
-        return degrees * Pi / 180;
+        return degrees * PI_64 / 180;
     }
 
-    constexpr double toDegrees(double radians)
+    constexpr float toRadians(float degrees)
     {
-        return radians * 180 / Pi;
+        return degrees * PI_32 / 180;
+    }
+
+    template <typename T>
+    constexpr double toDegrees(T radians)
+    {
+        return radians * 180 / PI_64;
+    }
+
+    constexpr float toDegrees(float radians)
+    {
+        return radians * 180 / PI_32;
     }
 
     inline int modulo(int dividend, int divisor)

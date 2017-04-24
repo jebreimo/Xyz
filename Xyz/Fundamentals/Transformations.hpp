@@ -30,7 +30,7 @@ namespace Xyz
     template <typename T>
     Matrix<T, 4, 4> scale4(T sx, T sy, T sz)
     {
-        return Matrix<T, 3, 3>{
+        return Matrix<T, 4, 4>{
                 sx, 0, 0, 0,
                 0, sy, 0, 0,
                 0, 0, sz, 0,

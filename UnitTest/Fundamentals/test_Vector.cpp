@@ -73,12 +73,12 @@ namespace {
 
     void test_Constructors()
     {
-        auto u = makeVector(1, 2);
+        auto u = makeVector(1, 2, 0, 1);
         Vector<double, 4> v = u;
         Y_EQUAL(v[0], 1);
         Y_EQUAL(v[1], 2);
         Y_EQUAL(v[2], 0);
-        Y_EQUAL(v[3], 0);
+        Y_EQUAL(v[3], 1);
     }
 
     void test_cross()
@@ -92,7 +92,7 @@ namespace {
     {
         Y_EQUIVALENT(counterclockwiseAngle(makeVector(6, 6),
                                            makeVector(4, -4)),
-                     3 * Pi / 2, 1e-10);
+                     3 * PI_64 / 2, 1e-10);
     }
 
     void test_rotated()
