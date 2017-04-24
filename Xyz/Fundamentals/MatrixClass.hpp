@@ -33,7 +33,8 @@ namespace Xyz
 
         Matrix()
         {
-            m_Values.fill(0);
+            for (unsigned i = 0; i < size(); ++i)
+                m_Values[i] = 0;
         }
 
         Matrix(std::initializer_list<T> v)
@@ -48,24 +49,24 @@ namespace Xyz
         template<typename U>
         Matrix(U (& arr)[M * N])
         {
-            for (auto dst = begin(); dst != end(); ++dst, ++arr)
-                *dst = T(*arr);
+            for (unsigned i = 0; i < size(); ++i)
+                m_Values[i] = arr[i];
         }
 
         template<typename U>
         explicit Matrix(const Matrix<U, M, N>& other)
         {
-            auto src = other.begin();
-            for (auto dst = begin(); dst != end(); ++dst, ++src)
-                *dst = T(*src);
+            auto src = other.data();
+            for (unsigned i = 0; i < size(); ++i)
+                m_Values[i] = src[i];
         }
 
         template<typename U>
         Matrix& operator=(const Matrix<U, M, N>& other)
         {
-            auto src = other.begin();
-            for (auto dst = begin(); dst != end(); ++dst, ++src)
-                *dst = T(*src);
+            auto src = other.data();
+            for (unsigned i = 0; i < size(); ++i)
+                m_Values[i] = src[i];
             return *this;
         }
 
@@ -81,32 +82,32 @@ namespace Xyz
 
         T* begin()
         {
-            return m_Values.data();
+            return m_Values;
         }
 
         T* end()
         {
-            return m_Values.data() + size();
+            return m_Values + size();
         }
 
         const T* begin() const
         {
-            return m_Values.data();
+            return m_Values;
         }
 
         const T* end() const
         {
-            return m_Values.data() + size();
+            return m_Values + size();
         }
 
         T* data()
         {
-            return m_Values.data();
+            return m_Values;
         }
 
         const T* data() const
         {
-            return m_Values.data();
+            return m_Values;
         }
 
         //static const Matrix& identity()
@@ -120,7 +121,7 @@ namespace Xyz
         //    return matrix;
         //}
     private:
-        std::array<T, M * N> m_Values;
+        T m_Values[M * N];
     };
 
     template<typename T, unsigned M, unsigned N>

@@ -43,14 +43,11 @@ namespace Xyz
                 m_Values[i] = arr[i];
         }
 
-        template<typename U, unsigned M>
-        Vector(const Vector<U, M>& other)
+        template<typename U>
+        Vector(const Vector<U, N>& other)
         {
-            unsigned i = 0;
-            for (; i < std::min(N, M); ++i)
+            for (unsigned i = 0; i < N; ++i)
                 m_Values[i] = other[i];
-            for (; i < N; ++i)
-                m_Values[i] = T();
         }
 
         template<typename U>
@@ -61,14 +58,11 @@ namespace Xyz
             return *this;
         }
 
-        template<typename U, unsigned M>
+        template<typename U>
         Vector& operator=(const Vector<U, N>& other)
         {
-            unsigned i = 0;
-            for (; i < std::min(N, M); ++i)
+            for (unsigned i = 0; i < N; ++i)
                 m_Values[i] = other[i];
-            for (; i < N; ++i)
-                m_Values[i] = T();
             return *this;
         }
 
@@ -94,12 +88,12 @@ namespace Xyz
 
         const T* begin() const
         {
-            return &m_Values[0];
+            return m_Values;
         }
 
         T* begin()
         {
-            return &m_Values[0];
+            return m_Values;
         }
 
         const T* end() const
@@ -114,16 +108,16 @@ namespace Xyz
 
         T* data()
         {
-            return &m_Values[0];
+            return m_Values;
         }
 
         const T* data() const
         {
-            return &m_Values[0];
+            return m_Values;
         }
 
     private:
-        std::array<T, N> m_Values;
+        T m_Values[N];
     };
 
     template<typename T, unsigned N>
