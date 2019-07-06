@@ -5,74 +5,52 @@
 ## This file is distributed under the Simplified BSD License.
 ## License text is included with the source distribution.
 ##****************************************************************************
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.13)
 project(Xyz)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall")
+set(CMAKE_CXX_STANDARD 14)
 
-add_subdirectory(Submodules)
-
-set(PUBLIC_HEADERS_XYZ
-    Xyz/Matrix.hpp
-    Xyz/Vector.hpp
-    Xyz/Xyz.hpp
+add_library(Xyz STATIC
+    include/Xyz/Matrix.hpp
+    include/Xyz/Vector.hpp
+    include/Xyz/Xyz.hpp
+    include/Xyz/Fundamentals/MatrixClass.hpp
+    include/Xyz/Fundamentals/MatrixFunctions.hpp
+    include/Xyz/Fundamentals/MatrixOperators.hpp
+    include/Xyz/Fundamentals/Projections.hpp
+    include/Xyz/Fundamentals/Transformations.hpp
+    include/Xyz/Fundamentals/VectorClass.hpp
+    include/Xyz/Fundamentals/VectorFunctions.hpp
+    include/Xyz/Fundamentals/VectorOperators.hpp
+    include/Xyz/Geometry/Line.hpp
+    include/Xyz/Geometry/LineClipping.hpp
+    include/Xyz/Geometry/LineLineIntersection.hpp
+    include/Xyz/Geometry/LineSegment.hpp
+    include/Xyz/Geometry/Rectangle.hpp
+    include/Xyz/Geometry/Triangle.hpp
+    include/Xyz/Utilities/Clamp.hpp
+    include/Xyz/Utilities/Comparisons.hpp
+    include/Xyz/Utilities/Constants.hpp
+    include/Xyz/Utilities/RandomGenerator.hpp
+    include/Xyz/Utilities/Utilities.hpp
+    src/Xyz/Utilities/RandomGenerator.cpp
     )
 
-set(PUBLIC_HEADERS_FUNDAMENTALS
-    Xyz/Fundamentals/MatrixClass.hpp
-    Xyz/Fundamentals/MatrixFunctions.hpp
-    Xyz/Fundamentals/MatrixOperators.hpp
-    Xyz/Fundamentals/Projections.hpp
-    Xyz/Fundamentals/Transformations.hpp
-    Xyz/Fundamentals/VectorClass.hpp
-    Xyz/Fundamentals/VectorFunctions.hpp
-    Xyz/Fundamentals/VectorOperators.hpp
+target_include_directories(Xyz
+    PUBLIC
+        $<INSTALL_INTERFACE:include>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/src
     )
 
-set(PUBLIC_HEADERS_GEOMETRY
-    Xyz/Geometry/Line.hpp
-    Xyz/Geometry/LineClipping.hpp
-    Xyz/Geometry/LineLineIntersection.hpp
-    Xyz/Geometry/LineSegment.hpp
-    Xyz/Geometry/Rectangle.hpp
-    Xyz/Geometry/Triangle.hpp
-    )
+add_library(Xyz::Xyz ALIAS Xyz)
 
-set(PUBLIC_HEADERS_UTILITIES
-    Xyz/Utilities/Clamp.hpp
-    Xyz/Utilities/Comparisons.hpp
-    Xyz/Utilities/Constants.hpp
-    Xyz/Utilities/RandomGenerator.hpp
-    Xyz/Utilities/Utilities.hpp
-    )
+if (EXISTS "${CMAKE_SOURCE_DIR}/external/Ytest/CMakeLists.txt")
+    add_subdirectory(external/Ytest EXCLUDE_FROM_ALL)
+    add_subdirectory(tests)
 
-set(PUBLIC_HEADERS
-    ${PUBLIC_HEADERS_XYZ}
-    ${PUBLIC_HEADERS_FUNDAMENTALS}
-    ${PUBLIC_HEADERS_GEOMETRY}
-    ${PUBLIC_HEADERS_UTILITIES}
-    )
-
-set(SOURCE_FILES
-    Xyz/Utilities/RandomGenerator.cpp
-    )
-
-add_library(${PROJECT_NAME} STATIC
-    ${PUBLIC_HEADERS}
-    ${SOURCE_FILES})
-
-target_sources(${PROJECT_NAME} INTERFACE ${PUBLIC_HEADERS})
-
-if (HAS_YTEST)
-    set(CTEST_OUTPUT_ON_FAILURE 1)
-    add_subdirectory(UnitTest)
-endif (HAS_YTEST)
-
-install(FILES ${PUBLIC_HEADERS_XYZ}
-    DESTINATION include/${PROJECT_NAME})
-install(FILES ${PUBLIC_HEADERS_FUNDAMENTALS}
-    DESTINATION include/${PROJECT_NAME}/Fundamentals)
-install(FILES ${PUBLIC_HEADERS_GEOMETRY}
-    DESTINATION include/${PROJECT_NAME}/Geometry)
-install(FILES ${PUBLIC_HEADERS_UTILITIES}
-    DESTINATION include/${PROJECT_NAME}/Utilities)
+    enable_testing()
+    add_test(XyzTest
+        COMMAND XyzTest)
+endif ()
