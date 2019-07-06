@@ -7,9 +7,6 @@
 ##****************************************************************************
 cmake_minimum_required(VERSION 2.8)
 
-find_package(Boost REQUIRED)
-include_directories(${BOOST_INCLUDE_DIR})
-
 add_executable(XyzTest
     main.cpp
     Fundamentals/YtestUtilities.hpp
@@ -26,4 +23,5 @@ add_executable(XyzTest
 
 target_link_libraries(XyzTest
     Xyz::Xyz
-    Ytest::Ytest)
+    Ytest::Ytest
+    )
