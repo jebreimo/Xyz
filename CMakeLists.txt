@@ -48,7 +48,7 @@ add_library(Xyz::Xyz ALIAS Xyz)
 
 if (EXISTS "${CMAKE_SOURCE_DIR}/external/Ytest/CMakeLists.txt")
     add_subdirectory(external/Ytest EXCLUDE_FROM_ALL)
-    add_subdirectory(tests)
+    add_subdirectory(tests/XyzTest)
 
     enable_testing()
     add_test(XyzTest

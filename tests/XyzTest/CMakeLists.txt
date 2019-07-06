@@ -10,23 +10,19 @@ cmake_minimum_required(VERSION 2.8)
 find_package(Boost REQUIRED)
 include_directories(${BOOST_INCLUDE_DIR})
 
-set(HEADER_FILES
+add_executable(XyzTest
+    main.cpp
     Fundamentals/YtestUtilities.hpp
     Fundamentals/test_Matrix.cpp
-    )
-set(SOURCE_FILES
-    main.cpp
     Fundamentals/test_Matrix.cpp
     Fundamentals/test_Projections.cpp
     Fundamentals/test_Transforms.cpp
     Fundamentals/test_Vector.cpp
-#    Geometry/test_Distance.cpp
+    #    Geometry/test_Distance.cpp
     Geometry/test_Intersections.cpp
-    Geometry/test_Triangle.cpp Geometry/test_LineClipping.cpp.cpp)
-
-add_executable(XyzTest
-    ${SOURCE_FILES}
-    ${HEADER_FILES})
+    Geometry/test_Triangle.cpp
+    Geometry/test_LineClipping.cpp.cpp
+    )
 
 target_link_libraries(XyzTest
     Xyz::Xyz
