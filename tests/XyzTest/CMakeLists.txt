@@ -7,6 +7,14 @@
 ##****************************************************************************
 cmake_minimum_required(VERSION 2.8)
 
+
+find_package(Ytest QUIET)
+
+if (NOT TARGET Ytest::Ytest)
+    message(VERBOSE "Ytest not found. Unit tests will not be built or run.")
+    return()
+endif ()
+
 add_executable(XyzTest
     main.cpp
     Fundamentals/YtestUtilities.hpp

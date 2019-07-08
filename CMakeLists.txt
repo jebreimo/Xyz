@@ -36,7 +36,7 @@ add_library(Xyz STATIC
     src/Xyz/Utilities/RandomGenerator.cpp
     )
 
-target_include_directories(Xyz
+target_include_directories(Xyz BEFORE
     PUBLIC
         $<INSTALL_INTERFACE:include>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -46,11 +46,56 @@ target_include_directories(Xyz
 
 add_library(Xyz::Xyz ALIAS Xyz)
 
+
+##
+## Unit tests
+##
+
 if (EXISTS "${CMAKE_SOURCE_DIR}/external/Ytest/CMakeLists.txt")
     add_subdirectory(external/Ytest EXCLUDE_FROM_ALL)
-    add_subdirectory(tests/XyzTest)
-
-    enable_testing()
-    add_test(XyzTest
-        COMMAND XyzTest)
 endif ()
+
+enable_testing()
+
+add_subdirectory(tests/XyzTest)
+
+
+##
+## "Export" the current build tree and make it possible for other modules
+## in the same build tree to locate it with find_package.
+##
+
+export(TARGETS Xyz
+    NAMESPACE Xyz::
+    FILE XyzConfig.cmake)
+
+export(PACKAGE Xyz)
+
+
+##
+## Installation
+##
+
+include(GNUInstallDirs)
+
+install(TARGETS Xyz
+    EXPORT XyzConfig
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    )
+
+install(EXPORT XyzConfig
+    FILE
+        XyzConfig.cmake
+    NAMESPACE
+        Xyz::
+    DESTINATION
+        ${CMAKE_INSTALL_LIBDIR}/cmake/Xyz
+    )
+
+install(
+    DIRECTORY
+        include/
+    DESTINATION
+        ${CMAKE_INSTALL_INCLUDEDIR}
+    )
