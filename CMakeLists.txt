@@ -69,8 +69,6 @@ export(TARGETS Xyz
     NAMESPACE Xyz::
     FILE XyzConfig.cmake)
 
-export(PACKAGE Xyz)
-
 
 ##
 ## Installation
