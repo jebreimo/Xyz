@@ -51,7 +51,7 @@ add_library(Xyz::Xyz ALIAS Xyz)
 ## Unit tests
 ##
 
-if (EXISTS "${CMAKE_SOURCE_DIR}/external/Ytest/CMakeLists.txt")
+if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/external/Ytest/CMakeLists.txt")
     add_subdirectory(external/Ytest EXCLUDE_FROM_ALL)
 endif ()
 
