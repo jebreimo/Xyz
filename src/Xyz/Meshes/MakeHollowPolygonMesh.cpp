@@ -5,15 +5,15 @@
 // This file is distributed under the BSD License.
 // License text is included with the source distribution.
 //****************************************************************************
-#include "Xyz/Makers/MakeHollowPolygon.hpp"
+#include "Xyz/Meshes/MakeHollowPolygonMesh.hpp"
 
 #include "Xyz/Utilities/Constants.hpp"
 
 namespace Xyz
 {
     std::pair<std::vector<Vector3f>, std::vector<short>>
-    makeHollowPolygon(short numberOfCorners, float innerRadius,
-                      float outerRadius, float zValue)
+    makeHollowPolygonMesh(short numberOfCorners, float innerRadius,
+                          float outerRadius, float zValue)
     {
         if (numberOfCorners <= 2)
             return std::pair<std::vector<Vector3f>, std::vector<short>>();

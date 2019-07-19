@@ -5,13 +5,13 @@
 // This file is distributed under the BSD License.
 // License text is included with the source distribution.
 //****************************************************************************
-#include "Xyz/Makers/MakeStarPolygon.hpp"
+#include "Xyz/Meshes/MakeStarPolygonMesh.hpp"
 
 namespace Xyz
 {
     std::pair<std::vector<Vector3f>, std::vector<short>>
-    makeStarPolygon(short numberOfCorners, float innerRadius,
-                    float outerRadius, float zValue)
+    makeStarPolygonMesh(short numberOfCorners, float innerRadius,
+                        float outerRadius, float zValue)
     {
         if (numberOfCorners <= 2)
             return std::pair<std::vector<Vector3f>, std::vector<short>>();
