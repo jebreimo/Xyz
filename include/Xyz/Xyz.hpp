@@ -16,6 +16,8 @@
 #include "Geometry/LineClipping.hpp"
 #include "Geometry/LineSegment.hpp"
 #include "Geometry/Triangle.hpp"
+#include "Makers/MakeHollowPolygon.hpp"
+#include "Makers/MakeStarPolygon.hpp"
 #include "Utilities/Comparisons.hpp"
 #include "Utilities/RandomGenerator.hpp"
 #include "Utilities/Utilities.hpp"

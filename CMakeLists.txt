@@ -28,11 +28,15 @@ add_library(Xyz STATIC
     include/Xyz/Geometry/LineSegment.hpp
     include/Xyz/Geometry/Rectangle.hpp
     include/Xyz/Geometry/Triangle.hpp
+    include/Xyz/Makers/MakeHollowPolygon.hpp
+    include/Xyz/Makers/MakeStarPolygon.hpp
     include/Xyz/Utilities/Clamp.hpp
     include/Xyz/Utilities/Comparisons.hpp
     include/Xyz/Utilities/Constants.hpp
     include/Xyz/Utilities/RandomGenerator.hpp
     include/Xyz/Utilities/Utilities.hpp
+    src/Xyz/Makers/MakeHollowPolygon.cpp
+    src/Xyz/Makers/MakeStarPolygon.cpp
     src/Xyz/Utilities/RandomGenerator.cpp
     )
 
