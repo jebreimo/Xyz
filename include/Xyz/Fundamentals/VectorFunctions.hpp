@@ -280,18 +280,21 @@ namespace Xyz
     template <typename T, unsigned N>
     T& getW(Vector<T, N>& v)
     {
+        static_assert(N > 3, "Vector doesn't have a w-coordinate.");
         return v[N - 1];
     }
 
     template <typename T, unsigned N>
     T getW(const Vector<T, N>& v)
     {
+        static_assert(N > 3, "Vector doesn't have a w-coordinate.");
         return v[N - 1];
     }
 
     template <typename T, unsigned N>
     Vector<T, N>& setW(Vector<T, N>& v, T z)
     {
+        static_assert(N > 3, "Vector doesn't have a w-coordinate.");
         v[N - 1] = z;
         return v;
     }

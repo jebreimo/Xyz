@@ -8,7 +8,7 @@
 #pragma once
 #include <array>
 #include <initializer_list>
-#include <stdexcept>
+#include "Xyz/Utilities/XyzException.hpp"
 
 namespace Xyz
 {
@@ -23,14 +23,12 @@ namespace Xyz
             return N;
         }
 
-        Vector()
-        {
-        }
+        Vector() = default;
 
         Vector(std::initializer_list<T> v)
         {
             if (v.size() != N)
-                throw std::invalid_argument("Incorrect number of arguments.");
+                XYZ_THROW("Incorrect number of arguments.");
             auto it = v.begin();
             for (unsigned i = 0; i < N; ++i)
                 m_Values[i] = *it++;

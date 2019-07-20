@@ -9,16 +9,16 @@
 
 namespace Xyz
 {
-    std::pair<std::vector<Vector3f>, std::vector<short>>
+    TriangleMesh<float>
     makeStarPolygonMesh(short numberOfCorners, float innerRadius,
                         float outerRadius, float zValue)
     {
         if (numberOfCorners <= 2)
-            return std::pair<std::vector<Vector3f>, std::vector<short>>();
+            return {};
         std::vector<Vector3f> points;
         points.reserve(size_t(numberOfCorners) * 2);
-        std::vector<short> indices;
-        indices.reserve(size_t(numberOfCorners) * 3);
+        std::vector<TriangleFace> faces;
+        faces.reserve(size_t(numberOfCorners) * 3);
         float halfAngle = PI_32 / numberOfCorners;
         for (short i = 0; i < numberOfCorners; ++i)
         {
@@ -30,11 +30,10 @@ namespace Xyz
             points.emplace_back(makeVector(outerRadius * std::cos(angle),
                                            outerRadius * std::sin(angle),
                                            zValue));
-            indices.push_back(short(2 * i));
-            indices.push_back(short(2 * i + 1));
-            indices.push_back(short(2 * i + 2));
+            auto index = short(2 * i);
+            faces.emplace_back(index, index + 1, index + 2);
         }
-        indices.back() = 0;
-        return std::make_pair(move(points), move(indices));
+        faces.back()[2] = 0;
+        return {move(points), move(faces)};
     }
 }
