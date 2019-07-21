@@ -7,11 +7,11 @@
 //****************************************************************************
 #pragma once
 #include <vector>
-#include "Xyz/Vector.hpp"
+#include "TriangleMesh.hpp"
 
 namespace Xyz
 {
-    std::pair<std::vector<Vector3f>, std::vector<short>>
+    TriangleMesh<float>
     makeHollowPolygonMesh(short numberOfCorners, float innerRadius,
                           float outerRadius, float zValue = 0);
 }

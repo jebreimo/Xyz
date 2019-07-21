@@ -9,7 +9,7 @@
 
 namespace Xyz
 {
-    std::pair<std::vector<Vector3f>, std::vector<short>>
+    TriangleMesh<float>
     makeRectangleMesh(float width, float height, float zValue)
     {
         float hw = width / 2;
@@ -19,10 +19,9 @@ namespace Xyz
             {hw, -hh, zValue},
             {hw, hh, zValue},
             {-hw, hh, zValue}};
-        std::vector<short> faces {
-            0, 1, 2,
-            0, 2, 3
-        };
+        std::vector<TriangleFace> faces {
+                {0, 1, 2},
+                {0, 2, 3}};
         return {move(points), move(faces)};
     }
 }

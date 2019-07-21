@@ -22,9 +22,9 @@ namespace Xyz
         TriangleMesh() = default;
 
         TriangleMesh(std::vector<Point3> points,
-                std::vector<TriangleFace> faces,
-                std::vector<Point3> normals = {},
-                std::vector<Point2> texturePoints = {})
+                     std::vector<TriangleFace> faces,
+                     std::vector<Point3> normals = {},
+                     std::vector<Point2> texturePoints = {})
             : m_Points(move(points)),
               m_Faces(move(faces)),
               m_Normals(move(normals)),
@@ -56,14 +56,14 @@ namespace Xyz
             return m_Faces;
         }
 
-        size_t sizeOfPoints() const
+        size_t hasNormals() const
         {
-            return m_Points.size() * sizeof(Point3);
+            return !m_Normals.empty();
         }
 
-        size_t sizeOfFaces() const
+        size_t hasTexturePoints() const
         {
-            return m_Faces.size() * sizeof(short);
+            return !m_TexturePoints.empty();
         }
     private:
         std::vector<Vector<T, 3>> m_Points;
@@ -88,35 +88,5 @@ namespace Xyz
             dest += rowSize;
         }
         return offset + N;
-    }
-
-    struct ArrayContents
-    {
-        enum Type
-        {
-            POINTS = 0,
-            NORMALS = 1,
-            TEXTURES = 2
-        };
-    };
-
-    template <typename T>
-    std::vector<float> makeArray(
-            const TriangleMesh<T>& mesh,
-            ArrayContents::Type contents = ArrayContents::POINTS,
-            size_t customValueCount = 0)
-    {
-        bool includeNormals = contents | ArrayContents::NORMALS;
-        bool includeTextures = contents | ArrayContents::TEXTURES;
-        auto rowSize = 3 + customValueCount
-                + (includeNormals ? 3 : 0)
-                + (includeTextures ? 2 : 0);
-        std::vector<float> result(mesh.points().size() * rowSize);
-        auto offset = copyPoints(mesh.points(), result.data(), result.size(), rowSize, 0);
-        if (includeNormals)
-            offset = copyPoints(mesh.normals(), result.data(), result.size(), rowSize, offset);
-        if (includeTextures)
-            copyPoints(mesh.texturePoints(), result.data(), result.size(), rowSize, offset);
-        return result;
     }
 }

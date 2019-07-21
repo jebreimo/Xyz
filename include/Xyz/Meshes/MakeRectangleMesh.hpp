@@ -7,10 +7,11 @@
 //****************************************************************************
 #pragma once
 #include <vector>
-#include <Xyz/Vector.hpp>
+#include "TriangleMesh.hpp"
+
 
 namespace Xyz
 {
-    std::pair<std::vector<Vector3f>, std::vector<short>>
+    TriangleMesh<float>
     makeRectangleMesh(float width = 2, float height = 2, float zValue = 0);
 }

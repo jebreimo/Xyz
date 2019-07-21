@@ -11,15 +11,15 @@
 
 namespace Xyz
 {
-    std::pair<std::vector<Vector3f>, std::vector<short>>
+    TriangleMesh<float>
     makeHollowPolygonMesh(short numberOfCorners, float innerRadius,
                           float outerRadius, float zValue)
     {
         if (numberOfCorners <= 2)
-            return std::pair<std::vector<Vector3f>, std::vector<short>>();
+            return {};
         std::vector<Vector3f> points;
         points.reserve(size_t(numberOfCorners) * 2);
-        std::vector<short> indices;
+        std::vector<TriangleFace> indices;
         indices.reserve(size_t(numberOfCorners) * 3);
         for (short i = 0; i < numberOfCorners; ++i)
         {
@@ -32,17 +32,14 @@ namespace Xyz
             points.emplace_back(makeVector(outerRadius * xFactor,
                                            outerRadius * yFactor,
                                            zValue));
-            indices.push_back(short(2 * i));
-            indices.push_back(short(2 * i + 3));
-            indices.push_back(short(2 * i + 1));
-            indices.push_back(short(2 * i));
-            indices.push_back(short(2 * i + 2));
-            indices.push_back(short(2 * i + 3));
+            auto n = short(2 * i);
+            indices.emplace_back(n, n + 3, n + 1);
+            indices.emplace_back(n, n + 2, n + 3);
         }
         auto n = indices.size();
-        indices[n - 1] = 1;
-        indices[n - 2] = 0;
-        indices[n - 5] = 1;
-        return std::make_pair(move(points), move(indices));
+        indices[n - 1][2] = 1;
+        indices[n - 1][1] = 0;
+        indices[n - 2][1] = 1;
+        return {move(points), move(indices)};
     }
 }

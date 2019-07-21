@@ -6,6 +6,7 @@
 // License text is included with the source distribution.
 //****************************************************************************
 #pragma once
+#include <cstdint>
 
 namespace Xyz
 {
@@ -13,23 +14,23 @@ namespace Xyz
     {
         TriangleFace() = default;
 
-        TriangleFace(short a, short b, short c)
+        TriangleFace(uint16_t a, uint16_t b, uint16_t c)
         {
             indices[0] = a;
             indices[1] = b;
             indices[2] = c;
         }
 
-        short& operator[](size_t i)
+        uint16_t& operator[](size_t i)
         {
             return indices[i];
         }
-        
-        short operator[](size_t i) const 
+
+        uint16_t operator[](size_t i) const
         {
             return indices[i];
         }
-        
-        std::array<short, 3> indices = {};
+
+        std::array<uint16_t, 3> indices = {};
     };
 }
