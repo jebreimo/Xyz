@@ -52,7 +52,7 @@ namespace Xyz
     {
         typedef std::tuple<LineRelationship, double, double> Result;
         auto vA = getVector(a);
-        auto nB = normal(getVector(b));
+        auto nB = getNormal(getVector(b));
 
         auto denominator = static_cast<double>(vA * nB);
         if (equal<double>(denominator, 0, epsilon))
@@ -63,7 +63,7 @@ namespace Xyz
                 return Result(LineRelationship::NONINTERSECTING, 0.0, 0.0);
         }
 
-        auto nA = normal(getVector(a));
+        auto nA = getNormal(getVector(a));
         auto vAB = getPoint(b) - getPoint(a);
         return Result(LineRelationship::INTERSECTING,
                       vAB * nB / denominator,

@@ -10,11 +10,11 @@
 #include "Xyz/Xyz.hpp"
 #include "Ytest/Ytest.hpp"
 
-namespace Ytest {
-
+namespace Ytest
+{
     template <typename T, unsigned N>
     bool equal(const Xyz::Vector<T, N>& v, const Xyz::Vector<T, N>& u)
     {
-        return Xyz::equivalent(v, u, 1e-9);
+        return Xyz::areEquivalent(v, u, 1e-9);
     }
 }

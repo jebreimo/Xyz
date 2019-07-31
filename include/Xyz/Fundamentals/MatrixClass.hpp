@@ -80,6 +80,16 @@ namespace Xyz
             return &m_Values[row * cols()];
         }
 
+        T at(unsigned row, unsigned col) const
+        {
+            return m_Values.at(row * cols() + col);
+        }
+
+        T& at(unsigned row, unsigned col)
+        {
+            return m_Values.at(row * cols() + col);
+        }
+
         T* begin()
         {
             return m_Values;
@@ -158,5 +168,23 @@ namespace Xyz
                 matrix[i][i] = 1;
         }
         return matrix;
+    }
+
+    template <unsigned K, unsigned L, typename T, unsigned M, unsigned N>
+    Matrix<T, K, L> makeSubmatrix(const Matrix<T, M, N>& m,
+                                  unsigned i0, unsigned j0)
+    {
+        static_assert(K <= M && L <= N, "The submatrix cannot be larger than the source matrix.");
+        Matrix<T, K, L> result;
+        for (unsigned i = 0; i < K; ++i)
+        {
+            auto iM = (i + i0) % M;
+            for (unsigned j = 0; j < L; ++j)
+            {
+                auto jM = (j + j0) % N;
+                result[i][j] = m[iM][jM];
+            }
+        }
+        return result;
     }
 }

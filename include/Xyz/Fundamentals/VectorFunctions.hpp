@@ -13,13 +13,13 @@
 namespace Xyz
 {
     template <typename T>
-    Vector<T, 2> normal(const Vector<T, 2>& v)
+    Vector<T, 2> getNormal(const Vector<T, 2>& v)
     {
         return makeVector(-v[1], v[0]);
     }
 
     template <typename T, unsigned N>
-    Vector<T, N>& assignDiv(Vector<T, N>& u, const Vector<T, N>& v)
+    Vector<T, N>& divideAssign(Vector<T, N>& u, const Vector<T, N>& v)
     {
         for (unsigned i = 0; i < N; ++i)
             u[i] /= v[i];
@@ -27,7 +27,7 @@ namespace Xyz
     }
 
     template <typename T, unsigned N>
-    Vector<T, N>& assignMul(Vector<T, N>& u, const Vector<T, N>& v)
+    Vector<T, N>& multiplyAssign(Vector<T, N>& u, const Vector<T, N>& v)
     {
         for (unsigned i = 0; i < N; ++i)
             u[i] *= v[i];
@@ -43,7 +43,7 @@ namespace Xyz
     }
 
     template <typename T, unsigned N>
-    Vector<T, N> div(const Vector<T, N>& u, const Vector<T, N>& v)
+    Vector<T, N> divide(const Vector<T, N>& u, const Vector<T, N>& v)
     {
         Vector<T, N> w;
         for (unsigned i = 0; i < N; ++i)
@@ -52,7 +52,7 @@ namespace Xyz
     }
 
     template <typename T, typename U, unsigned N>
-    Vector<T, N> div(U scalar, const Vector<T, N>& v)
+    Vector<T, N> divide(U scalar, const Vector<T, N>& v)
     {
         Vector<T, N> w;
         for (unsigned i = 0; i < N; ++i)
@@ -61,7 +61,7 @@ namespace Xyz
     }
 
     template <typename T, unsigned N>
-    Vector<T, N> mul(const Vector<T, N>& u, const Vector<T, N>& v)
+    Vector<T, N> multiply(const Vector<T, N>& u, const Vector<T, N>& v)
     {
         Vector<T, N> w;
         for (unsigned i = 0; i < N; ++i)
@@ -70,133 +70,112 @@ namespace Xyz
     }
 
     template <typename T, unsigned N>
-    T lengthSquared(const Vector<T, N>& v)
+    T getLengthSquared(const Vector<T, N>& v)
     {
         return v * v;
     }
 
     template <typename T, unsigned N>
-    bool equivalent(const Vector<T, N>& u, const Vector<T, N>& v,
-                    double epsilon = 1e-12)
+    bool areEquivalent(const Vector<T, N>& u, const Vector<T, N>& v,
+                       double epsilon = 1e-12)
     {
-        return lengthSquared(u - v) <= epsilon * epsilon;
+        return getLengthSquared(u - v) <= epsilon * epsilon;
     }
 
     template <unsigned N>
-    bool equivalent(const Vector<float, N>& u, const Vector<float, N>& v,
-                    float epsilon = 1e-12)
+    bool areEquivalent(const Vector<float, N>& u, const Vector<float, N>& v,
+                       float epsilon = 1e-12)
     {
-        return lengthSquared(u - v) <= epsilon * epsilon;
+        return getLengthSquared(u - v) <= epsilon * epsilon;
     }
 
     template <typename T, unsigned N>
-    double length(const Vector<T, N>& v)
+    auto getLength(const Vector<T, N>& v)
     {
-        return std::sqrt(lengthSquared(v));
-    }
-
-    template <unsigned N>
-    float length(const Vector<float, N>& v)
-    {
-        return std::sqrt(lengthSquared(v));
+        return std::sqrt(getLengthSquared(v));
     }
 
     template <typename T, unsigned N>
-    double cosAngle(const Vector<T, N>& u, const Vector<T, N>& v)
+    auto getCosAngle(const Vector<T, N>& u, const Vector<T, N>& v)
     {
-        return (u * v) / std::sqrt(lengthSquared(u) * lengthSquared(v));
-    }
-
-    template <unsigned N>
-    float cosAngle(const Vector<float, N>& u, const Vector<float, N>& v)
-    {
-        return (u * v) / std::sqrt(lengthSquared(u) * lengthSquared(v));
+        return (u * v) / std::sqrt(getLengthSquared(u) * getLengthSquared(v));
     }
 
     /** @brief Returns the smallest angle between @a u and @a v.
       * @return A value in the range 0 <= angle <= pi.
       */
     template <typename T, unsigned N>
-    double angle(const Vector<T, N>& u, const Vector<T, N>& v)
+    auto getAngle(const Vector<T, N>& u, const Vector<T, N>& v)
     {
-        return std::acos(cosAngle(u, v));
-    }
-
-    /** @brief Returns the smallest angle between @a u and @a v.
-      * @return A value in the range 0 <= angle <= pi.
-      */
-    template <unsigned N>
-    float angle(const Vector<float, N>& u, const Vector<float, N>& v)
-    {
-        return std::acos(cosAngle(u, v));
+        return std::acos(getCosAngle(u, v));
     }
 
     template <typename T>
-    double counterclockwiseAngle(const Vector<T, 2>& u,
-                                 const Vector<T, 2>& v)
+    auto getCounterclockwiseAngle(const Vector<T, 2>& u,
+                                  const Vector<T, 2>& v)
     {
-        auto angle = Xyz::angle(u, v);
-        if (normal(u) * v >= 0)
+        auto angle = getAngle(u, v);
+        if (getNormal(u) * v >= 0)
             return angle;
         else
             return 2 * PI_64 - angle;
     }
 
     template <typename T, unsigned N>
-    Vector<double, N> unit(const Vector<T, N>& v)
+    Vector<double, N> getUnit(const Vector<T, N>& v)
     {
-        return v / length(v);
+        return v / getLength(v);
     }
 
     template <unsigned N>
-    Vector<float, N> unit(const Vector<float, N>& v)
+    Vector<float, N> getUnit(const Vector<float, N>& v)
     {
-        return v / length(v);
+        return v / getLength(v);
     }
 
     template <typename T, unsigned N>
-    Vector<T, N>& resize(Vector<T, N>& v, T newLength)
+    Vector<T, N>& resizeAssign(Vector<T, N>& v, T newLength)
     {
-        return v *= (newLength / length(v));
+        return v *= (newLength / getLength(v));
     }
 
     template <typename T, unsigned N>
-    Vector<T, N> resized(const Vector<T, N>& v, T newLength)
+    Vector<T, N> resize(const Vector<T, N>& v, T newLength)
     {
         return v * (newLength / length(v));
     }
 
     template <typename T, unsigned N>
-    Vector<T, N>& clamp(Vector<T, N>& v, T min, T max)
+    Vector<T, N>& clampAssign(Vector<T, N>& v, T min, T max)
     {
         for (auto i = 0u; i < N; ++i)
             clamp(v[i], min, max);
     }
 
     template <typename T, unsigned N>
-    Vector<T, N> clamped(Vector<T, N> v, T min, T max)
+    Vector<T, N> clamp(Vector<T, N> v, T min, T max)
     {
-        clamp(v, min, max);
+        clampAssign(v, min, max);
         return v;
     }
 
     template <typename T>
-    Vector<T, 2> reflection(const Vector<T, 2>& v,
-                            const Vector<T, 2>& mirror)
+    Vector<T, 2> reflect(const Vector<T, 2>& v,
+                         const Vector<T, 2>& mirror)
     {
-        auto n = normal(mirror);
+        auto n = getNormal(mirror);
         return v - 2 * (v * n) * n;
     }
 
     template <typename T>
-    Vector<T, 2> rotated(const Vector<T, 2>& v, double radians)
+    Vector<T, 2> rotate(const Vector<T, 2>& v, double radians)
     {
         auto c = std::cos(radians);
         auto s = std::sin(radians);
         return makeVector(T(v[0] * c - v[1] * s), T(v[0] * s + v[1] * c));
     }
 
-    inline Vector<float, 2> rotated(const Vector<float, 2>& v, float radians)
+    inline Vector<float, 2> rotate(const Vector<float, 2>& v, float radians)
     {
         auto c = std::cos(radians);
         auto s = std::sin(radians);
