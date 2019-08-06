@@ -27,6 +27,15 @@ namespace
         Y_ASSERT(equalsIdentityMatrix(m * invert(m)));
     }
 
+    void test_Invert3()
+    {
+        Matrix3d m{
+                1, 4, 2,
+                2, 1, 3,
+                5, 7, 2};
+        Y_ASSERT(equalsIdentityMatrix(m * invert(m)));
+    }
+
     //void test_GetDeterminant4()
     //{
     //    Matrix4i m{
@@ -37,5 +46,6 @@ namespace
     //    Y_EQUAL(getDeterminant(m), -141);
     //}
 
-    Y_TEST(test_Invert2);
+    Y_TEST(test_Invert2,
+           test_Invert3);
 }
