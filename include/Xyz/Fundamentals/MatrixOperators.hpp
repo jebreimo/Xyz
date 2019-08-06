@@ -92,6 +92,41 @@ namespace Xyz
     }
 
     template <typename T, unsigned M, unsigned N>
+    Matrix<T, M, N> operator*(Matrix<T, M, N> a, T s)
+    {
+        for (unsigned i = 0; i < M; ++i)
+        {
+            for (unsigned j = 0; j < N; ++j)
+                a[i][j] *= s;
+        }
+        return a;
+    }
+
+    template <typename T, unsigned M, unsigned N>
+    Matrix<T, M, N>& operator*=(Matrix<T, M, N>& a, T s)
+    {
+        for (auto& v : a)
+            v *= s;
+        return a;
+    }
+
+    template <typename T, unsigned M, unsigned N>
+    Matrix<T, M, N> operator*(T s, Matrix<T, M, N> a)
+    {
+        for (auto& v : a)
+            v *= s;
+        return a;
+    }
+
+    template <typename T, unsigned M, unsigned N>
+    Matrix<T, M, N>& operator/=(Matrix<T, M, N>& a, T s)
+    {
+        for (auto& v : a)
+            v /= s;
+        return a;
+    }
+
+    template <typename T, unsigned M, unsigned N>
     Vector<T, M> operator*(const Matrix<T, M, N>& m, const Vector<T, N>& v)
     {
         Vector<T, M> result;

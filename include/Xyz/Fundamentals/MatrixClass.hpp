@@ -119,17 +119,6 @@ namespace Xyz
         {
             return m_Values;
         }
-
-        //static const Matrix& identity()
-        //{
-        //    static auto matrix = Matrix();
-        //    if (matrix[N - 1][N - 1] == 0)
-        //    {
-        //        for (auto i = 0; i < N; ++i)
-        //            matrix[i][i] = 1;
-        //    }
-        //    return matrix;
-        //}
     private:
         T m_Values[M * N];
     };

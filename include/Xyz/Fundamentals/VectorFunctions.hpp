@@ -9,6 +9,7 @@
 #include <cmath>
 #include "VectorClass.hpp"
 #include "Xyz/Utilities/Constants.hpp"
+#include "Xyz/Utilities/FloatType.hpp"
 
 namespace Xyz
 {
@@ -77,14 +78,7 @@ namespace Xyz
 
     template <typename T, unsigned N>
     bool areEquivalent(const Vector<T, N>& u, const Vector<T, N>& v,
-                       double epsilon = 1e-12)
-    {
-        return getLengthSquared(u - v) <= epsilon * epsilon;
-    }
-
-    template <unsigned N>
-    bool areEquivalent(const Vector<float, N>& u, const Vector<float, N>& v,
-                       float epsilon = 1e-12)
+                       typename FloatType<T>::type epsilon = 1e-12)
     {
         return getLengthSquared(u - v) <= epsilon * epsilon;
     }
@@ -122,13 +116,7 @@ namespace Xyz
     }
 
     template <typename T, unsigned N>
-    Vector<double, N> getUnit(const Vector<T, N>& v)
-    {
-        return v / getLength(v);
-    }
-
-    template <unsigned N>
-    Vector<float, N> getUnit(const Vector<float, N>& v)
+    Vector<typename FloatType<T>::type, N> getUnit(const Vector<T, N>& v)
     {
         return v / getLength(v);
     }
@@ -173,13 +161,6 @@ namespace Xyz
         auto c = std::cos(radians);
         auto s = std::sin(radians);
         return makeVector(T(v[0] * c - v[1] * s), T(v[0] * s + v[1] * c));
-    }
-
-    inline Vector<float, 2> rotate(const Vector<float, 2>& v, float radians)
-    {
-        auto c = std::cos(radians);
-        auto s = std::sin(radians);
-        return makeVector(v[0] * c - v[1] * s, v[0] * s + v[1] * c);
     }
 
     template <typename T, unsigned N>

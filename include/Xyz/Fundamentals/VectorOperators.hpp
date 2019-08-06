@@ -40,8 +40,8 @@ namespace Xyz
         return u;
     }
 
-    template <typename T, typename U, unsigned N>
-    Vector<T, N>& operator+=(Vector<T, N>& u, U scalar)
+    template <typename T, typename S, unsigned N>
+    Vector<T, N>& operator+=(Vector<T, N>& u, S scalar)
     {
         for (unsigned i = 0; i < N; ++i)
             u[i] += scalar;
@@ -56,24 +56,24 @@ namespace Xyz
         return u;
     }
 
-    template <typename T, typename U, unsigned N>
-    Vector<T, N>& operator-=(Vector<T, N>& u, U scalar)
+    template <typename T, typename S, unsigned N>
+    Vector<T, N>& operator-=(Vector<T, N>& u, S scalar)
     {
         for (unsigned i = 0; i < N; ++i)
             u[i] -= scalar;
         return u;
     }
 
-    template <typename T, typename U, unsigned N>
-    Vector<T, N>& operator*=(Vector<T, N>& u, U scalar)
+    template <typename T, typename S, unsigned N>
+    Vector<T, N>& operator*=(Vector<T, N>& u, S scalar)
     {
         for (unsigned i = 0; i < N; ++i)
             u[i] *= scalar;
         return u;
     }
 
-    template <typename T, typename U, unsigned N>
-    Vector<T, N>& operator/=(Vector<T, N>& u, U scalar)
+    template <typename T, typename S, unsigned N>
+    Vector<T, N>& operator/=(Vector<T, N>& u, S scalar)
     {
         for (unsigned i = 0; i < N; ++i)
             u[i] /= scalar;
@@ -103,8 +103,8 @@ namespace Xyz
         return w;
     }
 
-    template <typename T, typename U, unsigned N>
-    Vector<T, N> operator+(const Vector<T, N>& u, U scalar)
+    template <typename T, typename S, unsigned N>
+    Vector<T, N> operator+(const Vector<T, N>& u, S scalar)
     {
         Vector<T, N> w;
         for (unsigned i = 0; i < N; ++i)
@@ -121,8 +121,8 @@ namespace Xyz
         return w;
     }
 
-    template <typename T, typename U, unsigned N>
-    Vector<T, N> operator-(const Vector<T, N>& u, U scalar)
+    template <typename T, typename S, unsigned N>
+    Vector<T, N> operator-(const Vector<T, N>& u, S scalar)
     {
         Vector<T, N> w;
         for (unsigned i = 0; i < N; ++i)
@@ -130,8 +130,8 @@ namespace Xyz
         return w;
     }
 
-    template <typename T, typename U, unsigned N>
-    Vector<T, N> operator/(const Vector<T, N>& u, U scalar)
+    template <typename T, typename S, unsigned N>
+    Vector<T, N> operator/(const Vector<T, N>& u, S scalar)
     {
         Vector<T, N> w;
         for (unsigned i = 0; i < N; ++i)
@@ -148,8 +148,8 @@ namespace Xyz
         return result;
     }
 
-    template <typename T, typename U, unsigned N>
-    Vector<T, N> operator*(const Vector<T, N>& u, U scalar)
+    template <typename T, typename S, unsigned N>
+    Vector<T, N> operator*(const Vector<T, N>& u, S scalar)
     {
         Vector<T, N> w;
         for (unsigned i = 0; i < N; ++i)
@@ -157,8 +157,8 @@ namespace Xyz
         return w;
     }
 
-    template <typename T, typename U, unsigned N>
-    Vector<T, N> operator*(U scalar, const Vector<T, N>& v)
+    template <typename T, typename S, unsigned N>
+    Vector<T, N> operator*(S scalar, const Vector<T, N>& v)
     {
         return v * scalar;
     }

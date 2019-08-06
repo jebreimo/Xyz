@@ -6,9 +6,11 @@
 // License text is included with the source distribution.
 //****************************************************************************
 #pragma once
-#include "MatrixClass.hpp"
+#include <cmath>
 #include <numeric>
 #include <type_traits>
+#include <Xyz/Utilities/XyzException.hpp>
+#include "MatrixClass.hpp"
 
 namespace Xyz
 {
@@ -67,23 +69,14 @@ namespace Xyz
     }
 
     template <typename T, unsigned N>
-    std::pair<Matrix<T, N, N>, Matrix<T, N, N>> decomposeLU(Matrix<T, N, N> a)
+    bool areEquivalent(const Matrix<T, N, N>& a, const Matrix<T, N, N>& b,
+                       double epsilon = 1e-12)
     {
-        Matrix<T, N, N> u = {};
-        auto l = makeIdentityMatrix<T, N>();
-        for (unsigned k = 0; k < N; ++k)
-        {
-            u.at[k][k] = a[k][k];
-            for (unsigned i = k + 1; i < N; ++i)
-            {
-                l[i][k] = a[i][k] / u[k][k];
-                u[k][i] = a[k][i];
-            }
-            for (unsigned i = k + 1; i < N; ++i)
-                for (unsigned j = k + 1; j < N; ++j)
-                    a[i][j] = a[i][j] - l[i][k] * u[k][j];
-        }
-        return {l, u};
+        for (unsigned i = 0; i < N; ++i)
+            for (unsigned j = 0; j < N; ++j)
+                if (std::abs(a[i][j] - b[i][j]) > epsilon)
+                    return false;
+        return true;
     }
 
     template <typename T, unsigned M, size_t N>
@@ -112,11 +105,11 @@ namespace Xyz
         return determinant;
     }
 
-    template <typename T, unsigned M>
-    T getSubmatrixDeterminant(const Matrix <T, M, M>& m,
+    template <typename T, unsigned N>
+    T getSubmatrixDeterminant(const Matrix<T, N, N>& m,
                               const std::array<unsigned, 3>& columnIndices)
     {
-        constexpr auto r = M - 3;
+        constexpr auto r = N - 3;
         auto a = m[r][columnIndices[0]];
         auto b = m[r][columnIndices[1]];
         auto c = m[r][columnIndices[2]];
@@ -130,19 +123,61 @@ namespace Xyz
     }
 
     template <typename T, unsigned N>
-    T getDeterminant(const Matrix <T, N, N>& m)
+    T getDeterminant(const Matrix<T, N, N>& m)
     {
-        static_assert(N >= 3, "Matrix dimension must be greater than 3.");
+        static_assert(N > 3, "Matrix dimension must be greater than 3.");
         std::array<unsigned, N> subIndices;
         std::iota(subIndices.begin(), subIndices.end(), 0);
         return getSubmatrixDeterminant(m, subIndices);
     }
 
     template <typename T>
-    T getDeterminant(const Matrix <T, 3, 3>& m)
+    T getDeterminant(const Matrix<T, 3, 3>& m)
     {
         return m[0][0] * (m[1][1] * m[2][2] - m[1][2] * m[2][1])
                + m[0][1] * (m[1][2] * m[2][0] - m[1][0] * m[2][2])
                + m[0][2] * (m[1][0] * m[2][1] - m[1][1] * m[2][0]);
+    }
+
+    template <typename T>
+    T getDeterminant(const Matrix<T, 2, 2>& m)
+    {
+        return m[0][0] * m[1][1] - m[0][1] * m[1][0];
+    }
+
+    template <typename T>
+    Matrix<double, 2, 2> invert(const Matrix<T, 2, 2>& m)
+    {
+        auto det = getDeterminant(m);
+        if (det == 0)
+            XYZ_THROW("The matrix is not invertible.");
+        auto w = 1.0 / det;
+        return Matrix<double, 2, 2>{m[1][1] * w, -m[0][1] * w,
+                                    -m[1][0] * w, m[0][0] * w};
+    }
+
+    template <typename T>
+    Matrix<T, 3, 3> getTransposedCofactors(const Matrix<T, 3, 3>& m)
+    {
+        return Matrix<T, 3, 3>{
+            m[1][1] * m[2][2] - m[1][2] * m[2][1],
+            m[0][1] * m[2][2] - m[0][2] * m[2][1],
+            m[0][1] * m[1][2] - m[0][2] * m[1][1],
+            m[1][0] * m[2][2] - m[1][2] * m[2][0],
+            m[0][0] * m[2][2] - m[0][2] * m[2][0],
+            m[0][0] * m[1][2] - m[0][2] * m[1][0],
+            m[1][0] * m[2][1] - m[1][1] * m[2][0],
+            m[0][0] * m[2][1] - m[0][1] * m[2][0],
+            m[0][0] * m[1][1] - m[0][1] * m[1][0]
+        };
+    }
+
+    template <typename T>
+    Matrix<double, 3, 3> invert(const Matrix<T, 3, 3>& m)
+    {
+        auto c = getTransposedCofactors(m);
+        auto det = m[0][0] * c[0][0] - m[0][1] * c[1][0] + m[0][2] * c[2][0];
+        c *= 1.0 / det;
+        return {};
     }
 }
