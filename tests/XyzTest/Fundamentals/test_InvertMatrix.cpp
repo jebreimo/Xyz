@@ -6,7 +6,6 @@
 // License text is included with the source distribution.
 //****************************************************************************
 #include "Xyz/Matrix.hpp"
-
 #include "Ytest/Ytest.hpp"
 
 namespace
@@ -36,16 +35,17 @@ namespace
         Y_ASSERT(equalsIdentityMatrix(m * invert(m)));
     }
 
-    //void test_GetDeterminant4()
-    //{
-    //    Matrix4i m{
-    //            1, -2, 3, 2,
-    //            2, 3, 1, -1,
-    //            3, 3, 3, 3,
-    //            -1, 4, 2, 1};
-    //    Y_EQUAL(getDeterminant(m), -141);
-    //}
+    void test_Invert4()
+    {
+        Matrix4d m{
+                1, -2, 3, 2,
+                2, 3, 1, -1,
+                3, 7, 0, 3,
+                -1, 4, 2, 1};
+        Y_ASSERT(equalsIdentityMatrix(m * invert(m)));
+    }
 
     Y_TEST(test_Invert2,
-           test_Invert3);
+           test_Invert3,
+           test_Invert4);
 }

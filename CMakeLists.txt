@@ -38,7 +38,7 @@ add_library(Xyz STATIC
     src/Xyz/Meshes/MakeHollowPolygonMesh.cpp
     src/Xyz/Meshes/MakeStarPolygonMesh.cpp
     src/Xyz/Utilities/RandomGenerator.cpp
-    src/Xyz/Meshes/MakeRectangleMesh.cpp include/Xyz/Meshes/MakeRectangleMesh.hpp include/Xyz/Meshes/TriangleMesh.hpp include/Xyz/Utilities/XyzException.hpp include/Xyz/Meshes/TriangleFace.hpp include/Xyz/Geometry/Plane.hpp include/Xyz/Utilities/FloatType.hpp)
+    src/Xyz/Meshes/MakeRectangleMesh.cpp include/Xyz/Meshes/MakeRectangleMesh.hpp include/Xyz/Meshes/TriangleMesh.hpp include/Xyz/Utilities/XyzException.hpp include/Xyz/Meshes/TriangleFace.hpp include/Xyz/Geometry/Plane.hpp include/Xyz/Utilities/FloatType.hpp include/Xyz/Math/MatrixDeterminant.hpp include/Xyz/Math/InvertMatrix.hpp)
 
 target_include_directories(Xyz BEFORE
     PUBLIC

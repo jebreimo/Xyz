@@ -10,6 +10,8 @@
 #include "Fundamentals/MatrixClass.hpp"
 #include "Fundamentals/MatrixFunctions.hpp"
 #include "Fundamentals/MatrixOperators.hpp"
+#include "Math/InvertMatrix.hpp"
+#include "Math/MatrixDeterminant.hpp"
 
 namespace Xyz
 {
