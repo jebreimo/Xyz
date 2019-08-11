@@ -27,7 +27,7 @@ add_executable(XyzTest
     Geometry/test_Intersections.cpp
     Geometry/test_Triangle.cpp
     Geometry/test_LineClipping.cpp.cpp
-    Fundamentals/test_MatrixDeterminant.cpp Fundamentals/test_InvertMatrix.cpp)
+    Fundamentals/test_MatrixDeterminant.cpp Fundamentals/test_InvertMatrix.cpp Geometry/test_CoordinateSystem.cpp)
 
 target_link_libraries(XyzTest
     Xyz::Xyz

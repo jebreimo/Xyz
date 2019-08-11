@@ -48,6 +48,19 @@ namespace Xyz
                 m_Values[i] = other[i];
         }
 
+        Vector(const T* values, unsigned count)
+        {
+            if (count >= N)
+            {
+                std::copy(values, values + N, m_Values);
+            }
+            else
+            {
+                std::copy(values, values + count, m_Values);
+                std::fill(m_Values + count, m_Values + N, T());
+            }
+        }
+
         template<typename U>
         Vector& operator=(U (& arr)[N])
         {

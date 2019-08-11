@@ -63,7 +63,7 @@ namespace Xyz
     T getDeterminant(const Matrix<T, N, N>& m)
     {
         static_assert(N > 3, "Matrix dimension must be greater than 3.");
-        std::array<unsigned, N - 1> subIndices;
+        std::array<unsigned, N> subIndices;
         std::iota(subIndices.begin(), subIndices.end(), 0);
         return Details::getSubmatrixDeterminant(m, subIndices);
     }

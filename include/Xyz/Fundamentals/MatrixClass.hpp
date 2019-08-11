@@ -6,9 +6,11 @@
 // License text is included with the source distribution.
 //****************************************************************************
 #pragma once
+#include <algorithm>
 #include <array>
 #include <initializer_list>
 #include <stdexcept>
+#include "VectorClass.hpp"
 
 namespace Xyz
 {
@@ -46,22 +48,21 @@ namespace Xyz
                 *dst = *it;
         }
 
-        template<typename U>
+        template <typename U>
         Matrix(U (& arr)[M * N])
         {
             for (unsigned i = 0; i < size(); ++i)
                 m_Values[i] = arr[i];
         }
 
-        template<typename U>
+        template <typename U>
         explicit Matrix(const Matrix<U, M, N>& other)
         {
             auto src = other.data();
             for (unsigned i = 0; i < size(); ++i)
                 m_Values[i] = src[i];
         }
-
-        template<typename U>
+        template <typename U>
         Matrix& operator=(const Matrix<U, M, N>& other)
         {
             auto src = other.data();
@@ -88,6 +89,50 @@ namespace Xyz
         T& at(unsigned row, unsigned col)
         {
             return m_Values.at(row * cols() + col);
+        }
+
+        Vector<T, N> row(unsigned r) const
+        {
+            return Vector<T, N>(&m_Values[r * cols()], N);
+        }
+
+        void setRow(unsigned r, const T* values, unsigned count)
+        {
+            count = count <= N ? count : N;
+            std::copy(values, values + count, m_Values + r * cols());
+        }
+
+        void setRow(unsigned r, const Vector<T, N>& v)
+        {
+            setRow(r, v.data(), v.size());
+        }
+
+        Vector<T, M> col(unsigned c) const
+        {
+            Vector<T, M> result;
+            auto ptr = m_Values + c;
+            for (unsigned i = 0; i < N; ++i)
+            {
+                result[i] = *ptr;
+                ptr += cols();
+            }
+            return result;
+        }
+
+        void setCol(unsigned c, const T* values, unsigned count)
+        {
+            count = count <= N ? count : N;
+            auto ptr = m_Values + c;
+            for (unsigned i = 0; i < count; ++i)
+            {
+                *ptr = values[i];
+                ptr += cols();
+            }
+        }
+
+        void setCol(unsigned c, const Vector<T, N>& v)
+        {
+            setCol(c, v.data(), v.size());
         }
 
         T* begin()
@@ -157,6 +202,28 @@ namespace Xyz
                 matrix[i][i] = 1;
         }
         return matrix;
+    }
+
+    template <typename T, unsigned M, unsigned N>
+    Matrix<T, M, N> makeMatrixWithRows(const Vector<T, N>* rows,
+                                       unsigned count)
+    {
+        auto n = std::min(M, count);
+        Matrix<T, M, N> result;
+        for (unsigned i = 0; i < n; ++i)
+            result.setRow(i, rows[i]);
+        return result;
+    }
+
+    template <typename T, unsigned M, unsigned N>
+    Matrix<T, M, N> makeMatrixWithCols(const Vector<T, N>* cols,
+                                       unsigned count)
+    {
+        auto n = std::min(M, count);
+        Matrix<T, M, N> result;
+        for (unsigned i = 0; i < n; ++i)
+            result.setCol(i, cols[i]);
+        return result;
     }
 
     template <unsigned K, unsigned L, typename T, unsigned M, unsigned N>
