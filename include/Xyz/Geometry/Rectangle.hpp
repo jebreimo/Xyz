@@ -57,9 +57,9 @@ namespace Xyz
             if (0 <= getX(m_Size) && 0 <= getY(m_Size))
                 return m_Origin;
             else if (0 <= getX(m_Size))
-                return makeVector(getX(m_Origin), getY(m_Origin) + getY(m_Size));
+                return makeVector2(getX(m_Origin), getY(m_Origin) + getY(m_Size));
             else if (0 <= getY(m_Size))
-                return makeVector(getX(m_Origin) + getX(m_Size), getY(m_Origin));
+                return makeVector2(getX(m_Origin) + getX(m_Size), getY(m_Origin));
             else
                 return m_Origin + m_Size;
         }
@@ -69,9 +69,9 @@ namespace Xyz
             if (0 <= getX(m_Size) && 0 <= getY(m_Size))
                 return m_Origin + m_Size;
             else if (0 <= getX(m_Size))
-                return makeVector(getX(m_Origin) + getX(m_Size), getY(m_Origin));
+                return makeVector2(getX(m_Origin) + getX(m_Size), getY(m_Origin));
             else if (0 <= getY(m_Size))
-                return makeVector(getX(m_Origin), getY(m_Origin) + getY(m_Size));
+                return makeVector2(getX(m_Origin), getY(m_Origin) + getY(m_Size));
             else
                 return m_Origin;
         }

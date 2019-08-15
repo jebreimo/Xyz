@@ -126,13 +126,15 @@ namespace Xyz
         return a;
     }
 
-    template <typename T, unsigned M, unsigned N>
-    Vector<T, M> operator*(const Matrix<T, M, N>& m, const Vector<T, N>& v)
+    template <typename T, typename U, unsigned M, unsigned N>
+    Vector<decltype(T() * U()), M>
+    operator*(const Matrix<T, M, N>& m, const Vector<U, N>& v)
     {
-        Vector<T, M> result;
+        using R = decltype(T() * U());
+        Vector<R, M> result;
         for (auto i = 0u; i < M; ++i)
         {
-            T value = 0;
+            auto value = R();
             for (auto j = 0u; j < N; ++j)
                 value += m[i][j] * v[j];
             result[i] = value;
@@ -140,13 +142,15 @@ namespace Xyz
         return result;
     }
 
-    template <typename T, unsigned M, unsigned N>
-    Vector<T, N> operator*(const Vector<T, M>& v, const Matrix<T, M, N>& m)
+    template <typename T, typename U, unsigned M, unsigned N>
+    Vector<decltype(T() * U()), M>
+    operator*(const Vector<T, M>& v, const Matrix<U, M, N>& m)
     {
-        Vector<T, N> result;
+        using R = decltype(T() * U());
+        Vector<R, N> result;
         for (auto i = 0u; i < N; ++i)
         {
-            T value = 0;
+            R value = 0;
             for (auto j = 0u; j < M; ++j)
                 value += v[j] * m[j][i];
             result[i] = value;

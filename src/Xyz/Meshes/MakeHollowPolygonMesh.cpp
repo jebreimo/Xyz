@@ -26,12 +26,12 @@ namespace Xyz
             float angle = i * 2 * PI_32 / numberOfCorners;
             auto xFactor = std::cos(angle);
             auto yFactor = std::sin(angle);
-            points.emplace_back(makeVector(innerRadius * xFactor,
-                                           innerRadius * yFactor,
-                                           zValue));
-            points.emplace_back(makeVector(outerRadius * xFactor,
-                                           outerRadius * yFactor,
-                                           zValue));
+            points.emplace_back(makeVector3(innerRadius * xFactor,
+                                            innerRadius * yFactor,
+                                            zValue));
+            points.emplace_back(makeVector3(outerRadius * xFactor,
+                                            outerRadius * yFactor,
+                                            zValue));
             auto n = short(2 * i);
             indices.emplace_back(n, n + 3, n + 1);
             indices.emplace_back(n, n + 2, n + 3);

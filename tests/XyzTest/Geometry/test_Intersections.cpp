@@ -33,7 +33,7 @@ namespace {
     template <typename T>
     Xyz::LineSegment<T, 2> makeLineSegment(T x1, T y1, T x2, T y2)
     {
-        return Xyz::makeLineSegment(makeVector(x1, y1), makeVector(x2, y2));
+        return Xyz::makeLineSegment(makeVector2(x1, y1), makeVector2(x2, y2));
     }
 
     static void test_getIntersectionFactors()

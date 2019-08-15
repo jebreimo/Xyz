@@ -14,21 +14,21 @@ namespace {
     void test_PerspectiveProjection()
     {
         auto m = Xyz::makeFrustumMatrix<double>(-1, 1, -1, 1, 9, 11);
-        auto v = Xyz::makeVector<double>(-1.0, -1.0, -9.0, 1.0);
+        auto v = Xyz::makeVector4<double>(-1.0, -1.0, -9.0, 1.0);
         auto w = m * v;
-        Y_EQUAL(w, Xyz::makeVector<double>(-9, -9, -9, 9));
+        Y_EQUAL(w, Xyz::makeVector4<double>(-9, -9, -9, 9));
     }
 
     void test_LookAt()
     {
-        auto m = Xyz::makeLookAtMatrix<double>(Xyz::makeVector(5, 2, 3),
-                                               Xyz::makeVector(1, 8, 3),
-                                               Xyz::makeVector(0, 0, 1));
-        auto result = m * Xyz::makeVector(1.5, 4.0, 3.0, 1.0);
-        auto expected = Xyz::makeVector(-std::sqrt(1 + 1.5 * 1.5),
-                                        0.0,
-                                        -std::sqrt(2 * 2 + 3 * 3),
-                                        1.0);
+        auto m = Xyz::makeLookAtMatrix<double>(Xyz::makeVector3(5, 2, 3),
+                                               Xyz::makeVector3(1, 8, 3),
+                                               Xyz::makeVector3(0, 0, 1));
+        auto result = m * Xyz::makeVector4(1.5, 4.0, 3.0, 1.0);
+        auto expected = Xyz::makeVector4(-std::sqrt(1 + 1.5 * 1.5),
+                                         0.0,
+                                         -std::sqrt(2 * 2 + 3 * 3),
+                                         1.0);
         Y_EQUAL(result, expected);
     }
 

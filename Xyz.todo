@@ -9,4 +9,4 @@
 + Make test of invert for 3x3.
 + Make test of invert for 4x4.
 + Implement invert for 4x4.
-- Rename Plane to Euclidian3Space
++ Rename Plane to Euclidian3Space

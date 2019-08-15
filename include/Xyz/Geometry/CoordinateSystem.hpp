@@ -30,7 +30,7 @@ namespace Xyz
         }
 
         CoordinateSystem(const Vector<T, 3>& origin,
-              const Matrix<T, 3, 3>& fromWorldTransform)
+                         const Matrix<T, 3, 3>& fromWorldTransform)
                 : m_Origin(origin),
                   m_ToWorld(invert(fromWorldTransform)),
                   m_FromWorld(fromWorldTransform)
@@ -51,37 +51,20 @@ namespace Xyz
             return m_ToWorld;
         }
 
-        const Vector<T, 3>& axis1() const
+        template <typename U>
+        auto toWorldPos(const Vector<U, 3>& p) const
         {
-            return m_ToWorld.row(0);
+            return m_ToWorld * p + m_Origin;
         }
 
-        const Vector<T, 3>& axis2() const
+        template <typename U>
+        auto fromWorldPos(const Vector<U, 3>& p) const
         {
-            return m_ToWorld.row(1);
-        }
-
-        const Vector<T, 3>& axis3() const
-        {
-            return m_ToWorld.row(2);
+            return m_FromWorld * (p - m_Origin);
         }
     private:
         Vector<T, 3> m_Origin;
         Matrix<T, 3, 3> m_ToWorld;
         Matrix<T, 3, 3> m_FromWorld;
     };
-
-    template <typename T>
-    Vector<T, 3> fromCoordinateSystemPoint(const CoordinateSystem<T>& cs,
-                                           const Vector<T, 3>& point)
-    {
-        return cs.toWorldTransform() * point + cs.origin();
-    }
-
-    template <typename T>
-    Vector<T, 3> toCoordinateSystemPoint(const CoordinateSystem<T>& cs,
-                                         const Vector<T, 3>& point)
-    {
-        return cs.fromWorldTransform() * (point - cs.origin());
-    }
 }

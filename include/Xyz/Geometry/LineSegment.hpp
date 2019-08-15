@@ -121,7 +121,7 @@ namespace Xyz {
         auto lv = getVector(line);
         auto len = getLengthSquared(lv);
         auto pv = point - getStart(line);
-        return makeVector<T>(lv * pv / len, getNormal(lv) * pv / len);
+        return makeVector2<T>(lv * pv / len, getNormal(lv) * pv / len);
     }
 
 }

@@ -6,6 +6,7 @@
 // License text is included with the source distribution.
 //****************************************************************************
 #pragma once
+#include <Xyz/Utilities/FloatType.hpp>
 #include <Xyz/Utilities/XyzException.hpp>
 
 namespace Xyz
@@ -76,26 +77,26 @@ namespace Xyz
     }
 
     template <typename T, unsigned N>
-    Matrix<double, N, N> invert(const Matrix<T, N, N>& m)
+    Matrix<T, N, N> invert(const Matrix<T, N, N>& m)
     {
         auto c = Details::getTransposedCofactors(m);
-        double det = 0;
+        T det = 0;
         for (unsigned i = 0; i < N; ++i)
             det += m[0][i] * c[i][0];
         if (det == 0)
             XYZ_THROW("The matrix is not invertible.");
-        c *= 1.0 / det;
+        c *= T(1) / det;
         return c;
     }
 
     template <typename T>
-    Matrix<double, 2, 2> invert(const Matrix<T, 2, 2>& m)
+    Matrix<T, 2, 2> invert(const Matrix<T, 2, 2>& m)
     {
         auto det = m[0][0] * m[1][1] - m[0][1] * m[1][0];
         if (det == 0)
             XYZ_THROW("The matrix is not invertible.");
-        auto w = 1.0 / det;
-        return Matrix<double, 2, 2>{
+        auto w = T(1) / det;
+        return Matrix<typename FloatType<T>::type, 2, 2>{
                 m[1][1] * w, -m[0][1] * w,
                 -m[1][0] * w, m[0][0] * w};
     }

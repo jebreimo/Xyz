@@ -12,20 +12,20 @@ namespace
 {
     void test_containsPoint()
     {
-        auto triangle = Xyz::makeTriangle(Xyz::makeVector(-5, 0),
-                                          Xyz::makeVector(5, 0),
-                                          Xyz::makeVector(0, 5));
-        Y_ASSERT(containsPoint(triangle, Xyz::makeVector(0, 2), 1e-12));
-        Y_ASSERT(!containsPoint(triangle, Xyz::makeVector(-3, 2), 1e-12));
+        auto triangle = Xyz::makeTriangle(Xyz::makeVector2(-5, 0),
+                                          Xyz::makeVector2(5, 0),
+                                          Xyz::makeVector2(0, 5));
+        Y_ASSERT(containsPoint(triangle, Xyz::makeVector2(0, 2), 1e-12));
+        Y_ASSERT(!containsPoint(triangle, Xyz::makeVector2(-3, 2), 1e-12));
     }
 
     void test_containsPointInclusive()
     {
-        auto tri = Xyz::makeTriangle(Xyz::makeVector(-5, 0),
-                                     Xyz::makeVector(5, 0),
-                                     Xyz::makeVector(0, 5));
-        Y_ASSERT(containsPointInclusive(tri, Xyz::makeVector(0, 2), 1e-12));
-        Y_ASSERT(containsPointInclusive(tri, Xyz::makeVector(-3, 2), 1e-12));
+        auto tri = Xyz::makeTriangle(Xyz::makeVector2(-5, 0),
+                                     Xyz::makeVector2(5, 0),
+                                     Xyz::makeVector2(0, 5));
+        Y_ASSERT(containsPointInclusive(tri, Xyz::makeVector2(0, 2), 1e-12));
+        Y_ASSERT(containsPointInclusive(tri, Xyz::makeVector2(-3, 2), 1e-12));
     }
 
     Y_SUBTEST("Geometry",
