@@ -21,5 +21,14 @@ namespace
         Y_EQUAL(p0, p2);
     }
 
-    Y_TEST(test_Roundtrip);
+    void test_Something()
+    {
+        Xyz::CoordinateSystem<double> sys({0, 0, 0}, {0, 1, 0},
+                                          {0, 0, 1}, {1, 0, 0});
+        Xyz::Vector3d p1 = {-1, -1, 1};
+        auto p2 = sys.toWorldPos(p1);
+        Y_EQUAL(p2, Xyz::makeVector3(1, -1, -1));
+    }
+
+    Y_TEST(test_Roundtrip, test_Something);
 }

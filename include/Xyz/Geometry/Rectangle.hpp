@@ -88,9 +88,9 @@ namespace Xyz
             switch (n & 0x3)
             {
             case 0: return m_Origin;
-            case 1: return m_Origin + vector2(getX(m_Size), T(0));
+            case 1: return m_Origin + makeVector2(getX(m_Size), T(0));
             case 2: return m_Origin + m_Size;
-            case 3: return m_Origin + vector2(T(0), getY(m_Size));
+            case 3: return m_Origin + makeVector2(T(0), getY(m_Size));
             default: return Vector<T, 2>{};
             }
         }

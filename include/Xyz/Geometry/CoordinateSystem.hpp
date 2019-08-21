@@ -23,10 +23,10 @@ namespace Xyz
                          const Vector<T, 3>& axis3)
                 : m_Origin(origin)
         {
-            m_ToWorld.setRow(0, axis1 / getLengthSquared(axis1));
-            m_ToWorld.setRow(1, axis2 / getLengthSquared(axis2));
-            m_ToWorld.setRow(2, axis3 / getLengthSquared(axis3));
-            m_FromWorld = invert(m_ToWorld);
+            m_FromWorld.setRow(0, axis1 / getLengthSquared(axis1));
+            m_FromWorld.setRow(1, axis2 / getLengthSquared(axis2));
+            m_FromWorld.setRow(2, axis3 / getLengthSquared(axis3));
+            m_ToWorld = invert(m_FromWorld);
         }
 
         CoordinateSystem(const Vector<T, 3>& origin,
