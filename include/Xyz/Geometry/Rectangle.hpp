@@ -52,6 +52,11 @@ namespace Xyz
             m_Size = size;
         }
 
+        bool isClockwise() const
+        {
+            return (m_Size[0] < 0) != (m_Size[1] < 0);
+        }
+
         Vector<T, 2> bottomLeft() const
         {
             if (0 <= getX(m_Size) && 0 <= getY(m_Size))
