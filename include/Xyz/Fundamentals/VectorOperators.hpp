@@ -40,8 +40,8 @@ namespace Xyz
         return u;
     }
 
-    template <typename T, typename S, unsigned N>
-    Vector<T, N>& operator+=(Vector<T, N>& u, S scalar)
+    template <typename T, unsigned N>
+    Vector<T, N>& operator+=(Vector<T, N>& u, T scalar)
     {
         for (unsigned i = 0; i < N; ++i)
             u[i] += scalar;
@@ -56,8 +56,8 @@ namespace Xyz
         return u;
     }
 
-    template <typename T, typename S, unsigned N>
-    Vector<T, N>& operator-=(Vector<T, N>& u, S scalar)
+    template <typename T, unsigned N>
+    Vector<T, N>& operator-=(Vector<T, N>& u, T scalar)
     {
         for (unsigned i = 0; i < N; ++i)
             u[i] -= scalar;

@@ -84,7 +84,7 @@ namespace Xyz
             else
                 t = (getX(topRight) - getX(start)) / getX(vector);
 
-            auto point = start + t * vector;
+            auto point = start + T(t) * vector;
             if (code == startCode)
             {
                 tStart = t;

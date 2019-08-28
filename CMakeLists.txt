@@ -29,16 +29,14 @@ add_library(Xyz STATIC
     include/Xyz/Geometry/Rectangle.hpp
     include/Xyz/Geometry/Triangle.hpp
     include/Xyz/Meshes/MakeHollowPolygonMesh.hpp
-    include/Xyz/Meshes/MakeStarPolygonMesh.hpp
     include/Xyz/Utilities/Clamp.hpp
     include/Xyz/Utilities/Comparisons.hpp
     include/Xyz/Utilities/Constants.hpp
     include/Xyz/Utilities/RandomGenerator.hpp
     include/Xyz/Utilities/Utilities.hpp
     src/Xyz/Meshes/MakeHollowPolygonMesh.cpp
-    src/Xyz/Meshes/MakeStarPolygonMesh.cpp
     src/Xyz/Utilities/RandomGenerator.cpp
-    src/Xyz/Meshes/MakeRectangleMesh.cpp include/Xyz/Meshes/MakeRectangleMesh.hpp include/Xyz/Meshes/TriangleMesh.hpp include/Xyz/Utilities/XyzException.hpp include/Xyz/Meshes/TriangleFace.hpp include/Xyz/Geometry/CoordinateSystem.hpp include/Xyz/Utilities/FloatType.hpp include/Xyz/Math/MatrixDeterminant.hpp include/Xyz/Math/InvertMatrix.hpp)
+    src/Xyz/Meshes/MakeRectangleMesh.cpp include/Xyz/Meshes/MakeRectangleMesh.hpp include/Xyz/Meshes/TriangleMesh.hpp include/Xyz/Utilities/XyzException.hpp include/Xyz/Meshes/TriangleFace.hpp include/Xyz/Geometry/CoordinateSystem.hpp include/Xyz/Utilities/FloatType.hpp include/Xyz/Math/MatrixDeterminant.hpp include/Xyz/Math/InvertMatrix.hpp include/Xyz/Meshes/RegularPolygonGenerator.hpp include/Xyz/Meshes/StarPolygonGenerator.hpp)
 
 target_include_directories(Xyz BEFORE
     PUBLIC
