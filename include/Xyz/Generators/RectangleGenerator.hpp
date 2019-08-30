@@ -1,37 +1,26 @@
 //****************************************************************************
 // Copyright © 2019 Jan Erik Breimo. All rights reserved.
-// Created by Jan Erik Breimo on 2019-08-23.
+// Created by Jan Erik Breimo on 2019-08-29.
 //
 // This file is distributed under the BSD License.
 // License text is included with the source distribution.
 //****************************************************************************
 #pragma once
-#include "Xyz/Vector.hpp"
+#include "Xyz/Geometry/Rectangle.hpp"
 
 namespace Xyz
 {
-    class StarPolygonGenerator
+    class RectangleGenerator
     {
     public:
-        double outerRadius() const
+        double radius() const
         {
-            return m_OuterRadius;
+            return m_Radius;
         }
 
-        StarPolygonGenerator& setOuterRadius(double outerRadius)
+        RectangleGenerator& setRadius(double radius)
         {
-            m_OuterRadius = outerRadius;
-            return *this;
-        }
-
-        double innerRadius() const
-        {
-            return m_InnerRadius;
-        }
-
-        StarPolygonGenerator& setInnerRadius(double innerRadius)
-        {
-            m_InnerRadius = innerRadius;
+            m_Radius = radius;
             return *this;
         }
 
@@ -40,7 +29,7 @@ namespace Xyz
             return m_Angle;
         }
 
-        StarPolygonGenerator& setAngle(double angle)
+        RectangleGenerator& setAngle(double angle)
         {
             m_Angle = angle;
             return *this;
@@ -51,7 +40,7 @@ namespace Xyz
             return m_Center;
         }
 
-        StarPolygonGenerator& setCenter(const Vector2d& center)
+        RectangleGenerator& setCenter(const Vector2d& center)
         {
             m_Center = center;
             return *this;
@@ -62,7 +51,7 @@ namespace Xyz
             return m_NumberOfPoints;
         }
 
-        StarPolygonGenerator& setNumberOfPoints(size_t numberOfPoints)
+        RectangleGenerator& setNumberOfPoints(size_t numberOfPoints)
         {
             m_NumberOfPoints = numberOfPoints;
             return *this;
@@ -73,7 +62,7 @@ namespace Xyz
             return m_IsClosed;
         }
 
-        StarPolygonGenerator& setIsClosed(bool isClosed)
+        RectangleGenerator& setIsClosed(bool isClosed)
         {
             m_IsClosed = isClosed;
             return *this;
@@ -82,18 +71,16 @@ namespace Xyz
         template <typename T>
         std::vector<Vector<T, 2>> generate() const
         {
-            if (m_NumberOfPoints < 2)
+            if (m_NumberOfPoints < 3)
                 return {};
             std::vector<Vector<T, 2>> result;
-            result.reserve(2 * (m_NumberOfPoints + (m_IsClosed ? 1 : 0)));
+            result.reserve(m_NumberOfPoints + (m_IsClosed ? 1 : 0));
             for (size_t i = 0; i < m_NumberOfPoints; ++i)
             {
-                auto angle1 = m_Angle - i * PI_64 / m_NumberOfPoints;
-                result.emplace_back({T(m_Center[0] + m_OuterRadius * cos(angle1)),
-                                     T(m_Center[1] + m_OuterRadius * sin(angle1))});
-                auto angle2 = m_Angle - (i + 0.5) * PI_64 / m_NumberOfPoints;
-                result.emplace_back({T(m_Center[0] + m_InnerRadius * cos(angle2)),
-                                     T(m_Center[1] + m_InnerRadius * sin(angle2))});
+                auto angle = m_Angle + 2 * i * PI_64 / m_NumberOfPoints;
+                result.push_back({
+                                         T(m_Center[0] + m_Radius * cos(angle)),
+                                         T(m_Center[1] + m_Radius * sin(angle))});
             }
             if (m_IsClosed && !result.empty())
                 result.push_back(result.front());
@@ -101,8 +88,7 @@ namespace Xyz
         }
 
     private:
-        double m_OuterRadius = 1.0;
-        double m_InnerRadius = 0.5;
+        double m_Radius = 1.0;
         double m_Angle = 0.0;
         Vector2d m_Center;
         size_t m_NumberOfPoints = 4;
