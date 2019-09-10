@@ -21,9 +21,9 @@ namespace {
 
     void test_LookAt()
     {
-        auto m = Xyz::makeLookAtMatrix<double>(Xyz::makeVector3(5, 2, 3),
-                                               Xyz::makeVector3(1, 8, 3),
-                                               Xyz::makeVector3(0, 0, 1));
+        auto m = Xyz::makeLookAtMatrix(Xyz::makeVector3<double>(5, 2, 3),
+                                       Xyz::makeVector3<double>(1, 8, 3),
+                                       Xyz::makeVector3<double>(0, 0, 1));
         auto result = m * Xyz::makeVector4(1.5, 4.0, 3.0, 1.0);
         auto expected = Xyz::makeVector4(-std::sqrt(1 + 1.5 * 1.5),
                                          0.0,

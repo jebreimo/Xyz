@@ -23,7 +23,9 @@ namespace Xyz
             return N;
         }
 
-        Vector() = default;
+        constexpr Vector() noexcept
+            : m_Values()
+        {}
 
         Vector(std::initializer_list<T> v)
         {
@@ -34,15 +36,13 @@ namespace Xyz
                 m_Values[i] = *it++;
         }
 
-        template<typename U>
-        Vector(U (& arr)[N])
+        explicit Vector(T (& arr)[N]) noexcept
         {
             for (unsigned i = 0; i < N; ++i)
                 m_Values[i] = arr[i];
         }
 
-        template<typename U>
-        Vector(const Vector<U, N>& other)
+        Vector(const Vector& other) noexcept
         {
             for (unsigned i = 0; i < N; ++i)
                 m_Values[i] = other[i];
@@ -52,25 +52,23 @@ namespace Xyz
         {
             if (count >= N)
             {
-                std::copy(values, values + N, m_Values);
+                std::copy(values, values + N, m_Values.begin());
             }
             else
             {
-                std::copy(values, values + count, m_Values);
-                std::fill(m_Values + count, m_Values + N, T());
+                std::copy(values, values + count, m_Values.begin());
+                std::fill(m_Values.begin() + count, m_Values.end(), T());
             }
         }
 
-        template<typename U>
-        Vector& operator=(U (& arr)[N])
+        Vector& operator=(T (& arr)[N])
         {
             for (unsigned i = 0; i < N; ++i)
                 m_Values[i] = arr[i];
             return *this;
         }
 
-        template<typename U>
-        Vector& operator=(const Vector<U, N>& other)
+        Vector& operator=(const Vector<T, N>& other)
         {
             for (unsigned i = 0; i < N; ++i)
                 m_Values[i] = other[i];
@@ -99,22 +97,22 @@ namespace Xyz
 
         const T* begin() const
         {
-            return m_Values;
+            return m_Values.data();
         }
 
         T* begin()
         {
-            return m_Values;
+            return m_Values.data();
         }
 
         const T* end() const
         {
-            return &m_Values[N];
+            return m_Values.data() + N;
         }
 
         T* end()
         {
-            return &m_Values[N];
+            return m_Values.data() + N;
         }
 
         T* data()
@@ -124,11 +122,11 @@ namespace Xyz
 
         const T* data() const
         {
-            return m_Values;
+            return m_Values.data();
         }
 
     private:
-        T m_Values[N];
+        std::array<T, N> m_Values;
     };
 
     template<typename T, unsigned N>
@@ -180,9 +178,18 @@ namespace Xyz
     }
 
     template<typename T, typename U, unsigned N>
-    Vector<T, N> makeVector(const Vector<U, N>& v)
+    Vector<T, N> vector_cast(const Vector<U, N>& v)
     {
-        return Vector<T, N>(v);
+        if constexpr (std::is_same<T, U>::value)
+        {
+            return v;
+        }
+        else
+        {
+            Vector<T, N> result;
+            for (unsigned i = 0; i < N; ++i)
+                result[i] = static_cast<T>(v[i]);
+            return result;
+        }
     }
-
 }

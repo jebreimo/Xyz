@@ -73,13 +73,15 @@ namespace Xyz {
     }
 
     template <typename T, unsigned N>
-    Vector<T, N> getPointAtT(const LineSegment<T, N>& line, double t)
+    Vector<T, N> getPointAtT(const LineSegment<T, N>& line,
+                             typename FloatType<T>::type t)
     {
-        return getStart(line) + getVector(line) * t;
+        return getStart(line) + vector_cast<T>(getVector(line) * t);
     }
 
     template <typename T, unsigned N>
-    T getCoordinateAtT(const LineSegment<T, N>& line, size_t coord, double t)
+    T getCoordinateAtT(const LineSegment<T, N>& line, size_t coord,
+                       typename FloatType<T>::type t)
     {
         auto v0 = getStart(line)[coord];
         auto v1 = getEnd(line)[coord];

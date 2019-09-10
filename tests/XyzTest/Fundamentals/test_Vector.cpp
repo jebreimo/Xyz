@@ -75,7 +75,7 @@ namespace {
     void test_Constructors()
     {
         auto u = makeVector4(1, 2, 0, 1);
-        Vector<double, 4> v = u;
+        Vector<double, 4> v = vector_cast<double>(u);
         Y_EQUAL(v[0], 1);
         Y_EQUAL(v[1], 2);
         Y_EQUAL(v[2], 0);
@@ -126,7 +126,7 @@ namespace {
         auto v = makeVector2(2.0, 4.0);
         Y_EQUAL(typeid(typename decltype(v)::ValueType).name(),
                 typeid(double).name());
-        auto w = makeVector<double>(u) + v;
+        auto w = vector_cast<double>(u) + v;
         Y_EQUAL(typeid(typename decltype(w)::ValueType).name(),
                 typeid(double).name());
     }
