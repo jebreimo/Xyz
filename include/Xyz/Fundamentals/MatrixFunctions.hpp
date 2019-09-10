@@ -24,21 +24,7 @@ namespace Xyz
         }
     }
 
-    template<typename T, unsigned M, unsigned N,
-             typename std::enable_if<M == N, int>::type = 0>
-    Matrix<T, N, M> transpose(const Matrix<T, M, N>& m)
-    {
-        Matrix<T, N, M> result;
-        for (auto i = 0u; i < N; ++i)
-        {
-            for (auto j = 0u; j < N; ++j)
-                result[i][j] = m[j][i];
-        }
-        return result;
-    }
-
-    template <typename T, unsigned M, unsigned N,
-              typename std::enable_if<M != N, int>::type = 0>
+    template <typename T, unsigned M, unsigned N>
     Matrix<T, N, M> transpose(const Matrix<T, M, N>& m)
     {
         Matrix<T, N, M> result;

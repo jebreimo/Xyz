@@ -55,15 +55,13 @@ namespace Xyz
                 m_Values[i] = arr[i];
         }
 
-        template <typename U>
-        explicit Matrix(const Matrix<U, M, N>& other)
+        Matrix(const Matrix& other)
         {
             auto src = other.data();
             for (unsigned i = 0; i < size(); ++i)
                 m_Values[i] = src[i];
         }
-        template <typename U>
-        Matrix& operator=(const Matrix<U, M, N>& other)
+        Matrix& operator=(const Matrix<T, M, N>& other)
         {
             auto src = other.data();
             for (unsigned i = 0; i < size(); ++i)
@@ -99,7 +97,7 @@ namespace Xyz
         void setRow(unsigned r, const T* values, unsigned count)
         {
             count = count <= N ? count : N;
-            std::copy(values, values + count, m_Values + r * cols());
+            std::copy(values, values + count, m_Values.data() + r * cols());
         }
 
         void setRow(unsigned r, const Vector<T, N>& v)
@@ -110,7 +108,7 @@ namespace Xyz
         Vector<T, M> col(unsigned c) const
         {
             Vector<T, M> result;
-            auto ptr = m_Values + c;
+            auto ptr = m_Values.data() + c;
             for (unsigned i = 0; i < N; ++i)
             {
                 result[i] = *ptr;
@@ -137,35 +135,35 @@ namespace Xyz
 
         T* begin()
         {
-            return m_Values;
+            return m_Values.data();
         }
 
         T* end()
         {
-            return m_Values + size();
+            return m_Values.data() + size();
         }
 
         const T* begin() const
         {
-            return m_Values;
+            return m_Values.data();
         }
 
         const T* end() const
         {
-            return m_Values + size();
+            return m_Values.data() + size();
         }
 
         T* data()
         {
-            return m_Values;
+            return m_Values.data();
         }
 
         const T* data() const
         {
-            return m_Values;
+            return m_Values.data();
         }
     private:
-        T m_Values[M * N];
+        std::array<T, M * N> m_Values;
     };
 
     template<typename T, unsigned M, unsigned N>
