@@ -3,7 +3,7 @@
 
 #include <iosfwd>
 #include <vector>
-#include "LineSegment.hpp"
+#include "Xyz/Geometry/LineSegment.hpp"
 
 namespace JEBMath {
 

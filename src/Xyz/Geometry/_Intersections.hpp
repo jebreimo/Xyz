@@ -4,7 +4,7 @@
 #include <cmath>
 #include <limits>
 #include "../Math/Constants.hpp"
-#include "Line.hpp"
+#include "Xyz/Geometry/Line.hpp"
 #include "LineString.hpp"
 
 namespace JEBMath {
