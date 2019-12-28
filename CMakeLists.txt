@@ -5,7 +5,7 @@
 ## This file is distributed under the Simplified BSD License.
 ## License text is included with the source distribution.
 ##****************************************************************************
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.15)
 project(Xyz)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -22,19 +22,26 @@ add_library(Xyz STATIC
     include/Xyz/Fundamentals/VectorClass.hpp
     include/Xyz/Fundamentals/VectorFunctions.hpp
     include/Xyz/Fundamentals/VectorOperators.hpp
+    include/Xyz/Generators/RegularPolygonGenerator.hpp
+    include/Xyz/Generators/RectangleGenerator.hpp
+    include/Xyz/Geometry/CoordinateSystem.hpp
     include/Xyz/Geometry/Line.hpp
     include/Xyz/Geometry/LineClipping.hpp
     include/Xyz/Geometry/LineLineIntersection.hpp
     include/Xyz/Geometry/LineSegment.hpp
     include/Xyz/Geometry/Rectangle.hpp
     include/Xyz/Geometry/Triangle.hpp
+    include/Xyz/Math/InvertMatrix.hpp
+    include/Xyz/Math/MatrixDeterminant.hpp
     include/Xyz/Utilities/Clamp.hpp
     include/Xyz/Utilities/Comparisons.hpp
     include/Xyz/Utilities/Constants.hpp
+    include/Xyz/Utilities/FloatType.hpp
     include/Xyz/Utilities/RandomGenerator.hpp
     include/Xyz/Utilities/Utilities.hpp
+    include/Xyz/Utilities/XyzException.hpp
     src/Xyz/Utilities/RandomGenerator.cpp
-    include/Xyz/Utilities/XyzException.hpp include/Xyz/Geometry/CoordinateSystem.hpp include/Xyz/Utilities/FloatType.hpp include/Xyz/Math/MatrixDeterminant.hpp include/Xyz/Math/InvertMatrix.hpp include/Xyz/Generators/RegularPolygonGenerator.hpp include/Xyz/Generators/RectangleGenerator.hpp)
+    )
 
 target_include_directories(Xyz BEFORE
     PUBLIC
@@ -51,9 +58,10 @@ add_library(Xyz::Xyz ALIAS Xyz)
 ## Unit tests
 ##
 
-if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/external/Ytest/CMakeLists.txt")
-    add_subdirectory(external/Ytest EXCLUDE_FROM_ALL)
-endif ()
+include(FetchContent)
+FetchContent_Declare(Ytest
+    GIT_REPOSITORY "https://github.com/jebreimo/Ytest.git")
+FetchContent_MakeAvailable(Ytest)
 
 enable_testing()
 
