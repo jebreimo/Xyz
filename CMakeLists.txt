@@ -59,12 +59,12 @@ add_library(Xyz::Xyz ALIAS Xyz)
 ##
 
 include(FetchContent)
-FetchContent_Declare(Ytest
+FetchContent_Declare(ytest
     GIT_REPOSITORY "https://github.com/jebreimo/Ytest.git")
-FetchContent_GetProperties(Ytest)
-if (NOT Ytest_POPULATED)
-    FetchContent_Populate(Ytest)
-    add_subdirectory(${Ytest_SOURCE_DIR} ${Ytest_BINARY_DIR})
+FetchContent_GetProperties(ytest)
+if (NOT ytest_POPULATED)
+    FetchContent_Populate(ytest)
+    add_subdirectory(${ytest_SOURCE_DIR} ${ytest_BINARY_DIR})
 endif ()
 
 enable_testing()
