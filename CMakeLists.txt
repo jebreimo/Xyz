@@ -5,7 +5,7 @@
 ## This file is distributed under the Simplified BSD License.
 ## License text is included with the source distribution.
 ##****************************************************************************
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.13)
 project(Xyz)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -61,7 +61,11 @@ add_library(Xyz::Xyz ALIAS Xyz)
 include(FetchContent)
 FetchContent_Declare(Ytest
     GIT_REPOSITORY "https://github.com/jebreimo/Ytest.git")
-FetchContent_MakeAvailable(Ytest)
+FetchContent_GetProperties(Ytest)
+if (NOT Ytest_POPULATED)
+    FetchContent_Populate(Ytest)
+    add_subdirectory(${Ytest_SOURCE_DIR} ${Ytest_BINARY_DIR})
+endif ()
 
 enable_testing()
 
