@@ -99,23 +99,31 @@ namespace {
     void test_rotated()
     {
         auto sqrt2 = std::sqrt(2);
-        Y_EQUAL(rotate(makeVector2<double>(100, 0), toRadians(30)),
-                makeVector2(50 * std::sqrt(3), 50.0));
-        Y_EQUAL(rotate(makeVector2<double>(100, 0), toRadians(45)),
-                makeVector2(100 / sqrt2, 100 / sqrt2));
-        Y_EQUAL(rotate(makeVector2<double>(100, 0), toRadians(60)),
-                makeVector2(50.0, 50 * std::sqrt(3)));
-        Y_EQUAL(rotate(makeVector2<double>(0, 100), toRadians(-60)),
-                makeVector2(50 * std::sqrt(3), 50.0));
-        Y_EQUAL(rotate(makeVector2<double>(0, 100), toRadians(-45)),
-                makeVector2(100 / sqrt2, 100 / sqrt2));
-        Y_EQUAL(rotate(makeVector2<double>(0, 100), toRadians(-30)),
-                makeVector2(50.0, 50 * std::sqrt(3)));
+        Y_EQUIVALENT(rotate(makeVector2<double>(100, 0), toRadians(30)),
+                     makeVector2(50 * std::sqrt(3), 50.0),
+                     1e-10);
+        Y_EQUIVALENT(rotate(makeVector2<double>(100, 0), toRadians(45)),
+                     makeVector2(100 / sqrt2, 100 / sqrt2),
+                     1e-10);
+        Y_EQUIVALENT(rotate(makeVector2<double>(100, 0), toRadians(60)),
+                     makeVector2(50.0, 50 * std::sqrt(3)),
+                     1e-10);
+        Y_EQUIVALENT(rotate(makeVector2<double>(0, 100), toRadians(-60)),
+                     makeVector2(50 * std::sqrt(3), 50.0),
+                     1e-10);
+        Y_EQUIVALENT(rotate(makeVector2<double>(0, 100), toRadians(-45)),
+                     makeVector2(100 / sqrt2, 100 / sqrt2),
+                     1e-10);
+        Y_EQUIVALENT(rotate(makeVector2<double>(0, 100), toRadians(-30)),
+                     makeVector2(50.0, 50 * std::sqrt(3)),
+                     1e-10);
 
-        Y_EQUAL(rotate(makeVector2(1 / sqrt2, 1 / sqrt2), toRadians(45)),
-                makeVector2<double>(0, 1));
-        Y_EQUAL(rotate(makeVector2(1 / sqrt2, 1 / sqrt2), toRadians(135)),
-                makeVector2<double>(-1, 0));
+        Y_EQUIVALENT(rotate(makeVector2(1 / sqrt2, 1 / sqrt2), toRadians(45)),
+                     makeVector2<double>(0, 1),
+                         1e-10);
+        Y_EQUIVALENT(rotate(makeVector2(1 / sqrt2, 1 / sqrt2), toRadians(135)),
+                     makeVector2<double>(-1, 0),
+                         1e-10);
     }
 
     void test_Types()

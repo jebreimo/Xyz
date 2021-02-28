@@ -31,8 +31,6 @@ add_library(Xyz STATIC
     include/Xyz/Xyz.hpp
     include/Xyz/Fundamentals/Projections.hpp
     include/Xyz/Fundamentals/Transformations.hpp
-    include/Xyz/Generators/RegularPolygonGenerator.hpp
-    include/Xyz/Generators/RectangleGenerator.hpp
     include/Xyz/Geometry/CoordinateSystem.hpp
     include/Xyz/Geometry/Line.hpp
     include/Xyz/Geometry/LineClipping.hpp

@@ -24,12 +24,12 @@ namespace {
         auto m = Xyz::makeLookAtMatrix(Xyz::makeVector3<double>(5, 2, 3),
                                        Xyz::makeVector3<double>(1, 8, 3),
                                        Xyz::makeVector3<double>(0, 0, 1));
-        auto result = m * Xyz::makeVector4(1.5, 4.0, 3.0, 1.0);
-        auto expected = Xyz::makeVector4(-std::sqrt(1 + 1.5 * 1.5),
+        const auto result = m * Xyz::makeVector4(1.5, 4.0, 3.0, 1.0);
+        const auto expected = Xyz::makeVector4(-std::sqrt(1 + 1.5 * 1.5),
                                          0.0,
                                          -std::sqrt(2 * 2 + 3 * 3),
                                          1.0);
-        Y_EQUAL(result, expected);
+        Y_EQUIVALENT(result, expected, 1e-10);
     }
 
     Y_SUBTEST("Fundamentals",

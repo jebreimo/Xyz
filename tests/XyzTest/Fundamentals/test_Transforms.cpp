@@ -14,7 +14,7 @@ namespace {
     {
         auto trans = Xyz::rotateZ(Xyz::toRadians(90.0));
         auto v = trans * Xyz::makeVector4<double>(1, 1, 1, 1);
-        Y_EQUAL(v, Xyz::makeVector4<double>(-1, 1, 1, 1));
+        Y_EQUIVALENT(v, Xyz::makeVector4<double>(-1, 1, 1, 1), 1e-10);
     }
 
     void test_Translate4()
