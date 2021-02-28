@@ -54,10 +54,10 @@ namespace Xyz
         auto vA = getVector(a);
         auto nB = getNormal(getVector(b));
 
-        auto denominator = static_cast<double>(vA * nB);
+        auto denominator = static_cast<double>(dot(vA, nB));
         if (equal<double>(denominator, 0, epsilon))
         {
-            if (equal<double>(nB * (getPoint(a) - getPoint(b)), epsilon))
+            if (equal<double>(dot(nB, (getPoint(a) - getPoint(b))), epsilon))
                 return Result(LineRelationship::OVERLAPPING, 0.0, 0.0);
             else
                 return Result(LineRelationship::NONINTERSECTING, 0.0, 0.0);
@@ -66,8 +66,8 @@ namespace Xyz
         auto nA = getNormal(getVector(a));
         auto vAB = getPoint(b) - getPoint(a);
         return Result(LineRelationship::INTERSECTING,
-                      vAB * nB / denominator,
-                      vAB * nA / denominator);
+                      dot(vAB, nB) / denominator,
+                      dot(vAB, nA) / denominator);
     }
 
     template <typename T>
@@ -102,8 +102,8 @@ namespace Xyz
                         double epsilon)
     {
         auto length = getLengthSquared(getVector(a));
-        auto ta0 = getVector(a) * (getStart(b) - getStart(a)) / length;
-        auto ta1 = getVector(a) * (getEnd(b) - getStart(a)) / length;
+        auto ta0 = dot(getVector(a), (getStart(b) - getStart(a))) / length;
+        auto ta1 = dot(getVector(a), (getEnd(b) - getStart(a))) / length;
         if ((ta0 > 1 && ta1 > 1) || (ta0 < 0 && ta1 < 0))
             return std::make_pair(false, std::make_pair(ta0, ta1));
         ta0 = getClamped(ta0, 0.0, 1.0);

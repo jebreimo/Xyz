@@ -12,13 +12,25 @@
 
 namespace Xyz
 {
+    template <typename T>
+    struct Constants
+    {
+        constexpr static double PI = 3.141592653589793;
+    };
+
+    template <>
+    struct Constants<float>
+    {
+        constexpr static float PI = 3.14159265f;
+    };
+
     constexpr size_t INVALID_INDEX = SIZE_MAX;
     constexpr double INVALID_DOUBLE = -DBL_MAX;
     constexpr double DOUBLE_TOLERANCE = 1e-9;
     constexpr float FLOAT_TOLERANCE = 1e-5;
 
-    constexpr double PI_64 = 3.1415926535897932384626433832795;
-    constexpr float PI_32 = 3.1415926535897932384626433832795;
+    //constexpr double PI_64 = 3.1415926535897932384626433832795;
+    //constexpr float PI_32 = 3.1415926535897932384626433832795;
 
     static inline bool isValid(double v)
     {

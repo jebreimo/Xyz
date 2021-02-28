@@ -6,8 +6,9 @@
 // License text is included with the source distribution.
 //****************************************************************************
 #pragma once
+#include <array>
 #include <Xyz/Utilities/FloatType.hpp>
-#include <Xyz/Utilities/XyzException.hpp>
+#include <Xyz/XyzException.hpp>
 
 namespace Xyz
 {

@@ -7,14 +7,14 @@
 //****************************************************************************
 #pragma once
 #include <numeric>
-#include "Xyz/Fundamentals/MatrixClass.hpp"
+#include "Xyz/Matrix.hpp"
 
 namespace Xyz
 {
     namespace Details
     {
         template <typename T, unsigned N>
-        T getSubmatrixDeterminant(const Matrix <T, N, N>& m,
+        T getSubmatrixDeterminant(const Matrix<T, N, N>& m,
                                   const std::array<unsigned, 3>& columnIndices)
         {
             constexpr auto r = N - 3;

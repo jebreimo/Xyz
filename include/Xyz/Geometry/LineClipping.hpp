@@ -27,14 +27,14 @@ namespace Xyz
         auto tr = rectangle.topRight();
         unsigned code = OUTCODE_INSIDE;
 
-        if (getX(tr) < getX(point))
+        if (get<0>(tr) < get<0>(point))
             code = OUTCODE_RIGHT;
-        else if (getX(point) < getX(bl))
+        else if (get<0>(point) < get<0>(bl))
             code = OUTCODE_LEFT;
 
-        if (getY(tr) < getY(point))
+        if (get<1>(tr) < get<1>(point))
             code += OUTCODE_TOP;
-        else if (getY(point) < getY(bl))
+        else if (get<1>(point) < get<1>(bl))
             code += OUTCODE_BOTTOM;
 
         return code;
@@ -75,14 +75,14 @@ namespace Xyz
             unsigned code = startCode ? startCode : endCode;
             double t;
             if (code & OUTCODE_TOP)
-                t = (getY(topRight) - getY(start)) / getY(vector);
+                t = (get<1>(topRight) - get<1>(start)) / get<1>(vector);
 
             else if (code & OUTCODE_BOTTOM)
-                t = (getY(bottomLeft) - getY(start)) / getY(vector);
+                t = (get<1>(bottomLeft) - get<1>(start)) / get<1>(vector);
             else if (code & OUTCODE_LEFT)
-                t = (getX(bottomLeft) - getX(start)) / getX(vector);
+                t = (get<0>(bottomLeft) - get<0>(start)) / get<0>(vector);
             else
-                t = (getX(topRight) - getX(start)) / getX(vector);
+                t = (get<0>(topRight) - get<0>(start)) / get<0>(vector);
 
             auto point = start + T(t) * vector;
             if (code == startCode)

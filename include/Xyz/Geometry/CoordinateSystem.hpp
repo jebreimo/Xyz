@@ -6,8 +6,7 @@
 // License text is included with the source distribution.
 //****************************************************************************
 #pragma once
-#include "Xyz/Matrix.hpp"
-#include "Xyz/Vector.hpp"
+#include "Xyz/LinearAlgebra.hpp"
 
 namespace Xyz
 {
@@ -36,29 +35,29 @@ namespace Xyz
                   m_FromWorld(fromWorldTransform)
         {}
 
-        const Vector<T, 3>& origin() const
+        constexpr const Vector<T, 3>& origin() const
         {
             return m_Origin;
         }
 
-        const Matrix<T, 3, 3>& fromWorldTransform() const
+        constexpr const Matrix<T, 3, 3>& fromWorldTransform() const
         {
             return m_FromWorld;
         }
 
-        const Matrix<T, 3, 3>& toWorldTransform() const
+        constexpr const Matrix<T, 3, 3>& toWorldTransform() const
         {
             return m_ToWorld;
         }
 
         template <typename U>
-        auto toWorldPos(const Vector<U, 3>& p) const
+        constexpr auto toWorldPos(const Vector<U, 3>& p) const
         {
             return m_ToWorld * p + m_Origin;
         }
 
         template <typename U>
-        auto fromWorldPos(const Vector<U, 3>& p) const
+        constexpr auto fromWorldPos(const Vector<U, 3>& p) const
         {
             return m_FromWorld * (p - m_Origin);
         }

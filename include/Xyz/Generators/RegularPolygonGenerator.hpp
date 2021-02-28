@@ -77,7 +77,7 @@ namespace Xyz
             result.reserve(m_NumberOfPoints + (m_IsClosed ? 1 : 0));
             for (size_t i = 0; i < m_NumberOfPoints; ++i)
             {
-                auto angle = m_Angle + 2 * i * PI_64 / m_NumberOfPoints;
+                auto angle = m_Angle + 2 * i * Constants<T>::PI / m_NumberOfPoints;
                 result.push_back({T(m_Center[0] + m_Radius * cos(angle)),
                                   T(m_Center[1] + m_Radius * sin(angle))});
             }

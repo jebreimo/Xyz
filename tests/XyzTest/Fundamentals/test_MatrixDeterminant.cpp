@@ -5,7 +5,7 @@
 // This file is distributed under the BSD License.
 // License text is included with the source distribution.
 //****************************************************************************
-#include "Xyz/Matrix.hpp"
+#include "Xyz/LinearAlgebra.hpp"
 
 #include "Ytest/Ytest.hpp"
 

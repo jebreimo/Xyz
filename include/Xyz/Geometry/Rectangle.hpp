@@ -59,24 +59,24 @@ namespace Xyz
 
         Vector<T, 2> bottomLeft() const
         {
-            if (0 <= getX(m_Size) && 0 <= getY(m_Size))
+            if (0 <= get<0>(m_Size) && 0 <= get<1>(m_Size))
                 return m_Origin;
-            else if (0 <= getX(m_Size))
-                return makeVector2(getX(m_Origin), getY(m_Origin) + getY(m_Size));
-            else if (0 <= getY(m_Size))
-                return makeVector2(getX(m_Origin) + getX(m_Size), getY(m_Origin));
+            else if (0 <= get<0>(m_Size))
+                return makeVector2(get<0>(m_Origin), get<1>(m_Origin) + get<1>(m_Size));
+            else if (0 <= get<1>(m_Size))
+                return makeVector2(get<0>(m_Origin) + get<0>(m_Size), get<1>(m_Origin));
             else
                 return m_Origin + m_Size;
         }
 
         Vector<T, 2> topRight() const
         {
-            if (0 <= getX(m_Size) && 0 <= getY(m_Size))
+            if (0 <= get<0>(m_Size) && 0 <= get<1>(m_Size))
                 return m_Origin + m_Size;
-            else if (0 <= getX(m_Size))
-                return makeVector2(getX(m_Origin) + getX(m_Size), getY(m_Origin));
-            else if (0 <= getY(m_Size))
-                return makeVector2(getX(m_Origin), getY(m_Origin) + getY(m_Size));
+            else if (0 <= get<0>(m_Size))
+                return makeVector2(get<0>(m_Origin) + get<0>(m_Size), get<1>(m_Origin));
+            else if (0 <= get<1>(m_Size))
+                return makeVector2(get<0>(m_Origin), get<1>(m_Origin) + get<1>(m_Size));
             else
                 return m_Origin;
         }
@@ -93,9 +93,9 @@ namespace Xyz
             switch (n & 0x3)
             {
             case 0: return m_Origin;
-            case 1: return m_Origin + makeVector2(getX(m_Size), T(0));
+            case 1: return m_Origin + makeVector2(get<0>(m_Size), T(0));
             case 2: return m_Origin + m_Size;
-            case 3: return m_Origin + makeVector2(T(0), getY(m_Size));
+            case 3: return m_Origin + makeVector2(T(0), get<1>(m_Size));
             default: return Vector<T, 2>{};
             }
         }
@@ -116,15 +116,15 @@ namespace Xyz
     {
         auto origin = rectangle.origin();
         auto size = rectangle.size();
-        if (getX(size) < 0)
+        if (get<0>(size) < 0)
         {
-            getX(origin) -= getX(size);
-            getX(size) = -getX(size);
+            get<0>(origin) -= get<0>(size);
+            get<0>(size) = -get<0>(size);
         }
-        if (getY(size) < 0)
+        if (get<1>(size) < 0)
         {
-            getY(origin) -= getY(size);
-            getY(size) = -getY(size);
+            get<1>(origin) -= get<1>(size);
+            get<1>(size) = -get<1>(size);
         }
         return makeRectangle(origin, size);
     }

@@ -38,7 +38,7 @@ namespace {
         Y_EQUAL(multiplyAssign(u, v), makeVector2<double>(9, 6));
         Y_EQUAL(u *= 2, makeVector2<double>(18, 12));
         Y_EQUAL(divideAssign(u, v), makeVector2<double>(6, 3));
-        Y_EQUAL(u * v, 30);
+        Y_EQUAL(dot(u, v), 30);
         Y_EQUIVALENT(getLength(v), 5, 1e-10);
     }
 
@@ -68,7 +68,7 @@ namespace {
         Y_EQUAL(multiplyAssign(u, v), makeVector4<double>(9, 6, -6, -9));
         Y_EQUAL(u *= 2, makeVector4<double>(18, 12, -12, -18));
         Y_EQUAL(divideAssign(u, v), makeVector4<double>(6, 3, 12, 9));
-        Y_EQUAL(u * v, 18 + 12 - 12 - 18);
+        Y_EQUAL(dot(u, v), 18 + 12 - 12 - 18);
         Y_EQUIVALENT(getLength(v), sqrt(9 + 16 + 1 + 4), 1e-10);
     }
 
@@ -92,8 +92,8 @@ namespace {
     void test_getCounterclockwiseAngle()
     {
         Y_EQUIVALENT(getCounterclockwiseAngle(makeVector2(6, 6),
-                                              makeVector2(4, -4)),
-                     3 * PI_64 / 2, 1e-10);
+                                                 makeVector2(4, -4)),
+                     3 * Constants<double>::PI / 2, 1e-10);
     }
 
     void test_rotated()

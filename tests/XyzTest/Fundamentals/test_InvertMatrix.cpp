@@ -5,7 +5,7 @@
 // This file is distributed under the BSD License.
 // License text is included with the source distribution.
 //****************************************************************************
-#include "Xyz/Matrix.hpp"
+#include "Xyz/LinearAlgebra.hpp"
 #include "Ytest/Ytest.hpp"
 
 namespace
@@ -20,28 +20,25 @@ namespace
 
     void test_Invert2()
     {
-        Matrix2d m{
-                1, 4,
-                2, 1};
+        Matrix2d m{1, 4,
+                   2, 1};
         Y_ASSERT(equalsIdentityMatrix(m * invert(m)));
     }
 
     void test_Invert3()
     {
-        Matrix3d m{
-                1, 4, 2,
-                2, 1, 3,
-                5, 7, 2};
+        Matrix3d m{1, 4, 2,
+                   2, 1, 3,
+                   5, 7, 2};
         Y_ASSERT(equalsIdentityMatrix(m * invert(m)));
     }
 
     void test_Invert4()
     {
-        Matrix4d m{
-                1, -2, 3, 2,
-                2, 3, 1, -1,
-                3, 7, 0, 3,
-                -1, 4, 2, 1};
+        Matrix4d m{1, -2, 3, 2,
+                   2, 3, 1, -1,
+                   3, 7, 0, 3,
+                   -1, 4, 2, 1};
         Y_ASSERT(equalsIdentityMatrix(m * invert(m)));
     }
 

@@ -7,7 +7,7 @@
 //****************************************************************************
 #pragma once
 #include <cmath>
-#include "Constants.hpp"
+#include "Xyz/Constants.hpp"
 
 namespace Xyz
 {
@@ -23,25 +23,15 @@ namespace Xyz
     }
 
     template <typename T>
-    constexpr double toRadians(T degrees)
+    constexpr auto toRadians(T degrees)
     {
-        return degrees * PI_64 / 180;
-    }
-
-    constexpr float toRadians(float degrees)
-    {
-        return degrees * PI_32 / 180;
+        return degrees * Constants<T>::PI / 180;
     }
 
     template <typename T>
     constexpr double toDegrees(T radians)
     {
-        return radians * 180 / PI_64;
-    }
-
-    constexpr float toDegrees(float radians)
-    {
-        return radians * 180 / PI_32;
+        return radians * 180 / Constants<T>::PI;
     }
 
     inline int modulo(int dividend, int divisor)

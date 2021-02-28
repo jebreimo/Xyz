@@ -7,8 +7,7 @@
 //****************************************************************************
 #pragma once
 #include <cmath>
-#include "MatrixClass.hpp"
-#include "VectorClass.hpp"
+#include "Xyz/Matrix.hpp"
 
 namespace Xyz
 {

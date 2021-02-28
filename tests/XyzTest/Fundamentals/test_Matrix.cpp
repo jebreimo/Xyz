@@ -36,7 +36,7 @@ namespace
                               2, 6, 0, 4,
                               3, 7, 1, 5};
         Y_EQUAL(transpose(mat1), mat1t);
-        transposeAssign(mat1t);
+        transposeInplace(mat1t);
         Y_EQUAL(mat1, mat1t);
     }
 

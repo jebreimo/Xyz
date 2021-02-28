@@ -13,8 +13,14 @@
 namespace Ytest
 {
     template <typename T, unsigned N>
-    bool equal(const Xyz::Vector<T, N>& v, const Xyz::Vector<T, N>& u)
+    bool equal(const Xyz::Vector<T, N>& u, const Xyz::Vector<T, N>& v)
     {
-        return Xyz::areEquivalent(v, u, 1e-9);
+        return Xyz::areEquivalent(u, v, 1e-9);
+    }
+
+    inline bool equal(const Xyz::Vector<double, 4>& u,
+                      const Xyz::Vector<double, 4>& v)
+    {
+        return Xyz::areEquivalent(u, v, 1e-9);
     }
 }

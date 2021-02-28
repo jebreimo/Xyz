@@ -5,23 +5,32 @@
 ## This file is distributed under the Simplified BSD License.
 ## License text is included with the source distribution.
 ##****************************************************************************
-cmake_minimum_required(VERSION 3.13)
-project(Xyz)
+cmake_minimum_required(VERSION 3.16)
+project(Xyz VERSION 0.1.0)
 
 set(CMAKE_CXX_STANDARD 17)
+
+# Set XYZ_MASTER_PROJECT to ON if Argos is the root level project.
+if(NOT DEFINED XYZ_MASTER_PROJECT)
+    if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
+        set(XYZ_MASTER_PROJECT ON)
+    else()
+        set(XYZ_MASTER_PROJECT OFF)
+    endif()
+endif()
+
+# Test option
+option(XYZ_BUILD_TEST "Build tests" ${XYZ_MASTER_PROJECT})
+
+# Install option
+option(XYZ_INSTALL "Generate the install target" ${XYZ_MASTER_PROJECT})
 
 add_library(Xyz STATIC
     include/Xyz/Matrix.hpp
     include/Xyz/Vector.hpp
     include/Xyz/Xyz.hpp
-    include/Xyz/Fundamentals/MatrixClass.hpp
-    include/Xyz/Fundamentals/MatrixFunctions.hpp
-    include/Xyz/Fundamentals/MatrixOperators.hpp
     include/Xyz/Fundamentals/Projections.hpp
     include/Xyz/Fundamentals/Transformations.hpp
-    include/Xyz/Fundamentals/VectorClass.hpp
-    include/Xyz/Fundamentals/VectorFunctions.hpp
-    include/Xyz/Fundamentals/VectorOperators.hpp
     include/Xyz/Generators/RegularPolygonGenerator.hpp
     include/Xyz/Generators/RectangleGenerator.hpp
     include/Xyz/Geometry/CoordinateSystem.hpp
@@ -35,17 +44,19 @@ add_library(Xyz STATIC
     include/Xyz/Math/MatrixDeterminant.hpp
     include/Xyz/Utilities/Clamp.hpp
     include/Xyz/Utilities/Comparisons.hpp
-    include/Xyz/Utilities/Constants.hpp
+    include/Xyz/Constants.hpp
     include/Xyz/Utilities/FloatType.hpp
     include/Xyz/Utilities/RandomGenerator.hpp
     include/Xyz/Utilities/Utilities.hpp
-    include/Xyz/Utilities/XyzException.hpp
+    include/Xyz/XyzException.hpp
     src/Xyz/Utilities/RandomGenerator.cpp
-    )
+    include/Xyz/LinearAlgebra.hpp)
 
-target_include_directories(Xyz BEFORE
+include(GNUInstallDirs)
+
+target_include_directories(Xyz
     PUBLIC
-        $<INSTALL_INTERFACE:include>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/src
@@ -53,24 +64,14 @@ target_include_directories(Xyz BEFORE
 
 add_library(Xyz::Xyz ALIAS Xyz)
 
-
 ##
 ## Unit tests
 ##
 
-include(FetchContent)
-FetchContent_Declare(ytest
-    GIT_REPOSITORY "https://github.com/jebreimo/Ytest.git")
-FetchContent_GetProperties(ytest)
-if (NOT ytest_POPULATED)
-    FetchContent_Populate(ytest)
-    add_subdirectory(${ytest_SOURCE_DIR} ${ytest_BINARY_DIR})
-endif ()
-
-enable_testing()
-
-add_subdirectory(tests/XyzTest)
-
+if(XYZ_BUILD_TEST)
+    enable_testing()
+    add_subdirectory(tests/XyzTest)
+endif()
 
 ##
 ## "Export" the current build tree and make it possible for other modules
@@ -81,31 +82,32 @@ export(TARGETS Xyz
     NAMESPACE Xyz::
     FILE XyzConfig.cmake)
 
-
 ##
 ## Installation
 ##
 
-include(GNUInstallDirs)
+if(XYZ_INSTALL)
 
-install(TARGETS Xyz
-    EXPORT XyzConfig
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    )
+    install(TARGETS Xyz
+        EXPORT XyzConfig
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        )
 
-install(EXPORT XyzConfig
-    FILE
-        XyzConfig.cmake
-    NAMESPACE
-        Xyz::
-    DESTINATION
-        ${CMAKE_INSTALL_LIBDIR}/cmake/Xyz
-    )
+    install(EXPORT XyzConfig
+        FILE
+            XyzConfig.cmake
+        NAMESPACE
+            Xyz::
+        DESTINATION
+            ${CMAKE_INSTALL_LIBDIR}/cmake/Xyz
+        )
 
-install(
-    DIRECTORY
-        include/
-    DESTINATION
-        ${CMAKE_INSTALL_INCLUDEDIR}
-    )
+    install(
+        DIRECTORY
+            include/
+        DESTINATION
+            ${CMAKE_INSTALL_INCLUDEDIR}
+        )
+
+endif()

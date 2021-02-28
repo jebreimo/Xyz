@@ -7,8 +7,7 @@
 //****************************************************************************
 #pragma once
 
-#include "MatrixClass.hpp"
-#include "VectorFunctions.hpp"
+#include "Xyz/Matrix.hpp"
 
 namespace Xyz
 {
@@ -21,9 +20,9 @@ namespace Xyz
         auto s = cross(f, getUnit(up));
         auto u = cross(s, f);
         return Matrix<T, 4, 4>{
-                s[0], s[1], s[2], -s * eye,
-                u[0], u[1], u[2], -u * eye,
-                -f[0], -f[1], -f[2], f * eye,
+                s[0], s[1], s[2], dot(-s, eye),
+                u[0], u[1], u[2], dot(-u, eye),
+                -f[0], -f[1], -f[2], dot(f, eye),
                 0, 0, 0, 1};
     }
 
