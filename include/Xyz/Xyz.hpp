@@ -9,8 +9,8 @@
 
 #include "Matrix.hpp"
 #include "Vector.hpp"
-#include "Fundamentals/Projections.hpp"
-#include "Fundamentals/Transformations.hpp"
+#include "ProjectionMatrix.hpp"
+#include "MatrixTransformations.hpp"
 #include "Geometry/LineLineIntersection.hpp"
 #include "Geometry/Line.hpp"
 #include "Geometry/LineClipping.hpp"

@@ -6,8 +6,8 @@
 // License text is included with the source distribution.
 //****************************************************************************
 #pragma once
-#include <cmath>
-#include "Xyz/Matrix.hpp"
+
+#include "Matrix.hpp"
 
 namespace Xyz
 {

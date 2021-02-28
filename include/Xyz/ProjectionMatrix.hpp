@@ -7,7 +7,7 @@
 //****************************************************************************
 #pragma once
 
-#include "Xyz/Matrix.hpp"
+#include "Matrix.hpp"
 
 namespace Xyz
 {

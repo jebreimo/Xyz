@@ -6,6 +6,7 @@
 // License text is included with the source distribution.
 //****************************************************************************
 #pragma once
+
 #include <cfloat>
 #include <climits>
 #include <cstdint>
@@ -16,29 +17,13 @@ namespace Xyz
     struct Constants
     {
         constexpr static double PI = 3.141592653589793;
+        constexpr static double DEFAULT_MARGIN = 1e-15;
     };
 
     template <>
     struct Constants<float>
     {
         constexpr static float PI = 3.14159265f;
+        constexpr static float DEFAULT_MARGIN = 1e-6;
     };
-
-    constexpr size_t INVALID_INDEX = SIZE_MAX;
-    constexpr double INVALID_DOUBLE = -DBL_MAX;
-    constexpr double DOUBLE_TOLERANCE = 1e-9;
-    constexpr float FLOAT_TOLERANCE = 1e-5;
-
-    //constexpr double PI_64 = 3.1415926535897932384626433832795;
-    //constexpr float PI_32 = 3.1415926535897932384626433832795;
-
-    static inline bool isValid(double v)
-    {
-        return v != INVALID_DOUBLE;
-    }
-
-    static inline bool isValid(size_t v)
-    {
-        return v != INVALID_INDEX;
-    }
 }

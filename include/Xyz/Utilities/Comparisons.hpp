@@ -13,89 +13,68 @@
 namespace Xyz
 {
     template <typename T>
-    bool equal(T a, T b, T tolerance)
+    bool equal(T a, T b, T margin)
     {
-        return std::abs(a - b) <= tolerance;
-    }
-
-    template <>
-    inline bool equal(double a, double b, double tolerance)
-    {
-        return std::fabs(a - b) <= tolerance;
-    }
-
-    template <>
-    inline bool equal(float a, float b, float tolerance)
-    {
-        return std::fabs(a - b) <= tolerance;
+        return std::abs(a - b) <= margin;
     }
 
     template <typename T>
     bool equal(T a, T b)
     {
-        return a == b;
-    }
-
-    template <>
-    inline bool equal(double a, double b)
-    {
-        return equal(a, b, DOUBLE_TOLERANCE);
-    }
-
-    template <>
-    inline bool equal(float a, float b)
-    {
-        return equal(a, b, FLOAT_TOLERANCE);
+        if constexpr (std::is_floating_point_v<T>)
+            return equal(a, b, Constants<T>::DEFAULT_MARGIN);
+        else
+            return a == b;
     }
 
     template <typename T>
-    bool less(T a, T b, T tolerance)
+    bool less(T a, T b, T margin)
     {
-        return a < b - tolerance;
+        return a < b - margin;
     }
 
     template <typename T>
-    bool lessOrEqual(T a, T b, T tolerance)
+    bool lessOrEqual(T a, T b, T margin)
     {
-        return a <= b + tolerance;
+        return a <= b + margin;
     }
 
     template <typename T>
-    bool greater(T a, T b, T tolerance)
+    bool greater(T a, T b, T margin)
     {
-        return a > b + tolerance;
+        return a > b + margin;
     }
 
     template <typename T>
-    bool greaterOrEqual(T a, T b, T tolerance)
+    bool greaterOrEqual(T a, T b, T margin)
     {
-        return a >= b - tolerance;
+        return a >= b - margin;
     }
 
     template <typename T>
-    bool between(T from, T value, T to, T tolerance)
+    bool between(T from, T value, T to, T margin)
     {
-        return greaterOrEqual(value, from, tolerance)
-               && lessOrEqual(value, to, tolerance);
+        return greaterOrEqual(value, from, margin)
+               && lessOrEqual(value, to, margin);
     }
 
     template <typename T>
-    bool betweenExEx(T from, T value, T to, T tolerance)
+    bool betweenExEx(T from, T value, T to, T margin)
     {
-        return greater(value, from, tolerance) && less(value, to, tolerance);
+        return greater(value, from, margin) && less(value, to, margin);
     }
 
     template <typename T>
-    bool betweenIncEx(T from, T value, T to, T tolerance)
+    bool betweenIncEx(T from, T value, T to, T margin)
     {
-        return greaterOrEqual(value, from, tolerance)
-               && less(value, to, tolerance);
+        return greaterOrEqual(value, from, margin)
+               && less(value, to, margin);
     }
 
     template <typename T>
-    bool betweenExInc(T from, T value, T to, T tolerance)
+    bool betweenExInc(T from, T value, T to, T margin)
     {
-        return greater(value, from, tolerance)
-               && lessOrEqual(value, to, tolerance);
+        return greater(value, from, margin)
+               && lessOrEqual(value, to, margin);
     }
 }

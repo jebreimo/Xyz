@@ -15,8 +15,7 @@ namespace Xyz {
     class LineSegment
     {
     public:
-        LineSegment()
-        {}
+        LineSegment() = default;
 
         LineSegment(const Vector<T, N>& start, const Vector<T, N>& end)
             : m_Start(start),

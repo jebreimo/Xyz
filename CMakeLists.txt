@@ -29,8 +29,8 @@ add_library(Xyz STATIC
     include/Xyz/Matrix.hpp
     include/Xyz/Vector.hpp
     include/Xyz/Xyz.hpp
-    include/Xyz/Fundamentals/Projections.hpp
-    include/Xyz/Fundamentals/Transformations.hpp
+    include/Xyz/ProjectionMatrix.hpp
+    include/Xyz/MatrixTransformations.hpp
     include/Xyz/Geometry/CoordinateSystem.hpp
     include/Xyz/Geometry/Line.hpp
     include/Xyz/Geometry/LineClipping.hpp

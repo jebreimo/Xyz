@@ -6,6 +6,7 @@
 // License text is included with the source distribution.
 //****************************************************************************
 #pragma once
+
 #include <algorithm>
 #include <cmath>
 #include <initializer_list>
@@ -14,7 +15,6 @@
 #include "Constants.hpp"
 #include "XyzException.hpp"
 #include "Utilities/FloatType.hpp"
-//#include "Utilities.hpp"
 
 namespace Xyz
 {
@@ -386,9 +386,9 @@ namespace Xyz
     template <typename T, unsigned N,
               typename std::enable_if_t<std::is_floating_point_v<T>, int> = 0>
     bool areEquivalent(const Vector<T, N>& u, const Vector<T, N>& v,
-                       typename FloatType<T>::type epsilon = 1e-12)
+                       T margin = Constants<T>::DEFAULT_MARGIN)
     {
-        return getLengthSquared(u - v) <= epsilon * epsilon;
+        return getLengthSquared(u - v) <= margin;
     }
 
     template <typename T, unsigned N>
@@ -432,7 +432,7 @@ namespace Xyz
     }
 
     template <typename T, unsigned N>
-    Vector<T, N>& resizeAssign(Vector<T, N>& v, T newLength)
+    Vector<T, N>& resizeUpdate(Vector<T, N>& v, T newLength)
     {
         return v *= (newLength / getLength(v));
     }
@@ -444,7 +444,7 @@ namespace Xyz
     }
 
     template <typename T, unsigned N>
-    Vector<T, N>& clampAssign(Vector<T, N>& v, T min, T max)
+    Vector<T, N>& clampUpdate(Vector<T, N>& v, T min, T max)
     {
         for (auto i = 0u; i < N; ++i)
             clamp(v[i], min, max);
@@ -453,7 +453,7 @@ namespace Xyz
     template <typename T, unsigned N>
     Vector<T, N> clamp(Vector<T, N> v, T min, T max)
     {
-        clampAssign(v, min, max);
+        clampUpdate(v, min, max);
         return v;
     }
 
@@ -473,12 +473,25 @@ namespace Xyz
         return makeVector2(T(v[0] * c - v[1] * s), T(v[0] * s + v[1] * c));
     }
 
-    template <typename T, unsigned N>
-    bool isNull(Vector<T, N>& v, double epsilon = 1e-12)
+    template <typename T, unsigned N,
+              typename std::enable_if_t<std::is_integral_v<T>, int> = 0>
+    bool isNull(Vector<T, N>& v, T = 0)
     {
         for (auto n: v)
         {
-            if (fabs(n) > 1e-12)
+            if (n != 0)
+                return false;
+        }
+        return true;
+    }
+
+    template <typename T, unsigned N,
+              typename std::enable_if_t<std::is_floating_point_v<T>, int> = 0>
+    bool isNull(Vector<T, N>& v, T margin = Constants<T>::DEFAULT_MARGIN)
+    {
+        for (auto n: v)
+        {
+            if (fabs(n) > margin)
                 return false;
         }
         return true;

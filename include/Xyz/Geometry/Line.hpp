@@ -15,8 +15,7 @@ namespace Xyz {
     class Line
     {
     public:
-        Line()
-        {}
+        Line() = default;
 
         Line(const Vector<T, N>& point, const Vector<T, N>& vector)
             : m_Point(point),

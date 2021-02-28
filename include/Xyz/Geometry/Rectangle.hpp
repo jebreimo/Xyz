@@ -15,8 +15,7 @@ namespace Xyz
     class Rectangle
     {
     public:
-        Rectangle()
-        {}
+        Rectangle() = default;
 
         Rectangle(const Vector<T, 2>& origin, const Vector<T, 2>& size)
             : m_Origin(origin), m_Size(size)
