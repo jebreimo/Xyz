@@ -23,7 +23,6 @@ namespace Xyz
             : std::runtime_error(message)
         {}
     };
-
 }
 
 #define _XYZ_THROW_3(file, line, msg) \

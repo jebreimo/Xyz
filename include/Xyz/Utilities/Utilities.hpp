@@ -11,17 +11,6 @@
 
 namespace Xyz
 {
-    template<typename T>
-    T getSign(T value)
-    {
-        if (value > 0)
-            return T(1);
-        else if (value < 0)
-            return T(-1);
-        else
-            return T(0);
-    }
-
     template <typename T>
     constexpr auto toRadians(T degrees)
     {
@@ -29,16 +18,15 @@ namespace Xyz
     }
 
     template <typename T>
-    constexpr double toDegrees(T radians)
+    constexpr auto toDegrees(T radians)
     {
         return radians * 180 / Constants<T>::PI;
     }
 
-    inline int modulo(int dividend, int divisor)
+    template <typename T>
+    constexpr auto toPrincipalAngle(T radians)
     {
-        if (dividend >= 0)
-            return dividend % divisor;
-        else
-            return divisor - (-dividend % divisor);
+        auto result = fmod(radians, 2 * Constants<T>::PI);
+        return result >= 0 ? result : result + 2 * Constants<T>::PI;
     }
 }
