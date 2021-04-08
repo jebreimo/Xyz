@@ -122,7 +122,7 @@ namespace Xyz
     };
 
     template <typename T, typename S, unsigned N>
-    bool operator==(const Vector<T, N>& u, const Vector<S, N>& v)
+    constexpr bool operator==(const Vector<T, N>& u, const Vector<S, N>& v)
     {
         for (unsigned i = 0; i < N; ++i)
         {
@@ -133,13 +133,13 @@ namespace Xyz
     }
 
     template <typename T, typename S, unsigned N>
-    bool operator!=(const Vector<T, N>& u, const Vector<S, N>& v)
+    constexpr bool operator!=(const Vector<T, N>& u, const Vector<S, N>& v)
     {
         return !(u == v);
     }
 
     template <typename T, unsigned N>
-    Vector<T, N>& operator+=(Vector<T, N>& u, const Vector<T, N>& v)
+    constexpr Vector<T, N>& operator+=(Vector<T, N>& u, const Vector<T, N>& v)
     {
         for (unsigned i = 0; i < N; ++i)
             u[i] += v[i];
@@ -147,7 +147,7 @@ namespace Xyz
     }
 
     template <typename T, unsigned N>
-    Vector<T, N>& operator+=(Vector<T, N>& u, T scalar)
+    constexpr Vector<T, N>& operator+=(Vector<T, N>& u, T scalar)
     {
         for (unsigned i = 0; i < N; ++i)
             u[i] += scalar;
@@ -155,7 +155,7 @@ namespace Xyz
     }
 
     template <typename T, unsigned N>
-    Vector<T, N>& operator-=(Vector<T, N>& u, const Vector<T, N>& v)
+    constexpr Vector<T, N>& operator-=(Vector<T, N>& u, const Vector<T, N>& v)
     {
         for (unsigned i = 0; i < N; ++i)
             u[i] -= v[i];
@@ -163,7 +163,7 @@ namespace Xyz
     }
 
     template <typename T, unsigned N>
-    Vector<T, N>& operator-=(Vector<T, N>& u, T scalar)
+    constexpr Vector<T, N>& operator-=(Vector<T, N>& u, T scalar)
     {
         for (unsigned i = 0; i < N; ++i)
             u[i] -= scalar;
@@ -171,7 +171,7 @@ namespace Xyz
     }
 
     template <typename T, typename S, unsigned N>
-    Vector<T, N>& operator*=(Vector<T, N>& u, S scalar)
+    constexpr Vector<T, N>& operator*=(Vector<T, N>& u, S scalar)
     {
         for (unsigned i = 0; i < N; ++i)
             u[i] *= scalar;
@@ -179,7 +179,7 @@ namespace Xyz
     }
 
     template <typename T, typename S, unsigned N>
-    Vector<T, N>& operator/=(Vector<T, N>& u, S scalar)
+    constexpr Vector<T, N>& operator/=(Vector<T, N>& u, S scalar)
     {
         for (unsigned i = 0; i < N; ++i)
             u[i] /= scalar;
@@ -187,7 +187,7 @@ namespace Xyz
     }
 
     template <typename T, unsigned N>
-    Vector<T, N> operator-(Vector<T, N> v)
+    constexpr Vector<T, N> operator-(Vector<T, N> v)
     {
         for (unsigned i = 0; i < N; ++i)
             v[i] = -v[i];
@@ -195,7 +195,7 @@ namespace Xyz
     }
 
     template <typename T, typename S, unsigned N>
-    auto operator+(const Vector<T, N>& u, const Vector<S, N>& v)
+    constexpr auto operator+(const Vector<T, N>& u, const Vector<S, N>& v)
     {
         Vector<decltype(T() * S()), N> w;
         for (unsigned i = 0; i < N; ++i)
@@ -204,7 +204,7 @@ namespace Xyz
     }
 
     template <typename T, typename S, unsigned N>
-    auto operator-(const Vector<T, N>& u, const Vector<S, N>& v)
+    constexpr auto operator-(const Vector<T, N>& u, const Vector<S, N>& v)
     {
         Vector<decltype(T() * S()), N> w;
         for (unsigned i = 0; i < N; ++i)
@@ -213,7 +213,7 @@ namespace Xyz
     }
 
     template <typename T, typename S, unsigned N>
-    auto operator/(const Vector<T, N>& u, S scalar)
+    constexpr auto operator/(const Vector<T, N>& u, S scalar)
     {
         Vector<decltype(T() * S()), N> w;
         for (unsigned i = 0; i < N; ++i)
@@ -222,7 +222,7 @@ namespace Xyz
     }
 
     template <typename T, typename S, unsigned N>
-    auto operator*(const Vector<T, N>& u, S scalar)
+    constexpr auto operator*(const Vector<T, N>& u, S scalar)
     {
         Vector<decltype(T() * S()), N> w;
         for (unsigned i = 0; i < N; ++i)
@@ -231,7 +231,7 @@ namespace Xyz
     }
 
     template <typename T, typename S, unsigned N>
-    auto operator*(S scalar, const Vector<T, N>& v)
+    constexpr auto operator*(S scalar, const Vector<T, N>& v)
     {
         return v * scalar;
     }
