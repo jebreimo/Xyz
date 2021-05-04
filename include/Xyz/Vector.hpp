@@ -407,8 +407,7 @@ namespace Xyz
     }
 
     template <typename T>
-    auto getCounterclockwiseAngle(const Vector<T, 2>& u,
-                                  const Vector<T, 2>& v)
+    auto getCcwAngle(const Vector<T, 2>& u, const Vector<T, 2>& v)
     {
         auto angle = getAngle(u, v);
         if (dot(getNormal(u), v) >= 0)

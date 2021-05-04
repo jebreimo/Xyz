@@ -89,10 +89,9 @@ namespace {
         Y_EQUAL(cross(u, v), makeVector3(1, -2, 1));
     }
 
-    void test_getCounterclockwiseAngle()
+    void test_getCcwAngle()
     {
-        Y_EQUIVALENT(getCounterclockwiseAngle(makeVector2(6, 6),
-                                                 makeVector2(4, -4)),
+        Y_EQUIVALENT(getCcwAngle(makeVector2(6, 6), makeVector2(4, -4)),
                      3 * Constants<double>::PI / 2, 1e-10);
     }
 
@@ -144,7 +143,7 @@ namespace {
               test_Basics4D,
               test_Constructors,
               test_cross,
-              test_getCounterclockwiseAngle,
+              test_getCcwAngle,
               test_rotated,
               test_Types);
 }
