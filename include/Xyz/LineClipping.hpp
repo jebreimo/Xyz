@@ -23,18 +23,19 @@ namespace Xyz
     unsigned computeClippingOutcode(const Rectangle<T>& rectangle,
                                     const Vector<T, 2>& point)
     {
-        auto bl = rectangle.bottomLeft();
-        auto tr = rectangle.topRight();
+        auto [x, y] = point;
+        auto [x0, y0] = rectangle.min();
+        auto [x1, y1] = rectangle.max();
         unsigned code = OUTCODE_INSIDE;
 
-        if (get<0>(tr) < get<0>(point))
+        if (x1 < x)
             code = OUTCODE_RIGHT;
-        else if (get<0>(point) < get<0>(bl))
+        else if (x < x0)
             code = OUTCODE_LEFT;
 
-        if (get<1>(tr) < get<1>(point))
+        if (y1 < y)
             code += OUTCODE_TOP;
-        else if (get<1>(point) < get<1>(bl))
+        else if (y < y0)
             code += OUTCODE_BOTTOM;
 
         return code;
@@ -59,7 +60,7 @@ namespace Xyz
     {
         auto startCode = computeClippingOutcode(rectangle, line.start());
         auto endCode = computeClippingOutcode(rectangle, line.end());
-        auto tStart = 0.0, tEnd = 1.0;
+        double tStart = 0.0, tEnd = 1.0;
 
         for (;;)
         {
@@ -69,14 +70,13 @@ namespace Xyz
                 return {-1.0, -1.0};
             auto start = line.start();
             auto vector = line.end() - line.start();
-            auto bottomLeft = rectangle.bottomLeft();
-            auto topRight = rectangle.topRight();
+            auto bottomLeft = rectangle.min();
+            auto topRight = rectangle.max();
 
             unsigned code = startCode ? startCode : endCode;
             double t;
             if (code & OUTCODE_TOP)
                 t = (get<1>(topRight) - get<1>(start)) / get<1>(vector);
-
             else if (code & OUTCODE_BOTTOM)
                 t = (get<1>(bottomLeft) - get<1>(start)) / get<1>(vector);
             else if (code & OUTCODE_LEFT)
@@ -84,7 +84,7 @@ namespace Xyz
             else
                 t = (get<0>(topRight) - get<0>(start)) / get<0>(vector);
 
-            auto point = start + T(t) * vector;
+            auto point = start + t * vector;
             if (code == startCode)
             {
                 tStart = t;

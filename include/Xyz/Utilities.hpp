@@ -6,8 +6,9 @@
 // License text is included with the source distribution.
 //****************************************************************************
 #pragma once
+
 #include <cmath>
-#include "Xyz/Constants.hpp"
+#include "Constants.hpp"
 
 namespace Xyz
 {

@@ -15,17 +15,17 @@ FetchContent_MakeAvailable(ytest)
 
 add_executable(XyzTest
     main.cpp
-    Fundamentals/YtestUtilities.hpp
-    Fundamentals/test_InvertMatrix.cpp
-    Fundamentals/test_Matrix.cpp
-    Fundamentals/test_MatrixDeterminant.cpp
-    Fundamentals/test_Projections.cpp
-    Fundamentals/test_Transforms.cpp
-    Fundamentals/test_Vector.cpp
-    Geometry/test_CoordinateSystem.cpp
-    Geometry/test_LineClipping.cpp.cpp
-    Geometry/test_Intersections.cpp
-    Geometry/test_Triangle.cpp
+    YtestUtilities.hpp
+    test_InvertMatrix.cpp
+    test_Matrix.cpp
+    test_MatrixDeterminant.cpp
+    test_Projections.cpp
+    test_Transforms.cpp
+    test_Vector.cpp
+    test_CoordinateSystem.cpp
+    test_LineClipping.cpp.cpp
+    test_Intersections.cpp
+    test_Triangle.cpp
     )
 
 target_link_libraries(XyzTest

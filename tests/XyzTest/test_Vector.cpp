@@ -9,7 +9,7 @@
 
 #include <cmath>
 #include <Ytest/Ytest.hpp>
-#include "Xyz/Utilities/Utilities.hpp"
+#include "Xyz/Utilities.hpp"
 #include "YtestUtilities.hpp"
 
 namespace {

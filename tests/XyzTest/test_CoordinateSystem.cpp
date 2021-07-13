@@ -7,7 +7,7 @@
 //****************************************************************************
 #include <Ytest/Ytest.hpp>
 #include <Xyz/Vector.hpp>
-#include <Xyz/Geometry/CoordinateSystem.hpp>
+#include <Xyz/CoordinateSystem.hpp>
 
 namespace
 {

@@ -6,7 +6,7 @@
 ## License text is included with the source distribution.
 ##****************************************************************************
 cmake_minimum_required(VERSION 3.16)
-project(Xyz VERSION 0.1.1.4)
+project(Xyz VERSION 0.1.1.5)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -26,29 +26,28 @@ option(XYZ_BUILD_TEST "Build tests" ${XYZ_MASTER_PROJECT})
 option(XYZ_INSTALL "Generate the install target" ${XYZ_MASTER_PROJECT})
 
 add_library(Xyz STATIC
+    include/Xyz/Constants.hpp
     include/Xyz/Matrix.hpp
+    include/Xyz/MatrixTransformations.hpp
+    include/Xyz/ProjectionMatrix.hpp
     include/Xyz/Vector.hpp
     include/Xyz/Xyz.hpp
-    include/Xyz/ProjectionMatrix.hpp
-    include/Xyz/MatrixTransformations.hpp
-    include/Xyz/Geometry/CoordinateSystem.hpp
-    include/Xyz/Geometry/Line.hpp
-    include/Xyz/Geometry/LineClipping.hpp
-    include/Xyz/Geometry/LineLineIntersection.hpp
-    include/Xyz/Geometry/LineSegment.hpp
-    include/Xyz/Geometry/Rectangle.hpp
-    include/Xyz/Geometry/Triangle.hpp
-    include/Xyz/Math/InvertMatrix.hpp
-    include/Xyz/Math/MatrixDeterminant.hpp
-    include/Xyz/Utilities/Clamp.hpp
-    include/Xyz/Utilities/Comparisons.hpp
-    include/Xyz/Constants.hpp
-    include/Xyz/Utilities/FloatType.hpp
-    include/Xyz/Utilities/RandomGenerator.hpp
-    include/Xyz/Utilities/Utilities.hpp
     include/Xyz/XyzException.hpp
-    src/Xyz/Utilities/RandomGenerator.cpp
-    include/Xyz/LinearAlgebra.hpp)
+    include/Xyz/CoordinateSystem.hpp
+    include/Xyz/Line.hpp
+    include/Xyz/LineClipping.hpp
+    include/Xyz/LineLineIntersection.hpp
+    include/Xyz/LineSegment.hpp
+    include/Xyz/Rectangle.hpp
+    include/Xyz/Triangle.hpp
+    include/Xyz/InvertMatrix.hpp
+    include/Xyz/MatrixDeterminant.hpp
+    include/Xyz/Clamp.hpp
+    include/Xyz/FloatType.hpp
+    include/Xyz/RandomGenerator.hpp
+    include/Xyz/Utilities.hpp
+    src/Xyz/RandomGenerator.cpp
+    )
 
 include(GNUInstallDirs)
 

@@ -1,7 +1,7 @@
 #ifndef JEBMATH_GEOMETRY_DISTANCE_HPP
 #define JEBMATH_GEOMETRY_DISTANCE_HPP
 
-#include "Xyz/Geometry/Line.hpp"
+#include "Xyz/Line.hpp"
 #include "LineString.hpp"
 
 namespace JEBMath {

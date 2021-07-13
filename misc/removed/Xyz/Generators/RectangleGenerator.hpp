@@ -6,7 +6,7 @@
 // License text is included with the source distribution.
 //****************************************************************************
 #pragma once
-#include "Xyz/Geometry/Rectangle.hpp"
+#include "Xyz/Rectangle.hpp"
 
 namespace Xyz
 {

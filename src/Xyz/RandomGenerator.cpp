@@ -5,19 +5,14 @@
 // This file is distributed under the BSD License.
 // License text is included with the source distribution.
 //****************************************************************************
-#include "Xyz/Utilities/RandomGenerator.hpp"
+#include "Xyz/RandomGenerator.hpp"
 
 namespace Xyz
 {
     std::default_random_engine& getRandomEngine()
     {
-        static std::default_random_engine engine;
-        static bool initialized = false;
-        if (!initialized)
-        {
-            std::random_device rd;
-            engine.seed(rd());
-        }
+        static std::default_random_engine engine(
+            [](){return std::random_device()();}());
         return engine;
     }
 }

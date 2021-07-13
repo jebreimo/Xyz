@@ -18,14 +18,16 @@ namespace Xyz
     class RandomIntGenerator
     {
     public:
-        RandomIntGenerator(IntT min = 0,
-                           IntT max = std::numeric_limits<IntT>::max())
+        explicit RandomIntGenerator(
+            IntT min = 0,
+            IntT max = std::numeric_limits<IntT>::max())
             : m_Engine(getRandomEngine()), m_Dist(min, max)
         {}
 
-        RandomIntGenerator(std::default_random_engine& randomEngine,
-                           IntT min = 0,
-                           IntT max = std::numeric_limits<IntT>::max())
+        explicit RandomIntGenerator(
+            std::default_random_engine& randomEngine,
+            IntT min = 0,
+            IntT max = std::numeric_limits<IntT>::max())
             : m_Engine(getRandomEngine()), m_Dist(min, max)
         {}
 
@@ -43,15 +45,16 @@ namespace Xyz
     class RandomRealGenerator
     {
     public:
-        RandomRealGenerator(RealT min = 0.0, RealT max = 1.0)
+        explicit RandomRealGenerator(RealT min = 0.0, RealT max = 1.0)
             : m_Engine(getRandomEngine()),
               m_Dist(min,
                      std::nextafter(max, std::numeric_limits<RealT>::max()))
         {}
 
-        RandomRealGenerator(std::default_random_engine& randomEngine,
-                            RealT min = 0.0,
-                            RealT max = 1.0)
+        explicit RandomRealGenerator(
+            std::default_random_engine& randomEngine,
+            RealT min = 0.0,
+            RealT max = 1.0)
             : m_Engine(getRandomEngine()),
               m_Dist(min,
                      std::nextafter(max, std::numeric_limits<RealT>::max()))

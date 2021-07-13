@@ -6,8 +6,9 @@
 // License text is included with the source distribution.
 //****************************************************************************
 #pragma once
+
 #include <vector>
-#include "Xyz/Vector.hpp"
+#include "Vector.hpp"
 
 namespace Xyz
 {
@@ -21,6 +22,7 @@ namespace Xyz
             : m_Origin(origin), m_Size(size)
         {}
 
+        [[nodiscard]]
         Vector<T, 2> center() const
         {
             return m_Origin + m_Size / 2;
@@ -31,6 +33,7 @@ namespace Xyz
             m_Origin = center - m_Size / 2;
         }
 
+        [[nodiscard]]
         const Vector<T, 2>& origin() const
         {
             return m_Origin;
@@ -41,6 +44,7 @@ namespace Xyz
             m_Origin = origin;
         }
 
+        [[nodiscard]]
         const Vector<T, 2>& size() const
         {
             return m_Size;
@@ -51,31 +55,38 @@ namespace Xyz
             m_Size = size;
         }
 
+        [[nodiscard]]
         bool isClockwise() const
         {
             return (m_Size[0] < 0) != (m_Size[1] < 0);
         }
 
-        Vector<T, 2> bottomLeft() const
+        [[nodiscard]]
+        Vector<T, 2> min() const
         {
-            if (0 <= get<0>(m_Size) && 0 <= get<1>(m_Size))
+            auto [w, h] = m_Size;
+            if (0 <= w && 0 <= h)
                 return m_Origin;
-            else if (0 <= get<0>(m_Size))
-                return makeVector2(get<0>(m_Origin), get<1>(m_Origin) + get<1>(m_Size));
-            else if (0 <= get<1>(m_Size))
-                return makeVector2(get<0>(m_Origin) + get<0>(m_Size), get<1>(m_Origin));
+            auto [x, y] = m_Origin;
+            if (0 <= w)
+                return makeVector2(x, y + h);
+            else if (0 <= h)
+                return makeVector2(x + w, y);
             else
                 return m_Origin + m_Size;
         }
 
-        Vector<T, 2> topRight() const
+        [[nodiscard]]
+        Vector<T, 2> max() const
         {
-            if (0 <= get<0>(m_Size) && 0 <= get<1>(m_Size))
+            auto [w, h] = m_Size;
+            if (0 <= w && 0 <= h)
                 return m_Origin + m_Size;
-            else if (0 <= get<0>(m_Size))
-                return makeVector2(get<0>(m_Origin) + get<0>(m_Size), get<1>(m_Origin));
-            else if (0 <= get<1>(m_Size))
-                return makeVector2(get<0>(m_Origin), get<1>(m_Origin) + get<1>(m_Size));
+            auto [x, y] = m_Origin;
+            if (0 <= w)
+                return makeVector2(x + w, y);
+            else if (0 <= h)
+                return makeVector2(x, y + h);
             else
                 return m_Origin;
         }
@@ -87,7 +98,8 @@ namespace Xyz
           *
           * @param n the vertex index, must be in the range 0..3
           */
-        Vector<T, 2> point(size_t n) const
+        [[nodiscard]]
+        Vector<T, 2> vertex(size_t n) const
         {
             switch (n & 0x3)
             {
@@ -104,6 +116,7 @@ namespace Xyz
     };
 
     template <typename T>
+    [[nodiscard]]
     Rectangle<T> makeRectangle(const Vector<T, 2>& origin,
                                const Vector<T, 2>& size)
     {
@@ -111,20 +124,21 @@ namespace Xyz
     }
 
     template <typename T>
+    [[nodiscard]]
     Rectangle<T> normalize(const Rectangle<T>& rectangle)
     {
-        auto origin = rectangle.origin();
-        auto size = rectangle.size();
-        if (get<0>(size) < 0)
+        auto [x, y] = rectangle.origin();
+        auto [w, h] = rectangle.size();
+        if (w < 0)
         {
-            get<0>(origin) -= get<0>(size);
-            get<0>(size) = -get<0>(size);
+            x -= w;
+            w = -w;
         }
-        if (get<1>(size) < 0)
+        if (h < 0)
         {
-            get<1>(origin) -= get<1>(size);
-            get<1>(size) = -get<1>(size);
+            y -= h;
+            h = -h;
         }
-        return makeRectangle(origin, size);
+        return makeRectangle({x, y}, {w, h});
     }
 }

@@ -6,11 +6,12 @@
 // License text is included with the source distribution.
 //****************************************************************************
 #pragma once
+
 #include "LineSegment.hpp"
-#include "Xyz/Vector.hpp"
+#include "Vector.hpp"
 
-namespace Xyz {
-
+namespace Xyz
+{
     template <typename T, unsigned N>
     class Line
     {
@@ -62,7 +63,7 @@ namespace Xyz {
     template <typename T, unsigned N>
     std::ostream& operator<<(std::ostream& os, const Line<T, N>& line)
     {
-        return os << "{\"point\": " << getPoint(line)
+        return os << "{\"vertex\": " << getPoint(line)
                   << ", \"vector\": " << getVector(line) << "}";
     }
 

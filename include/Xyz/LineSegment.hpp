@@ -6,11 +6,12 @@
 // License text is included with the source distribution.
 //****************************************************************************
 #pragma once
-#include "Xyz/Vector.hpp"
-#include "Xyz/Utilities/Clamp.hpp"
 
-namespace Xyz {
+#include "Clamp.hpp"
+#include "Vector.hpp"
 
+namespace Xyz
+{
     template <typename T, unsigned N>
     class LineSegment
     {

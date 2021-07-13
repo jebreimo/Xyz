@@ -6,7 +6,8 @@
 // License text is included with the source distribution.
 //****************************************************************************
 #pragma once
-#include "Xyz/LinearAlgebra.hpp"
+
+#include "InvertMatrix.hpp"
 
 namespace Xyz
 {

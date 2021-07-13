@@ -6,8 +6,10 @@
 // License text is included with the source distribution.
 //****************************************************************************
 #pragma once
+
+#include <algorithm>
 #include <cmath>
-#include "Xyz/Constants.hpp"
+#include "Constants.hpp"
 
 namespace Xyz
 {
@@ -22,12 +24,13 @@ namespace Xyz
     }
 
     template <typename T>
-    void clamp(T& value, T min, T max)
+    T& clamp(T& value, T min, T max)
     {
         if (value < min)
             value = min;
         else if (value > max)
             value = max;
+        return value;
     }
 
     template <typename It, typename T>

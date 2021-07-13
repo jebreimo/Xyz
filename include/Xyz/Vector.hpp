@@ -13,8 +13,8 @@
 #include <ostream>
 #include <type_traits>
 #include "Constants.hpp"
+#include "FloatType.hpp"
 #include "XyzException.hpp"
-#include "Utilities/FloatType.hpp"
 
 namespace Xyz
 {
@@ -507,4 +507,18 @@ namespace Xyz
     using Vector4i = Vector<int, 4>;
     using Vector4f = Vector<float, 4>;
     using Vector4d = Vector<double, 4>;
+}
+
+namespace std
+{
+    template <typename T, size_t N>
+    struct tuple_size<Xyz::Vector<T, N>>
+        : integral_constant<size_t, N>
+    {};
+
+    template <size_t I, typename T, size_t N>
+    struct tuple_element<I, Xyz::Vector<T, N>>
+    {
+        using type = T;
+    };
 }
