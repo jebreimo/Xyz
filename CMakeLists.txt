@@ -6,7 +6,7 @@
 ## License text is included with the source distribution.
 ##****************************************************************************
 cmake_minimum_required(VERSION 3.16)
-project(Xyz VERSION 0.1.1.5)
+project(Xyz VERSION 0.1.2)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -26,26 +26,26 @@ option(XYZ_BUILD_TEST "Build tests" ${XYZ_MASTER_PROJECT})
 option(XYZ_INSTALL "Generate the install target" ${XYZ_MASTER_PROJECT})
 
 add_library(Xyz STATIC
+    include/Xyz/Clamp.hpp
     include/Xyz/Constants.hpp
-    include/Xyz/Matrix.hpp
-    include/Xyz/MatrixTransformations.hpp
-    include/Xyz/ProjectionMatrix.hpp
-    include/Xyz/Vector.hpp
-    include/Xyz/Xyz.hpp
-    include/Xyz/XyzException.hpp
     include/Xyz/CoordinateSystem.hpp
+    include/Xyz/FloatType.hpp
+    include/Xyz/InvertMatrix.hpp
     include/Xyz/Line.hpp
     include/Xyz/LineClipping.hpp
     include/Xyz/LineLineIntersection.hpp
     include/Xyz/LineSegment.hpp
+    include/Xyz/Matrix.hpp
+    include/Xyz/MatrixDeterminant.hpp
+    include/Xyz/MatrixTransformations.hpp
+    include/Xyz/ProjectionMatrix.hpp
+    include/Xyz/RandomGenerator.hpp
     include/Xyz/Rectangle.hpp
     include/Xyz/Triangle.hpp
-    include/Xyz/InvertMatrix.hpp
-    include/Xyz/MatrixDeterminant.hpp
-    include/Xyz/Clamp.hpp
-    include/Xyz/FloatType.hpp
-    include/Xyz/RandomGenerator.hpp
     include/Xyz/Utilities.hpp
+    include/Xyz/Vector.hpp
+    include/Xyz/Xyz.hpp
+    include/Xyz/XyzException.hpp
     src/Xyz/RandomGenerator.cpp
     )
 
