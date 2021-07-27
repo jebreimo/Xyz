@@ -6,18 +6,18 @@
 ## License text is included with the source distribution.
 ##****************************************************************************
 cmake_minimum_required(VERSION 3.16)
-project(Xyz VERSION 0.1.2)
+project(Xyz VERSION 0.1.3)
 
 set(CMAKE_CXX_STANDARD 17)
 
 # Set XYZ_MASTER_PROJECT to ON if Xyz is the root level project.
-if(NOT DEFINED XYZ_MASTER_PROJECT)
-    if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
+if (NOT DEFINED XYZ_MASTER_PROJECT)
+    if (CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
         set(XYZ_MASTER_PROJECT ON)
-    else()
+    else ()
         set(XYZ_MASTER_PROJECT OFF)
-    endif()
-endif()
+    endif ()
+endif ()
 
 # Test option
 option(XYZ_BUILD_TEST "Build tests" ${XYZ_MASTER_PROJECT})

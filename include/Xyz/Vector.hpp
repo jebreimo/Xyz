@@ -359,7 +359,7 @@ namespace Xyz
     }
 
     template <typename T, unsigned N>
-    T getLengthSquared(const Vector<T, N>& v)
+    auto getLengthSquared(const Vector<T, N>& v)
     {
         return dot(v, v);
     }
