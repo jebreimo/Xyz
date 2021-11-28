@@ -104,6 +104,15 @@ namespace
         Y_EQUAL(s, e);
     }
 
+    void test_Identity()
+    {
+        auto m1 = makeIdentityMatrix<int, 4>();
+        auto m2 = Matrix<int, 4, 4>::identity();
+        Y_EQUAL(m1, m2);
+        Y_EQUAL(m1[0][0], 1);
+        Y_EQUAL(m1[0][1], 0);
+    }
+
     Y_SUBTEST("Fundamentals",
               test_Basics,
               test_Transpose,
@@ -111,5 +120,6 @@ namespace
               test_MatrixMatrixSubtraction,
               test_MatrixMatrixMultiplication,
               test_MatrixVectorMultiplication,
-              test_MakeSubmatrix);
+              test_MakeSubmatrix,
+              test_Identity);
 }

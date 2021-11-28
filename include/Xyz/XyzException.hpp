@@ -15,13 +15,7 @@ namespace Xyz
     class XyzException : public std::runtime_error
     {
     public:
-        explicit XyzException(const std::string& message) noexcept
-                : std::runtime_error(message)
-        {}
-
-        explicit XyzException(const char* message) noexcept
-            : std::runtime_error(message)
-        {}
+        using std::runtime_error::runtime_error;
     };
 }
 

@@ -30,7 +30,16 @@ namespace Xyz
             return M * N;
         }
 
-        Matrix()
+        static constexpr Matrix identity()
+        {
+            static_assert(M == N);
+            Matrix result;
+            for (unsigned i = 0; i < M; ++i)
+                result[i][i] = 1;
+            return result;
+        }
+
+        constexpr Matrix()
         {
             for (unsigned i = 0; i < size(); ++i)
                 m_Values[i] = 0;
