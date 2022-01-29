@@ -9,7 +9,7 @@
 
 namespace Xyz
 {
-    std::default_random_engine& getRandomEngine()
+    std::default_random_engine& get_random_engine()
     {
         static std::default_random_engine engine(
             [](){return std::random_device()();}());

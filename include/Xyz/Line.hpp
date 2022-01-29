@@ -19,43 +19,43 @@ namespace Xyz
         Line() = default;
 
         Line(const Vector<T, N>& point, const Vector<T, N>& vector)
-            : m_Point(point),
-              m_Vector(vector)
+            : m_point(point),
+              m_vector(vector)
         {}
 
         const Vector<T, N>& point() const
         {
-            return m_Point;
+            return m_point;
         }
 
-        void setPoint(const Vector<T, N>& point)
+        void set_point(const Vector<T, N>& point)
         {
-            m_Point = point;
+            m_point = point;
         }
 
         const Vector<T, N>& vector() const
         {
-            return m_Vector;
+            return m_vector;
         }
 
-        void setVector(const Vector<T, N>& vector)
+        void set_vector(const Vector<T, N>& vector)
         {
-            m_Vector = vector;
+            m_vector = vector;
         }
 
     private:
-        Vector<T, N> m_Point;
-        Vector<T, N> m_Vector;
+        Vector<T, N> m_point;
+        Vector<T, N> m_vector;
     };
 
     template <typename T, unsigned N>
-    const Vector<T, N>& getPoint(const Line<T, N>& line)
+    const Vector<T, N>& get_point(const Line<T, N>& line)
     {
         return line.point();
     }
 
     template <typename T, unsigned N>
-    const Vector<T, N>& getVector(const Line<T, N>& line)
+    const Vector<T, N>& get_vector(const Line<T, N>& line)
     {
         return line.vector();
     }
@@ -63,20 +63,20 @@ namespace Xyz
     template <typename T, unsigned N>
     std::ostream& operator<<(std::ostream& os, const Line<T, N>& line)
     {
-        return os << "{\"vertex\": " << getPoint(line)
-                  << ", \"vector\": " << getVector(line) << "}";
+        return os << "{\"vertex\": " << get_point(line)
+                  << ", \"vector\": " << get_vector(line) << "}";
     }
 
     template <typename T, unsigned N>
-    Line<T, N> makeLine(const Vector<T, N>& point,
-                        const Vector<T, N>& vector)
+    Line<T, N> make_line(const Vector<T, N>& point,
+                         const Vector<T, N>& vector)
     {
         return Line<T, N>(point, vector);
     }
 
     template <typename T, unsigned N>
-    Line<T, N> makeLine(const LineSegment<T, N>& lineSegment)
+    Line<T, N> make_line(const LineSegment<T, N>& line_segment)
     {
-        return makeLine(getStart(lineSegment), getVector(lineSegment));
+        return make_line(get_start(line_segment), get_vector(line_segment));
     }
 }

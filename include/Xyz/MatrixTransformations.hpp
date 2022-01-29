@@ -53,8 +53,11 @@ namespace Xyz
                 0, 0, 1};
     }
 
+    /**
+     * @brief Rotation around the z axis.
+     */
     template <typename T>
-    Matrix<T, 4, 4> rotateZ(T angle)
+    Matrix<T, 4, 4> rotate_z(T angle)
     {
         auto c = std::cos(angle);
         auto s = std::sin(angle);
@@ -66,7 +69,7 @@ namespace Xyz
     }
 
     template <typename T>
-    Matrix<T, 4, 4> rotateY(T angle)
+    Matrix<T, 4, 4> rotate_y(T angle)
     {
         auto c = std::cos(angle);
         auto s = std::sin(angle);
@@ -78,7 +81,7 @@ namespace Xyz
     }
 
     template <unsigned N, typename T>
-    Matrix<T, 4, 4> rotateX(T angle)
+    Matrix<T, 4, 4> rotate_x(T angle)
     {
         auto c = std::cos(angle);
         auto s = std::sin(angle);
@@ -137,7 +140,7 @@ namespace Xyz
     }
 
     template <typename T>
-    Matrix<T, 3, 3> transposedRotate3(T angle)
+    Matrix<T, 3, 3> transposed_rotate3(T angle)
     {
         auto c = std::cos(angle);
         auto s = std::sin(angle);
@@ -148,7 +151,7 @@ namespace Xyz
     }
 
     template <typename T>
-    Matrix<T, 3, 3> transposedTranslate3(T x, T y)
+    Matrix<T, 3, 3> transposed_translate3(T x, T y)
     {
         return Matrix<T, 3, 3>{
                 1, 0, 0,
@@ -157,13 +160,13 @@ namespace Xyz
     }
 
     template <typename T>
-    Matrix<T, 3, 3> transposedTranslate3(const Vector<T, 2>& offsets)
+    Matrix<T, 3, 3> transposed_translate3(const Vector<T, 2>& offsets)
     {
-        return transposeTranslate(offsets[0], offsets[1]);
+        return transpose_translate(offsets[0], offsets[1]);
     }
 
     template <typename T>
-    Matrix<T, 4, 4> transposedRotateZ(T angle)
+    Matrix<T, 4, 4> transposed_rotate_z(T angle)
     {
         auto c = std::cos(angle);
         auto s = std::sin(angle);
@@ -175,7 +178,7 @@ namespace Xyz
     }
 
     template <typename T>
-    Matrix<T, 4, 4> transposedRotateY(T angle)
+    Matrix<T, 4, 4> transposed_rotate_y(T angle)
     {
         auto c = std::cos(angle);
         auto s = std::sin(angle);
@@ -187,7 +190,7 @@ namespace Xyz
     }
 
     template <typename T>
-    Matrix<T, 4, 4> transposedRotateX(T angle)
+    Matrix<T, 4, 4> transposed_rotate_x(T angle)
     {
         auto c = std::cos(angle);
         auto s = std::sin(angle);
@@ -199,7 +202,7 @@ namespace Xyz
     }
 
     template <typename T>
-    Matrix<T, 4, 4> transposedRotate4(T angle, const Vector<T, 3>& axis)
+    Matrix<T, 4, 4> transposed_rotate4(T angle, const Vector<T, 3>& axis)
     {
         auto c = std::cos(angle);
         auto s = std::sin(angle);
@@ -215,7 +218,7 @@ namespace Xyz
     }
 
     template <typename T>
-    Matrix<T, 4, 4> transposedTranslate4(T x, T y, T z)
+    Matrix<T, 4, 4> transposed_translate4(T x, T y, T z)
     {
         return Matrix<T, 4, 4>{
                 1, 0, 0, 0,
@@ -225,8 +228,8 @@ namespace Xyz
     }
 
     template <typename T>
-    Matrix<T, 4, 4> transposedTranslate4(const Vector<T, 3>& offsets)
+    Matrix<T, 4, 4> transposed_translate4(const Vector<T, 3>& offsets)
     {
-        return transposedTranslate4(offsets[0], offsets[1], offsets[2]);
+        return transposed_translate4(offsets[0], offsets[1], offsets[2]);
     }
 }

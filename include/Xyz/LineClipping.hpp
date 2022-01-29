@@ -20,8 +20,8 @@ namespace Xyz
     constexpr unsigned OUTCODE_TOP = 0b1000;
 
     template <typename T>
-    unsigned computeClippingOutcode(const Rectangle<T>& rectangle,
-                                    const Vector<T, 2>& point)
+    unsigned compute_clipping_outcode(const Rectangle<T>& rectangle,
+                                      const Vector<T, 2>& point)
     {
         auto [x, y] = point;
         auto [x0, y0] = rectangle.min();
@@ -55,11 +55,11 @@ namespace Xyz
      *      which case both positions are -1.
      */
     template <typename T>
-    std::pair<double, double> getClippingPositions(
+    std::pair<double, double> get_clipping_positions(
             const Rectangle<T>& rectangle, const LineSegment<T, 2>& line)
     {
-        auto startCode = computeClippingOutcode(rectangle, line.start());
-        auto endCode = computeClippingOutcode(rectangle, line.end());
+        auto startCode = compute_clipping_outcode(rectangle, line.start());
+        auto endCode = compute_clipping_outcode(rectangle, line.end());
         double tStart = 0.0, tEnd = 1.0;
 
         for (;;)
@@ -88,12 +88,12 @@ namespace Xyz
             if (code == startCode)
             {
                 tStart = t;
-                startCode = computeClippingOutcode(rectangle, point);
+                startCode = compute_clipping_outcode(rectangle, point);
             }
             else
             {
                 tEnd = t;
-                endCode = computeClippingOutcode(rectangle, point);
+                endCode = compute_clipping_outcode(rectangle, point);
             }
         }
     }

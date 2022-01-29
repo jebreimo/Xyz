@@ -20,7 +20,7 @@ namespace Xyz
     {
         constexpr static T DEFAULT_MARGIN = 100 * std::numeric_limits<T>::epsilon();
 
-        explicit constexpr Approx(T value, T margin = DEFAULT_MARGIN)
+        constexpr explicit Approx(T value, T margin = DEFAULT_MARGIN)
             : value(value),
               margin(margin)
         {}

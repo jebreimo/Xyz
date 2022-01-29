@@ -30,7 +30,7 @@ namespace Xyz
         }
 
         constexpr Vector() noexcept
-            : m_Values()
+            : m_values()
         {}
 
         constexpr Vector(std::initializer_list<T> v)
@@ -39,13 +39,13 @@ namespace Xyz
                 XYZ_THROW("Incorrect number of arguments.");
             auto it = v.begin();
             for (unsigned i = 0; i < N; ++i)
-                m_Values[i] = *it++;
+                m_values[i] = *it++;
         }
 
         explicit Vector(T (& arr)[N]) noexcept
         {
             for (unsigned i = 0; i < N; ++i)
-                m_Values[i] = arr[i];
+                m_values[i] = arr[i];
         }
 
         template <typename U>
@@ -55,13 +55,13 @@ namespace Xyz
                 XYZ_THROW("Incorrect number of values.");
 
             for (unsigned i = 0; i < N; ++i)
-                m_Values[i] = U(values[i]);
+                m_values[i] = U(values[i]);
         }
 
         Vector(const Vector& other) noexcept
         {
             for (unsigned i = 0; i < N; ++i)
-                m_Values[i] = other[i];
+                m_values[i] = other[i];
         }
 
         Vector& operator=(T (& arr)[N])
@@ -79,46 +79,46 @@ namespace Xyz
 
         constexpr const T& operator[](unsigned i) const
         {
-            return m_Values[i];
+            return m_values[i];
         }
 
         constexpr T& operator[](unsigned i)
         {
-            return m_Values[i];
+            return m_values[i];
         }
 
         constexpr const T* begin() const
         {
-            return m_Values;
+            return m_values;
         }
 
         constexpr T* begin()
         {
-            return m_Values;
+            return m_values;
         }
 
         constexpr const T* end() const
         {
-            return m_Values + N;
+            return m_values + N;
         }
 
         constexpr T* end()
         {
-            return m_Values + N;
+            return m_values + N;
         }
 
         constexpr T* data()
         {
-            return m_Values;
+            return m_values;
         }
 
         constexpr const T* data() const
         {
-            return m_Values;
+            return m_values;
         }
 
     private:
-        T m_Values[N];
+        T m_values[N];
     };
 
     template <typename T, typename S, unsigned N>
@@ -247,31 +247,31 @@ namespace Xyz
     }
 
     template <typename T>
-    constexpr Vector<T, 2> makeVector2(T x, T y)
+    constexpr Vector<T, 2> make_vector2(T x, T y)
     {
         return Vector<T, 2>({x, y});
     }
 
     template <typename T>
-    constexpr Vector<T, 3> makeVector3(T x, T y, T z)
+    constexpr Vector<T, 3> make_vector3(T x, T y, T z)
     {
         return Vector<T, 3>({x, y, z});
     }
 
     template <typename T, typename U>
-    constexpr Vector<T, 3> makeVector3(const Vector<U, 2>& v, T z)
+    constexpr Vector<T, 3> make_vector3(const Vector<U, 2>& v, T z)
     {
         return Vector<T, 3>({T(v[0]), T(v[1]), z});
     }
 
     template <typename T>
-    constexpr Vector<T, 4> makeVector4(T x, T y, T z, T w)
+    constexpr Vector<T, 4> make_vector4(T x, T y, T z, T w)
     {
         return Vector<T, 4>({x, y, z, w});
     }
 
     template <typename T, typename U>
-    constexpr Vector<T, 4> makeVector4(const Vector<U, 3>& v, T w)
+    constexpr Vector<T, 4> make_vector4(const Vector<U, 3>& v, T w)
     {
         return Vector<T, 4>({T(v[0]), T(v[1]), T(v[2]), w});
     }
@@ -316,7 +316,7 @@ namespace Xyz
     }
 
     template <typename T, unsigned N>
-    Vector<T, N>& divideAssign(Vector<T, N>& u, const Vector<T, N>& v)
+    Vector<T, N>& divide_assign(Vector<T, N>& u, const Vector<T, N>& v)
     {
         for (unsigned i = 0; i < N; ++i)
             u[i] /= v[i];
@@ -324,7 +324,7 @@ namespace Xyz
     }
 
     template <typename T, unsigned N>
-    Vector<T, N>& multiplyAssign(Vector<T, N>& u, const Vector<T, N>& v)
+    Vector<T, N>& multiply_assign(Vector<T, N>& u, const Vector<T, N>& v)
     {
         for (unsigned i = 0; i < N; ++i)
             u[i] *= v[i];
@@ -359,58 +359,58 @@ namespace Xyz
     }
 
     template <typename T, unsigned N>
-    auto getLengthSquared(const Vector<T, N>& v)
+    auto get_length_squared(const Vector<T, N>& v)
     {
         return dot(v, v);
     }
 
     template <typename T, unsigned N>
-    auto getLength(const Vector<T, N>& v)
+    auto get_length(const Vector<T, N>& v)
     {
-        return std::sqrt(getLengthSquared(v));
+        return std::sqrt(get_length_squared(v));
     }
 
     template <typename T>
-    Vector<T, 2> getNormal(const Vector<T, 2>& v)
+    Vector<T, 2> get_normal(const Vector<T, 2>& v)
     {
-        return makeVector2(-v[1], v[0]);
+        return make_vector2(-v[1], v[0]);
     }
 
     template <typename T, unsigned N,
               typename std::enable_if_t<std::is_integral_v<T>, int> = 0>
-    bool areEquivalent(const Vector<T, N>& u, const Vector<T, N>& v, T = 0)
+    bool are_equivalent(const Vector<T, N>& u, const Vector<T, N>& v, T = 0)
     {
         return u == v;
     }
 
     template <typename T, unsigned N,
               typename std::enable_if_t<std::is_floating_point_v<T>, int> = 0>
-    bool areEquivalent(const Vector<T, N>& u, const Vector<T, N>& v,
-                       T margin = Constants<T>::DEFAULT_MARGIN)
+    bool are_equivalent(const Vector<T, N>& u, const Vector<T, N>& v,
+                        T margin = Constants<T>::DEFAULT_MARGIN)
     {
-        return getLengthSquared(u - v) <= margin;
+        return get_length_squared(u - v) <= margin;
     }
 
     template <typename T, unsigned N>
-    auto getCosAngle(const Vector<T, N>& u, const Vector<T, N>& v)
+    auto get_cos_angle(const Vector<T, N>& u, const Vector<T, N>& v)
     {
-        return dot(u, v) / std::sqrt(getLengthSquared(u) * getLengthSquared(v));
+        return dot(u, v) / std::sqrt(get_length_squared(u) * get_length_squared(v));
     }
 
     /** @brief Returns the smallest angle between @a u and @a v.
       * @return A value in the range 0 <= angle <= pi.
       */
     template <typename T, unsigned N>
-    auto getAngle(const Vector<T, N>& u, const Vector<T, N>& v)
+    auto get_angle(const Vector<T, N>& u, const Vector<T, N>& v)
     {
-        return std::acos(getCosAngle(u, v));
+        return std::acos(get_cos_angle(u, v));
     }
 
     template <typename T>
-    auto getCcwAngle(const Vector<T, 2>& u, const Vector<T, 2>& v)
+    auto get_ccw_angle(const Vector<T, 2>& u, const Vector<T, 2>& v)
     {
-        auto angle = getAngle(u, v);
-        if (dot(getNormal(u), v) >= 0)
+        auto angle = get_angle(u, v);
+        if (dot(get_normal(u), v) >= 0)
             return angle;
         else
             return 2 * Constants<decltype(angle)>::PI - angle;
@@ -419,31 +419,31 @@ namespace Xyz
     template <typename T>
     Vector<T, 3> cross(const Vector<T, 3>& a, const Vector<T, 3>& b)
     {
-        return makeVector3(a[1] * b[2] - a[2] * b[1],
-                           a[2] * b[0] - a[0] * b[2],
-                           a[0] * b[1] - a[1] * b[0]);
+        return make_vector3(a[1] * b[2] - a[2] * b[1],
+                            a[2] * b[0] - a[0] * b[2],
+                            a[0] * b[1] - a[1] * b[0]);
     }
 
     template <typename T, unsigned N>
-    auto getUnit(const Vector<T, N>& v)
+    auto get_unit(const Vector<T, N>& v)
     {
-        return v / getLength(v);
+        return v / get_length(v);
     }
 
     template <typename T, unsigned N>
-    Vector<T, N>& resizeUpdate(Vector<T, N>& v, T newLength)
+    Vector<T, N>& resize_update(Vector<T, N>& v, T new_length)
     {
-        return v *= (newLength / getLength(v));
+        return v *= (new_length / get_length(v));
     }
 
     template <typename T, unsigned N>
-    Vector<T, N> resize(const Vector<T, N>& v, T newLength)
+    Vector<T, N> resize(const Vector<T, N>& v, T new_length)
     {
-        return v * (newLength / length(v));
+        return v * (new_length / length(v));
     }
 
     template <typename T, unsigned N>
-    Vector<T, N>& clampUpdate(Vector<T, N>& v, T min, T max)
+    Vector<T, N>& clamp_update(Vector<T, N>& v, T min, T max)
     {
         for (auto i = 0u; i < N; ++i)
             clamp(v[i], min, max);
@@ -452,7 +452,7 @@ namespace Xyz
     template <typename T, unsigned N>
     Vector<T, N> clamp(Vector<T, N> v, T min, T max)
     {
-        clampUpdate(v, min, max);
+        clamp_update(v, min, max);
         return v;
     }
 
@@ -460,7 +460,7 @@ namespace Xyz
     Vector<T, 2> reflect(const Vector<T, 2>& v,
                          const Vector<T, 2>& mirror)
     {
-        auto n = getNormal(mirror);
+        auto n = get_normal(mirror);
         return v - 2 * (v * n) * n;
     }
 
@@ -469,12 +469,12 @@ namespace Xyz
     {
         auto c = std::cos(radians);
         auto s = std::sin(radians);
-        return makeVector2(T(v[0] * c - v[1] * s), T(v[0] * s + v[1] * c));
+        return make_vector2(T(v[0] * c - v[1] * s), T(v[0] * s + v[1] * c));
     }
 
     template <typename T, unsigned N,
               typename std::enable_if_t<std::is_integral_v<T>, int> = 0>
-    bool isNull(Vector<T, N>& v, T = 0)
+    bool is_null(Vector<T, N>& v, T = 0)
     {
         for (auto n: v)
         {
@@ -486,7 +486,7 @@ namespace Xyz
 
     template <typename T, unsigned N,
               typename std::enable_if_t<std::is_floating_point_v<T>, int> = 0>
-    bool isNull(Vector<T, N>& v, T margin = Constants<T>::DEFAULT_MARGIN)
+    bool is_null(Vector<T, N>& v, T margin = Constants<T>::DEFAULT_MARGIN)
     {
         for (auto n: v)
         {

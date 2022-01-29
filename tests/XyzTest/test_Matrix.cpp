@@ -15,7 +15,7 @@ namespace
 {
     using namespace Xyz;
 
-    void test_Basics()
+    void test_basics()
     {
         auto mat = Matrix3d{1, 0, 0,
                             0, 1, 0,
@@ -25,7 +25,7 @@ namespace
         Y_EQUAL(mat[1][1], 1);
     }
 
-    void test_Transpose()
+    void test_transpose()
     {
         auto mat1 = Matrix4d{0, 1, 2, 3,
                              4, 5, 6, 7,
@@ -36,11 +36,11 @@ namespace
                               2, 6, 0, 4,
                               3, 7, 1, 5};
         Y_EQUAL(transpose(mat1), mat1t);
-        transposeInplace(mat1t);
+        transpose_inplace(mat1t);
         Y_EQUAL(mat1, mat1t);
     }
 
-    void test_MatrixMatrixAddition()
+    void test_matrix_matrix_addition()
     {
         auto m1 = Matrix3i{1, 2, 3,
                            4, 5, 6,
@@ -54,7 +54,7 @@ namespace
         Y_EQUAL(m1 + m2, product);
     }
 
-    void test_MatrixMatrixSubtraction()
+    void test_matrix_matrix_subtraction()
     {
         auto m1 = Matrix3i{1, 2, 3,
                            4, 5, 6,
@@ -68,7 +68,7 @@ namespace
         Y_EQUAL(m1 - m2, product);
     }
 
-    void test_MatrixMatrixMultiplication()
+    void test_matrix_matrix_multiplication()
     {
         auto m1 = Matrix2i{1, 2,
                            3, 4};
@@ -79,7 +79,7 @@ namespace
         Y_EQUAL(m1 * m2, product);
     }
 
-    void test_MatrixVectorMultiplication()
+    void test_matrix_vector_multiplication()
     {
         auto m = Matrix3i{1, 2, 3,
                           4, 5, 6,
@@ -91,22 +91,22 @@ namespace
         Y_EQUAL(v * m, product2);
     }
 
-    void test_MakeSubmatrix()
+    void test_make_submatrix()
     {
         Matrix4i m{1, 2, 3, 4,
                    5, 6, 7, 8,
                    9, 0, 1, 2,
                    3, 4, 5, 6};
-        auto s = makeSubmatrix<3, 3>(m, 3, 2);
+        auto s = make_submatrix<3, 3>(m, 3, 2);
         Matrix3i e{5, 6, 3,
                    3, 4, 1,
                    7, 8, 5};
         Y_EQUAL(s, e);
     }
 
-    void test_Identity()
+    void test_identity()
     {
-        auto m1 = makeIdentityMatrix<int, 4>();
+        auto m1 = make_identity_matrix<int, 4>();
         auto m2 = Matrix<int, 4, 4>::identity();
         Y_EQUAL(m1, m2);
         Y_EQUAL(m1[0][0], 1);
@@ -114,12 +114,12 @@ namespace
     }
 
     Y_SUBTEST("Fundamentals",
-              test_Basics,
-              test_Transpose,
-              test_MatrixMatrixAddition,
-              test_MatrixMatrixSubtraction,
-              test_MatrixMatrixMultiplication,
-              test_MatrixVectorMultiplication,
-              test_MakeSubmatrix,
-              test_Identity);
+              test_basics,
+              test_transpose,
+              test_matrix_matrix_addition,
+              test_matrix_matrix_subtraction,
+              test_matrix_matrix_multiplication,
+              test_matrix_vector_multiplication,
+              test_make_submatrix,
+              test_identity);
 }

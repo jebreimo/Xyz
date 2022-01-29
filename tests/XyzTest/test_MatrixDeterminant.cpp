@@ -13,23 +13,23 @@ namespace
 {
     using namespace Xyz;
 
-    void test_GetDeterminant3()
+    void test_get_determinant3()
     {
         Matrix3i m {1, 4, 3,
                     2, 1, 5,
                     3, 2, 1};
-        Y_EQUAL(getDeterminant(m), 46);
+        Y_EQUAL(get_determinant(m), 46);
     }
 
-    void test_GetDeterminant4()
+    void test_get_determinant4()
     {
         Matrix4i m{1, -2, 3, 2,
                    2, 3, 1, -1,
                    3, 3, 3, 3,
                    -1, 4, 2, 1};
-        Y_EQUAL(getDeterminant(m), -141);
+        Y_EQUAL(get_determinant(m), -141);
     }
 
-    Y_TEST(test_GetDeterminant3,
-           test_GetDeterminant4);
+    Y_TEST(test_get_determinant3,
+           test_get_determinant4);
 }

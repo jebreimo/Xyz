@@ -12,12 +12,12 @@
 namespace Xyz
 {
     template <typename T>
-    Matrix<T, 4, 4> makeLookAtMatrix(const Vector<T, 3>& eye,
-                                     const Vector<T, 3>& center,
-                                     const Vector<T, 3>& up)
+    Matrix<T, 4, 4> make_look_at_matrix(const Vector<T, 3>& eye,
+                                        const Vector<T, 3>& center,
+                                        const Vector<T, 3>& up)
     {
-        auto f = getUnit(center - eye);
-        auto s = cross(f, getUnit(up));
+        auto f = get_unit(center - eye);
+        auto s = cross(f, get_unit(up));
         auto u = cross(s, f);
         return Matrix<T, 4, 4>{
                 s[0], s[1], s[2], dot(-s, eye),
@@ -27,7 +27,7 @@ namespace Xyz
     }
 
     template <typename T>
-    Matrix<T, 4, 4> makeFrustumMatrix(T l, T r, T b, T t, T n, T f)
+    Matrix<T, 4, 4> make_frustum_matrix(T l, T r, T b, T t, T n, T f)
     {
         return Matrix<T, 4, 4>{
                 2 * n / (r - l),  0,  (r + l) / (r - l),  0,
@@ -37,7 +37,7 @@ namespace Xyz
     }
 
     template <typename T>
-    Matrix<T, 4, 4> makeOrthogonalMatrix(T l, T r, T b, T t, T n, T f)
+    Matrix<T, 4, 4> make_orthogonal_matrix(T l, T r, T b, T t, T n, T f)
     {
         return Matrix<T, 4, 4> {
                 2 / (r - l),  0,  0,  -(r + l) / (r - l),

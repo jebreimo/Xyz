@@ -17,13 +17,13 @@ namespace Xyz
     struct Constants
     {
         constexpr static double PI = 3.141592653589793;
-        constexpr static double DEFAULT_MARGIN = 1e-15;
+        constexpr static double DEFAULT_MARGIN = DBL_EPSILON * 100.0;
     };
 
     template <>
     struct Constants<float>
     {
         constexpr static float PI = 3.14159265f;
-        constexpr static float DEFAULT_MARGIN = 1e-6;
+        constexpr static float DEFAULT_MARGIN = FLT_EPSILON * 100.0;
     };
 }

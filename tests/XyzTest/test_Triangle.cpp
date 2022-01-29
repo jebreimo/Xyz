@@ -10,35 +10,35 @@
 
 namespace
 {
-    void test_containsPoint()
+    void test_contains_point()
     {
-        auto triangle = Xyz::makeTriangle(Xyz::makeVector2(-5, 0),
-                                          Xyz::makeVector2(5, 0),
-                                          Xyz::makeVector2(0, 5));
-        Y_ASSERT(containsPoint(triangle, Xyz::makeVector2(0, 2), 1e-12));
-        Y_ASSERT(!containsPoint(triangle, Xyz::makeVector2(-3, 2), 1e-12));
+        auto triangle = Xyz::make_triangle(Xyz::make_vector2(-5, 0),
+                                           Xyz::make_vector2(5, 0),
+                                           Xyz::make_vector2(0, 5));
+        Y_ASSERT(contains_point(triangle, Xyz::make_vector2(0, 2), 1e-12));
+        Y_ASSERT(!contains_point(triangle, Xyz::make_vector2(-3, 2), 1e-12));
     }
 
-    void test_containsPointInclusive()
+    void test_contains_point_inclusive()
     {
-        auto tri = Xyz::makeTriangle(Xyz::makeVector2(-5, 0),
-                                     Xyz::makeVector2(5, 0),
-                                     Xyz::makeVector2(0, 5));
-        Y_ASSERT(containsPointInclusive(tri, Xyz::makeVector2(0, 2), 1e-12));
-        Y_ASSERT(containsPointInclusive(tri, Xyz::makeVector2(-3, 2), 1e-12));
+        auto tri = Xyz::make_triangle(Xyz::make_vector2(-5, 0),
+                                      Xyz::make_vector2(5, 0),
+                                      Xyz::make_vector2(0, 5));
+        Y_ASSERT(contains_point_inclusive(tri, Xyz::make_vector2(0, 2), 1e-12));
+        Y_ASSERT(contains_point_inclusive(tri, Xyz::make_vector2(-3, 2), 1e-12));
     }
 
-    void test_getArea()
+    void test_get_area()
     {
-        auto tri = Xyz::makeTriangle(Xyz::makeVector3(3, 1, 2),
-                                     Xyz::makeVector3(7, 5, 2),
-                                     Xyz::makeVector3(3, 7, 2));
-        Y_EQUIVALENT(Xyz::getAreaSquared(tri), 144, 1e-10);
-        Y_EQUIVALENT(Xyz::getArea(tri), 12, 1e-10);
+        auto tri = Xyz::make_triangle(Xyz::make_vector3(3, 1, 2),
+                                      Xyz::make_vector3(7, 5, 2),
+                                      Xyz::make_vector3(3, 7, 2));
+        Y_EQUIVALENT(Xyz::get_area_squared(tri), 144, 1e-10);
+        Y_EQUIVALENT(Xyz::get_area(tri), 12, 1e-10);
     }
 
     Y_SUBTEST("Geometry",
-              test_containsPoint,
-              test_containsPointInclusive,
-              test_getArea);
+              test_contains_point,
+              test_contains_point_inclusive,
+              test_get_area);
 }

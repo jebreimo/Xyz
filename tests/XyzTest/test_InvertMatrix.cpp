@@ -13,36 +13,36 @@ namespace
     using namespace Xyz;
 
     template <typename T, unsigned N>
-    bool equalsIdentityMatrix(const Matrix<T, N, N>& m)
+    bool equals_identity_matrix(const Matrix<T, N, N>& m)
     {
-        return areEquivalent(m, makeIdentityMatrix<T, N>());
+        return are_equivalent(m, make_identity_matrix<T, N>());
     }
 
-    void test_Invert2()
+    void test_invert2()
     {
         Matrix2d m{1, 4,
                    2, 1};
-        Y_ASSERT(equalsIdentityMatrix(m * invert(m)));
+        Y_ASSERT(equals_identity_matrix(m * invert(m)));
     }
 
-    void test_Invert3()
+    void test_invert3()
     {
         Matrix3d m{1, 4, 2,
                    2, 1, 3,
                    5, 7, 2};
-        Y_ASSERT(equalsIdentityMatrix(m * invert(m)));
+        Y_ASSERT(equals_identity_matrix(m * invert(m)));
     }
 
-    void test_Invert4()
+    void test_invert4()
     {
         Matrix4d m{1, -2, 3, 2,
                    2, 3, 1, -1,
                    3, 7, 0, 3,
                    -1, 4, 2, 1};
-        Y_ASSERT(equalsIdentityMatrix(m * invert(m)));
+        Y_ASSERT(equals_identity_matrix(m * invert(m)));
     }
 
-    Y_TEST(test_Invert2,
-           test_Invert3,
-           test_Invert4);
+    Y_TEST(test_invert2,
+           test_invert3,
+           test_invert4);
 }

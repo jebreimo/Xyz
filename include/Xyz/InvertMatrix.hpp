@@ -15,7 +15,7 @@ namespace Xyz
     namespace Details
     {
         template <typename T>
-        Matrix<T, 3, 3> getTransposedCofactors(const Matrix<T, 3, 3>& m)
+        Matrix<T, 3, 3> get_transposed_cofactors(const Matrix<T, 3, 3>& m)
         {
             return Matrix<T, 3, 3>{
                     m[1][1] * m[2][2] - m[1][2] * m[2][1],
@@ -31,7 +31,7 @@ namespace Xyz
         }
 
         template <typename T>
-        T getCofactor(const Matrix<T, 4, 4>& m, const std::array<T, 7>& a,
+        T get_cofactor(const Matrix<T, 4, 4>& m, const std::array<T, 7>& a,
                       unsigned row, const std::array<unsigned, 3>& columns)
         {
             return m[row][columns[0]] * a[columns[1] * 2 + columns[2] - 1]
@@ -40,7 +40,7 @@ namespace Xyz
         }
 
         template <typename T>
-        Matrix<T, 4, 4> getTransposedCofactors(const Matrix<T, 4, 4>& m)
+        Matrix<T, 4, 4> get_transposed_cofactors(const Matrix<T, 4, 4>& m)
         {
             Matrix<T, 4, 4> c;
             std::array<T, 7> a = {};
@@ -62,10 +62,10 @@ namespace Xyz
                 for (unsigned i = 2 - k; i < 4 - k; ++i)
                 {
                     std::array<unsigned, 3> columns = {1, 2, 3};
-                    auto otherRow = 5 - 2 * k - i;
+                    auto other_row = 5 - 2 * k - i;
                     for (unsigned j = 0; j < 4; ++j)
                     {
-                        c[j][i] = sign * getCofactor(m, a, otherRow, columns);
+                        c[j][i] = sign * get_cofactor(m, a, other_row, columns);
                         sign = -sign;
                         if (j < 3)
                             columns[j] = j;
@@ -81,7 +81,7 @@ namespace Xyz
               std::enable_if_t<N == 3 || N == 4, int> = 0>
     Matrix<T, N, N> invert(const Matrix<T, N, N>& m)
     {
-        auto c = Details::getTransposedCofactors(m);
+        auto c = Details::get_transposed_cofactors(m);
         T det = 0;
         for (unsigned i = 0; i < N; ++i)
             det += m[0][i] * c[i][0];

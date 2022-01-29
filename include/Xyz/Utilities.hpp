@@ -13,19 +13,19 @@
 namespace Xyz
 {
     template <typename T>
-    constexpr auto toRadians(T degrees)
+    constexpr auto to_radians(T degrees)
     {
         return degrees * Constants<T>::PI / 180;
     }
 
     template <typename T>
-    constexpr auto toDegrees(T radians)
+    constexpr auto to_degrees(T radians)
     {
         return radians * 180 / Constants<T>::PI;
     }
 
     template <typename T>
-    constexpr auto toPrincipalAngle(T radians)
+    constexpr auto to_principal_angle(T radians)
     {
         auto result = fmod(radians, 2 * Constants<T>::PI);
         return result >= 0 ? result : result + 2 * Constants<T>::PI;

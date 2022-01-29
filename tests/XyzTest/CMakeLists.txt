@@ -23,12 +23,10 @@ add_executable(XyzTest
     test_Transforms.cpp
     test_Vector.cpp
     test_CoordinateSystem.cpp
-    test_LineClipping.cpp.cpp
+    test_LineClipping.cpp
     test_Intersections.cpp
-    test_Triangle.cpp
-    )
+    test_Triangle.cpp)
 
 target_link_libraries(XyzTest
     Xyz::Xyz
-    Ytest::Ytest
-    )
+    Ytest::Ytest)

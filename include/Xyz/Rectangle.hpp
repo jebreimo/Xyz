@@ -19,76 +19,76 @@ namespace Xyz
         Rectangle() = default;
 
         Rectangle(const Vector<T, 2>& origin, const Vector<T, 2>& size)
-            : m_Origin(origin), m_Size(size)
+            : m_origin(origin), m_size(size)
         {}
 
         [[nodiscard]]
         Vector<T, 2> center() const
         {
-            return m_Origin + m_Size / 2;
+            return m_origin + m_size / 2;
         }
 
-        void setCenter(const Vector<T, 2>& center)
+        void set_center(const Vector<T, 2>& center)
         {
-            m_Origin = center - m_Size / 2;
+            m_origin = center - m_size / 2;
         }
 
         [[nodiscard]]
         const Vector<T, 2>& origin() const
         {
-            return m_Origin;
+            return m_origin;
         }
 
-        void setOrigin(const Vector<T, 2>& origin)
+        void set_origin(const Vector<T, 2>& origin)
         {
-            m_Origin = origin;
+            m_origin = origin;
         }
 
         [[nodiscard]]
         const Vector<T, 2>& size() const
         {
-            return m_Size;
+            return m_size;
         }
 
-        void setSize(const Vector<T, 2>& size)
+        void set_size(const Vector<T, 2>& size)
         {
-            m_Size = size;
+            m_size = size;
         }
 
         [[nodiscard]]
-        bool isClockwise() const
+        bool is_clockwise() const
         {
-            return (m_Size[0] < 0) != (m_Size[1] < 0);
+            return (m_size[0] < 0) != (m_size[1] < 0);
         }
 
         [[nodiscard]]
         Vector<T, 2> min() const
         {
-            auto [w, h] = m_Size;
+            auto [w, h] = m_size;
             if (0 <= w && 0 <= h)
-                return m_Origin;
-            auto [x, y] = m_Origin;
+                return m_origin;
+            auto [x, y] = m_origin;
             if (0 <= w)
-                return makeVector2(x, y + h);
+                return make_vector2(x, y + h);
             else if (0 <= h)
-                return makeVector2(x + w, y);
+                return make_vector2(x + w, y);
             else
-                return m_Origin + m_Size;
+                return m_origin + m_size;
         }
 
         [[nodiscard]]
         Vector<T, 2> max() const
         {
-            auto [w, h] = m_Size;
+            auto [w, h] = m_size;
             if (0 <= w && 0 <= h)
-                return m_Origin + m_Size;
-            auto [x, y] = m_Origin;
+                return m_origin + m_size;
+            auto [x, y] = m_origin;
             if (0 <= w)
-                return makeVector2(x + w, y);
+                return make_vector2(x + w, y);
             else if (0 <= h)
-                return makeVector2(x, y + h);
+                return make_vector2(x, y + h);
             else
-                return m_Origin;
+                return m_origin;
         }
 
         /** @brief Returns the the @a nth vertex of the rectangle.
@@ -103,22 +103,22 @@ namespace Xyz
         {
             switch (n & 0x3)
             {
-            case 0: return m_Origin;
-            case 1: return m_Origin + makeVector2(get<0>(m_Size), T(0));
-            case 2: return m_Origin + m_Size;
-            case 3: return m_Origin + makeVector2(T(0), get<1>(m_Size));
+            case 0: return m_origin;
+            case 1: return m_origin + make_vector2(get<0>(m_size), T(0));
+            case 2: return m_origin + m_size;
+            case 3: return m_origin + make_vector2(T(0), get<1>(m_size));
             default: return Vector<T, 2>{};
             }
         }
     private:
-        Vector<T, 2> m_Origin;
-        Vector<T, 2> m_Size;
+        Vector<T, 2> m_origin;
+        Vector<T, 2> m_size;
     };
 
     template <typename T>
     [[nodiscard]]
-    Rectangle<T> makeRectangle(const Vector<T, 2>& origin,
-                               const Vector<T, 2>& size)
+    Rectangle<T> make_rectangle(const Vector<T, 2>& origin,
+                                const Vector<T, 2>& size)
     {
         return Rectangle<T>(origin, size);
     }
@@ -139,6 +139,6 @@ namespace Xyz
             y -= h;
             h = -h;
         }
-        return makeRectangle({x, y}, {w, h});
+        return make_rectangle({x, y}, {w, h});
     }
 }

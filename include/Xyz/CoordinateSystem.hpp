@@ -21,50 +21,50 @@ namespace Xyz
                          const Vector<T, 3>& axis1,
                          const Vector<T, 3>& axis2,
                          const Vector<T, 3>& axis3)
-                : m_Origin(origin)
+                : m_origin(origin)
         {
-            m_FromWorld.setRow(0, axis1 / getLengthSquared(axis1));
-            m_FromWorld.setRow(1, axis2 / getLengthSquared(axis2));
-            m_FromWorld.setRow(2, axis3 / getLengthSquared(axis3));
-            m_ToWorld = invert(m_FromWorld);
+            m_from_world.set_row(0, axis1 / get_length_squared(axis1));
+            m_from_world.set_row(1, axis2 / get_length_squared(axis2));
+            m_from_world.set_row(2, axis3 / get_length_squared(axis3));
+            m_to_world = invert(m_from_world);
         }
 
         CoordinateSystem(const Vector<T, 3>& origin,
-                         const Matrix<T, 3, 3>& fromWorldTransform)
-                : m_Origin(origin),
-                  m_ToWorld(invert(fromWorldTransform)),
-                  m_FromWorld(fromWorldTransform)
+                         const Matrix<T, 3, 3>& from_world_transform)
+                : m_origin(origin),
+                  m_to_world(invert(from_world_transform)),
+                  m_from_world(from_world_transform)
         {}
 
         constexpr const Vector<T, 3>& origin() const
         {
-            return m_Origin;
+            return m_origin;
         }
 
-        constexpr const Matrix<T, 3, 3>& fromWorldTransform() const
+        constexpr const Matrix<T, 3, 3>& from_world_transform() const
         {
-            return m_FromWorld;
+            return m_from_world;
         }
 
-        constexpr const Matrix<T, 3, 3>& toWorldTransform() const
+        constexpr const Matrix<T, 3, 3>& to_world_transform() const
         {
-            return m_ToWorld;
-        }
-
-        template <typename U>
-        constexpr auto toWorldPos(const Vector<U, 3>& p) const
-        {
-            return m_ToWorld * p + m_Origin;
+            return m_to_world;
         }
 
         template <typename U>
-        constexpr auto fromWorldPos(const Vector<U, 3>& p) const
+        constexpr auto to_world_pos(const Vector<U, 3>& p) const
         {
-            return m_FromWorld * (p - m_Origin);
+            return m_to_world * p + m_origin;
+        }
+
+        template <typename U>
+        constexpr auto from_world_pos(const Vector<U, 3>& p) const
+        {
+            return m_from_world * (p - m_origin);
         }
     private:
-        Vector<T, 3> m_Origin;
-        Matrix<T, 3, 3> m_ToWorld;
-        Matrix<T, 3, 3> m_FromWorld;
+        Vector<T, 3> m_origin;
+        Matrix<T, 3, 3> m_to_world;
+        Matrix<T, 3, 3> m_from_world;
     };
 }

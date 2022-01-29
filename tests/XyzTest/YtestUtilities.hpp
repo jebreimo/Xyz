@@ -16,12 +16,12 @@ namespace Ytest
     bool equivalent(const Xyz::Vector<T, N>& u, const Xyz::Vector<T, N>& v,
                     T margin)
     {
-        return Xyz::areEquivalent(u, v, margin);
+        return Xyz::are_equivalent(u, v, margin);
     }
 
     template <typename T, unsigned N>
     bool equivalent(Xyz::Vector<T, N>& u, Xyz::Vector<T, N>& v, T margin)
     {
-        return Xyz::areEquivalent(u, v, margin);
+        return Xyz::are_equivalent(u, v, margin);
     }
 }

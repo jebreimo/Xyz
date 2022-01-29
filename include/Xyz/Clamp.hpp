@@ -14,7 +14,7 @@
 namespace Xyz
 {
     template <typename T>
-    T getClamped(T value, T min, T max)
+    T get_clamped(T value, T min, T max)
     {
         if (value < min)
             return min;
@@ -34,26 +34,26 @@ namespace Xyz
     }
 
     template <typename It, typename T>
-    void scaleRange(It first, It last, T newMin, T newMax)
+    void scale_range(It first, It last, T new_min, T new_max)
     {
         auto its = std::minmax_element(first, last);
         if (its.first == last)
             return;
 
-        auto curMin = *its.first;
-        auto curMax = *its.second;
-        auto curRange = curMax - curMin;
+        auto cur_min = *its.first;
+        auto cur_max = *its.second;
+        auto cur_range = cur_max - cur_min;
 
-        auto newRange = newMax - newMin;
+        auto new_range = new_max - new_min;
 
         for (auto it = first; it != last; ++it)
-            *it = newMin + (*it - curMin) * newRange / curRange;
+            *it = new_min + (*it - cur_min) * new_range / cur_range;
     }
 
     template <typename It, typename T>
-    void clampRange(It first, It last, T newMin, T newMax)
+    void clamp_range(It first, It last, T newMin, T new_max)
     {
         for (auto it = first; it != last; ++it)
-            Xyz::clamp(*it, newMin, newMax);
+            Xyz::clamp(*it, newMin, new_max);
     }
 }
