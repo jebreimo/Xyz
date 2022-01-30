@@ -6,7 +6,7 @@
 ## License text is included with the source distribution.
 ##****************************************************************************
 cmake_minimum_required(VERSION 3.16)
-project(Xyz VERSION 0.2.0)
+project(Xyz VERSION 0.2.1)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -30,6 +30,7 @@ add_library(Xyz STATIC
     include/Xyz/Constants.hpp
     include/Xyz/CoordinateSystem.hpp
     include/Xyz/FloatType.hpp
+    include/Xyz/Generators.hpp
     include/Xyz/InvertMatrix.hpp
     include/Xyz/Line.hpp
     include/Xyz/LineClipping.hpp
@@ -68,6 +69,7 @@ add_library(Xyz::Xyz ALIAS Xyz)
 if(XYZ_BUILD_TEST)
     enable_testing()
     add_subdirectory(tests/XyzTest)
+    add_subdirectory(tests/CatchXyzTest)
 endif()
 
 ##

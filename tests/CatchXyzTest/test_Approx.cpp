@@ -5,12 +5,12 @@
 // This file is distributed under the BSD License.
 // License text is included with the source distribution.
 //****************************************************************************
-#include <Chorasmia/Approx.hpp>
+#include <Xyz/Approx.hpp>
 #include <catch2/catch.hpp>
 
 TEST_CASE("Approx comparisons")
 {
-    Chorasmia::Approx<double> a(1, 0.01);
+    Xyz::Approx<double> a(1, 0.01);
 
     REQUIRE(a == 0.991);
     REQUIRE_FALSE(a == 0.989);

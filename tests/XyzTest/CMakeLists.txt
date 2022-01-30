@@ -14,7 +14,7 @@ FetchContent_Declare(ytest
 FetchContent_MakeAvailable(ytest)
 
 add_executable(XyzTest
-    main.cpp
+    XyzTestMain.cpp
     YtestUtilities.hpp
     test_InvertMatrix.cpp
     test_Matrix.cpp
