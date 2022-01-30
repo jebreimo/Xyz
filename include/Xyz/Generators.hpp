@@ -41,7 +41,7 @@ namespace Xyz
 
         Vector<T, 2> operator*() const
         {
-            auto angle = m_start_angle + m_count * m_delta_angle;
+            auto angle = m_start_angle + T(m_count * m_delta_angle);
             return {std::cos(angle), std::sin(angle)};
         }
 
@@ -58,8 +58,8 @@ namespace Xyz
         }
     private:
         unsigned m_count = 0;
-        double m_start_angle = 0;
-        double m_delta_angle = 0;
+        T m_start_angle = 0;
+        T m_delta_angle = 0;
     };
 
     template <typename T>
@@ -98,7 +98,7 @@ namespace Xyz
 
         CircleIterator<T> end() const
         {
-            return {m_points, 0.0, 0.0};
+            return {m_points + (m_repeat_first_point ? 1 : 0), 0.0, 0.0};
         }
     private:
         unsigned m_points;
