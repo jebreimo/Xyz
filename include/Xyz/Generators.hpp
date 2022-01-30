@@ -82,6 +82,12 @@ namespace Xyz
             return *this;
         }
 
+        CircleGenerator& repeat_first_point(bool value)
+        {
+            m_repeat_first_point = value;
+            return *this;
+        }
+
         CircleIterator<T> begin() const
         {
             T delta_angle = 2 * Constants<T>::PI / m_points;
@@ -98,5 +104,6 @@ namespace Xyz
         unsigned m_points;
         double m_start_angle = 0;
         bool m_ccw = true;
+        bool m_repeat_first_point = false;
     };
 }
