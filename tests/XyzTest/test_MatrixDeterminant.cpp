@@ -15,7 +15,7 @@ namespace
 
     void test_get_determinant3()
     {
-        Matrix3i m {1, 4, 3,
+        Matrix3I m {1, 4, 3,
                     2, 1, 5,
                     3, 2, 1};
         Y_EQUAL(get_determinant(m), 46);
@@ -23,7 +23,7 @@ namespace
 
     void test_get_determinant4()
     {
-        Matrix4i m{1, -2, 3, 2,
+        Matrix4I m{1, -2, 3, 2,
                    2, 3, 1, -1,
                    3, 3, 3, 3,
                    -1, 4, 2, 1};

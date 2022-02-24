@@ -11,8 +11,8 @@
 namespace
 {
     void test_clip(const Xyz::Rectangle<double>& rectangle,
-                   const Xyz::Vector2d& start,
-                   const Xyz::Vector2d& end,
+                   const Xyz::Vector2D& start,
+                   const Xyz::Vector2D& end,
                    double expected_t0, double expected_t1)
     {
         Xyz::LineSegment<double, 2> line_segment(start, end);

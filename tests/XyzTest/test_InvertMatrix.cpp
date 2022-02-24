@@ -20,14 +20,14 @@ namespace
 
     void test_invert2()
     {
-        Matrix2d m{1, 4,
+        Matrix2D m{1, 4,
                    2, 1};
         Y_ASSERT(equals_identity_matrix(m * invert(m)));
     }
 
     void test_invert3()
     {
-        Matrix3d m{1, 4, 2,
+        Matrix3D m{1, 4, 2,
                    2, 1, 3,
                    5, 7, 2};
         Y_ASSERT(equals_identity_matrix(m * invert(m)));
@@ -35,7 +35,7 @@ namespace
 
     void test_invert4()
     {
-        Matrix4d m{1, -2, 3, 2,
+        Matrix4D m{1, -2, 3, 2,
                    2, 3, 1, -1,
                    3, 7, 0, 3,
                    -1, 4, 2, 1};

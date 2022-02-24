@@ -17,7 +17,7 @@ namespace
 
     void test_basics()
     {
-        auto mat = Matrix3d{1, 0, 0,
+        auto mat = Matrix3D{1, 0, 0,
                             0, 1, 0,
                             0, 0, 1};
         Y_EQUAL(mat[0][0], 1);
@@ -27,11 +27,11 @@ namespace
 
     void test_transpose()
     {
-        auto mat1 = Matrix4d{0, 1, 2, 3,
+        auto mat1 = Matrix4D{0, 1, 2, 3,
                              4, 5, 6, 7,
                              8, 9, 0, 1,
                              2, 3, 4, 5};
-        auto mat1t = Matrix4d{0, 4, 8, 2,
+        auto mat1t = Matrix4D{0, 4, 8, 2,
                               1, 5, 9, 3,
                               2, 6, 0, 4,
                               3, 7, 1, 5};
@@ -42,13 +42,13 @@ namespace
 
     void test_matrix_matrix_addition()
     {
-        auto m1 = Matrix3i{1, 2, 3,
+        auto m1 = Matrix3I{1, 2, 3,
                            4, 5, 6,
                            7, 8, 9};
-        auto m2 = Matrix3i{ 1, -1,  1,
+        auto m2 = Matrix3I{ 1, -1,  1,
                             -1,  1, -1,
                             1, -1,  1};
-        auto product = Matrix3i{ 2,  1,  4,
+        auto product = Matrix3I{ 2,  1,  4,
                                  3,  6,  5,
                                  8,  7, 10};
         Y_EQUAL(m1 + m2, product);
@@ -56,13 +56,13 @@ namespace
 
     void test_matrix_matrix_subtraction()
     {
-        auto m1 = Matrix3i{1, 2, 3,
+        auto m1 = Matrix3I{1, 2, 3,
                            4, 5, 6,
                            7, 8, 9};
-        auto m2 = Matrix3i{ 1, -1,  1,
+        auto m2 = Matrix3I{ 1, -1,  1,
                             -1,  1, -1,
                             1, -1,  1};
-        auto product = Matrix3i{0, 3, 2,
+        auto product = Matrix3I{0, 3, 2,
                                 5, 4, 7,
                                 6, 9, 8};
         Y_EQUAL(m1 - m2, product);
@@ -70,35 +70,35 @@ namespace
 
     void test_matrix_matrix_multiplication()
     {
-        auto m1 = Matrix2i{1, 2,
+        auto m1 = Matrix2I{1, 2,
                            3, 4};
-        auto m2 = Matrix2i{4, 3,
+        auto m2 = Matrix2I{4, 3,
                            1, 2};
-        auto product = Matrix2i{ 6,  7,
+        auto product = Matrix2I{ 6,  7,
                                  16, 17};
         Y_EQUAL(m1 * m2, product);
     }
 
     void test_matrix_vector_multiplication()
     {
-        auto m = Matrix3i{1, 2, 3,
+        auto m = Matrix3I{1, 2, 3,
                           4, 5, 6,
                           7, 8, 9};
-        auto v = Vector3i{1, 2, 3};
-        auto product1 = Vector3i{14, 32, 50};
-        auto product2 = Vector3i{30, 36, 42};
+        auto v = Vector3I{1, 2, 3};
+        auto product1 = Vector3I{14, 32, 50};
+        auto product2 = Vector3I{30, 36, 42};
         Y_EQUAL(m * v, product1);
         Y_EQUAL(v * m, product2);
     }
 
     void test_make_submatrix()
     {
-        Matrix4i m{1, 2, 3, 4,
+        Matrix4I m{1, 2, 3, 4,
                    5, 6, 7, 8,
                    9, 0, 1, 2,
                    3, 4, 5, 6};
         auto s = make_submatrix<3, 3>(m, 3, 2);
-        Matrix3i e{5, 6, 3,
+        Matrix3I e{5, 6, 3,
                    3, 4, 1,
                    7, 8, 5};
         Y_EQUAL(s, e);
