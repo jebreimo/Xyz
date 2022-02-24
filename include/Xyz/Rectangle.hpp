@@ -141,4 +141,8 @@ namespace Xyz
         }
         return make_rectangle({x, y}, {w, h});
     }
+
+    using RectangleI = Rectangle<int>;
+    using RectangleF = Rectangle<float>;
+    using RectangleD = Rectangle<double>;
 }

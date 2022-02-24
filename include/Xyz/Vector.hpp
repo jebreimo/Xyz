@@ -496,29 +496,26 @@ namespace Xyz
         return true;
     }
 
-    using Vector2i = Vector<int, 2>;
-    using Vector2f = Vector<float, 2>;
-    using Vector2d = Vector<double, 2>;
+    using Vector2I = Vector<int, 2>;
+    using Vector2F = Vector<float, 2>;
+    using Vector2D = Vector<double, 2>;
 
-    using Vector3i = Vector<int, 3>;
-    using Vector3f = Vector<float, 3>;
-    using Vector3d = Vector<double, 3>;
+    using Vector3I = Vector<int, 3>;
+    using Vector3F = Vector<float, 3>;
+    using Vector3D = Vector<double, 3>;
 
-    using Vector4i = Vector<int, 4>;
-    using Vector4f = Vector<float, 4>;
-    using Vector4d = Vector<double, 4>;
+    using Vector4I = Vector<int, 4>;
+    using Vector4F = Vector<float, 4>;
+    using Vector4D = Vector<double, 4>;
 }
 
-namespace std
+template <typename T, size_t N>
+struct std::tuple_size<Xyz::Vector<T, N>>
+    : std::integral_constant<size_t, N>
+{};
+
+template <size_t I, typename T, size_t N>
+struct std::tuple_element<I, Xyz::Vector<T, N>>
 {
-    template <typename T, size_t N>
-    struct tuple_size<Xyz::Vector<T, N>>
-        : integral_constant<size_t, N>
-    {};
-
-    template <size_t I, typename T, size_t N>
-    struct tuple_element<I, Xyz::Vector<T, N>>
-    {
-        using type = T;
-    };
-}
+    using type = T;
+};
