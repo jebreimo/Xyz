@@ -17,7 +17,7 @@ FetchContent_MakeAvailable(catch)
 add_executable(CatchXyzTest
     CatchXyzTestMain.cpp
     test_Approx.cpp
-    test_Generators.cpp)
+    )
 
 target_link_libraries(CatchXyzTest
     Xyz::Xyz

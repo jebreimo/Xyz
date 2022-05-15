@@ -30,7 +30,6 @@ add_library(Xyz STATIC
     include/Xyz/Constants.hpp
     include/Xyz/CoordinateSystem.hpp
     include/Xyz/FloatType.hpp
-    include/Xyz/Generators.hpp
     include/Xyz/InvertMatrix.hpp
     include/Xyz/Line.hpp
     include/Xyz/LineClipping.hpp
@@ -42,12 +41,14 @@ add_library(Xyz STATIC
     include/Xyz/ProjectionMatrix.hpp
     include/Xyz/RandomGenerator.hpp
     include/Xyz/Rectangle.hpp
+    include/Xyz/SimplexNoise.hpp
     include/Xyz/Triangle.hpp
     include/Xyz/Utilities.hpp
     include/Xyz/Vector.hpp
     include/Xyz/Xyz.hpp
     include/Xyz/XyzException.hpp
     src/Xyz/RandomGenerator.cpp
+    src/Xyz/SimplexNoise.cpp
     )
 
 include(GNUInstallDirs)
