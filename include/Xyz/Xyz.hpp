@@ -13,6 +13,7 @@
 #include "LineSegment.hpp"
 #include "Matrix.hpp"
 #include "MatrixTransformations.hpp"
+#include "SimplexNoise.hpp"
 #include "ProjectionMatrix.hpp"
 #include "RandomGenerator.hpp"
 #include "Triangle.hpp"
