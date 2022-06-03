@@ -6,7 +6,7 @@
 ## License text is included with the source distribution.
 ##****************************************************************************
 cmake_minimum_required(VERSION 3.16)
-project(Xyz VERSION 0.2.5)
+project(Xyz VERSION 0.2.6)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -41,14 +41,16 @@ add_library(Xyz STATIC
     include/Xyz/ProjectionMatrix.hpp
     include/Xyz/RandomGenerator.hpp
     include/Xyz/Rectangle.hpp
-    include/Xyz/SimplexNoise.hpp
     include/Xyz/Triangle.hpp
     include/Xyz/Utilities.hpp
     include/Xyz/Vector.hpp
     include/Xyz/Xyz.hpp
     include/Xyz/XyzException.hpp
     src/Xyz/RandomGenerator.cpp
-    src/Xyz/SimplexNoise.cpp
+    include/Xyz/Mesh.hpp
+    include/Xyz/Face.hpp
+    include/Xyz/HalfEdge.hpp
+    src/Xyz/Face.cpp
     )
 
 include(GNUInstallDirs)

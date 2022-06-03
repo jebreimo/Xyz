@@ -17,6 +17,7 @@ FetchContent_MakeAvailable(catch)
 add_executable(CatchXyzTest
     CatchXyzTestMain.cpp
     test_Approx.cpp
+    test_Mesh.cpp
     )
 
 target_link_libraries(CatchXyzTest
