@@ -38,6 +38,11 @@ namespace Xyz
             vertexes_.push_back(v);
         }
 
+        void set_vertex(size_t n, const Vertex& v)
+        {
+            vertexes_[n] = v;
+        }
+
         void set_vertexes(std::vector<Vertex> vertexes)
         {
             vertexes_ = move(vertexes);
@@ -61,7 +66,7 @@ namespace Xyz
             assign_face_ids(faces_);
         }
 
-        Vertex normal(const Face& face)
+        Vertex normal(const Face& face) const
         {
             return get_unit(cross(vertexes_[face[1]] - vertexes_[face[0]],
                                   vertexes_[face[2]] - vertexes_[face[1]]));

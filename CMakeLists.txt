@@ -6,7 +6,20 @@
 ## License text is included with the source distribution.
 ##****************************************************************************
 cmake_minimum_required(VERSION 3.16)
-project(Xyz VERSION 0.2.6)
+
+find_package(Git QUIET)
+if (Git_FOUND)
+    execute_process(
+        COMMAND ${GIT_EXECUTABLE} rev-list --count HEAD
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        OUTPUT_VARIABLE Xyz_GIT_VERSION
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+else ()
+    set(Xyz_GIT_VERSION 0)
+endif ()
+
+project(Xyz VERSION 0.2.${Xyz_GIT_VERSION})
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -14,6 +27,7 @@ set(CMAKE_CXX_STANDARD 17)
 if (NOT DEFINED XYZ_MASTER_PROJECT)
     if (CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
         set(XYZ_MASTER_PROJECT ON)
+        message("XYZ version is ${Xyz_VERSION}")
     else ()
         set(XYZ_MASTER_PROJECT OFF)
     endif ()
