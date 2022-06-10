@@ -40,21 +40,19 @@ namespace Xyz
         }
 
         constexpr Matrix()
-        {
-            for (unsigned i = 0; i < size(); ++i)
-                m_values[i] = 0;
-        }
+            : m_values()
+        {}
 
         Matrix(std::initializer_list<T> v)
         {
             if (v.size() != size())
                 XYZ_THROW("Incorrect number of arguments.");
-            std::copy(v.begin(), v.end(), m_values);
+            std::copy(v.begin(), v.end(), begin());
         }
 
         explicit Matrix(T (&other)[ M * N])
         {
-            std::copy(std::begin(other), std::end(other), m_values);
+            std::copy(std::begin(other), std::end(other), begin());
         }
 
         template <typename U>
@@ -63,22 +61,19 @@ namespace Xyz
             if (count != size())
                 XYZ_THROW("Incorrect number of arguments.");
 
-            for (unsigned i = 0; i < size(); ++i)
-                m_values[i] = U(values[i]);
+            std::copy(values, values + count, begin());
         }
 
         Matrix(const Matrix& other)
         {
-            auto src = other.data();
-            for (unsigned i = 0; i < size(); ++i)
-                m_values[i] = src[i];
+            std::copy(other.begin(), other.end(), begin());
         }
 
         Matrix& operator=(const Matrix& other)
         {
             if (&other == this)
                 return *this;
-            std::copy(other.begin(), other.end(), m_values);
+            std::copy(other.begin(), other.end(), begin());
             return *this;
         }
 

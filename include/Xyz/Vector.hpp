@@ -35,17 +35,14 @@ namespace Xyz
 
         constexpr Vector(std::initializer_list<T> v)
         {
-            if (v.size() != N)
+            if (v.size() != size())
                 XYZ_THROW("Incorrect number of arguments.");
-            auto it = v.begin();
-            for (unsigned i = 0; i < N; ++i)
-                m_values[i] = *it++;
+            std::copy(v.begin(), v.end(), begin());
         }
 
-        explicit Vector(T (& arr)[N]) noexcept
+        explicit Vector(T const (& arr)[N]) noexcept
         {
-            for (unsigned i = 0; i < N; ++i)
-                m_values[i] = arr[i];
+            std::copy(std::begin(arr), std::end(arr), begin());
         }
 
         template <typename U>
@@ -54,19 +51,17 @@ namespace Xyz
             if (count != size())
                 XYZ_THROW("Incorrect number of values.");
 
-            for (unsigned i = 0; i < N; ++i)
-                m_values[i] = U(values[i]);
+            std::copy(std::begin(values), std::end(values), begin());
         }
 
         Vector(const Vector& other) noexcept
         {
-            for (unsigned i = 0; i < N; ++i)
-                m_values[i] = other[i];
+            std::copy(other.begin(), other.end(), begin());
         }
 
         Vector& operator=(T (& arr)[N])
         {
-            std::copy(arr, arr + N, begin());
+            std::copy(std::begin(arr), std::end(arr), begin());
             return *this;
         }
 
