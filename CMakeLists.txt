@@ -7,7 +7,7 @@
 ##****************************************************************************
 cmake_minimum_required(VERSION 3.16)
 
-project(Xyz VERSION 0.2.74)
+project(Xyz VERSION 0.2.75)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -124,6 +124,7 @@ if (DEFINED LOCAL_SOURCE_PACKAGE_DIR OR DEFINED ENV{LOCAL_SOURCE_PACKAGE_DIR})
         add_custom_target(${PROJECT_NAME}_BUILD_SRC_TARBALL
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
             COMMAND git archive -v --format=tar.gz --prefix=${PROJECT_NAME}/ HEAD > ${LOCAL_SOURCE_PACKAGE_DIR}/${PROJECT_NAME}-${PROJECT_VERSION}.tar.gz
+            COMMAND echo Created ${LOCAL_SOURCE_PACKAGE_DIR}/${PROJECT_NAME}-${PROJECT_VERSION}.tar.gz
             )
     endif()
 endif ()
