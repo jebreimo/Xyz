@@ -21,8 +21,8 @@ namespace Xyz
         Mesh() = default;
 
         Mesh(std::vector<Vertex> vertexes, std::vector<Face> faces)
-            : vertexes_(move(vertexes)),
-              faces_(move(faces))
+            : vertexes_(std::move(vertexes)),
+              faces_(std::move(faces))
         {
             assign_face_ids(faces_);
         }
@@ -45,7 +45,7 @@ namespace Xyz
 
         void set_vertexes(std::vector<Vertex> vertexes)
         {
-            vertexes_ = move(vertexes);
+            vertexes_ = std::move(vertexes);
         }
 
         [[nodiscard]]
@@ -62,7 +62,7 @@ namespace Xyz
 
         void set_faces(std::vector<Face> faces)
         {
-            faces_ = move(faces);
+            faces_ = std::move(faces);
             assign_face_ids(faces_);
         }
 
