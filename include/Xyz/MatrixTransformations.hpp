@@ -21,7 +21,7 @@ namespace Xyz
     }
 
     template <typename T>
-    Matrix<T, 3, 3> scale3(Vector<T, 2>& scales)
+    Matrix<T, 3, 3> scale3(const Vector<T, 2>& scales)
     {
         return scale3(scales[0], scales[1]);
     }
@@ -37,7 +37,7 @@ namespace Xyz
     }
 
     template <typename T>
-    Matrix<T, 4, 4> scale4(Vector<T, 3>& scales)
+    Matrix<T, 4, 4> scale4(const Vector<T, 3>& scales)
     {
         return scale4(scales[0], scales[1], scales[2]);
     }
