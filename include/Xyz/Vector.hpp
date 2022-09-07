@@ -210,9 +210,18 @@ namespace Xyz
     template <typename T, typename S, unsigned N>
     constexpr auto operator/(const Vector<T, N>& u, S scalar)
     {
-        Vector<decltype(T() * S()), N> w;
+        Vector<decltype(T() / S()), N> w;
         for (unsigned i = 0; i < N; ++i)
             w[i] = u[i] / scalar;
+        return w;
+    }
+
+    template <typename T, typename S, unsigned N>
+    constexpr auto operator/(S scalar, const Vector<T, N>& u)
+    {
+        Vector<decltype(S() / T()), N> w;
+        for (unsigned i = 0; i < N; ++i)
+            w[i] = scalar / u[i];
         return w;
     }
 
@@ -332,15 +341,6 @@ namespace Xyz
         Vector<T, N> w;
         for (unsigned i = 0; i < N; ++i)
             w[i] = u[i] / v[i];
-        return w;
-    }
-
-    template <typename T, typename U, unsigned N>
-    Vector<T, N> divide(U scalar, const Vector<T, N>& v)
-    {
-        Vector<T, N> w;
-        for (unsigned i = 0; i < N; ++i)
-            w[i] = scalar / v[i];
         return w;
     }
 
