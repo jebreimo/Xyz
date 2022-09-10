@@ -471,24 +471,16 @@ namespace Xyz
               typename std::enable_if_t<std::is_integral_v<T>, int> = 0>
     bool is_null(Vector<T, N>& v, T = 0)
     {
-        for (auto n: v)
-        {
-            if (n != 0)
-                return false;
-        }
-        return true;
+        return std::none_of(v.begin(), v.end(),
+                            [](auto n){return n != 0;});
     }
 
     template <typename T, unsigned N,
               typename std::enable_if_t<std::is_floating_point_v<T>, int> = 0>
     bool is_null(Vector<T, N>& v, T margin = Constants<T>::DEFAULT_MARGIN)
     {
-        for (auto n: v)
-        {
-            if (fabs(n) > margin)
-                return false;
-        }
-        return true;
+        return std::none_of(v.begin(), v.end(),
+                            [&](auto n) {return fabs(n) > margin;});
     }
 
     using Vector2I = Vector<int, 2>;
