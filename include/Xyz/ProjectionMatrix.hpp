@@ -37,7 +37,7 @@ namespace Xyz
     }
 
     template <typename T>
-    Matrix<T, 4, 4> make_orthogonal_matrix(T l, T r, T b, T t, T n, T f)
+    Matrix<T, 4, 4> make_orthographic_matrix(T l, T r, T b, T t, T n, T f)
     {
         return Matrix<T, 4, 4> {
                 2 / (r - l),  0,  0,  -(r + l) / (r - l),

@@ -80,7 +80,7 @@ namespace Xyz
                 0, 0, 0, 1};
     }
 
-    template <unsigned N, typename T>
+    template <typename T>
     Matrix<T, 4, 4> rotate_x(T angle)
     {
         auto c = std::cos(angle);
