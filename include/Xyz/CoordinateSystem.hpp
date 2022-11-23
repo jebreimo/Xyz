@@ -23,9 +23,9 @@ namespace Xyz
                          const Vector<T, 3>& axis3)
                 : m_origin(origin)
         {
-            m_from_world.set_row(0, axis1 / get_length_squared(axis1));
-            m_from_world.set_row(1, axis2 / get_length_squared(axis2));
-            m_from_world.set_row(2, axis3 / get_length_squared(axis3));
+            set_row(m_from_world, 0, axis1 / get_length_squared(axis1));
+            set_row(m_from_world, 1, axis2 / get_length_squared(axis2));
+            set_row(m_from_world, 2, axis3 / get_length_squared(axis3));
             m_to_world = invert(m_from_world);
         }
 

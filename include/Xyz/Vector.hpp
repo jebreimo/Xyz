@@ -23,98 +23,225 @@ namespace Xyz
     {
     public:
         using ValueType = T;
-
-        static constexpr unsigned size()
-        {
-            return N;
-        }
+        static constexpr size_t SIZE = N;
 
         constexpr Vector() noexcept
-            : m_values()
+            : values()
         {}
 
         constexpr Vector(std::initializer_list<T> v)
         {
-            if (v.size() != size())
+            if (v.size() != SIZE)
                 XYZ_THROW("Incorrect number of arguments.");
-            std::copy(v.begin(), v.end(), begin());
+            std::copy(v.begin(), v.end(), std::begin(values));
         }
 
         explicit Vector(T const (& arr)[N]) noexcept
         {
-            std::copy(std::begin(arr), std::end(arr), begin());
-        }
-
-        template <typename U>
-        Vector(const U* values, size_t count)
-        {
-            if (count != size())
-                XYZ_THROW("Incorrect number of values.");
-
-            std::copy(std::begin(values), std::end(values), begin());
+            std::copy(std::begin(arr), std::end(arr), std::begin(values));
         }
 
         Vector(const Vector& other) noexcept
         {
-            std::copy(other.begin(), other.end(), begin());
+            std::copy(std::begin(other.values), std::end(other.values),
+                      std::begin(values));
         }
 
-        Vector& operator=(T (& arr)[N])
-        {
-            std::copy(std::begin(arr), std::end(arr), begin());
-            return *this;
-        }
-
-        Vector& operator=(const Vector<T, N>& other)
+        Vector& operator=(const Vector& other)
         {
             if (this != &other)
-                std::copy(other.begin(), other.end(), begin());
+            {
+                std::copy(std::begin(other.values), std::end(other.values),
+                          std::begin(values));
+            }
             return *this;
         }
 
-        constexpr const T& operator[](unsigned i) const
+        constexpr T operator[](unsigned i) const
         {
-            return m_values[i];
+            return values[i];
         }
 
         constexpr T& operator[](unsigned i)
         {
-            return m_values[i];
+            return values[i];
         }
 
-        constexpr const T* begin() const
-        {
-            return m_values;
-        }
-
-        constexpr T* begin()
-        {
-            return m_values;
-        }
-
-        constexpr const T* end() const
-        {
-            return m_values + N;
-        }
-
-        constexpr T* end()
-        {
-            return m_values + N;
-        }
-
-        constexpr T* data()
-        {
-            return m_values;
-        }
-
-        constexpr const T* data() const
-        {
-            return m_values;
-        }
-
-    private:
-        T m_values[N];
+        T values[SIZE];
     };
+
+    template <typename T>
+    class Vector<T, 2>
+    {
+    public:
+        using ValueType = T;
+        static constexpr size_t SIZE = 2;
+
+        constexpr Vector() noexcept
+            : values()
+        {}
+
+        constexpr Vector(T x, T y)
+            : values{x, y}
+        {}
+
+        explicit Vector(T const (& arr)[2]) noexcept
+        {
+            std::copy(std::begin(arr), std::end(arr), std::begin(values));
+        }
+
+        Vector(const Vector& other) noexcept
+        {
+            std::copy(std::begin(other.values), std::end(other.values),
+                      std::begin(values));
+        }
+
+        Vector& operator=(const Vector& other)
+        {
+            if (this != &other)
+            {
+                std::copy(std::begin(other.values), std::end(other.values),
+                          std::begin(values));
+            }
+            return *this;
+        }
+
+        constexpr T operator[](unsigned i) const
+        {
+            return values[i];
+        }
+
+        constexpr T& operator[](unsigned i)
+        {
+            return values[i];
+        }
+
+        T values[2];
+    };
+
+    template <typename T>
+    class Vector<T, 3>
+    {
+    public:
+        using ValueType = T;
+        static constexpr size_t SIZE = 3;
+
+        constexpr Vector() noexcept
+            : values()
+        {
+        }
+
+        constexpr Vector(T x, T y, T z)
+            : values{x, y, z}
+        {
+        }
+
+        explicit Vector(T const (& arr)[3]) noexcept
+        {
+            std::copy(std::begin(arr), std::end(arr), std::begin(values));
+        }
+
+        Vector(const Vector& other) noexcept
+        {
+            std::copy(std::begin(other.values), std::end(other.values),
+                      std::begin(values));
+        }
+
+        Vector& operator=(const Vector& other)
+        {
+            if (this != &other)
+            {
+                std::copy(std::begin(other.values), std::end(other.values),
+                          std::begin(values));
+            }
+            return *this;
+        }
+
+        constexpr T operator[](unsigned i) const
+        {
+            return values[i];
+        }
+
+        constexpr T& operator[](unsigned i)
+        {
+            return values[i];
+        }
+
+        T values[3];
+    };
+
+    template <typename T>
+    class Vector<T, 4>
+    {
+    public:
+        using ValueType = T;
+        static constexpr size_t SIZE = 4;
+
+        constexpr Vector() noexcept
+            : values()
+        {}
+
+        constexpr Vector(T x, T y, T z, T w)
+            : values{x, y, z, w}
+        {}
+
+        explicit Vector(T const (& arr)[4]) noexcept
+        {
+            std::copy(std::begin(arr), std::end(arr), std::begin(values));
+        }
+
+        Vector(const Vector& other) noexcept
+        {
+            std::copy(std::begin(other.values), std::end(other.values),
+                      std::begin(values));
+        }
+
+        Vector& operator=(const Vector& other)
+        {
+            if (this != &other)
+            {
+                std::copy(std::begin(other.values), std::end(other.values),
+                          std::begin(values));
+            }
+            return *this;
+        }
+
+        constexpr T operator[](unsigned i) const
+        {
+            return values[i];
+        }
+
+        constexpr T& operator[](unsigned i)
+        {
+            return values[i];
+        }
+
+        T values[4];
+    };
+
+    template <typename T, unsigned N>
+    constexpr T* begin(Vector<T, N>& v)
+    {
+        return std::begin(v.values);
+    }
+
+    template <typename T, unsigned N>
+    constexpr T* end(Vector<T, N>& v)
+    {
+        return std::end(v.values);
+    }
+
+    template <typename T, unsigned N>
+    constexpr const T* begin(const Vector<T, N>& v)
+    {
+        return std::begin(v.values);
+    }
+
+    template <typename T, unsigned N>
+    constexpr const T* end(const Vector<T, N>& v)
+    {
+        return std::end(v.values);
+    }
 
     template <typename T, typename S, unsigned N>
     constexpr bool operator==(const Vector<T, N>& u, const Vector<S, N>& v)
@@ -243,9 +370,9 @@ namespace Xyz
     template <typename T, unsigned N>
     std::ostream& operator<<(std::ostream& os, const Vector<T, N>& v)
     {
-        const T* it = v.begin();
+        const T* it = begin(v);
         os << "[" << *it;
-        while (++it != v.end())
+        while (++it != end(v))
             os << ", " << *it;
         return os << "]";
     }

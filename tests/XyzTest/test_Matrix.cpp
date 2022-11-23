@@ -20,9 +20,9 @@ namespace
         auto mat = Matrix3D{1, 0, 0,
                             0, 1, 0,
                             0, 0, 1};
-        Y_EQUAL(mat[0][0], 1);
-        Y_EQUAL(mat[0][1], 0);
-        Y_EQUAL(mat[1][1], 1);
+        Y_EQUAL(mat[RowCol(0, 0)], 1.0);
+        Y_EQUAL(mat[RowCol(0, 1)], 0.0);
+        Y_EQUAL(mat[RowCol(1, 1)], 1.0);
     }
 
     void test_transpose()
@@ -107,10 +107,8 @@ namespace
     void test_identity()
     {
         auto m1 = make_identity_matrix<int, 4>();
-        auto m2 = Matrix<int, 4, 4>::identity();
-        Y_EQUAL(m1, m2);
-        Y_EQUAL(m1[0][0], 1);
-        Y_EQUAL(m1[0][1], 0);
+        Y_EQUAL(m1[RowCol(0, 0)], 1);
+        Y_EQUAL(m1[RowCol(0, 1)], 0);
     }
 
     Y_SUBTEST("Fundamentals",

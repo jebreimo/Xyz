@@ -11,174 +11,306 @@
 
 namespace Xyz
 {
+    struct RowCol
+    {
+        RowCol() = default;
+        RowCol(unsigned r, unsigned c) : row(r), col(c) {}
+        unsigned row = 0;
+        unsigned col = 0;
+    };
+
     template <typename T, unsigned M, unsigned N>
     class Matrix
     {
     public:
-        constexpr static unsigned rows()
-        {
-            return M;
-        }
-
-        constexpr static unsigned cols()
-        {
-            return N;
-        }
-
-        constexpr static unsigned size()
-        {
-            return M * N;
-        }
-
-        static constexpr Matrix identity()
-        {
-            static_assert(M == N);
-            Matrix result;
-            for (unsigned i = 0; i < M; ++i)
-                result[i][i] = 1;
-            return result;
-        }
+        static constexpr size_t SIZE = M * N;
+        static constexpr size_t ROWS = M;
+        static constexpr size_t COLS = N;
 
         constexpr Matrix()
-            : m_values()
+            : values()
         {}
 
         Matrix(std::initializer_list<T> v)
         {
-            if (v.size() != size())
+            if (v.size() != SIZE)
                 XYZ_THROW("Incorrect number of arguments.");
-            std::copy(v.begin(), v.end(), begin());
+            std::copy(v.begin(), v.end(), std::begin(values));
         }
 
-        explicit Matrix(T (&other)[ M * N])
+        explicit Matrix(T (&other)[SIZE])
         {
-            std::copy(std::begin(other), std::end(other), begin());
-        }
-
-        template <typename U>
-        Matrix(const U* values, size_t count)
-        {
-            if (count != size())
-                XYZ_THROW("Incorrect number of arguments.");
-
-            std::copy(values, values + count, begin());
+            std::copy(std::begin(other), std::end(other), std::begin(values));
         }
 
         Matrix(const Matrix& other)
         {
-            std::copy(other.begin(), other.end(), begin());
+            std::copy(begin(other), end(other), std::begin(values));
         }
 
         Matrix& operator=(const Matrix& other)
         {
             if (&other == this)
                 return *this;
-            std::copy(other.begin(), other.end(), begin());
+            std::copy(begin(other), end(other), std::begin(values));
             return *this;
         }
 
-        constexpr T* operator[](unsigned row)
+        constexpr T& operator[](RowCol pos)
         {
-            return &m_values[row * cols()];
+            return values[pos.row * COLS + pos.col];
         }
 
-        constexpr const T* operator[](unsigned row) const
+        constexpr T operator[](RowCol pos) const
         {
-            return &m_values[row * cols()];
+            return values[pos.row * COLS + pos.col];
         }
 
-        Vector<T, N> row(unsigned r) const
-        {
-            return Vector<T, N>(&m_values[r * cols()], N);
-        }
-
-        void set_row(unsigned row, const Vector<T, N>& v)
-        {
-            std::copy(v.begin(), v.end(), m_values + row * cols());
-        }
-
-        void set_row(unsigned row, const T* values, unsigned count)
-        {
-            if (count != N)
-                XYZ_THROW("Incorrect number of columns.");
-            std::copy(values, values + count, m_values.data() + row * cols());
-        }
-
-        Vector<T, M> col(unsigned c) const
-        {
-            Vector<T, M> result;
-            auto ptr = m_values.data() + c;
-            for (unsigned i = 0; i < M; ++i)
-            {
-                result[i] = *ptr;
-                ptr += cols();
-            }
-            return result;
-        }
-
-        void set_col(unsigned c, const Vector<T, M>& v)
-        {
-            auto ptr = m_values + c;
-            for (unsigned i = 0; i < M; ++i)
-            {
-                *ptr = v[i];
-                ptr += cols();
-            }
-        }
-
-        void set_col(unsigned c, const T* values, unsigned count)
-        {
-            if (count != M)
-                XYZ_THROW("Incorrect number of columns.");
-            auto ptr = m_values + c;
-            for (unsigned i = 0; i < M; ++i)
-            {
-                *ptr = values[i];
-                ptr += cols();
-            }
-        }
-
-        constexpr T* begin()
-        {
-            return m_values;
-        }
-
-        constexpr T* end()
-        {
-            return m_values + size();
-        }
-
-        constexpr const T* begin() const
-        {
-            return m_values;
-        }
-
-        constexpr const T* end() const
-        {
-            return m_values + size();
-        }
-
-        constexpr T* data()
-        {
-            return m_values;
-        }
-
-        constexpr const T* data() const
-        {
-            return m_values;
-        }
-    private:
-        T m_values[M * N];
+        T values[SIZE];
     };
+
+    template <typename T>
+    class Matrix<T, 2, 2>
+    {
+    public:
+        static constexpr size_t SIZE = 2 * 2;
+        static constexpr size_t ROWS = 2;
+        static constexpr size_t COLS = 2;
+
+        constexpr Matrix()
+            : values()
+        {}
+
+        Matrix(T a11, T a12, T a21, T a22)
+            : values{a11, a12, a21, a22}
+        {}
+
+        explicit Matrix(T (&other)[SIZE])
+        {
+            std::copy(std::begin(other), std::end(other), std::begin(values));
+        }
+
+        Matrix(const Matrix& other)
+        {
+            std::copy(begin(other), end(other), std::begin(values));
+        }
+
+        Matrix& operator=(const Matrix& other)
+        {
+            if (&other == this)
+                return *this;
+            std::copy(begin(other), end(other), std::begin(values));
+            return *this;
+        }
+
+        constexpr T& operator[](RowCol pos)
+        {
+            return values[pos.row * COLS + pos.col];
+        }
+
+        constexpr T operator[](RowCol pos) const
+        {
+            return values[pos.row * COLS + pos.col];
+        }
+
+        T values[SIZE];
+    };
+
+    template <typename T>
+    class Matrix<T, 3, 3>
+    {
+    public:
+        static constexpr size_t SIZE = 3 * 3;
+        static constexpr size_t ROWS = 3;
+        static constexpr size_t COLS = 3;
+
+        constexpr Matrix()
+            : values()
+        {}
+
+        Matrix(T a11, T a12, T a13,
+               T a21, T a22, T a23,
+               T a31, T a32, T a33)
+            : values{a11, a12, a13,
+                     a21, a22, a23,
+                     a31, a32, a33}
+        {}
+
+        explicit Matrix(T (&other)[SIZE])
+        {
+            std::copy(std::begin(other), std::end(other), std::begin(values));
+        }
+
+        Matrix(const Matrix& other)
+        {
+            std::copy(begin(other), end(other), std::begin(values));
+        }
+
+        Matrix& operator=(const Matrix& other)
+        {
+            if (&other == this)
+                return *this;
+            std::copy(begin(other), end(other), std::begin(values));
+            return *this;
+        }
+
+        constexpr T& operator[](RowCol pos)
+        {
+            return values[pos.row * COLS + pos.col];
+        }
+
+        constexpr T operator[](RowCol pos) const
+        {
+            return values[pos.row * COLS + pos.col];
+        }
+
+        T values[SIZE];
+    };
+
+    template <typename T>
+    class Matrix<T, 4, 4>
+    {
+    public:
+        static constexpr size_t SIZE = 4 * 4;
+        static constexpr size_t ROWS = 4;
+        static constexpr size_t COLS = 4;
+
+        constexpr Matrix()
+            : values()
+        {}
+
+        Matrix(T a11, T a12, T a13, T a14,
+               T a21, T a22, T a23, T a24,
+               T a31, T a32, T a33, T a34,
+               T a41, T a42, T a43, T a44)
+            : values{a11, a12, a13, a14,
+                     a21, a22, a23, a24,
+                     a31, a32, a33, a34,
+                     a41, a42, a43, a44}
+        {}
+
+        explicit Matrix(T (&other)[SIZE])
+        {
+            std::copy(std::begin(other), std::end(other), std::begin(values));
+        }
+
+        Matrix(const Matrix& other)
+        {
+            std::copy(begin(other), end(other), std::begin(values));
+        }
+
+        Matrix& operator=(const Matrix& other)
+        {
+            if (&other == this)
+                return *this;
+            std::copy(begin(other), end(other), std::begin(values));
+            return *this;
+        }
+
+        constexpr T& operator[](RowCol pos)
+        {
+            return values[pos.row * COLS + pos.col];
+        }
+
+        constexpr T operator[](RowCol pos) const
+        {
+            return values[pos.row * COLS + pos.col];
+        }
+
+        T values[SIZE];
+    };
+
+    template <typename T, unsigned M, unsigned N>
+    constexpr T* begin(Matrix<T, M, N>& m)
+    {
+        return std::begin(m.values);
+    }
+
+    template <typename T, unsigned M, unsigned N>
+    constexpr T* end(Matrix<T, M, N>& m)
+    {
+        return std::end(m.values);
+    }
+
+    template <typename T, unsigned M, unsigned N>
+    constexpr const T* begin(const Matrix<T, M, N>& m)
+    {
+        return std::begin(m.values);
+    }
+
+    template <typename T, unsigned M, unsigned N>
+    constexpr const T* end(const Matrix<T, M, N>& m)
+    {
+        return std::end(m.values);
+    }
+
+    template <typename T, unsigned M, unsigned N>
+    Vector<T, N> row(const Matrix<T, M, N>& m, unsigned r)
+    {
+        return Vector<T, N>(&m.values[r * N], N);
+    }
+
+    template <typename T, unsigned M, unsigned N>
+    void set_row(Matrix<T, M, N>& m, unsigned row, const Vector<T, N>& v)
+    {
+        std::copy(begin(v), end(v), m.values + row * N);
+    }
+
+    template <typename T, unsigned M, unsigned N>
+    void set_row(Matrix<T, M, N>& m, unsigned row,
+                 const T* values, unsigned count)
+    {
+        if (count != N)
+            XYZ_THROW("Incorrect number of columns.");
+        std::copy(values, values + count, m.values + row * N);
+    }
+
+    template <typename T, unsigned M, unsigned N>
+    Vector<T, M> col(const Matrix<T, M, N>& m, unsigned c)
+    {
+        Vector<T, M> result;
+        auto ptr = m.values + c;
+        for (unsigned i = 0; i < M; ++i)
+        {
+            result[i] = *ptr;
+            ptr += N;
+        }
+        return result;
+    }
+
+    template <typename T, unsigned M, unsigned N>
+    void set_col(Matrix<T, M, N>& m, unsigned c, const Vector<T, M>& v)
+    {
+        auto ptr = m.values + c;
+        for (unsigned i = 0; i < M; ++i)
+        {
+            *ptr = v[i];
+            ptr += N;
+        }
+    }
+
+    template <typename T, unsigned M, unsigned N>
+    void set_col(Matrix<T, M, N>& m, unsigned c,
+                 const T* values, unsigned count)
+    {
+        if (count != M)
+            XYZ_THROW("Incorrect number of columns.");
+        auto ptr = m.values + c;
+        for (unsigned i = 0; i < M; ++i)
+        {
+            *ptr = values[i];
+            ptr += N;
+        }
+    }
 
     template <typename T, unsigned N>
     Matrix<T, N, N> make_identity_matrix()
     {
         static Matrix<T, N, N> matrix;
-        if (matrix[0][0] == 0)
+        if (matrix[{0, 0}] == 0)
         {
-            for (auto i = 0; i < N; ++i)
-                matrix[i][i] = 1;
+            for (unsigned i = 0; i < N; ++i)
+                matrix[{i, i}] = 1;
         }
         return matrix;
     }
@@ -218,7 +350,7 @@ namespace Xyz
             for (unsigned j = 0; j < L; ++j)
             {
                 auto j_m = (j + j0) % N;
-                result[i][j] = m[i_m][j_m];
+                result[{i, j}] = m[{i_m, j_m}];
             }
         }
         return result;
@@ -227,11 +359,9 @@ namespace Xyz
     template <typename T, unsigned N, unsigned M>
     bool operator==(const Matrix<T, M, N>& a, const Matrix<T, M, N>& b)
     {
-        auto a_data = a.data();
-        auto b_data = b.data();
         for (auto i = 0u; i < M * N; ++i)
         {
-            if (a_data[i] != b_data[i])
+            if (a.values[i] != b.values[i])
                 return false;
         }
         return true;
@@ -246,8 +376,8 @@ namespace Xyz
     template <typename T, unsigned M, unsigned N>
     Matrix<T, M, N>& operator+=(Matrix<T, M, N>& a, const Matrix<T, M, N>& b)
     {
-        auto a_data = a.data();
-        auto b_data = b.data();
+        auto a_data = a.values;
+        auto b_data = b.values;
         for (auto i = 0u; i < M * N; ++i)
             a_data[i] += b_data[i];
         return a;
@@ -264,8 +394,8 @@ namespace Xyz
     template <typename T, unsigned M, unsigned N>
     Matrix<T, M, N>& operator-=(Matrix<T, M, N>& a, const Matrix<T, M, N>& b)
     {
-        auto a_data = a.data();
-        auto b_data = b.data();
+        auto a_data = a.values;
+        auto b_data = b.values;
         for (auto i = 0u; i < M * N; ++i)
             a_data[i] -= b_data[i];
         return a;
@@ -290,8 +420,8 @@ namespace Xyz
             {
                 T v = 0;
                 for (auto k = 0u; k < N; ++k)
-                    v += a[i][k] * b[k][j];
-                result[i][j] = v;
+                    v += a[{i, k}] * b[{k, j}];
+                result[{i, j}] = v;
             }
         }
         return result;
@@ -309,7 +439,7 @@ namespace Xyz
         for (unsigned i = 0; i < M; ++i)
         {
             for (unsigned j = 0; j < N; ++j)
-                a[i][j] *= s;
+                a[{i, j}] *= s;
         }
         return a;
     }
@@ -348,7 +478,7 @@ namespace Xyz
         {
             auto value = R();
             for (auto j = 0u; j < N; ++j)
-                value += m[i][j] * v[j];
+                value += m[{i, j}] * v[j];
             result[i] = value;
         }
         return result;
@@ -364,7 +494,7 @@ namespace Xyz
         {
             R value = 0;
             for (auto j = 0u; j < M; ++j)
-                value += v[j] * m[j][i];
+                value += v[j] * m[{j, i}];
             result[i] = value;
         }
         return result;
@@ -373,14 +503,14 @@ namespace Xyz
     template <typename T, unsigned M, unsigned N>
     std::ostream& operator<<(std::ostream& os, const Matrix<T, M, N>& m)
     {
-        os << m[0][0];
+        os << m[{0, 0}];
         for (auto j = 1u; j < N; ++j)
-            os << " " << m[0][j];
+            os << " " << m[{0, j}];
         for (auto i = 1u; i < M; ++i)
         {
             os << " |";
             for (auto j = 0u; j < N; ++j)
-                os << " " << m[i][j];
+                os << " " << m[{i, j}];
         }
         return os;
     }
@@ -392,7 +522,7 @@ namespace Xyz
         for (auto i = 0u; i < N; ++i)
         {
             for (auto j = 0u; j < M; ++j)
-                result[i][j] = m[j][i];
+                result[{i, j}] = m[{j, i}];
         }
         return result;
     }
@@ -403,7 +533,7 @@ namespace Xyz
         for (auto i = 0u; i < N; ++i)
         {
             for (auto j = i + 1; j < N; ++j)
-                std::swap(m[i][j], m[j][i]);
+                std::swap(m[{i, j}], m[{j, i}]);
         }
     }
 
@@ -418,8 +548,8 @@ namespace Xyz
             {
                 T v = 0;
                 for (auto k = 0u; k < N; ++k)
-                    v += a[i][k] * b[j][k];
-                result[i][j] = v;
+                    v += a[{i, k}] * b[{j, k}];
+                result[{i, j}] = v;
             }
         }
         return result;
@@ -442,7 +572,7 @@ namespace Xyz
         {
             for (unsigned j = 0; j < N; ++j)
             {
-                if (std::abs(a[i][j] - b[i][j]) > margin)
+                if (std::abs(a[{i, j}] - b[{i, j}]) > margin)
                     return false;
             }
         }
