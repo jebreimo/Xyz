@@ -18,6 +18,7 @@ add_executable(CatchXyzTest
     CatchXyzTestMain.cpp
     test_Approx.cpp
     test_Mesh.cpp
+    test_Vector.cpp
     )
 
 target_link_libraries(CatchXyzTest
