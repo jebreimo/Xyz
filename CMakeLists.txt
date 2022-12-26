@@ -7,7 +7,7 @@
 ##****************************************************************************
 cmake_minimum_required(VERSION 3.16)
 
-project(Xyz VERSION 0.2.82)
+project(Xyz VERSION 0.2.83)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -53,7 +53,7 @@ add_library(Xyz STATIC
     include/Xyz/Face.hpp
     include/Xyz/HalfEdge.hpp
     src/Xyz/Face.cpp
-    )
+    include/Xyz/SphericalPoint.hpp)
 
 include(GNUInstallDirs)
 

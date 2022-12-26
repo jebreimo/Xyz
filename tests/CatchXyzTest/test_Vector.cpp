@@ -5,46 +5,81 @@
 // This file is distributed under the BSD License.
 // License text is included with the source distribution.
 //****************************************************************************
-#include <Xyz/Vector.hpp>
+#include <Xyz/SphericalPoint.hpp>
 #include <catch2/catch.hpp>
 
-void test_from_xyz_to_spherical_and_back(Xyz::Vector3D xyz,
-                                         Xyz::Vector3D spherical)
+constexpr auto PI = Xyz::Constants<double>::PI;
+constexpr auto MARGIN = Xyz::Constants<double>::DEFAULT_MARGIN;
+
+using Catch::Matchers::WithinAbs;
+
+void test_from_xyz_to_spherical_and_back(Xyz::Vector3D cartesian,
+                                         Xyz::SphericalPoint<double> spherical)
 {
-    auto sp = Xyz::xyz_to_spherical<double>(xyz);
-    REQUIRE(sp[0] == Approx(spherical[0]));
-    REQUIRE(sp[1] == Approx(spherical[1]));
-    REQUIRE(sp[2] == Approx(spherical[2]));
-    auto p = Xyz::spherical_to_xyz(sp);
-    REQUIRE(p[0] == Approx(xyz[0]));
-    REQUIRE(p[1] == Approx(xyz[1]));
-    REQUIRE(p[2] == Approx(xyz[2]));
+    auto sp = Xyz::to_spherical<double>(cartesian);
+    REQUIRE_THAT(sp.radius, WithinAbs(spherical.radius, MARGIN));
+    REQUIRE_THAT(sp.azimuth, WithinAbs(spherical.azimuth, MARGIN));
+    REQUIRE_THAT(sp.polar, WithinAbs(spherical.polar, MARGIN));
+    auto p = Xyz::to_cartesian(sp);
+    REQUIRE_THAT(p[0], WithinAbs(cartesian[0], MARGIN));
+    REQUIRE_THAT(p[1], WithinAbs(cartesian[1], MARGIN));
+    REQUIRE_THAT(p[2], WithinAbs(cartesian[2], MARGIN));
 }
 
 TEST_CASE("xyz to spherical")
 {
-    SECTION("45°")
+    SECTION("0°, -45°")
+    {
+        test_from_xyz_to_spherical_and_back(
+            {1, 0, -1},
+            {sqrt(2), 0, -PI / 4});
+    }
+    SECTION("45°, 35.3°")
     {
         test_from_xyz_to_spherical_and_back(
             {1, 1, 1},
-            {sqrt(3), Xyz::Constants<double>::PI / 4, asin(1 / sqrt(3))});
+            {sqrt(3), PI / 4, asin(1 / sqrt(3))});
     }
-    SECTION("135°")
+    SECTION("90°, -45°")
+    {
+        test_from_xyz_to_spherical_and_back(
+            {0, 1, -1},
+            {sqrt(2), PI / 2, -PI / 4});
+    }
+    SECTION("135°, 35.3°")
     {
         test_from_xyz_to_spherical_and_back(
             {-1, 1, 1},
-            {sqrt(3), 3 * Xyz::Constants<double>::PI / 4, asin(1 / sqrt(3))});
+            {sqrt(3), 3 * PI / 4, asin(1 / sqrt(3))});
     }
-    SECTION("225°")
+    SECTION("180°, -45°")
+    {
+        test_from_xyz_to_spherical_and_back(
+            {-1, 0, -1},
+            {sqrt(2), PI, -PI / 4});
+    }
+    SECTION("-135°, 35.3°")
     {
         test_from_xyz_to_spherical_and_back(
             {-1, -1, 1},
-            {sqrt(3), -3 * Xyz::Constants<double>::PI / 4, asin(1 / sqrt(3))});
+            {sqrt(3), -3 * PI / 4, asin(1 / sqrt(3))});
     }
-    SECTION("-45°")
+    SECTION("180°, -45°")
+    {
+        test_from_xyz_to_spherical_and_back(
+            {-1, 0, -1},
+            {sqrt(2), PI, -PI / 4});
+    }
+    SECTION("-45°, 35.3°")
     {
         test_from_xyz_to_spherical_and_back(
             {1, -1, 1},
-            {sqrt(3), -1 * Xyz::Constants<double>::PI / 4, asin(1 / sqrt(3))});
+            {sqrt(3), -1 * PI / 4, asin(1 / sqrt(3))});
+    }
+    SECTION("-90°, -45°")
+    {
+        test_from_xyz_to_spherical_and_back(
+            {0, -1, -1},
+            {sqrt(2), -PI / 2, -PI / 4});
     }
 }

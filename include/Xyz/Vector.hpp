@@ -536,39 +536,6 @@ namespace Xyz
             return 2 * Constants<decltype(angle)>::PI - angle;
     }
 
-    /**
-     * @brief Returns the spherical point corresponding to @a p.
-     * @tparam T a numeric type
-     * @param p a point in cartesian 3D space
-     * @return a spherical point (rho, theta, phi), where rho is the distance
-     *  from the origin to the point, theta is the angle in the xy-plane
-     *  (0° in the direction of the x-axis), and phi is the angle between
-     *  the vector from the origin to the point and the xy-plane.
-     */
-    template <typename T>
-    Vector<T, 3> xyz_to_spherical(const Vector<T, 3>& p)
-    {
-        auto length = get_length(p);
-        if (length == 0)
-            return {};
-        auto theta = p[1] > 0
-                     ? Constants<T>::PI / 2 - atan(p[0] / p[1])
-                     : p[1] < 0
-                       ? -Constants<T>::PI / 2 - atan(p[0] / p[1])
-                       : p[0] >= 0 ? 0
-                                   : Constants<T>::PI;
-        auto phi = asin(p[2] / length);
-        return {length, theta, phi};
-    }
-
-    template <typename T>
-    Vector<T, 3> spherical_to_xyz(const Vector<T, 3>& s)
-    {
-        return {s[0] * cos(s[1]) * cos(s[2]),
-                s[0] * sin(s[1]) * cos(s[2]),
-                s[0] * sin(s[2])};
-    }
-
     template <typename T>
     Vector<T, 3> cross(const Vector<T, 3>& a, const Vector<T, 3>& b)
     {

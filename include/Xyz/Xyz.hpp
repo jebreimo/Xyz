@@ -16,6 +16,7 @@
 #include "Mesh.hpp"
 #include "ProjectionMatrix.hpp"
 #include "RandomGenerator.hpp"
+#include "SphericalPoint.hpp"
 #include "Triangle.hpp"
 #include "Utilities.hpp"
 #include "Vector.hpp"
