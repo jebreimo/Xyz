@@ -37,11 +37,17 @@ namespace Xyz
         auto length = get_length(p);
         if (length == 0)
             return {};
-        auto theta = y > 0
-                     ? Constants<T>::PI / 2 - atan(x / y)
-                     : y < 0
-                       ? -Constants<T>::PI / 2 - atan(x / y)
-                       : x >= 0 ? 0 : Constants<T>::PI;
+
+        T theta;
+        if (y > 0)
+            theta = Constants<T>::PI / 2 - atan(x / y);
+        else if (y < 0)
+            theta = -Constants<T>::PI / 2 - atan(x / y);
+        else if (x >= 0)
+            theta = 0;
+        else
+            theta = Constants<T>::PI;
+
         auto phi = asin(z / length);
         return {length, theta, phi};
     }
