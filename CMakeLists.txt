@@ -53,7 +53,9 @@ add_library(Xyz STATIC
     include/Xyz/Face.hpp
     include/Xyz/HalfEdge.hpp
     src/Xyz/Face.cpp
-    include/Xyz/SphericalPoint.hpp)
+    include/Xyz/SphericalPoint.hpp
+    include/Xyz/ComplexApprox.hpp
+    )
 
 include(GNUInstallDirs)
 
