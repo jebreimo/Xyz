@@ -8,19 +8,19 @@
 #pragma once
 
 #include <algorithm>
-#include <cmath>
 #include <cstdlib>
 #include <limits>
 #include <type_traits>
 
 namespace Xyz
 {
-    template <typename T, typename std::enable_if_t<std::is_floating_point_v<T>, int> = 0>
+    template <typename T,
+              std::enable_if_t<std::is_floating_point_v<T>, int> = 0>
     struct Approx
     {
         constexpr static T DEFAULT_MARGIN = 100 * std::numeric_limits<T>::epsilon();
 
-        constexpr explicit Approx(T value, T margin = DEFAULT_MARGIN)
+        constexpr explicit Approx(T value, T margin = DEFAULT_MARGIN) noexcept
             : value(value),
               margin(margin)
         {}
@@ -33,14 +33,14 @@ namespace Xyz
               std::enable_if_t<std::is_arithmetic_v<U>, int> = 0>
     constexpr bool operator==(U v, Approx<T> m)
     {
-        return std::abs(m.value - v) <= m.margin;
+        return v + m.margin >= m.value && m.value + m.margin >= v;
     }
 
     template <typename T, typename U,
               std::enable_if_t<std::is_arithmetic_v<U>, int> = 0>
     constexpr bool operator==(Approx<T> m, U v)
     {
-        return std::abs(m.value - v) <= m.margin;
+        return v + m.margin >= m.value && m.value + m.margin >= v;
     }
 
     template <typename T, typename U>
