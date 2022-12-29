@@ -7,6 +7,7 @@
 //****************************************************************************
 #pragma once
 
+#include "ComplexApprox.hpp"
 #include "Line.hpp"
 #include "LineClipping.hpp"
 #include "LineLineIntersection.hpp"
@@ -15,6 +16,7 @@
 #include "MatrixTransformations.hpp"
 #include "Mesh.hpp"
 #include "ProjectionMatrix.hpp"
+#include "QuadraticEquation.hpp"
 #include "RandomGenerator.hpp"
 #include "SphericalPoint.hpp"
 #include "Triangle.hpp"

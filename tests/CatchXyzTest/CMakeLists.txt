@@ -17,13 +17,15 @@ FetchContent_MakeAvailable(catch)
 add_executable(CatchXyzTest
     CatchXyzTestMain.cpp
     test_Approx.cpp
-    test_Mesh.cpp
-    test_Vector.cpp
-    test_QuadraticEquation.cpp
     test_ComplexApprox.hpp
+    test_Mesh.cpp
+    test_QuadraticEquation.cpp
+    test_Vector.cpp
     )
 
 target_link_libraries(CatchXyzTest
     Xyz::Xyz
     Catch2::Catch2
     )
+
+add_test(NAME CatchXyzTest COMMAND CatchXyzTest)

@@ -7,7 +7,7 @@
 ##****************************************************************************
 cmake_minimum_required(VERSION 3.16)
 
-project(Xyz VERSION 0.2.84)
+project(Xyz VERSION 0.2.85)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -29,9 +29,12 @@ option(XYZ_INSTALL "Generate the install target" ${XYZ_MASTER_PROJECT})
 
 add_library(Xyz STATIC
     include/Xyz/Clamp.hpp
+    include/Xyz/ComplexApprox.hpp
     include/Xyz/Constants.hpp
     include/Xyz/CoordinateSystem.hpp
+    include/Xyz/Face.hpp
     include/Xyz/FloatType.hpp
+    include/Xyz/HalfEdge.hpp
     include/Xyz/InvertMatrix.hpp
     include/Xyz/Line.hpp
     include/Xyz/LineClipping.hpp
@@ -40,22 +43,19 @@ add_library(Xyz STATIC
     include/Xyz/Matrix.hpp
     include/Xyz/MatrixDeterminant.hpp
     include/Xyz/MatrixTransformations.hpp
+    include/Xyz/Mesh.hpp
     include/Xyz/ProjectionMatrix.hpp
+    include/Xyz/QuadraticEquation.hpp
     include/Xyz/RandomGenerator.hpp
     include/Xyz/Rectangle.hpp
+    include/Xyz/SphericalPoint.hpp
     include/Xyz/Triangle.hpp
     include/Xyz/Utilities.hpp
     include/Xyz/Vector.hpp
     include/Xyz/Xyz.hpp
     include/Xyz/XyzException.hpp
-    src/Xyz/RandomGenerator.cpp
-    include/Xyz/Mesh.hpp
-    include/Xyz/Face.hpp
-    include/Xyz/HalfEdge.hpp
     src/Xyz/Face.cpp
-    include/Xyz/SphericalPoint.hpp
-    include/Xyz/QuadraticEquation.hpp
-    include/Xyz/ComplexApprox.hpp
+    src/Xyz/RandomGenerator.cpp
     )
 
 include(GNUInstallDirs)

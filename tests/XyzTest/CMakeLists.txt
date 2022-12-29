@@ -16,17 +16,20 @@ FetchContent_MakeAvailable(ytest)
 add_executable(XyzTest
     XyzTestMain.cpp
     YtestUtilities.hpp
+    test_CoordinateSystem.cpp
+    test_Intersections.cpp
     test_InvertMatrix.cpp
+    test_LineClipping.cpp
     test_Matrix.cpp
     test_MatrixDeterminant.cpp
     test_Projections.cpp
     test_Transforms.cpp
+    test_Triangle.cpp
     test_Vector.cpp
-    test_CoordinateSystem.cpp
-    test_LineClipping.cpp
-    test_Intersections.cpp
-    test_Triangle.cpp)
+    )
 
 target_link_libraries(XyzTest
     Xyz::Xyz
     Ytest::Ytest)
+
+add_test(NAME XyzTest COMMAND XyzTest)

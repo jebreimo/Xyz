@@ -7,6 +7,7 @@
 //****************************************************************************
 #pragma once
 
+#include "Approx.hpp"
 #include "Vector.hpp"
 
 namespace Xyz
