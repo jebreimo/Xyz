@@ -54,6 +54,7 @@ add_library(Xyz STATIC
     include/Xyz/HalfEdge.hpp
     src/Xyz/Face.cpp
     include/Xyz/SphericalPoint.hpp
+    include/Xyz/QuadraticEquation.hpp
     include/Xyz/ComplexApprox.hpp
     )
 
