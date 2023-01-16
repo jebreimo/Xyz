@@ -13,9 +13,9 @@ namespace Xyz
     template <typename T>
     struct SphericalPoint
     {
-        SphericalPoint() = default;
+        constexpr SphericalPoint() = default;
 
-        SphericalPoint(T radius, T azimuth, T polar)
+        constexpr SphericalPoint(T radius, T azimuth, T polar)
             : radius(radius),
               azimuth(azimuth),
               polar(polar)
@@ -25,6 +25,22 @@ namespace Xyz
         T azimuth = {};
         T polar = {};
     };
+
+    template <typename T>
+    constexpr bool operator==(const SphericalPoint<T>& a,
+                              const SphericalPoint<T>& b)
+    {
+        return a.radius == b.radius
+               && a.azimuth == b.azimuth
+               && a.polar == b.polar;
+    }
+
+    template <typename T>
+    constexpr bool operator!=(const SphericalPoint<T>& a,
+                              const SphericalPoint<T>& b)
+    {
+        return !(a == b);
+    }
 
     /**
      * @brief Returns the spherical point corresponding to the
@@ -59,4 +75,7 @@ namespace Xyz
                 s.radius * sin(s.azimuth) * cos(s.polar),
                 s.radius * sin(s.polar)};
     }
+
+    using SphericalPointF = SphericalPoint<float>;
+    using SphericalPointD = SphericalPoint<double>;
 }
