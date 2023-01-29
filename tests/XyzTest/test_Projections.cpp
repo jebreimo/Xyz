@@ -11,7 +11,6 @@
 
 namespace
 {
-
     void test_perspective_projection()
     {
         auto m = Xyz::make_frustum_matrix<double>(-1, 1, -1, 1, 9, 11);

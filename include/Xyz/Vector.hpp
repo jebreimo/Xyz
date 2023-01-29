@@ -290,19 +290,35 @@ namespace Xyz
         return u;
     }
 
-    template <typename T, typename S, unsigned N>
-    constexpr Vector<T, N>& operator*=(Vector<T, N>& u, S scalar)
+    template <typename T, unsigned N>
+    constexpr Vector<T, N>& operator*=(Vector<T, N>& u, T scalar)
     {
         for (unsigned i = 0; i < N; ++i)
             u[i] *= scalar;
         return u;
     }
 
-    template <typename T, typename S, unsigned N>
-    constexpr Vector<T, N>& operator/=(Vector<T, N>& u, S scalar)
+    template <typename T, unsigned N>
+    constexpr Vector<T, N>& operator*=(Vector<T, N>& u, const Vector<T, N>& v)
+    {
+        for (unsigned i = 0; i < N; ++i)
+            u[i] *= v[i];
+        return u;
+    }
+
+    template <typename T, unsigned N>
+    constexpr Vector<T, N>& operator/=(Vector<T, N>& u, T scalar)
     {
         for (unsigned i = 0; i < N; ++i)
             u[i] /= scalar;
+        return u;
+    }
+
+    template <typename T, unsigned N>
+    constexpr Vector<T, N>& operator/=(Vector<T, N>& u, const Vector<T, N>& v)
+    {
+        for (unsigned i = 0; i < N; ++i)
+            u[i] /= v[i];
         return u;
     }
 
@@ -332,37 +348,55 @@ namespace Xyz
         return w;
     }
 
-    template <typename T, typename S, unsigned N>
-    constexpr auto operator/(const Vector<T, N>& u, S scalar)
+    template <typename T, unsigned N>
+    constexpr auto operator/(const Vector<T, N>& u, T scalar)
     {
-        Vector<decltype(T() / S()), N> w;
+        Vector<T, N> w;
         for (unsigned i = 0; i < N; ++i)
             w[i] = u[i] / scalar;
         return w;
     }
 
-    template <typename T, typename S, unsigned N>
-    constexpr auto operator/(S scalar, const Vector<T, N>& u)
+    template <typename T, unsigned N>
+    constexpr auto operator/(T scalar, const Vector<T, N>& u)
     {
-        Vector<decltype(S() / T()), N> w;
+        Vector<T, N> w;
         for (unsigned i = 0; i < N; ++i)
             w[i] = scalar / u[i];
         return w;
     }
 
-    template <typename T, typename S, unsigned N>
-    constexpr auto operator*(const Vector<T, N>& u, S scalar)
+    template <typename T, unsigned N>
+    Vector<T, N> operator/(const Vector<T, N>& u, const Vector<T, N>& v)
     {
-        Vector<decltype(T() * S()), N> w;
+        Vector<T, N> w;
+        for (unsigned i = 0; i < N; ++i)
+            w[i] = u[i] / v[i];
+        return w;
+    }
+
+    template <typename T, unsigned N>
+    constexpr auto operator*(const Vector<T, N>& u, T scalar)
+    {
+        Vector<T, N> w;
         for (unsigned i = 0; i < N; ++i)
             w[i] = u[i] * scalar;
         return w;
     }
 
-    template <typename T, typename S, unsigned N>
-    constexpr auto operator*(S scalar, const Vector<T, N>& v)
+    template <typename T, unsigned N>
+    constexpr auto operator*(T scalar, const Vector<T, N>& v)
     {
         return v * scalar;
+    }
+
+    template <typename T, unsigned N>
+    constexpr auto operator*(const Vector<T, N>& u, const Vector<T, N>& v)
+    {
+        Vector<T, N> w;
+        for (unsigned i = 0; i < N; ++i)
+            w[i] = u[i] * v[i];
+        return w;
     }
 
     template <typename T, unsigned N>
@@ -442,40 +476,6 @@ namespace Xyz
         for (unsigned i = 0; i < N; ++i)
             result += u[i] * v[i];
         return result;
-    }
-
-    template <typename T, unsigned N>
-    Vector<T, N>& divide_assign(Vector<T, N>& u, const Vector<T, N>& v)
-    {
-        for (unsigned i = 0; i < N; ++i)
-            u[i] /= v[i];
-        return u;
-    }
-
-    template <typename T, unsigned N>
-    Vector<T, N>& multiply_assign(Vector<T, N>& u, const Vector<T, N>& v)
-    {
-        for (unsigned i = 0; i < N; ++i)
-            u[i] *= v[i];
-        return u;
-    }
-
-    template <typename T, unsigned N>
-    Vector<T, N> divide(const Vector<T, N>& u, const Vector<T, N>& v)
-    {
-        Vector<T, N> w;
-        for (unsigned i = 0; i < N; ++i)
-            w[i] = u[i] / v[i];
-        return w;
-    }
-
-    template <typename T, unsigned N>
-    Vector<T, N> multiply(const Vector<T, N>& u, const Vector<T, N>& v)
-    {
-        Vector<T, N> w;
-        for (unsigned i = 0; i < N; ++i)
-            w[i] = u[i] * v[i];
-        return w;
     }
 
     template <typename T, unsigned N>
