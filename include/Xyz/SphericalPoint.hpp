@@ -42,7 +42,7 @@ namespace Xyz
         return !(a == b);
     }
 
-    template <typename T, unsigned N>
+    template <typename T>
     std::ostream& operator<<(std::ostream& os, const SphericalPoint<T>& sp)
     {
         return os << '[' << sp.radius
