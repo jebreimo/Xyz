@@ -12,8 +12,8 @@
 #include "Xyz/Utilities.hpp"
 #include "YtestUtilities.hpp"
 
-namespace {
-
+namespace
+{
     using namespace Xyz;
 
     void test_basics_2d()
