@@ -84,6 +84,18 @@ namespace Xyz
                 s.radius * sin(s.polar)};
     }
 
+    template <typename T>
+    SphericalPoint<T> to_degrees(const SphericalPoint<T>& sp)
+    {
+        return {sp.radius, to_degrees(sp.azimuth), to_degrees(sp.polar)};
+    }
+
+    template <typename T>
+    SphericalPoint<T> to_radians(const SphericalPoint<T>& sp)
+    {
+        return {sp.radius, to_radians(sp.azimuth), to_radians(sp.polar)};
+    }
+
     using SphericalPointF = SphericalPoint<float>;
     using SphericalPointD = SphericalPoint<double>;
 }
