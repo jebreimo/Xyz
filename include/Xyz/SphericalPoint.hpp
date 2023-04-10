@@ -42,6 +42,14 @@ namespace Xyz
         return !(a == b);
     }
 
+    template <typename T, unsigned N>
+    std::ostream& operator<<(std::ostream& os, const SphericalPoint<T>& sp)
+    {
+        return os << '[' << sp.radius
+                  << ", " << sp.azimuth
+                  << ", " << sp.polar << ']';
+    }
+
     /**
      * @brief Returns the spherical point corresponding to the
      *  cartesian point @a p.
