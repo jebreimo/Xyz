@@ -6,6 +6,7 @@
 // License text is included with the source distribution.
 //****************************************************************************
 #pragma once
+#include "Utilities.hpp"
 #include "Vector.hpp"
 
 namespace Xyz
