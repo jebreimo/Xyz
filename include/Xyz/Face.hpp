@@ -6,7 +6,6 @@
 // License text is included with the source distribution.
 //****************************************************************************
 #pragma once
-#include <cstddef>
 #include "HalfEdge.hpp"
 
 namespace Xyz
