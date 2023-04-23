@@ -36,7 +36,7 @@ namespace Xyz
     namespace Details
     {
         template <typename T, typename U,
-                  std::enable_if<std::is_same_v<T, decltype(T() + U())>, int> = 0>
+                  std::enable_if_t<std::is_same_v<T, decltype(T() + U())>, int> = 0>
         ComplexApprox<T>
         merge_margins(const ComplexApprox<T>& a, const ComplexApprox<U>& b)
         {
@@ -48,7 +48,7 @@ namespace Xyz
         }
 
         template <typename T, typename U,
-                  std::enable_if<!std::is_same_v<T, decltype(T() + U())>, int> = 0>
+                  std::enable_if_t<!std::is_same_v<T, decltype(T() + U())>, int> = 0>
         auto merge_margins(const ComplexApprox<T>& a, const ComplexApprox<U>& b)
             -> ComplexApprox<decltype(T() + U())>
         {
