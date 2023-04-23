@@ -10,7 +10,7 @@ cmake_minimum_required(VERSION 3.13)
 include(FetchContent)
 FetchContent_Declare(ytest
     GIT_REPOSITORY "https://github.com/jebreimo/Ytest.git"
-    GIT_TAG v0.1.2)
+    GIT_TAG v0.1.3)
 FetchContent_MakeAvailable(ytest)
 
 add_executable(XyzTest
