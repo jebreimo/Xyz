@@ -27,6 +27,7 @@ TEST_CASE("Equation without real solution")
 TEST_CASE("Equation with complex solution")
 {
     auto [lo, hi] = Xyz::solve_complex_quadratic_equation<double>(1, 0, 1);
-    REQUIRE(lo == Xyz::ComplexApprox<double>({0., -1.}));
-    REQUIRE(hi == Xyz::ComplexApprox<double>({0., 1.}));
+    using C = std::complex<double>;
+    REQUIRE(lo == Xyz::ComplexApprox<double>(C(0., -1.)));
+    REQUIRE(hi == Xyz::ComplexApprox<double>(C(0., 1.)));
 }
