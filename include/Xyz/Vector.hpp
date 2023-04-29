@@ -622,12 +622,12 @@ namespace Xyz
     using Vector4D = Vector<double, 4>;
 }
 
-template <typename T, size_t N>
+template <typename T, unsigned N>
 struct std::tuple_size<Xyz::Vector<T, N>>
-    : std::integral_constant<size_t, N>
+    : std::integral_constant<unsigned, N>
 {};
 
-template <size_t I, typename T, size_t N>
+template <size_t I, typename T, unsigned N>
 struct std::tuple_element<I, Xyz::Vector<T, N>>
 {
     using type = T;
