@@ -35,7 +35,7 @@ namespace
         Y_EQUAL(u -= v, make_vector2<double>(2, 1));
         Y_EQUAL(u *= 3., make_vector2<double>(6, 3));
         Y_EQUAL(u /= 2., make_vector2<double>(3.0, 1.5));
-        Y_EQUAL(u * v, make_vector2<double>(9, 6));
+        Y_EQUAL(u *= v, make_vector2<double>(9, 6));
         Y_EQUAL(u *= 2., make_vector2<double>(18, 12));
         Y_EQUAL(u /= v, make_vector2<double>(6, 3));
         Y_EQUAL(dot(u, v), 30);
@@ -65,7 +65,7 @@ namespace
         Y_EQUAL(u -= v, make_vector4<double>(2, 1, 4, 3));
         Y_EQUAL(u *= 3., make_vector4<double>(6, 3, 12, 9));
         Y_EQUAL(u /= 2., make_vector4<double>(3.0, 1.5, 6.0, 4.5));
-        Y_EQUAL(u /= v, make_vector4<double>(9, 6, -6, -9));
+        Y_EQUAL(u *= v, make_vector4<double>(9, 6, -6, -9));
         Y_EQUAL(u *= 2., make_vector4<double>(18, 12, -12, -18));
         Y_EQUAL(u /= v, make_vector4<double>(6, 3, 12, 9));
         Y_EQUAL(dot(u, v), 18 + 12 - 12 - 18);
