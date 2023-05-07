@@ -113,7 +113,7 @@ namespace Xyz
     {
         auto divisor = get_length_squared(get_vector(line));
         auto t = (point - get_start(line)) * get_vector(line) / divisor;
-        return get_point_at_t(line, get_clamped(t, 0.0, 1.0));
+        return get_point_at_t(line, clamp(t, 0.0, 1.0));
     }
 
     template <typename T>
