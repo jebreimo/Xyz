@@ -14,7 +14,7 @@
 namespace Xyz
 {
     template <typename T>
-    T clamp(T value, T min, T max)
+    [[nodiscard]] T clamp(T value, T min, T max)
     {
         return std::min(max, std::max(min, value));
     }

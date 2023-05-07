@@ -12,6 +12,7 @@
 #include <initializer_list>
 #include <ostream>
 #include <type_traits>
+#include "Clamp.hpp"
 #include "Constants.hpp"
 #include "FloatType.hpp"
 #include "XyzException.hpp"
@@ -410,36 +411,42 @@ namespace Xyz
     }
 
     template <typename T>
+    [[nodiscard]]
     constexpr Vector<T, 2> make_vector2(T x, T y)
     {
         return Vector<T, 2>({x, y});
     }
 
     template <typename T>
+    [[nodiscard]]
     constexpr Vector<T, 3> make_vector3(T x, T y, T z)
     {
         return Vector<T, 3>({x, y, z});
     }
 
     template <typename T, typename U>
+    [[nodiscard]]
     constexpr Vector<T, 3> make_vector3(const Vector<U, 2>& v, T z)
     {
         return Vector<T, 3>({T(v[0]), T(v[1]), z});
     }
 
     template <typename T>
+    [[nodiscard]]
     constexpr Vector<T, 4> make_vector4(T x, T y, T z, T w)
     {
         return Vector<T, 4>({x, y, z, w});
     }
 
     template <typename T, typename U>
+    [[nodiscard]]
     constexpr Vector<T, 4> make_vector4(const Vector<U, 3>& v, T w)
     {
         return Vector<T, 4>({T(v[0]), T(v[1]), T(v[2]), w});
     }
 
     template <typename T, typename U, unsigned N>
+    [[nodiscard]]
     Vector<T, N> vector_cast(const Vector<U, N>& v)
     {
         if constexpr (std::is_same<T, U>::value)
@@ -456,6 +463,7 @@ namespace Xyz
     }
 
     template <unsigned Index, typename T, unsigned N>
+    [[nodiscard]]
     T& get(Vector<T, N>& v)
     {
         static_assert(Index < N, "Incorrect vector index.");
@@ -463,6 +471,7 @@ namespace Xyz
     }
 
     template <unsigned Index, typename T, unsigned N>
+    [[nodiscard]]
     T get(const Vector<T, N>& v)
     {
         static_assert(Index < N, "Incorrect vector index.");
@@ -470,6 +479,7 @@ namespace Xyz
     }
 
     template <typename T, typename S, unsigned N>
+    [[nodiscard]]
     auto dot(const Vector<T, N>& u, const Vector<S, N>& v)
     {
         decltype(T() * S()) result = 0;
@@ -479,18 +489,21 @@ namespace Xyz
     }
 
     template <typename T, unsigned N>
+    [[nodiscard]]
     auto get_length_squared(const Vector<T, N>& v)
     {
         return dot(v, v);
     }
 
     template <typename T, unsigned N>
+    [[nodiscard]]
     auto get_length(const Vector<T, N>& v)
     {
         return std::sqrt(get_length_squared(v));
     }
 
     template <typename T>
+    [[nodiscard]]
     Vector<T, 2> get_normal(const Vector<T, 2>& v)
     {
         return make_vector2(-v[1], v[0]);
@@ -498,6 +511,7 @@ namespace Xyz
 
     template <typename T, unsigned N,
               typename std::enable_if_t<std::is_integral_v<T>, int> = 0>
+    [[nodiscard]]
     bool are_equivalent(const Vector<T, N>& u, const Vector<T, N>& v, T = 0)
     {
         return u == v;
@@ -505,6 +519,7 @@ namespace Xyz
 
     template <typename T, unsigned N,
               typename std::enable_if_t<std::is_floating_point_v<T>, int> = 0>
+    [[nodiscard]]
     bool are_equivalent(const Vector<T, N>& u, const Vector<T, N>& v,
                         T margin = Constants<T>::DEFAULT_MARGIN)
     {
@@ -512,6 +527,7 @@ namespace Xyz
     }
 
     template <typename T, unsigned N>
+    [[nodiscard]]
     auto get_cos_angle(const Vector<T, N>& u, const Vector<T, N>& v)
     {
         return dot(u, v) / std::sqrt(get_length_squared(u) * get_length_squared(v));
@@ -521,12 +537,14 @@ namespace Xyz
       * @return A value in the range 0 <= angle <= pi.
       */
     template <typename T, unsigned N>
+    [[nodiscard]]
     auto get_angle(const Vector<T, N>& u, const Vector<T, N>& v)
     {
         return std::acos(get_cos_angle(u, v));
     }
 
     template <typename T>
+    [[nodiscard]]
     auto get_ccw_angle(const Vector<T, 2>& u, const Vector<T, 2>& v)
     {
         auto angle = get_angle(u, v);
@@ -537,6 +555,7 @@ namespace Xyz
     }
 
     template <typename T>
+    [[nodiscard]]
     Vector<T, 3> cross(const Vector<T, 3>& a, const Vector<T, 3>& b)
     {
         return {a[1] * b[2] - a[2] * b[1],
@@ -545,38 +564,42 @@ namespace Xyz
     }
 
     template <typename T, unsigned N>
+    [[nodiscard]]
     auto get_unit(const Vector<T, N>& v)
     {
         return v / get_length(v);
     }
 
     template <typename T, unsigned N>
-    Vector<T, N>& resize_update(Vector<T, N>& v, T new_length)
+    Vector<T, N>& scale_inplace(Vector<T, N>& v, T new_length)
     {
         return v *= (new_length / get_length(v));
     }
 
     template <typename T, unsigned N>
-    Vector<T, N> resize(const Vector<T, N>& v, T new_length)
+    [[nodiscard]]
+    Vector<T, N> get_scaled(const Vector<T, N>& v, T new_length)
     {
-        return v * (new_length / length(v));
+        return v * (new_length / get_length(v));
     }
 
     template <typename T, unsigned N>
-    Vector<T, N>& clamp_update(Vector<T, N>& v, T min, T max)
+    Vector<T, N>& clamp_inplace(Vector<T, N>& v, T min, T max)
     {
-        for (auto i = 0u; i < N; ++i)
-            clamp(v[i], min, max);
+        clamp_range(begin(v), end(v), min, max);
+        return v;
     }
 
     template <typename T, unsigned N>
-    Vector<T, N> clamp(Vector<T, N> v, T min, T max)
+    [[nodiscard]]
+    Vector<T, N> get_clamped(Vector<T, N> v, T min, T max)
     {
-        clamp_update(v, min, max);
+        clamp_inplace(v, min, max);
         return v;
     }
 
     template <typename T>
+    [[nodiscard]]
     Vector<T, 2> reflect(const Vector<T, 2>& v,
                          const Vector<T, 2>& mirror)
     {
@@ -585,6 +608,7 @@ namespace Xyz
     }
 
     template <typename T>
+    [[nodiscard]]
     Vector<T, 2> rotate(const Vector<T, 2>& v, double radians)
     {
         auto c = std::cos(radians);
@@ -594,6 +618,7 @@ namespace Xyz
 
     template <typename T, unsigned N,
               typename std::enable_if_t<std::is_integral_v<T>, int> = 0>
+    [[nodiscard]]
     bool is_null(Vector<T, N>& v, T = 0)
     {
         return std::none_of(v.begin(), v.end(),
@@ -602,6 +627,7 @@ namespace Xyz
 
     template <typename T, unsigned N,
               typename std::enable_if_t<std::is_floating_point_v<T>, int> = 0>
+    [[nodiscard]]
     bool is_null(Vector<T, N>& v, T margin = Constants<T>::DEFAULT_MARGIN)
     {
         return std::none_of(v.begin(), v.end(),
