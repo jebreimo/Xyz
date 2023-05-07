@@ -109,8 +109,8 @@ namespace Xyz
         auto ta1 = dot(get_vector(a), (get_end(b) - get_start(a))) / length;
         if ((ta0 > 1 && ta1 > 1) || (ta0 < 0 && ta1 < 0))
             return {false, {ta0, ta1}};
-        ta0 = get_clamped<Float>(ta0, 0.0, 1.0);
-        ta1 = get_clamped<Float>(ta1, 0.0, 1.0);
+        ta0 = clamp<Float>(ta0, 0.0, 1.0);
+        ta1 = clamp<Float>(ta1, 0.0, 1.0);
         return {true, {ta0, ta1}};
     }
 
