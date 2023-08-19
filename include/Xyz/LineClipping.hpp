@@ -24,8 +24,8 @@ namespace Xyz
                                       const Vector<T, 2>& point)
     {
         auto [x, y] = point;
-        auto [x0, y0] = rectangle.min();
-        auto [x1, y1] = rectangle.max();
+        auto [x0, y0] = get_min(rectangle);
+        auto [x1, y1] = get_max(rectangle);
         unsigned code = OUTCODE_INSIDE;
 
         if (x1 < x)
@@ -70,8 +70,8 @@ namespace Xyz
                 return {-1.0, -1.0};
             auto start = line.start();
             auto vector = line.end() - line.start();
-            auto bottomLeft = rectangle.min();
-            auto topRight = rectangle.max();
+            auto bottomLeft = get_min(rectangle);
+            auto topRight = get_max(rectangle);
 
             unsigned code = startCode ? startCode : endCode;
             double t;

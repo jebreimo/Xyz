@@ -5,7 +5,6 @@
 // This file is distributed under the BSD License.
 // License text is included with the source distribution.
 //****************************************************************************
-#pragma once
 #include <Xyz/ComplexApprox.hpp>
 #include <catch2/catch.hpp>
 
