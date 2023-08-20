@@ -10,12 +10,11 @@ cmake_minimum_required(VERSION 3.20)
 include(FetchContent)
 FetchContent_Declare(catch
     GIT_REPOSITORY "https://github.com/catchorg/Catch2.git"
-    GIT_TAG "v2.13.10"
+    GIT_TAG "v3.4.0"
 )
 FetchContent_MakeAvailable(catch)
 
 add_executable(CatchXyzTest
-    CatchXyzTestMain.cpp
     test_Approx.cpp
     test_ComplexApprox.cpp
     test_Mesh.cpp
@@ -26,7 +25,7 @@ add_executable(CatchXyzTest
 
 target_link_libraries(CatchXyzTest
     Xyz::Xyz
-    Catch2::Catch2
+    Catch2::Catch2WithMain
 )
 
 add_test(NAME CatchXyzTest COMMAND CatchXyzTest)

@@ -6,7 +6,8 @@
 // License text is included with the source distribution.
 //****************************************************************************
 #include <Xyz/SphericalPoint.hpp>
-#include <catch2/catch.hpp>
+#include <catch2/catch_test_macros.hpp>
+#include "catch2/matchers/catch_matchers_floating_point.hpp"
 
 constexpr auto PI = Xyz::Constants<double>::PI;
 constexpr auto MARGIN = Xyz::Constants<double>::DEFAULT_MARGIN;
