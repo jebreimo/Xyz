@@ -38,6 +38,14 @@ TEST_CASE("Test Rectangle min and max")
     REQUIRE(get_max({{10, 15}, {-10, -10}}) == Xyz::Vector2I(10, 15));
 }
 
+TEST_CASE("Test Rectangle is_empty")
+{
+    REQUIRE(is_empty(Xyz::RectangleF({2, 3}, {0, 0})));
+    REQUIRE(is_empty(Xyz::RectangleF({2, 3}, {0, -1})));
+    REQUIRE(is_empty(Xyz::RectangleF({2, 3}, {-1, 0})));
+    REQUIRE(!is_empty(Xyz::RectangleF({2, 3}, {-1, -1})));
+}
+
 TEST_CASE("Test Rectangle normalize")
 {
     using R = Xyz::RectangleD;

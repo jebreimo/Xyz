@@ -49,6 +49,13 @@ namespace Xyz
 
     template <typename T>
     [[nodiscard]]
+    bool is_empty(const Rectangle<T>& rect)
+    {
+        return rect.size[0] == 0 || rect.size[1] == 0;
+    }
+
+    template <typename T>
+    [[nodiscard]]
     Vector<T, 2> get_bottom_left(const Rectangle<T>& rect)
     {
         return rect.origin;
