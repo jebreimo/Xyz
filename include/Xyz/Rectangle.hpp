@@ -129,7 +129,7 @@ namespace Xyz
 
     template <typename T>
     [[nodiscard]]
-    Rectangle<T> offset(Rectangle<T>& rect, const Vector<T, 2>& delta)
+    Rectangle<T> offset(Rectangle<T> rect, const Vector<T, 2>& delta)
     {
         rect.origin += delta;
         return rect;
