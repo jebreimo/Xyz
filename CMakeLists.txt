@@ -7,7 +7,7 @@
 ##****************************************************************************
 cmake_minimum_required(VERSION 3.16)
 
-project(Xyz VERSION 0.2.90)
+project(Xyz VERSION 0.2.91)
 
 set(CMAKE_CXX_STANDARD 17)
 
