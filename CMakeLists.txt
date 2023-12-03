@@ -7,9 +7,9 @@
 ##****************************************************************************
 cmake_minimum_required(VERSION 3.16)
 
-project(Xyz VERSION 0.2.91)
+project(Xyz VERSION 0.3.0)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 
 # Set XYZ_MASTER_PROJECT to ON if Xyz is the root level project.
 if (NOT DEFINED XYZ_MASTER_PROJECT)

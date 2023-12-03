@@ -40,6 +40,8 @@ namespace
         Y_EQUAL(u /= v, make_vector2<double>(6, 3));
         Y_EQUAL(dot(u, v), 30);
         Y_EQUIVALENT(get_length(v), 5, 1e-10);
+        std::pair<int, int> values{1, 2};
+        Y_EQUAL(Vector2F(values), make_vector2(1.0f, 2.0f));
     }
 
     void test_basics_4d()

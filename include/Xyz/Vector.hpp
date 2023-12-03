@@ -86,6 +86,12 @@ namespace Xyz
             : values{x, y}
         {}
 
+        template <typename U,
+                  typename = std::enable_if_t<std::is_arithmetic_v<U>>>
+        explicit constexpr Vector(const std::pair<U, U>& p) noexcept
+            : values{T(p.first), T(p.second)}
+        {}
+
         explicit constexpr Vector(T const (& arr)[2]) noexcept
         {
             std::copy(std::begin(arr), std::end(arr), std::begin(values));
