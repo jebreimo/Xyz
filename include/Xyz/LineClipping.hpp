@@ -7,6 +7,7 @@
 //****************************************************************************
 #pragma once
 
+#include <optional>
 #include <utility>
 #include "LineSegment.hpp"
 #include "Rectangle.hpp"
@@ -20,6 +21,7 @@ namespace Xyz
     constexpr unsigned OUTCODE_TOP = 0b1000;
 
     template <typename T>
+    [[nodiscard]]
     unsigned compute_clipping_outcode(const Rectangle<T>& rectangle,
                                       const Vector<T, 2>& point)
     {
@@ -52,48 +54,50 @@ namespace Xyz
      * @return the relative start and end positions of the part of @a line
      *      that lies inside @a rectangle. Both positions will be between
      *      0 and 1, unless @a line is completely outside @a rectangle in
-     *      which case both positions are -1.
+     *      which case the result is empty.
      */
     template <typename T>
-    std::pair<double, double> get_clipping_positions(
-            const Rectangle<T>& rectangle, const LineSegment<T, 2>& line)
+    [[nodiscard]]
+    std::optional<std::pair<double, double>>
+    get_clipping_positions(const Rectangle<T>& rectangle,
+                           const LineSegment<T, 2>& line)
     {
-        auto startCode = compute_clipping_outcode(rectangle, line.start());
-        auto endCode = compute_clipping_outcode(rectangle, line.end());
-        double tStart = 0.0, tEnd = 1.0;
+        auto start_code = compute_clipping_outcode(rectangle, line.start());
+        auto end_code = compute_clipping_outcode(rectangle, line.end());
+        double t_start = 0.0, tEnd = 1.0;
 
         for (;;)
         {
-            if (!(startCode | endCode))
-                return {tStart, tEnd};
-            if (startCode & endCode)
-                return {-1.0, -1.0};
+            if (!(start_code | end_code))
+                return std::pair(t_start, tEnd);
+            if (start_code & end_code)
+                return std::nullopt;
             auto start = line.start();
             auto vector = line.end() - line.start();
-            auto bottomLeft = get_min(rectangle);
-            auto topRight = get_max(rectangle);
+            auto bottom_left = get_min(rectangle);
+            auto top_right = get_max(rectangle);
 
-            unsigned code = startCode ? startCode : endCode;
+            unsigned code = start_code ? start_code : end_code;
             double t;
             if (code & OUTCODE_TOP)
-                t = (get<1>(topRight) - get<1>(start)) / get<1>(vector);
+                t = (get<1>(top_right) - get<1>(start)) / get<1>(vector);
             else if (code & OUTCODE_BOTTOM)
-                t = (get<1>(bottomLeft) - get<1>(start)) / get<1>(vector);
+                t = (get<1>(bottom_left) - get<1>(start)) / get<1>(vector);
             else if (code & OUTCODE_LEFT)
-                t = (get<0>(bottomLeft) - get<0>(start)) / get<0>(vector);
+                t = (get<0>(bottom_left) - get<0>(start)) / get<0>(vector);
             else
-                t = (get<0>(topRight) - get<0>(start)) / get<0>(vector);
+                t = (get<0>(top_right) - get<0>(start)) / get<0>(vector);
 
             auto point = start + t * vector;
-            if (code == startCode)
+            if (code == start_code)
             {
-                tStart = t;
-                startCode = compute_clipping_outcode(rectangle, point);
+                t_start = t;
+                start_code = compute_clipping_outcode(rectangle, point);
             }
             else
             {
                 tEnd = t;
-                endCode = compute_clipping_outcode(rectangle, point);
+                end_code = compute_clipping_outcode(rectangle, point);
             }
         }
     }
