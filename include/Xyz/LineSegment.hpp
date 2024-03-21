@@ -89,10 +89,17 @@ namespace Xyz
     }
 
     template <typename T, unsigned N>
-    LineSegment<T, N> make_line_segment(const Vector<T, N>& start,
-                                        const Vector<T, N>& end)
+    LineSegment<T, N>
+    make_line_segment(const Vector<T, N>& start, const Vector<T, N>& end)
     {
-        return LineSegment<T, N>(start, end);
+        return {start, end};
+    }
+
+    template <typename T, unsigned N>
+    LineSegment<T, N>
+    make_line_segment(const LineSegment<T, N>& base, T t0, T t1)
+    {
+        return {get_point_at_t(base, t0), get_point_at_t(base, t1)};
     }
 
     template <typename T, unsigned N>
@@ -104,7 +111,7 @@ namespace Xyz
     template <typename T, unsigned N>
     LineSegment<T, N> get_reverse(const LineSegment<T, N>& line)
     {
-        return LineSegment<T, N>(get_end(line), get_start(line));
+        return {get_end(line), get_start(line)};
     }
 
     template <typename T, unsigned N>
