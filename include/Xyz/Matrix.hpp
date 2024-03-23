@@ -113,6 +113,11 @@ namespace Xyz
             return values[pos.row * COLS + pos.col];
         }
 
+        static constexpr Matrix identity()
+        {
+            return Matrix(1, 0, 0, 1);
+        }
+
         T values[SIZE];
     };
 
@@ -162,6 +167,13 @@ namespace Xyz
         constexpr T operator[](RowCol pos) const
         {
             return values[pos.row * COLS + pos.col];
+        }
+
+        static constexpr Matrix identity()
+        {
+            return Matrix(1, 0, 0,
+                          0, 1, 0,
+                          0, 0, 1);
         }
 
         T values[SIZE];
@@ -215,6 +227,14 @@ namespace Xyz
         constexpr T operator[](RowCol pos) const
         {
             return values[pos.row * COLS + pos.col];
+        }
+
+        static constexpr Matrix identity()
+        {
+            return Matrix(1, 0, 0, 0,
+                          0, 1, 0, 0,
+                          0, 0, 1, 0,
+                          0, 0, 0, 1);
         }
 
         T values[SIZE];
