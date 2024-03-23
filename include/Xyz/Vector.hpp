@@ -517,7 +517,7 @@ namespace Xyz
 
     template <typename T, unsigned N>
     [[nodiscard]]
-    bool are_close(const Vector<T, N>& u, const Vector<T, N>& v,
+    bool are_equal(const Vector<T, N>& u, const Vector<T, N>& v,
                    T margin = Constants<T>::DEFAULT_MARGIN)
     {
         return get_length_squared(u - v) <= margin;

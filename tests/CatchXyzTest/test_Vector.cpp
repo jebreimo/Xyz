@@ -100,8 +100,8 @@ TEST_CASE("scale vector")
     Xyz::Vector4D v1(1, -2, 3, -4);
     auto v2 = get_scaled(v1, 1.0);
     const auto root = std::sqrt(1 + 2*2 + 3*3 + 4*4);
-    REQUIRE(are_close(v2, Xyz::Vector4D(1 / root, -2 / root, 3 / root, -4 / root)));
+    REQUIRE(are_equal(v2, Xyz::Vector4D(1 / root, -2 / root, 3 / root, -4 / root)));
 
     scale_inplace(v1, 1.0);
-    REQUIRE(are_close(v1, Xyz::Vector4D(1 / root, -2 / root, 3 / root, -4 / root)));
+    REQUIRE(are_equal(v1, Xyz::Vector4D(1 / root, -2 / root, 3 / root, -4 / root)));
 }
