@@ -41,7 +41,6 @@ namespace Xyz
     }
 
     template <typename T>
-    [[nodiscard]]
     std::ostream& operator<<(std::ostream& os, const Rectangle<T>& rect)
     {
         return os << '{' << rect.origin << ", " << rect.size << "}";
