@@ -15,7 +15,7 @@ namespace
     template <typename T, unsigned N>
     bool equals_identity_matrix(const Matrix<T, N, N>& m)
     {
-        return are_equivalent(m, make_identity_matrix<T, N>());
+        return are_close(m, make_identity_matrix<T, N>());
     }
 
     void test_invert2()

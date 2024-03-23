@@ -515,19 +515,10 @@ namespace Xyz
         return make_vector2(-v[1], v[0]);
     }
 
-    template <typename T, unsigned N,
-              typename std::enable_if_t<std::is_integral_v<T>, int> = 0>
+    template <typename T, unsigned N>
     [[nodiscard]]
-    bool are_equivalent(const Vector<T, N>& u, const Vector<T, N>& v, T = 0)
-    {
-        return u == v;
-    }
-
-    template <typename T, unsigned N,
-              typename std::enable_if_t<std::is_floating_point_v<T>, int> = 0>
-    [[nodiscard]]
-    bool are_equivalent(const Vector<T, N>& u, const Vector<T, N>& v,
-                        T margin = Constants<T>::DEFAULT_MARGIN)
+    bool are_close(const Vector<T, N>& u, const Vector<T, N>& v,
+                   T margin = Constants<T>::DEFAULT_MARGIN)
     {
         return get_length_squared(u - v) <= margin;
     }
