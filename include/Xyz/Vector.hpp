@@ -430,11 +430,11 @@ namespace Xyz
         return Vector<T, 3>({x, y, z});
     }
 
-    template <typename T, typename U>
+    template <typename T>
     [[nodiscard]]
-    constexpr Vector<T, 3> make_vector3(const Vector<U, 2>& v, T z)
+    constexpr Vector<T, 3> make_vector3(const Vector<T, 2>& v, T z)
     {
-        return Vector<T, 3>({T(v[0]), T(v[1]), z});
+        return Vector<T, 3>({v[0], v[1], z});
     }
 
     template <typename T>
@@ -444,11 +444,11 @@ namespace Xyz
         return Vector<T, 4>({x, y, z, w});
     }
 
-    template <typename T, typename U>
+    template <typename T>
     [[nodiscard]]
-    constexpr Vector<T, 4> make_vector4(const Vector<U, 3>& v, T w)
+    constexpr Vector<T, 4> make_vector4(const Vector<T, 3>& v, T w)
     {
-        return Vector<T, 4>({T(v[0]), T(v[1]), T(v[2]), w});
+        return Vector<T, 4>({v[0], v[1], v[2], w});
     }
 
     template <typename T, typename U, unsigned N>
