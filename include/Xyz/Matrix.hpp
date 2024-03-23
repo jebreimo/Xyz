@@ -577,8 +577,7 @@ namespace Xyz
 
     template <typename T, unsigned M, unsigned N,
         typename std::enable_if_t<std::is_integral_v<T>, int> = 0>
-    bool are_equal(const Matrix<T, M, N>& a, const Matrix<T, M, N>& b,
-                   T = 0)
+    bool are_equal(const Matrix<T, M, N>& a, const Matrix<T, M, N>& b, T = 0)
     {
         return a == b;
     }
