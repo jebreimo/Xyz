@@ -88,20 +88,20 @@ TEST_CASE("xyz to spherical")
 TEST_CASE("clamp vector")
 {
     Xyz::Vector4D v1(1, -2, 3, -4);
-    auto v2 = get_clamped(v1, -1.0, 1.0);
+    auto v2 = get_clamped(v1, -1, 1);
     REQUIRE(v2 == Xyz::Vector4D(1, -1, 1, -1));
     REQUIRE(v1 == Xyz::Vector4D(1, -2, 3, -4));
-    clamp_inplace(v1, -1.0, 1.0);
+    clamp_inplace(v1, -1, 1);
     REQUIRE(v1 == Xyz::Vector4D(1, -1, 1, -1));
 }
 
 TEST_CASE("scale vector")
 {
     Xyz::Vector4D v1(1, -2, 3, -4);
-    auto v2 = get_scaled(v1, 1.0);
+    auto v2 = get_scaled(v1, 1);
     const auto root = std::sqrt(1 + 2*2 + 3*3 + 4*4);
     REQUIRE(are_equal(v2, Xyz::Vector4D(1 / root, -2 / root, 3 / root, -4 / root)));
 
-    scale_inplace(v1, 1.0);
+    scale_inplace(v1, 1);
     REQUIRE(are_equal(v1, Xyz::Vector4D(1 / root, -2 / root, 3 / root, -4 / root)));
 }

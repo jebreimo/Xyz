@@ -37,7 +37,7 @@ namespace Xyz
             std::copy(v.begin(), v.end(), std::begin(values));
         }
 
-        explicit Vector(T const (& arr)[N]) noexcept
+        explicit Vector(T const (&arr)[N]) noexcept
         {
             std::copy(std::begin(arr), std::end(arr), std::begin(values));
         }
@@ -92,7 +92,7 @@ namespace Xyz
             : values{T(p.first), T(p.second)}
         {}
 
-        explicit constexpr Vector(T const (& arr)[2]) noexcept
+        explicit constexpr Vector(T const (&arr)[2]) noexcept
         {
             std::copy(std::begin(arr), std::end(arr), std::begin(values));
         }
@@ -141,7 +141,7 @@ namespace Xyz
             : values{x, y, z}
         {}
 
-        explicit Vector(T const (& arr)[3]) noexcept
+        explicit Vector(T const (&arr)[3]) noexcept
         {
             std::copy(std::begin(arr), std::end(arr), std::begin(values));
         }
@@ -190,7 +190,7 @@ namespace Xyz
             : values{x, y, z, w}
         {}
 
-        explicit Vector(T const (& arr)[4]) noexcept
+        explicit Vector(T const (&arr)[4]) noexcept
         {
             std::copy(std::begin(arr), std::end(arr), std::begin(values));
         }
@@ -274,7 +274,8 @@ namespace Xyz
     }
 
     template <typename T, unsigned N>
-    constexpr Vector<T, N>& operator+=(Vector<T, N>& u, T scalar)
+    constexpr Vector<T, N>& operator+=(Vector<T, N>& u,
+                                       std::type_identity_t<T> scalar)
     {
         for (unsigned i = 0; i < N; ++i)
             u[i] += scalar;
@@ -290,7 +291,8 @@ namespace Xyz
     }
 
     template <typename T, unsigned N>
-    constexpr Vector<T, N>& operator-=(Vector<T, N>& u, T scalar)
+    constexpr Vector<T, N>& operator-=(Vector<T, N>& u,
+                                       std::type_identity_t<T> scalar)
     {
         for (unsigned i = 0; i < N; ++i)
             u[i] -= scalar;
@@ -298,7 +300,8 @@ namespace Xyz
     }
 
     template <typename T, unsigned N>
-    constexpr Vector<T, N>& operator*=(Vector<T, N>& u, T scalar)
+    constexpr Vector<T, N>& operator*=(Vector<T, N>& u,
+                                       std::type_identity_t<T> scalar)
     {
         for (unsigned i = 0; i < N; ++i)
             u[i] *= scalar;
@@ -314,7 +317,8 @@ namespace Xyz
     }
 
     template <typename T, unsigned N>
-    constexpr Vector<T, N>& operator/=(Vector<T, N>& u, T scalar)
+    constexpr Vector<T, N>& operator/=(Vector<T, N>& u,
+                                       std::type_identity_t<T> scalar)
     {
         for (unsigned i = 0; i < N; ++i)
             u[i] /= scalar;
@@ -356,7 +360,8 @@ namespace Xyz
     }
 
     template <typename T, unsigned N>
-    constexpr auto operator/(const Vector<T, N>& u, T scalar)
+    constexpr auto operator/(const Vector<T, N>& u,
+                             std::type_identity_t<T> scalar)
     {
         Vector<T, N> w;
         for (unsigned i = 0; i < N; ++i)
@@ -365,7 +370,8 @@ namespace Xyz
     }
 
     template <typename T, unsigned N>
-    constexpr auto operator/(T scalar, const Vector<T, N>& u)
+    constexpr auto operator/(std::type_identity_t<T> scalar,
+                             const Vector<T, N>& u)
     {
         Vector<T, N> w;
         for (unsigned i = 0; i < N; ++i)
@@ -383,7 +389,8 @@ namespace Xyz
     }
 
     template <typename T, unsigned N>
-    constexpr auto operator*(const Vector<T, N>& u, T scalar)
+    constexpr auto operator*(const Vector<T, N>& u,
+                             std::type_identity_t<T> scalar)
     {
         Vector<T, N> w;
         for (unsigned i = 0; i < N; ++i)
@@ -392,7 +399,8 @@ namespace Xyz
     }
 
     template <typename T, unsigned N>
-    constexpr auto operator*(T scalar, const Vector<T, N>& v)
+    constexpr auto operator*(std::type_identity_t<T> scalar,
+                             const Vector<T, N>& v)
     {
         return v * scalar;
     }
@@ -432,7 +440,8 @@ namespace Xyz
 
     template <typename T>
     [[nodiscard]]
-    constexpr Vector<T, 3> make_vector3(const Vector<T, 2>& v, T z)
+    constexpr Vector<T, 3> make_vector3(const Vector<T, 2>& v,
+                                        std::type_identity_t<T> z)
     {
         return Vector<T, 3>({v[0], v[1], z});
     }
@@ -446,7 +455,8 @@ namespace Xyz
 
     template <typename T>
     [[nodiscard]]
-    constexpr Vector<T, 4> make_vector4(const Vector<T, 3>& v, T w)
+    constexpr Vector<T, 4> make_vector4(const Vector<T, 3>& v,
+                                        std::type_identity_t<T> w)
     {
         return Vector<T, 4>({v[0], v[1], v[2], w});
     }
@@ -518,7 +528,7 @@ namespace Xyz
     template <typename T, unsigned N>
     [[nodiscard]]
     bool are_equal(const Vector<T, N>& u, const Vector<T, N>& v,
-                   T margin = Constants<T>::DEFAULT_MARGIN)
+                   std::type_identity_t<T> margin = Constants<T>::DEFAULT_MARGIN)
     {
         return get_length_squared(u - v) <= margin;
     }
@@ -555,9 +565,11 @@ namespace Xyz
     [[nodiscard]]
     Vector<T, 3> cross(const Vector<T, 3>& a, const Vector<T, 3>& b)
     {
-        return {a[1] * b[2] - a[2] * b[1],
-                a[2] * b[0] - a[0] * b[2],
-                a[0] * b[1] - a[1] * b[0]};
+        return {
+            a[1] * b[2] - a[2] * b[1],
+            a[2] * b[0] - a[0] * b[2],
+            a[0] * b[1] - a[1] * b[0]
+        };
     }
 
     template <typename T, unsigned N>
@@ -568,20 +580,24 @@ namespace Xyz
     }
 
     template <typename T, unsigned N>
-    Vector<T, N>& scale_inplace(Vector<T, N>& v, T new_length)
+    Vector<T, N>& scale_inplace(Vector<T, N>& v,
+                                std::type_identity_t<T> new_length)
     {
         return v *= (new_length / get_length(v));
     }
 
     template <typename T, unsigned N>
     [[nodiscard]]
-    Vector<T, N> get_scaled(const Vector<T, N>& v, T new_length)
+    Vector<T, N> get_scaled(const Vector<T, N>& v,
+                            std::type_identity_t<T> new_length)
     {
         return v * (new_length / get_length(v));
     }
 
     template <typename T, unsigned N>
-    Vector<T, N>& clamp_inplace(Vector<T, N>& v, T min, T max)
+    Vector<T, N>& clamp_inplace(Vector<T, N>& v,
+                                std::type_identity_t<T> min,
+                                std::type_identity_t<T> max)
     {
         clamp_range(begin(v), end(v), min, max);
         return v;
@@ -589,7 +605,9 @@ namespace Xyz
 
     template <typename T, unsigned N>
     [[nodiscard]]
-    Vector<T, N> get_clamped(Vector<T, N> v, T min, T max)
+    Vector<T, N> get_clamped(Vector<T, N> v,
+                             std::type_identity_t<T> min,
+                             std::type_identity_t<T> max)
     {
         clamp_inplace(v, min, max);
         return v;
@@ -619,16 +637,17 @@ namespace Xyz
     bool is_null(Vector<T, N>& v, T = 0)
     {
         return std::none_of(v.begin(), v.end(),
-                            [](auto n){return n != 0;});
+                            [](auto n) { return n != 0; });
     }
 
     template <typename T, unsigned N,
               typename std::enable_if_t<std::is_floating_point_v<T>, int> = 0>
     [[nodiscard]]
-    bool is_null(Vector<T, N>& v, T margin = Constants<T>::DEFAULT_MARGIN)
+    bool is_null(Vector<T, N>& v,
+                 std::type_identity_t<T> margin = Constants<T>::DEFAULT_MARGIN)
     {
         return std::none_of(v.begin(), v.end(),
-                            [&](auto n) {return fabs(n) > margin;});
+                            [&](auto n) { return fabs(n) > margin; });
     }
 
 
