@@ -1,0 +1,36 @@
+//****************************************************************************
+// Copyright © 2025 Jan Erik Breimo. All rights reserved.
+// Created by Jan Erik Breimo on 2025-02-16.
+//
+// This file is distributed under the Zero-Clause BSD License.
+// License text is included with the source distribution.
+//****************************************************************************
+#pragma once
+
+/**
+ * @file
+ * @brief Defines the current Xyz version.
+ */
+
+/**
+ * @brief String representation of the complete version number.
+ */
+constexpr char XYZ_VERSION[] = "@Xyz_VERSION@";
+
+/**
+ * @brief Incremented if a new version is significantly incompatible
+ *      with the previous version.
+ */
+constexpr unsigned XYZ_VERSION_MAJOR = @Xyz_VERSION_MAJOR@;
+
+/**
+ * @brief Incremented when Xyz's interface is modified without introducing
+ *      incompatibilities with previous versions.
+ */
+constexpr unsigned XYZ_VERSION_MINOR = @Xyz_VERSION_MINOR@;
+
+/**
+ * @brief Incremented when Xyz's internals are modified without modifying
+ *      its interface.
+ */
+constexpr unsigned XYZ_VERSION_PATCH = @Xyz_VERSION_PATCH@;

@@ -27,6 +27,8 @@ option(XYZ_BUILD_TEST "Build tests" ${XYZ_MASTER_PROJECT})
 # Install option
 option(XYZ_INSTALL "Generate the install target" ${XYZ_MASTER_PROJECT})
 
+configure_file(src/Xyz/XyzVersion.hpp.in XyzVersion.hpp @ONLY)
+
 add_library(Xyz STATIC
     include/Xyz/Clamp.hpp
     include/Xyz/ComplexApprox.hpp
@@ -64,9 +66,10 @@ target_include_directories(Xyz
     PUBLIC
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/src
-    )
+)
 
 add_library(Xyz::Xyz ALIAS Xyz)
 
@@ -109,6 +112,13 @@ if(XYZ_INSTALL)
         DESTINATION
             ${CMAKE_INSTALL_LIBDIR}/cmake/Xyz
         )
+
+    install(
+        FILES
+            ${CMAKE_CURRENT_BINARY_DIR}/XyzVersion.hpp
+        DESTINATION
+            ${CMAKE_INSTALL_INCLUDEDIR}/Xyz
+    )
 
     install(
         DIRECTORY
