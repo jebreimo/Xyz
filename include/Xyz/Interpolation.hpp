@@ -11,16 +11,16 @@
 namespace Xyz
 {
     template <typename T>
-    T bilinear(const Vector<T, 2>& p,
-               const Vector<T, 2>& p1,
-               const Vector<T, 2>& p2,
-               T q11, T q21, T q12, T q22)
+    T bilinear(const Vector<T, 4>& q,
+               const Vector<std::type_identity_t<T>, 2>& min,
+               const Vector<std::type_identity_t<T>, 2>& max,
+               const Vector<std::type_identity_t<T>, 2>& p)
     {
-        auto [dx12, dy12] = p2 - p1;
-        auto [dx1, dy1] = p - p1;
-        auto [dx2, dy2] = p2 - p;
-        return (q11 * dx2 * dy2 + q21 * dx1 * dy2
-                + q12 * dx2 * dy1 + q22 * dx1 * dy1)
+        auto [dx12, dy12] = max - min;
+        auto [dx1, dy1] = p - min;
+        auto [dx2, dy2] = max - p;
+        return (q[0] * dx2 * dy2 + q[1] * dx1 * dy2
+                + q[2] * dx2 * dy1 + q[3] * dx1 * dy1)
             / (dx12 * dy12);
     }
 }

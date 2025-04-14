@@ -16,26 +16,12 @@ TEST_CASE("bilinear interpolation")
 
     auto p1 = Vector2F(10, 10);
     auto p2 = Vector2F(15, 15);
-    auto q11 = 1.f;
-    auto q21 = 2.f;
-    auto q12 = 3.f;
-    auto q22 = 4.f;
+    Vector4F q(1, 2, 3, 4);
 
-    auto p = Vector2F(10, 10);
-    REQUIRE_THAT(bilinear(p, p1, p2, q11, q21, q12, q22), WithinAbs(1.0f, 0.00001f));
-
-    p = Vector2F(12.5, 10);
-    REQUIRE_THAT(bilinear(p, p1, p2, q11, q21, q12, q22), WithinAbs(1.5f, 0.00001f));
-
-    p = Vector2F(10, 12.5);
-    REQUIRE_THAT(bilinear(p, p1, p2, q11, q21, q12, q22), WithinAbs(2.0f, 0.00001f));
-
-    p = Vector2F(12.5f, 12.5f);
-    REQUIRE_THAT(bilinear(p, p1, p2, q11, q21, q12, q22), WithinAbs(2.5f, 0.00001f));
-
-    p = Vector2F(15, 12.5);
-    REQUIRE_THAT(bilinear(p, p1, p2, q11, q21, q12, q22), WithinAbs(3.0f, 0.00001f));
-
-    p = Vector2F(12.5, 15);
-    REQUIRE_THAT(bilinear(p, p1, p2, q11, q21, q12, q22), WithinAbs(3.5f, 0.00001f));
+    REQUIRE_THAT(bilinear(q, p1, p2, {10, 10}), WithinAbs(1.0f, 0.00001f));
+    REQUIRE_THAT(bilinear(q, p1, p2, {12.5, 10}), WithinAbs(1.5f, 0.00001f));
+    REQUIRE_THAT(bilinear(q, p1, p2, {10, 12.5}), WithinAbs(2.0f, 0.00001f));
+    REQUIRE_THAT(bilinear(q, p1, p2, {12.5f, 12.5f}), WithinAbs(2.5f, 0.00001f));
+    REQUIRE_THAT(bilinear(q, p1, p2, {15, 12.5}), WithinAbs(3.0f, 0.00001f));
+    REQUIRE_THAT(bilinear(q, p1, p2, {12.5, 15}), WithinAbs(3.5f, 0.00001f));
 }
