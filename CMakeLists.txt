@@ -7,7 +7,7 @@
 ##****************************************************************************
 cmake_minimum_required(VERSION 3.16)
 
-project(Xyz VERSION 0.4.1)
+project(Xyz VERSION 0.4.2)
 
 set(CMAKE_CXX_STANDARD 20)
 
@@ -37,6 +37,7 @@ add_library(Xyz STATIC
     include/Xyz/Face.hpp
     include/Xyz/FloatType.hpp
     include/Xyz/HalfEdge.hpp
+    include/Xyz/Interpolation.hpp
     include/Xyz/InvertMatrix.hpp
     include/Xyz/Line.hpp
     include/Xyz/LineClipping.hpp
@@ -58,7 +59,7 @@ add_library(Xyz STATIC
     include/Xyz/XyzException.hpp
     src/Xyz/Face.cpp
     src/Xyz/RandomGenerator.cpp
-    )
+)
 
 include(GNUInstallDirs)
 
