@@ -595,19 +595,43 @@ namespace Xyz
     }
 
     template <typename T, unsigned N>
-    Vector<T, N>& clamp_inplace(Vector<T, N>& v,
-                                std::type_identity_t<T> min,
-                                std::type_identity_t<T> max)
+    constexpr Vector<T, N>&
+    clamp_inplace(Vector<T, N>& v,
+                  std::type_identity_t<T> min,
+                  std::type_identity_t<T> max)
     {
-        clamp_range(begin(v), end(v), min, max);
+        for (int i = 0; i < N; ++i)
+            v[i] = Xyz::clamp(v[i], min, max);
+        return v;
+    }
+
+    template <typename T, unsigned N>
+    [[nodiscard]]
+    constexpr Vector<T, N>
+    get_clamped(Vector<T, N> v,
+                std::type_identity_t<T> min,
+                std::type_identity_t<T> max)
+    {
+        clamp_inplace(v, min, max);
+        return v;
+    }
+
+    template <typename T, unsigned N>
+    constexpr Vector<T, N>&
+    clamp_inplace(Vector<T, N>& v,
+                  const Vector<std::type_identity_t<T>, N>& min,
+                  const Vector<std::type_identity_t<T>, N>& max)
+    {
+        for (int i = 0; i < N; ++i)
+            v[i] = Xyz::clamp(v[i], min[i], max[i]);
         return v;
     }
 
     template <typename T, unsigned N>
     [[nodiscard]]
     Vector<T, N> get_clamped(Vector<T, N> v,
-                             std::type_identity_t<T> min,
-                             std::type_identity_t<T> max)
+                             const Vector<std::type_identity_t<T>, N>& min,
+                             const Vector<std::type_identity_t<T>, N>& max)
     {
         clamp_inplace(v, min, max);
         return v;
@@ -632,7 +656,7 @@ namespace Xyz
     }
 
     template <typename T, unsigned N,
-              typename std::enable_if_t<std::is_integral_v<T>, int> = 0>
+              typename std::enable_if_t<std::is_integral_v<T>, int>  = 0>
     [[nodiscard]]
     bool is_null(Vector<T, N>& v, T = 0)
     {
@@ -641,7 +665,7 @@ namespace Xyz
     }
 
     template <typename T, unsigned N,
-              typename std::enable_if_t<std::is_floating_point_v<T>, int> = 0>
+              typename std::enable_if_t<std::is_floating_point_v<T>, int>  = 0>
     [[nodiscard]]
     bool is_null(Vector<T, N>& v,
                  std::type_identity_t<T> margin = Constants<T>::DEFAULT_MARGIN)
@@ -650,6 +674,27 @@ namespace Xyz
                             [&](auto n) { return fabs(n) > margin; });
     }
 
+    template <typename T, unsigned N,
+              typename std::enable_if_t<std::is_floating_point_v<T>, int>  = 0>
+    [[nodiscard]]
+    Vector<T, N> floor(const Vector<T, N>& v)
+    {
+        Vector<T, N> result;
+        for (unsigned i = 0; i < N; ++i)
+            result[i] = std::floor(v[i]);
+        return result;
+    }
+
+    template <typename T, unsigned N,
+              typename std::enable_if_t<std::is_floating_point_v<T>, int>  = 0>
+    [[nodiscard]]
+    Vector<T, N> ceil(const Vector<T, N>& v)
+    {
+        Vector<T, N> result;
+        for (unsigned i = 0; i < N; ++i)
+            result[i] = std::ceil(v[i]);
+        return result;
+    }
 
     using Vector2I = Vector<int, 2>;
     using Vector2F = Vector<float, 2>;

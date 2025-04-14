@@ -136,6 +136,7 @@ namespace
         Y_EQUAL(typeid(typename decltype(v)::ValueType).name(),
                 typeid(double).name());
         auto w = vector_cast<double>(u) + v;
+        Y_EQUAL(w, Vector2D(3.0, 6.0));
         Y_EQUAL(typeid(typename decltype(w)::ValueType).name(),
                 typeid(double).name());
     }
