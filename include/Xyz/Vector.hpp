@@ -600,7 +600,7 @@ namespace Xyz
                   std::type_identity_t<T> min,
                   std::type_identity_t<T> max)
     {
-        for (int i = 0; i < N; ++i)
+        for (unsigned i = 0; i < N; ++i)
             v[i] = Xyz::clamp(v[i], min, max);
         return v;
     }
@@ -622,7 +622,7 @@ namespace Xyz
                   const Vector<std::type_identity_t<T>, N>& min,
                   const Vector<std::type_identity_t<T>, N>& max)
     {
-        for (int i = 0; i < N; ++i)
+        for (unsigned i = 0; i < N; ++i)
             v[i] = Xyz::clamp(v[i], min[i], max[i]);
         return v;
     }
