@@ -8,6 +8,7 @@
 #pragma once
 
 #include "ComplexApprox.hpp"
+#include "Interpolation.hpp"
 #include "Line.hpp"
 #include "LineClipping.hpp"
 #include "LineLineIntersection.hpp"
