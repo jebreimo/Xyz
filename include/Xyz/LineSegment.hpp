@@ -8,6 +8,7 @@
 #pragma once
 
 #include "Clamp.hpp"
+#include "FloatType.hpp"
 #include "Vector.hpp"
 
 namespace Xyz

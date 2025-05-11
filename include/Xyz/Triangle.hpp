@@ -73,15 +73,15 @@ namespace Xyz
                         Float margin = Constants<Float>::DEFAULT_MARGIN)
     {
         auto a = dot(get_normal(triangle[1] - triangle[0]),
-                     (point - triangle[0]));
+                     point - triangle[0]);
         if (Xyz::Approx<Float>(a, margin) <= 0)
             return false;
         auto b = dot(get_normal(triangle[2] - triangle[1]),
-                     (point - triangle[1]));
+                     point - triangle[1]);
         if (Xyz::Approx<Float>(b, margin) <= 0)
             return false;
         auto c = dot(get_normal(triangle[0] - triangle[2]),
-                     (point - triangle[2]));
+                     point - triangle[2]);
         return Xyz::Approx<Float>(c, margin) > 0;
     }
 
@@ -93,15 +93,15 @@ namespace Xyz
                                   Float margin = Constants<Float>::DEFAULT_MARGIN)
     {
         auto a = dot(get_normal(triangle[1] - triangle[0]),
-                     (point - triangle[0]));
+                     point - triangle[0]);
         if (Xyz::Approx<Float>(a, margin) < 0)
             return false;
         auto b = dot(get_normal(triangle[2] - triangle[1]),
-                     (point - triangle[1]));
+                     point - triangle[1]);
         if (Xyz::Approx<Float>(b, margin) < 0)
             return false;
         auto c = dot(get_normal(triangle[0] - triangle[2]),
-                     (point - triangle[2]));
+                     point - triangle[2]);
         return Xyz::Approx<Float>(c, margin) >= 0;
     }
 }

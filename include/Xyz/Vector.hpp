@@ -464,7 +464,7 @@ namespace Xyz
     [[nodiscard]]
     Vector<T, N> vector_cast(const Vector<U, N>& v)
     {
-        if constexpr (std::is_same<T, U>::value)
+        if constexpr (std::is_same_v<T, U>)
         {
             return v;
         }
@@ -556,8 +556,7 @@ namespace Xyz
         auto angle = get_angle(u, v);
         if (dot(get_normal(u), v) >= 0)
             return angle;
-        else
-            return 2 * Constants<decltype(angle)>::PI - angle;
+        return 2 * Constants<decltype(angle)>::PI - angle;
     }
 
     template <typename T>
@@ -582,7 +581,7 @@ namespace Xyz
     Vector<T, N>& scale_inplace(Vector<T, N>& v,
                                 std::type_identity_t<T> new_length)
     {
-        return v *= (new_length / get_length(v));
+        return v *= new_length / get_length(v);
     }
 
     template <typename T, unsigned N>
@@ -655,7 +654,7 @@ namespace Xyz
     }
 
     template <typename T, unsigned N,
-              typename std::enable_if_t<std::is_integral_v<T>, int>  = 0>
+              std::enable_if_t<std::is_integral_v<T>, int>  = 0>
     [[nodiscard]]
     bool is_null(Vector<T, N>& v, T = 0)
     {
@@ -664,7 +663,7 @@ namespace Xyz
     }
 
     template <typename T, unsigned N,
-              typename std::enable_if_t<std::is_floating_point_v<T>, int>  = 0>
+              std::enable_if_t<std::is_floating_point_v<T>, int>  = 0>
     [[nodiscard]]
     bool is_null(Vector<T, N>& v,
                  std::type_identity_t<T> margin = Constants<T>::DEFAULT_MARGIN)
@@ -674,7 +673,7 @@ namespace Xyz
     }
 
     template <typename T, unsigned N,
-              typename std::enable_if_t<std::is_floating_point_v<T>, int>  = 0>
+              std::enable_if_t<std::is_floating_point_v<T>, int>  = 0>
     [[nodiscard]]
     Vector<T, N> floor(const Vector<T, N>& v)
     {
@@ -685,7 +684,7 @@ namespace Xyz
     }
 
     template <typename T, unsigned N,
-              typename std::enable_if_t<std::is_floating_point_v<T>, int>  = 0>
+              std::enable_if_t<std::is_floating_point_v<T>, int>  = 0>
     [[nodiscard]]
     Vector<T, N> ceil(const Vector<T, N>& v)
     {

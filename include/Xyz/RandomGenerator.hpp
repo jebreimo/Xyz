@@ -28,7 +28,7 @@ namespace Xyz
             std::default_random_engine& engine,
             IntT min = 0,
             IntT max = std::numeric_limits<IntT>::max())
-            : m_engine(get_random_engine()), m_dist(min, max)
+            : m_engine(engine), m_dist(min, max)
         {}
 
         IntT operator()()
@@ -54,7 +54,7 @@ namespace Xyz
         explicit RandomRealGenerator(std::default_random_engine& engine,
                                      RealT min = 0.0,
                                      RealT max = 1.0)
-            : m_engine(get_random_engine()),
+            : m_engine(engine),
               m_dist(min,
                      std::nextafter(max, std::numeric_limits<RealT>::max()))
         {}
@@ -63,6 +63,7 @@ namespace Xyz
         {
             return m_dist(m_engine);
         }
+
     private:
         std::default_random_engine& m_engine;
         std::uniform_real_distribution<RealT> m_dist;

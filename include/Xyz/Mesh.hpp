@@ -16,7 +16,7 @@ namespace Xyz
     class Mesh
     {
     public:
-        using Vertex = Xyz::Vector<T, 3>;
+        using Vertex = Vector<T, 3>;
 
         Mesh() = default;
 

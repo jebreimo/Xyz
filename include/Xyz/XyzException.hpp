@@ -19,11 +19,11 @@ namespace Xyz
     };
 }
 
-#define _XYZ_THROW_3(file, line, msg) \
+#define XYZ_THROW_3_(file, line, msg) \
     throw ::Xyz::XyzException(file ":" #line ": " msg)
 
-#define _XYZ_THROW_2(file, line, msg) \
-    _XYZ_THROW_3(file, line, msg)
+#define XYZ_THROW_2_(file, line, msg) \
+    XYZ_THROW_3_(file, line, msg)
 
 #define XYZ_THROW(msg) \
-    _XYZ_THROW_2(__FILE__, __LINE__, msg)
+    XYZ_THROW_2_(__FILE__, __LINE__, msg)

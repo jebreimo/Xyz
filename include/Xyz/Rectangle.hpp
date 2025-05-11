@@ -7,7 +7,6 @@
 //****************************************************************************
 #pragma once
 
-#include <vector>
 #include "Vector.hpp"
 
 namespace Xyz
@@ -91,10 +90,9 @@ namespace Xyz
         auto [x, y] = rect.origin;
         if (0 <= w)
             return {x, y + h};
-        else if (0 <= h)
+        if (0 <= h)
             return {x + w, y};
-        else
-            return rect.origin + rect.size;
+        return rect.origin + rect.size;
     }
 
     template <typename T>
@@ -107,10 +105,9 @@ namespace Xyz
         auto [x, y] = rect.origin;
         if (0 <= w)
             return {x + w, y};
-        else if (0 <= h)
+        if (0 <= h)
             return {x, y + h};
-        else
-            return rect.origin;
+        return rect.origin;
     }
 
     template <typename T>

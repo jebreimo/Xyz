@@ -8,8 +8,6 @@
 #pragma once
 
 #include <algorithm>
-#include <cmath>
-#include "Constants.hpp"
 
 namespace Xyz
 {

@@ -136,9 +136,11 @@ namespace Xyz
         Matrix(T a11, T a12, T a13,
                T a21, T a22, T a23,
                T a31, T a32, T a33)
-            : values{a11, a12, a13,
-                     a21, a22, a23,
-                     a31, a32, a33}
+            : values{
+                a11, a12, a13,
+                a21, a22, a23,
+                a31, a32, a33
+            }
         {}
 
         explicit Matrix(T (&other)[SIZE])
@@ -195,10 +197,12 @@ namespace Xyz
                T a21, T a22, T a23, T a24,
                T a31, T a32, T a33, T a34,
                T a41, T a42, T a43, T a44)
-            : values{a11, a12, a13, a14,
-                     a21, a22, a23, a24,
-                     a31, a32, a33, a34,
-                     a41, a42, a43, a44}
+            : values{
+                a11, a12, a13, a14,
+                a21, a22, a23, a24,
+                a31, a32, a33, a34,
+                a41, a42, a43, a44
+            }
         {}
 
         explicit Matrix(T (&other)[SIZE])
@@ -339,7 +343,7 @@ namespace Xyz
     Matrix<T, M, N> make_matrix_with_rows(const Vector<T, N>* rows,
                                           unsigned count)
     {
-        auto n = std::min(M, count);
+        constexpr auto n = std::min(M, count);
         Matrix<T, M, N> result;
         for (unsigned i = 0; i < n; ++i)
             result.set_row(i, rows[i]);
@@ -350,7 +354,7 @@ namespace Xyz
     Matrix<T, M, N> make_matrix_with_cols(const Vector<T, N>* cols,
                                           unsigned count)
     {
-        auto n = std::min(M, count);
+        constexpr auto n = std::min(M, count);
         Matrix<T, M, N> result;
         for (unsigned i = 0; i < n; ++i)
             result.set_col(i, cols[i]);
@@ -408,7 +412,8 @@ namespace Xyz
                               const Matrix<T, M, N>& b)
     {
         Matrix<T, M, N> c(a);
-        return c += b;
+        c += b;
+        return c;
     }
 
     template <typename T, unsigned M, unsigned N>
@@ -426,7 +431,8 @@ namespace Xyz
                               const Matrix<T, M, N>& b)
     {
         Matrix<T, M, N> c(a);
-        return c -= b;
+        c -= b;
+        return c;
     }
 
     template <typename T, unsigned M, unsigned N, unsigned O>
@@ -576,14 +582,14 @@ namespace Xyz
     }
 
     template <typename T, unsigned M, unsigned N,
-        typename std::enable_if_t<std::is_integral_v<T>, int> = 0>
+              std::enable_if_t<std::is_integral_v<T>, int>  = 0>
     bool are_equal(const Matrix<T, M, N>& a, const Matrix<T, M, N>& b, T = 0)
     {
         return a == b;
     }
 
     template <typename T, unsigned N,
-              typename std::enable_if_t<std::is_floating_point_v<T>, int> = 0>
+              std::enable_if_t<std::is_floating_point_v<T>, int>  = 0>
     bool are_equal(const Matrix<T, N, N>& a, const Matrix<T, N, N>& b,
                    double margin = 1e-12)
     {
