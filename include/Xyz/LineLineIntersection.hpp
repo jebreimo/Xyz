@@ -9,6 +9,7 @@
 
 #include <tuple>
 #include "Approx.hpp"
+#include "FloatType.hpp"
 #include "Line.hpp"
 #include "LineSegment.hpp"
 
@@ -30,7 +31,7 @@ namespace Xyz
         COLINEAR
     };
 
-    #define XYZ_CASE_OSTREAM_ENUM(name) \
+#define XYZ_CASE_OSTREAM_ENUM(name) \
         case name: return os << #name
 
     inline std::ostream& operator<<(std::ostream& os, LineRelationship e)
@@ -60,15 +61,17 @@ namespace Xyz
             auto distance = dot(n_b, (get_point(a) - get_point(b)));
             if (Approx<Float>(distance, margin) == 0)
                 return {LineRelationship::OVERLAPPING, Float(), Float()};
-            else
-                return {LineRelationship::NONINTERSECTING, Float(), Float()};
+
+            return {LineRelationship::NONINTERSECTING, Float(), Float()};
         }
 
         auto n_a = get_normal(get_vector(a));
         auto v_ab = get_point(b) - get_point(a);
-        return {LineRelationship::INTERSECTING,
-                dot(v_ab, n_b) / denominator,
-                dot(v_ab, n_a) / denominator};
+        return {
+            LineRelationship::INTERSECTING,
+            dot(v_ab, n_b) / denominator,
+            dot(v_ab, n_a) / denominator
+        };
     }
 
     template <typename T, typename Float = typename FloatType<T>::type>
@@ -84,18 +87,17 @@ namespace Xyz
         {
             return {LineRelationship::COLINEAR, t0, t1};
         }
-        else if (rel == LineRelationship::INTERSECTING
-                 && 0.0 < Approx<Float>(t0, margin)
-                 && Approx<Float>(t0, margin) < 1.0
-                 && 0.0 < Approx<Float>(t1, margin)
-                 && Approx<Float>(t1, margin) < 1.0)
+
+        if (rel == LineRelationship::INTERSECTING
+            && 0.0 < Approx<Float>(t0, margin)
+            && Approx<Float>(t0, margin) < 1.0
+            && 0.0 < Approx<Float>(t1, margin)
+            && Approx<Float>(t1, margin) < 1.0)
         {
             return {rel, t0, t1};
         }
-        else
-        {
-            return {LineRelationship::NONINTERSECTING, t0, t1};
-        }
+
+        return {LineRelationship::NONINTERSECTING, t0, t1};
     }
 
     template <typename T, typename Float = typename FloatType<T>::type>
@@ -105,10 +107,15 @@ namespace Xyz
                           Float margin = Constants<Float>::DEFAULT_MARGIN)
     {
         auto length = Float(get_length_squared(get_vector(a)));
-        auto ta0 = dot(get_vector(a), (get_start(b) - get_start(a))) / length;
-        auto ta1 = dot(get_vector(a), (get_end(b) - get_start(a))) / length;
-        if ((ta0 > 1 && ta1 > 1) || (ta0 < 0 && ta1 < 0))
+        auto ta0 = dot(get_vector(a), get_start(b) - get_start(a)) / length;
+        auto ta1 = dot(get_vector(a), get_end(b) - get_start(a)) / length;
+        if ((Approx<Float>(ta0, margin) > 1
+                && Approx<Float>(ta1, margin) > 1)
+            || (Approx<Float>(ta0, margin) < 0
+                && Approx<Float>(ta1, margin) < 0))
+        {
             return {false, {ta0, ta1}};
+        }
         ta0 = clamp<Float>(ta0, 0.0, 1.0);
         ta1 = clamp<Float>(ta1, 0.0, 1.0);
         return {true, {ta0, ta1}};
@@ -140,15 +147,18 @@ namespace Xyz
         if (get<0>(isect) == LineRelationship::COLINEAR)
         {
             auto overlap = get_projection_extents(a, b, margin);
-            return {get<0>(overlap) ? LineRelationship::INTERSECTING
-                                    : LineRelationship::NONINTERSECTING,
-                    get<1>(overlap), get<2>(overlap)};
+            return {
+                get<0>(overlap)
+                    ? LineRelationship::INTERSECTING
+                    : LineRelationship::NONINTERSECTING,
+                get<1>(overlap), get<2>(overlap)
+            };
         }
-        else
-        {
-            return {get<0>(isect),
-                    {get<1>(isect), get<1>(isect)},
-                    {get<2>(isect), get<2>(isect)}};
-        }
+
+        return {
+            get<0>(isect),
+            {get<1>(isect), get<1>(isect)},
+            {get<2>(isect), get<2>(isect)}
+        };
     }
 }
