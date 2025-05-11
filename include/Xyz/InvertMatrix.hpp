@@ -8,6 +8,7 @@
 #pragma once
 
 #include <array>
+#include "FloatType.hpp"
 #include "Matrix.hpp"
 
 namespace Xyz

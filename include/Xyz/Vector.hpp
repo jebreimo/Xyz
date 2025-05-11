@@ -14,7 +14,6 @@
 #include <type_traits>
 #include "Clamp.hpp"
 #include "Constants.hpp"
-#include "FloatType.hpp"
 #include "XyzException.hpp"
 
 namespace Xyz
