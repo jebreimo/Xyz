@@ -6,7 +6,6 @@
 // License text is included with the source distribution.
 //****************************************************************************
 #include <Xyz/CoordinateSystem.hpp>
-#include <Xyz/Vector.hpp>
 #include <catch2/catch_test_macros.hpp>
 
 namespace
