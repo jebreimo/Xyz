@@ -561,7 +561,7 @@ namespace Xyz
 
     template <typename T>
     [[nodiscard]]
-    Vector<T, 3> cross(const Vector<T, 3>& a, const Vector<T, 3>& b)
+    constexpr Vector<T, 3> cross(const Vector<T, 3>& a, const Vector<T, 3>& b)
     {
         return {
             a[1] * b[2] - a[2] * b[1],
