@@ -17,11 +17,12 @@ FetchContent_MakeAvailable(catch)
 add_executable(CatchXyzTest
     test_Approx.cpp
     test_ComplexApprox.cpp
+    test_CoordinateSystem.cpp
+    test_Interpolation.cpp
     test_Mesh.cpp
     test_QuadraticEquation.cpp
     test_Rect.cpp
     test_Vector.cpp
-    test_Interpolation.cpp
 )
 
 target_link_libraries(CatchXyzTest

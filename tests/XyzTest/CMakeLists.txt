@@ -16,7 +16,6 @@ FetchContent_MakeAvailable(ytest)
 add_executable(XyzTest
     XyzTestMain.cpp
     YtestUtilities.hpp
-    test_CoordinateSystem.cpp
     test_Intersections.cpp
     test_InvertMatrix.cpp
     test_LineClipping.cpp
