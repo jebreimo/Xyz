@@ -7,7 +7,7 @@
 ##****************************************************************************
 cmake_minimum_required(VERSION 3.16)
 
-project(Xyz VERSION 0.5.0)
+project(Xyz VERSION 0.5.1)
 
 set(CMAKE_CXX_STANDARD 20)
 
@@ -47,6 +47,7 @@ add_library(Xyz STATIC
     include/Xyz/MatrixDeterminant.hpp
     include/Xyz/MatrixTransformations.hpp
     include/Xyz/Mesh.hpp
+    include/Xyz/PlaneSegment.hpp
     include/Xyz/ProjectionMatrix.hpp
     include/Xyz/QuadraticEquation.hpp
     include/Xyz/RandomGenerator.hpp

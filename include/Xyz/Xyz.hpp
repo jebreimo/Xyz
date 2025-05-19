@@ -16,6 +16,7 @@
 #include "Matrix.hpp"
 #include "MatrixTransformations.hpp"
 #include "Mesh.hpp"
+#include "PlaneSegment.hpp"
 #include "ProjectionMatrix.hpp"
 #include "QuadraticEquation.hpp"
 #include "RandomGenerator.hpp"

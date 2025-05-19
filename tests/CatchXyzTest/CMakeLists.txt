@@ -23,6 +23,7 @@ add_executable(CatchXyzTest
     test_QuadraticEquation.cpp
     test_Rect.cpp
     test_Vector.cpp
+    test_PlaneSegment.cpp
 )
 
 target_link_libraries(CatchXyzTest
