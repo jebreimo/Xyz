@@ -19,11 +19,17 @@ add_executable(CatchXyzTest
     test_ComplexApprox.cpp
     test_CoordinateSystem.cpp
     test_Interpolation.cpp
+    test_Intersections.cpp
+    test_InvertMatrix.cpp
+    test_MatrixDeterminant.cpp
     test_Mesh.cpp
+    test_PlaneSegment.cpp
+    test_Projections.cpp
     test_QuadraticEquation.cpp
     test_Rect.cpp
+    test_Transforms.cpp
+    test_Triangle.cpp
     test_Vector.cpp
-    test_PlaneSegment.cpp
 )
 
 target_link_libraries(CatchXyzTest
