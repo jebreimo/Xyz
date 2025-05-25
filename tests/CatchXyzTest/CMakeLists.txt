@@ -21,6 +21,7 @@ add_executable(CatchXyzTest
     test_Interpolation.cpp
     test_Intersections.cpp
     test_InvertMatrix.cpp
+    test_LineClipping.cpp
     test_MatrixDeterminant.cpp
     test_Mesh.cpp
     test_PlaneSegment.cpp
@@ -30,6 +31,7 @@ add_executable(CatchXyzTest
     test_Transforms.cpp
     test_Triangle.cpp
     test_Vector.cpp
+    test_Matrix.cpp
 )
 
 target_link_libraries(CatchXyzTest

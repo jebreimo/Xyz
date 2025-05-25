@@ -111,7 +111,7 @@ TEST_CASE("scale vector")
 {
     Xyz::Vector4D v1(1, -2, 3, -4);
     auto v2 = get_scaled(v1, 1);
-    const auto root = std::sqrt(1 + 2*2 + 3*3 + 4*4);
+    const auto root = std::sqrt(1 + 2 * 2 + 3 * 3 + 4 * 4);
     REQUIRE(are_equal(v2, Xyz::Vector4D(1 / root, -2 / root, 3 / root, -4 / root)));
 
     scale_inplace(v1, 1);
@@ -128,4 +128,119 @@ TEST_CASE("vector ceil")
 {
     Xyz::Vector4D v(1.2, -2.2, 3.2, -4.9);
     REQUIRE(ceil(v) == Xyz::Vector4D(2, -2, 4, -4));
+}
+
+TEST_CASE("Vector cross product")
+{
+    auto u = Xyz::make_vector3(1, 2, 3);
+    auto v = Xyz::make_vector3(0, 1, 2);
+    CHECK(cross(u, v) == Xyz::make_vector3(1, -2, 1));
+}
+
+TEST_CASE("Vector get_ccw_angle")
+{
+    CHECK_THAT(get_ccw_angle(Xyz::Vector2I(6, 6), Xyz::Vector2I(4, -4)),
+               WithinAbs(3 * Xyz::Constants<double>::PI / 2, 1e-10));
+}
+
+TEST_CASE("Test vector types")
+{
+    auto u = Xyz::make_vector2(1, 2);
+    CHECK(typeid(typename decltype(u)::ValueType).name() == typeid(int).name());
+    auto v = Xyz::make_vector2(2.0, 4.0);
+    CHECK(typeid(typename decltype(v)::ValueType).name() == typeid(double).name());
+    auto w = vector_cast<double>(u) + v;
+    CHECK(w == Xyz::Vector2D(3.0, 6.0));
+    CHECK(typeid(typename decltype(w)::ValueType).name() == typeid(double).name());
+}
+
+TEST_CASE("Test vector constructors")
+{
+    auto u = Xyz::make_vector4(1, 2, 0, 1);
+    Xyz::Vector<double, 4> v = vector_cast<double>(u);
+    CHECK(v[0] == 1);
+    CHECK(v[1] == 2);
+    CHECK(v[2] == 0);
+    CHECK(v[3] == 1);
+}
+
+TEST_CASE("Test Vector2D basics")
+{
+    auto u = Xyz::Vector2D(2.0, 1.0);
+    auto v = Xyz::Vector2D(3.0, 4.0);
+    CHECK(u[0] == 2);
+    CHECK(u[1] == 1);
+    CHECK(v[0] == 3);
+    CHECK(v[1] == 4);
+    CHECK(u * v == Xyz::Vector2D(6, 4));
+    CHECK(u + v == Xyz::Vector2D(5, 5));
+    CHECK(u - v == Xyz::Vector2D(-1, -3));
+    CHECK(u * 3. == Xyz::Vector2D(6, 3));
+    CHECK(3. * u == Xyz::Vector2D(6, 3));
+    CHECK(u / 3. == Xyz::Vector2D(2.0 / 3, 1.0 / 3));
+    CHECK(6. / u == Xyz::Vector2D(3, 6));
+    CHECK((u += v) == Xyz::Vector2D(5, 5));
+    CHECK((u -= v) == Xyz::Vector2D(2, 1));
+    CHECK((u *= 3.) == Xyz::Vector2D(6, 3));
+    CHECK((u /= 2.) == Xyz::Vector2D(3.0, 1.5));
+    CHECK((u *= v) == Xyz::Vector2D(9, 6));
+    CHECK((u *= 2.) == Xyz::Vector2D(18, 12));
+    CHECK((u /= v) == Xyz::Vector2D(6, 3));
+    CHECK(dot(u, v) == 30);
+    CHECK_THAT(get_length(v), WithinAbs(5, 1e-10));
+    std::pair<int, int> values{1, 2};
+    CHECK(Xyz::Vector2F(values) == Xyz::Vector2D(1.0f, 2.0f));
+}
+
+TEST_CASE("Test Vector4D basics")
+{
+    auto u = Xyz::Vector4D(2.0, 1.0, 4.0, 3.0);
+    auto v = Xyz::Vector4D(3.0, 4.0, -1.0, -2.0);
+    CHECK(u[0] == 2);
+    CHECK(u[1] == 1);
+    CHECK(u[2] == 4);
+    CHECK(u[3] == 3);
+    CHECK(v[0] == 3);
+    CHECK(v[1] == 4);
+    CHECK(v[2] == -1);
+    CHECK(v[3] == -2);
+    CHECK(u * v == Xyz::Vector4D(6, 4, -4, -6));
+    CHECK(u + v == Xyz::Vector4D(5, 5, 3, 1));
+    CHECK(u - v == Xyz::Vector4D(-1, -3, 5, 5));
+    CHECK(u * 3. == Xyz::Vector4D(6, 3, 12, 9));
+    CHECK(3. * u == Xyz::Vector4D(6, 3, 12, 9));
+    CHECK(u / 3. == Xyz::Vector4D(2.0 / 3, 1.0 / 3, 4.0 / 3, 1.0));
+    CHECK(12. / u == Xyz::Vector4D(6, 12, 3, 4));
+    CHECK((u += v) == Xyz::Vector4D(5, 5, 3, 1));
+    CHECK((u -= v) == Xyz::Vector4D(2, 1, 4, 3));
+    CHECK((u *= 3.) == Xyz::Vector4D(6, 3, 12, 9));
+    CHECK((u /= 2.) == Xyz::Vector4D(3.0, 1.5, 6.0, 4.5));
+    CHECK((u *= v) == Xyz::Vector4D(9, 6, -6, -9));
+    CHECK((u *= 2.) == Xyz::Vector4D(18, 12, -12, -18));
+    CHECK((u /= v) == Xyz::Vector4D(6, 3, 12, 9));
+    CHECK(dot(u, v) == 18 + 12 - 12 - 18);
+    CHECK_THAT(get_length(v), WithinAbs(sqrt(9 + 16 + 1 + 4), 1e-10));
+}
+
+TEST_CASE("Test rotate Vector2D")
+{
+    using V = Xyz::Vector2D;
+    auto sqrt2 = std::sqrt(2);
+    CHECK(are_equal(rotate(V(100, 0), Xyz::to_radians(30)),
+        V(50 * std::sqrt(3), 50.0), 1e-10));
+    CHECK(are_equal(rotate(V(100, 0), Xyz::to_radians(45)),
+        V(100 / sqrt2, 100 / sqrt2), 1e-10));
+    CHECK(are_equal(rotate(V(100, 0), Xyz::to_radians(60)),
+        V(50.0, 50 * std::sqrt(3)), 1e-10));
+    CHECK(are_equal(rotate(V(0, 100), Xyz::to_radians(-60)),
+        V(50 * std::sqrt(3), 50.0), 1e-10));
+    CHECK(are_equal(rotate(V(0, 100), Xyz::to_radians(-45)),
+        V(100 / sqrt2, 100 / sqrt2), 1e-10));
+    CHECK(are_equal(rotate(V(0, 100), Xyz::to_radians(-30)),
+        V(50.0, 50 * std::sqrt(3)), 1e-10));
+
+    CHECK(are_equal(rotate(V(1 / sqrt2, 1 / sqrt2), Xyz::to_radians(45)),
+        V(0, 1), 1e-10));
+    CHECK(are_equal(rotate(V(1 / sqrt2, 1 / sqrt2), Xyz::to_radians(135)),
+        V(-1, 0), 1e-10));
 }

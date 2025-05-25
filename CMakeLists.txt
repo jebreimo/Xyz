@@ -81,7 +81,6 @@ add_library(Xyz::Xyz ALIAS Xyz)
 
 if(XYZ_BUILD_TEST)
     enable_testing()
-    add_subdirectory(tests/XyzTest)
     add_subdirectory(tests/CatchXyzTest)
 endif()
 
