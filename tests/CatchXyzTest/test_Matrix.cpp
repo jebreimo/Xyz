@@ -122,7 +122,7 @@ TEST_CASE("Matrix: test_make_submatrix")
         9, 0, 1, 2,
         3, 4, 5, 6
     };
-    auto s = make_submatrix<3, 3>(m, 3, 2);
+    auto s = make_submatrix<3, 3>(m, {3, 2});
     Xyz::Matrix3I e{
         5, 6, 3,
         3, 4, 1,

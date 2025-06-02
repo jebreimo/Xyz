@@ -363,17 +363,17 @@ namespace Xyz
 
     template <unsigned K, unsigned L, typename T, unsigned M, unsigned N>
     Matrix<T, K, L> make_submatrix(const Matrix<T, M, N>& m,
-                                   unsigned i0, unsigned j0)
+                                   const RowCol& pos)
     {
         static_assert(K <= M && L <= N,
                       "The submatrix cannot be larger than the source matrix.");
         Matrix<T, K, L> result;
         for (unsigned i = 0; i < K; ++i)
         {
-            auto i_m = (i + i0) % M;
+            auto i_m = (i + pos.row) % M;
             for (unsigned j = 0; j < L; ++j)
             {
-                auto j_m = (j + j0) % N;
+                auto j_m = (j + pos.col) % N;
                 result[{i, j}] = m[{i_m, j_m}];
             }
         }
