@@ -140,10 +140,9 @@ namespace Xyz
             : values{x, y, z}
         {}
 
-        explicit Vector(T const (&arr)[3]) noexcept
-        {
-            std::copy(std::begin(arr), std::end(arr), std::begin(values));
-        }
+        explicit constexpr Vector(T const (&arr)[3]) noexcept
+            : values{arr[0], arr[1], arr[2]}
+        {}
 
         constexpr Vector(const Vector& other) noexcept
         {
@@ -190,9 +189,8 @@ namespace Xyz
         {}
 
         explicit Vector(T const (&arr)[4]) noexcept
-        {
-            std::copy(std::begin(arr), std::end(arr), std::begin(values));
-        }
+            : values{arr[0], arr[1], arr[2], arr[3]}
+        {}
 
         constexpr Vector(const Vector& other) noexcept
         {
@@ -495,7 +493,7 @@ namespace Xyz
 
     template <typename T, typename S, unsigned N>
     [[nodiscard]]
-    auto dot(const Vector<T, N>& u, const Vector<S, N>& v)
+    constexpr auto dot(const Vector<T, N>& u, const Vector<S, N>& v)
     {
         decltype(T() * S()) result = 0;
         for (unsigned i = 0; i < N; ++i)
@@ -503,9 +501,20 @@ namespace Xyz
         return result;
     }
 
+    template <typename T>
+    [[nodiscard]]
+    constexpr Vector<T, 3> cross(const Vector<T, 3>& a, const Vector<T, 3>& b)
+    {
+        return {
+            a[1] * b[2] - a[2] * b[1],
+            a[2] * b[0] - a[0] * b[2],
+            a[0] * b[1] - a[1] * b[0]
+        };
+    }
+
     template <typename T, unsigned N>
     [[nodiscard]]
-    auto get_length_squared(const Vector<T, N>& v)
+    constexpr auto get_length_squared(const Vector<T, N>& v)
     {
         return dot(v, v);
     }
@@ -519,7 +528,7 @@ namespace Xyz
 
     template <typename T>
     [[nodiscard]]
-    Vector<T, 2> get_normal(const Vector<T, 2>& v)
+    constexpr Vector<T, 2> get_normal(const Vector<T, 2>& v)
     {
         return make_vector2(-v[1], v[0]);
     }
