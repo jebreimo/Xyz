@@ -137,3 +137,16 @@ TEST_CASE("Matrix: test_identity")
     CHECK(m1[RowCol(0, 0)] == 1);
     CHECK(m1[RowCol(0, 1)] == 0);
 }
+
+TEST_CASE("Matrix: outer product")
+{
+    auto u = Xyz::Vector3F{1, 2, 3};
+    auto v = Xyz::Vector3F{4, 5, 6};
+    auto result = Xyz::outer_product(u, v);
+    Xyz::Matrix3F expected{
+        4, 5, 6,
+        8, 10, 12,
+        12, 15, 18
+    };
+    CHECK(result == expected);
+}

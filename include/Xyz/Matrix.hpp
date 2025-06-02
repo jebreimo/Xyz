@@ -604,6 +604,21 @@ namespace Xyz
         return true;
     }
 
+    template <typename T, unsigned N>
+    Matrix<T, N, N> outer_product(const Vector<T, N>& u,
+                                  const Vector<T, N>& v)
+    {
+        Matrix<T, N, N> result;
+        for (unsigned i = 0; i < N; ++i)
+        {
+            for (unsigned j = 0; j < N; ++j)
+            {
+                result[{i, j}] = u[i] * v[j];
+            }
+        }
+        return result;
+    }
+
     using Matrix2I = Matrix<int, 2, 2>;
     using Matrix2F = Matrix<float, 2, 2>;
     using Matrix2D = Matrix<double, 2, 2>;
