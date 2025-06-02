@@ -570,13 +570,13 @@ namespace Xyz
 
     template <typename T>
     [[nodiscard]]
-    constexpr Vector<T, 3> cross(const Vector<T, 3>& a, const Vector<T, 3>& b)
+    auto get_ccw_angle(const Vector<T, 3>& u, const Vector<T, 3>& v, const Vector<T, 3>& normal)
     {
-        return {
-            a[1] * b[2] - a[2] * b[1],
-            a[2] * b[0] - a[0] * b[2],
-            a[0] * b[1] - a[1] * b[0]
-        };
+        auto angle = get_angle(u, v);
+        auto c = cross(u, v);
+        if (dot(normal, cross(u, v)) >= 0)
+            return angle;
+        return 2 * Constants<decltype(angle)>::PI - angle;
     }
 
     template <typename T, unsigned N>

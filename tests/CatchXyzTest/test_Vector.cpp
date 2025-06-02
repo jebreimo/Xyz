@@ -110,7 +110,7 @@ TEST_CASE("clamp vector with min and max vectors")
 TEST_CASE("scale vector")
 {
     Xyz::Vector4D v1(1, -2, 3, -4);
-    auto v2 = get_scaled(v1, 1);
+    const auto v2 = get_scaled(v1, 1);
     const auto root = std::sqrt(1 + 2 * 2 + 3 * 3 + 4 * 4);
     REQUIRE(are_equal(v2, Xyz::Vector4D(1 / root, -2 / root, 3 / root, -4 / root)));
 
@@ -120,27 +120,71 @@ TEST_CASE("scale vector")
 
 TEST_CASE("vector floor")
 {
-    Xyz::Vector4D v(1.2, -2.2, 3.2, -4.9);
+    constexpr Xyz::Vector4D v(1.2, -2.2, 3.2, -4.9);
     REQUIRE(floor(v) == Xyz::Vector4D(1, -3, 3, -5));
 }
 
 TEST_CASE("vector ceil")
 {
-    Xyz::Vector4D v(1.2, -2.2, 3.2, -4.9);
+    constexpr Xyz::Vector4D v(1.2, -2.2, 3.2, -4.9);
     REQUIRE(ceil(v) == Xyz::Vector4D(2, -2, 4, -4));
 }
 
 TEST_CASE("Vector cross product")
 {
-    auto u = Xyz::make_vector3(1, 2, 3);
-    auto v = Xyz::make_vector3(0, 1, 2);
+    const auto u = Xyz::make_vector3(1, 2, 3);
+    const auto v = Xyz::make_vector3(0, 1, 2);
     CHECK(cross(u, v) == Xyz::make_vector3(1, -2, 1));
 }
 
-TEST_CASE("Vector get_ccw_angle")
+TEST_CASE("Vector get_cos_angle")
 {
-    CHECK_THAT(get_ccw_angle(Xyz::Vector2I(6, 6), Xyz::Vector2I(4, -4)),
-               WithinAbs(3 * Xyz::Constants<double>::PI / 2, 1e-10));
+    using V = Xyz::Vector2D;
+    CHECK_THAT(get_cos_angle(V(3, 0), V(5, 5)), WithinAbs(1.0 / sqrt(2), 1e-10));
+}
+
+TEST_CASE("Vector get_angle")
+{
+    using V = Xyz::Vector3D;
+    CHECK_THAT(get_angle(V(1, 0, 0), V(0, 1, 0)),
+               WithinAbs(PI / 2, 1e-10));
+    CHECK_THAT(get_angle(V(1, 0, 0), V(0, -1, 0)),
+               WithinAbs(PI / 2, 1e-10));
+    CHECK_THAT(get_angle(V(1, 0, 0), V(-1, -1, 0)),
+               WithinAbs(3 * PI / 4, 1e-10));
+    CHECK_THAT(get_angle(V(1, 0, 0), V(-1, 1, 0)),
+               WithinAbs(3 * PI / 4, 1e-10));
+}
+
+TEST_CASE("Vector get_ccw_angle 2D")
+{
+    using V = Xyz::Vector2I;
+    CHECK_THAT(get_ccw_angle(V(6, 6), V(4, -4)),
+               WithinAbs(3 * PI / 2, 1e-10));
+}
+
+TEST_CASE("Vector get_cw_angle 3D")
+{
+    using V = Xyz::Vector3D;
+    auto q = sqrt(8);
+    CHECK_THAT(get_ccw_angle(V(1, 0, 0), V(4, q, q), V(0, -1, 1)),
+               WithinAbs(PI / 4, 1e-10));
+    CHECK_THAT(get_ccw_angle(V(6, 0, 0), V(0, 4, 4), V(0, -1, 1)),
+               WithinAbs(PI / 2, 1e-10));
+    CHECK_THAT(get_ccw_angle(V(6, 0, 0), V(-4, q, q), V(0, -1, 1)),
+               WithinAbs(3 * PI / 4, 1e-10));
+    CHECK_THAT(get_ccw_angle(V(6, 0, 0), V(-6, 0, 0), V(0, -1, 1)),
+               WithinAbs(PI, 1e-10));
+    CHECK_THAT(get_ccw_angle(V(6, 0, 0), V(-4, -q, -q), V(0, -1, 1)),
+               WithinAbs(5 * PI / 4, 1e-10));
+    CHECK_THAT(get_ccw_angle(V(6, 0, 0), V(0, -4, -4), V(0, -1, 1)),
+               WithinAbs(3 * PI / 2, 1e-10));
+    CHECK_THAT(get_ccw_angle(V(6, 0, 0), V(4, -q, -q), V(0, -1, 1)),
+               WithinAbs(7 * PI / 4, 1e-10));
+    CHECK_THAT(get_ccw_angle(V(6, 0, 0), V(1, 0, 0), V(0, -1, 1)),
+               WithinAbs(0, 1e-10));
+    // CHECK_THAT(get_ccw_angle(V(6, 6, 0), V(4, -4, 0)),
+    //            WithinAbs(3 * PI / 2, 1e-10));
 }
 
 TEST_CASE("Test vector types")
@@ -156,7 +200,7 @@ TEST_CASE("Test vector types")
 
 TEST_CASE("Test vector constructors")
 {
-    auto u = Xyz::make_vector4(1, 2, 0, 1);
+    const auto u = Xyz::make_vector4(1, 2, 0, 1);
     Xyz::Vector<double, 4> v = vector_cast<double>(u);
     CHECK(v[0] == 1);
     CHECK(v[1] == 2);
@@ -188,7 +232,7 @@ TEST_CASE("Test Vector2D basics")
     CHECK((u /= v) == Xyz::Vector2D(6, 3));
     CHECK(dot(u, v) == 30);
     CHECK_THAT(get_length(v), WithinAbs(5, 1e-10));
-    std::pair<int, int> values{1, 2};
+    std::pair values{1, 2};
     CHECK(Xyz::Vector2F(values) == Xyz::Vector2D(1.0f, 2.0f));
 }
 
