@@ -47,7 +47,7 @@ add_library(Xyz STATIC
     include/Xyz/MatrixDeterminant.hpp
     include/Xyz/MatrixTransformations.hpp
     include/Xyz/Mesh.hpp
-    include/Xyz/PlaneSegment.hpp
+    include/Xyz/Pgram3.hpp
     include/Xyz/ProjectionMatrix.hpp
     include/Xyz/QuadraticEquation.hpp
     include/Xyz/RandomGenerator.hpp
@@ -60,6 +60,7 @@ add_library(Xyz STATIC
     include/Xyz/XyzException.hpp
     src/Xyz/Face.cpp
     src/Xyz/RandomGenerator.cpp
+    include/Xyz/Plane.hpp
 )
 
 include(GNUInstallDirs)

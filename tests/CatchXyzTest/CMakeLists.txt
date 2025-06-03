@@ -24,7 +24,7 @@ add_executable(CatchXyzTest
     test_LineClipping.cpp
     test_MatrixDeterminant.cpp
     test_Mesh.cpp
-    test_PlaneSegment.cpp
+    test_Pgram3.cpp
     test_Projections.cpp
     test_QuadraticEquation.cpp
     test_Rect.cpp
@@ -32,6 +32,7 @@ add_executable(CatchXyzTest
     test_Triangle.cpp
     test_Vector.cpp
     test_Matrix.cpp
+    test_Plane.cpp
 )
 
 target_link_libraries(CatchXyzTest
