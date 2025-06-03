@@ -14,7 +14,6 @@
 #include <type_traits>
 #include "Clamp.hpp"
 #include "Constants.hpp"
-#include "FloatType.hpp"
 #include "XyzException.hpp"
 
 namespace Xyz
@@ -727,6 +726,36 @@ namespace Xyz
         Vector<T, N> result;
         for (unsigned i = 0; i < N; ++i)
             result[i] = std::ceil(v[i]);
+        return result;
+    }
+
+    /**
+     * @brief Adds a new coordinate to the end of a vector, expanding its
+     *  dimension by one.
+     */
+    template <typename T, unsigned N>
+    [[nodiscard]]
+    constexpr Vector<T, N + 1> push_back(const Vector<T, N>& v,
+                                         std::type_identity_t<T> value)
+    {
+        Vector<T, N + 1> result;
+        for (unsigned i = 0; i < N; ++i)
+            result[i] = v[i];
+        result[N] = value;
+        return result;
+    }
+
+    /**
+     * @brief Removes the last coordinate from a vector, shrinking its
+     *  dimension by one.
+     */
+    template <typename T, unsigned N>
+    [[nodiscard]]
+    constexpr Vector<T, N - 1> drop_back(const Vector<T, N>& v)
+    {
+        Vector<T, N - 1> result;
+        for (unsigned i = 0; i < N - 1; ++i)
+            result[i] = v[i];
         return result;
     }
 
