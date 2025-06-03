@@ -14,6 +14,7 @@
 #include <type_traits>
 #include "Clamp.hpp"
 #include "Constants.hpp"
+#include "FloatType.hpp"
 #include "XyzException.hpp"
 
 namespace Xyz
@@ -460,7 +461,7 @@ namespace Xyz
 
     template <typename T, typename U, unsigned N>
     [[nodiscard]]
-    Vector<T, N> vector_cast(const Vector<U, N>& v)
+    constexpr Vector<T, N> vector_cast(const Vector<U, N>& v)
     {
         if constexpr (std::is_same_v<T, U>)
         {
@@ -568,11 +569,37 @@ namespace Xyz
         return 2 * Constants<decltype(angle)>::PI - angle;
     }
 
+    /**
+     * @brief Returns the vector formed by projecting @a v onto the plane
+     * defined by the normal vector @a normal.
+     * @param v The vector to project.
+     * @param normal The normal vector of the plane.
+     * @return The projection of @a v onto the plane.
+     */
+    template <typename T, unsigned N>
+    [[nodiscard]]
+    Vector<T, N> get_projection(const Vector<T, N>& v,
+                                const Vector<T, N>& normal)
+    {
+        auto n = get_unit(normal);
+        return v - dot(v, n) * n;
+    }
+
+    /**
+     * @brief Returns the counter-clockwise angle between the vectors
+     * @a u and @a v in the plane defined by the normal vector @a normal.
+     * @param u The first vector.
+     * @param v The second vector.
+     * @param normal The normal vector of the plane.
+     * @return A value in the range 0 <= angle < 2 * pi.
+     */
     template <typename T>
     [[nodiscard]]
     auto get_ccw_angle(const Vector<T, 3>& u, const Vector<T, 3>& v, const Vector<T, 3>& normal)
     {
-        auto angle = get_angle(u, v);
+        auto angle = get_angle(get_projection(u, normal),
+                               get_projection(v, normal));
+
         auto c = cross(u, v);
         if (dot(normal, cross(u, v)) >= 0)
             return angle;

@@ -183,8 +183,14 @@ TEST_CASE("Vector get_cw_angle 3D")
                WithinAbs(7 * PI / 4, 1e-10));
     CHECK_THAT(get_ccw_angle(V(6, 0, 0), V(1, 0, 0), V(0, -1, 1)),
                WithinAbs(0, 1e-10));
-    // CHECK_THAT(get_ccw_angle(V(6, 6, 0), V(4, -4, 0)),
-    //            WithinAbs(3 * PI / 2, 1e-10));
+}
+
+TEST_CASE("get_ccw_angle 3D only considers the plane defined by the normal")
+{
+    using V = Xyz::Vector3D;
+    auto q = sqrt(8);
+    CHECK_THAT(get_ccw_angle(V(6, 0, 0), V(2, 0, 2), V(0, 0, 1)),
+                WithinAbs(0, 1e-10));
 }
 
 TEST_CASE("Test vector types")
