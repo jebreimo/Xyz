@@ -11,31 +11,49 @@
 
 namespace Xyz
 {
+    /**
+     * @brief Returns the homogeneous scaling matrix for 2D points.
+     */
     template <typename T>
     Matrix<T, 3, 3> scale3(T sx, T sy)
     {
         return Matrix<T, 3, 3>{
-                sx, 0, 0,
-                0, sy, 0,
-                0, 0, 1};
+            sx, 0, 0,
+            0, sy, 0,
+            0, 0, 1
+        };
     }
 
+    /**
+     * @brief Returns the homogeneous scaling matrix for 2D points.
+     */
     template <typename T>
     Matrix<T, 3, 3> scale3(const Vector<T, 2>& scales)
     {
         return scale3(scales[0], scales[1]);
     }
 
+    /**
+     * @brief Returns the homogeneous scaling matrix for 3D points.
+     * @param sx The scale factor in the x direction.
+     * @param sy The scale factor in the y direction.
+     * @param sz The scale factor in the z direction.
+     */
     template <typename T>
     Matrix<T, 4, 4> scale4(T sx, T sy, T sz)
     {
         return Matrix<T, 4, 4>{
-                sx, 0, 0, 0,
-                0, sy, 0, 0,
-                0, 0, sz, 0,
-                0, 0, 0, 1};
+            sx, 0, 0, 0,
+            0, sy, 0, 0,
+            0, 0, sz, 0,
+            0, 0, 0, 1
+        };
     }
 
+    /**
+     * @brief Returns the homogeneous scaling matrix for 3D points.
+     * @param scales The scale factors in the x, y and z directions.
+     */
     template <typename T>
     Matrix<T, 4, 4> scale4(const Vector<T, 3>& scales)
     {
@@ -48,9 +66,10 @@ namespace Xyz
         auto c = std::cos(angle);
         auto s = std::sin(angle);
         return Matrix<T, 3, 3>{
-                c, -s, 0,
-                s, c, 0,
-                0, 0, 1};
+            c, -s, 0,
+            s, c, 0,
+            0, 0, 1
+        };
     }
 
     /**
@@ -62,10 +81,11 @@ namespace Xyz
         auto c = std::cos(angle);
         auto s = std::sin(angle);
         return Matrix<T, 4, 4>{
-                c, -s, 0, 0,
-                s, c, 0, 0,
-                0, 0, 1, 0,
-                0, 0, 0, 1};
+            c, -s, 0, 0,
+            s, c, 0, 0,
+            0, 0, 1, 0,
+            0, 0, 0, 1
+        };
     }
 
     template <typename T>
@@ -74,10 +94,11 @@ namespace Xyz
         auto c = std::cos(angle);
         auto s = std::sin(angle);
         return Matrix<T, 4, 4>{
-                c, 0, s, 0,
-                0, 1, 0, 0,
-                -s, 0, c, 0,
-                0, 0, 0, 1};
+            c, 0, s, 0,
+            0, 1, 0, 0,
+            -s, 0, c, 0,
+            0, 0, 0, 1
+        };
     }
 
     template <typename T>
@@ -86,19 +107,21 @@ namespace Xyz
         auto c = std::cos(angle);
         auto s = std::sin(angle);
         return Matrix<T, 4, 4>{
-                1, 0, 0, 0,
-                0, c, -s, 0,
-                0, s, c, 0,
-                0, 0, 0, 1};
+            1, 0, 0, 0,
+            0, c, -s, 0,
+            0, s, c, 0,
+            0, 0, 0, 1
+        };
     }
 
     template <typename T>
     Matrix<T, 3, 3> translate3(T x, T y)
     {
         return Matrix<T, 3, 3>{
-                1, 0, x,
-                0, 1, y,
-                0, 0, 1};
+            1, 0, x,
+            0, 1, y,
+            0, 0, 1
+        };
     }
 
     template <typename T>
@@ -117,20 +140,22 @@ namespace Xyz
         auto cz = axis * ((1 - c) * axis[2]);
         auto sa = s * axis;
         return Matrix<T, 4, 4>{
-                cx[0] + c, cx[1] - sa[2], cx[2] + sa[1], 0,
-                cy[0] + sa[2], cy[1] + c, cy[2] - sa[0], 0,
-                cz[0] - sa[1], cz[1] + sa[0], cz[2] + c, 0,
-                0, 0, 0, 1};
+            cx[0] + c, cx[1] - sa[2], cx[2] + sa[1], 0,
+            cy[0] + sa[2], cy[1] + c, cy[2] - sa[0], 0,
+            cz[0] - sa[1], cz[1] + sa[0], cz[2] + c, 0,
+            0, 0, 0, 1
+        };
     }
 
     template <typename T>
     Matrix<T, 4, 4> translate4(T x, T y, T z)
     {
         return Matrix<T, 4, 4>{
-                1, 0, 0, x,
-                0, 1, 0, y,
-                0, 0, 1, z,
-                0, 0, 0, 1};
+            1, 0, 0, x,
+            0, 1, 0, y,
+            0, 0, 1, z,
+            0, 0, 0, 1
+        };
     }
 
     template <typename T>
@@ -145,18 +170,20 @@ namespace Xyz
         auto c = std::cos(angle);
         auto s = std::sin(angle);
         return Matrix<T, 3, 3>{
-                c, s, 0,
-                -s, c, 0,
-                0, 0, 1};
+            c, s, 0,
+            -s, c, 0,
+            0, 0, 1
+        };
     }
 
     template <typename T>
     Matrix<T, 3, 3> transposed_translate3(T x, T y)
     {
         return Matrix<T, 3, 3>{
-                1, 0, 0,
-                0, 1, 0,
-                x, y, 1};
+            1, 0, 0,
+            0, 1, 0,
+            x, y, 1
+        };
     }
 
     template <typename T>
@@ -171,10 +198,11 @@ namespace Xyz
         auto c = std::cos(angle);
         auto s = std::sin(angle);
         return Matrix<T, 4, 4>{
-                c, s, 0, 0,
-                -s, c, 0, 0,
-                0, 0, 1, 0,
-                0, 0, 0, 1};
+            c, s, 0, 0,
+            -s, c, 0, 0,
+            0, 0, 1, 0,
+            0, 0, 0, 1
+        };
     }
 
     template <typename T>
@@ -183,10 +211,11 @@ namespace Xyz
         auto c = std::cos(angle);
         auto s = std::sin(angle);
         return Matrix<T, 4, 4>{
-                c, 0, -s, 0,
-                0, 1, 0, 0,
-                s, 0, c, 0,
-                0, 0, 0, 1};
+            c, 0, -s, 0,
+            0, 1, 0, 0,
+            s, 0, c, 0,
+            0, 0, 0, 1
+        };
     }
 
     template <typename T>
@@ -195,10 +224,11 @@ namespace Xyz
         auto c = std::cos(angle);
         auto s = std::sin(angle);
         return Matrix<T, 4, 4>{
-                1, 0, 0, 0,
-                0, c, s, 0,
-                0, -s, c, 0,
-                0, 0, 0, 1};
+            1, 0, 0, 0,
+            0, c, s, 0,
+            0, -s, c, 0,
+            0, 0, 0, 1
+        };
     }
 
     template <typename T>
@@ -211,20 +241,22 @@ namespace Xyz
         auto cz = axis * ((1 - c) * axis[2]);
         auto sa = s * axis;
         return Matrix<T, 4, 4>{
-                cx[0] + c, cy[0] + sa[2], cz[0] - sa[1], 0,
-                cx[1] - sa[2], cy[1] + c, cz[1] + sa[0], 0,
-                cx[2] + sa[1], cy[2] - sa[0], cz[2] + c, 0,
-                0, 0, 0, 1};
+            cx[0] + c, cy[0] + sa[2], cz[0] - sa[1], 0,
+            cx[1] - sa[2], cy[1] + c, cz[1] + sa[0], 0,
+            cx[2] + sa[1], cy[2] - sa[0], cz[2] + c, 0,
+            0, 0, 0, 1
+        };
     }
 
     template <typename T>
     Matrix<T, 4, 4> transposed_translate4(T x, T y, T z)
     {
         return Matrix<T, 4, 4>{
-                1, 0, 0, 0,
-                0, 1, 0, 0,
-                0, 0, 1, 0,
-                x, y, z, 1};
+            1, 0, 0, 0,
+            0, 1, 0, 0,
+            0, 0, 1, 0,
+            x, y, z, 1
+        };
     }
 
     template <typename T>
