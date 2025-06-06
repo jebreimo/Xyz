@@ -21,18 +21,19 @@ add_executable(CatchXyzTest
     test_Interpolation.cpp
     test_Intersections.cpp
     test_InvertMatrix.cpp
+    test_LineClipper.cpp
     test_LineClipping.cpp
+    test_Matrix.cpp
     test_MatrixDeterminant.cpp
     test_Mesh.cpp
     test_Pgram3.cpp
+    test_Plane.cpp
     test_Projections.cpp
     test_QuadraticEquation.cpp
     test_Rect.cpp
     test_Transforms.cpp
     test_Triangle.cpp
     test_Vector.cpp
-    test_Matrix.cpp
-    test_Plane.cpp
 )
 
 target_link_libraries(CatchXyzTest

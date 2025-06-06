@@ -77,6 +77,6 @@ namespace Xyz
     template <typename T, unsigned N>
     Line<T, N> make_line(const LineSegment<T, N>& line_segment)
     {
-        return make_line(get_start(line_segment), get_vector(line_segment));
+        return {line_segment.start, line_segment.end - line_segment.start};
     }
 }
