@@ -19,7 +19,7 @@ namespace Xyz
     {
         /* Lines or line segments are parallel, but not co-linear.
          */
-        NONINTERSECTING,
+        NON_INTERSECTING,
         /* Lines or line segments are intersecting.
          */
         INTERSECTING,
@@ -28,7 +28,7 @@ namespace Xyz
         OVERLAPPING,
         /* Line segments are co-linear and may or may not overlap.
          */
-        COLINEAR
+        CO_LINEAR
     };
 
 #define XYZ_CASE_OSTREAM_ENUM(name) \
@@ -38,10 +38,10 @@ namespace Xyz
     {
         switch (e)
         {
-        XYZ_CASE_OSTREAM_ENUM(LineRelationship::NONINTERSECTING);
+        XYZ_CASE_OSTREAM_ENUM(LineRelationship::NON_INTERSECTING);
         XYZ_CASE_OSTREAM_ENUM(LineRelationship::INTERSECTING);
         XYZ_CASE_OSTREAM_ENUM(LineRelationship::OVERLAPPING);
-        XYZ_CASE_OSTREAM_ENUM(LineRelationship::COLINEAR);
+        XYZ_CASE_OSTREAM_ENUM(LineRelationship::CO_LINEAR);
         default: return os << "Unknown value.";
         }
     }
@@ -58,11 +58,11 @@ namespace Xyz
         Float denominator = dot(v_a, n_b);
         if (Approx<Float>(denominator, margin) == 0.0)
         {
-            auto distance = dot(n_b, (get_point(a) - get_point(b)));
+            auto distance = dot(n_b, get_point(a) - get_point(b));
             if (Approx<Float>(distance, margin) == 0)
                 return {LineRelationship::OVERLAPPING, Float(), Float()};
 
-            return {LineRelationship::NONINTERSECTING, Float(), Float()};
+            return {LineRelationship::NON_INTERSECTING, Float(), Float()};
         }
 
         auto n_a = get_normal(get_vector(a));
@@ -85,7 +85,7 @@ namespace Xyz
                                                         margin);
         if (rel == LineRelationship::OVERLAPPING)
         {
-            return {LineRelationship::COLINEAR, t0, t1};
+            return {LineRelationship::CO_LINEAR, t0, t1};
         }
 
         if (rel == LineRelationship::INTERSECTING
@@ -97,7 +97,7 @@ namespace Xyz
             return {rel, t0, t1};
         }
 
-        return {LineRelationship::NONINTERSECTING, t0, t1};
+        return {LineRelationship::NON_INTERSECTING, t0, t1};
     }
 
     template <typename T, typename Float = typename FloatType<T>::type>
@@ -144,13 +144,13 @@ namespace Xyz
     {
         using std::get;
         auto isect = get_intersection_positions(a, b, margin);
-        if (get<0>(isect) == LineRelationship::COLINEAR)
+        if (get<0>(isect) == LineRelationship::CO_LINEAR)
         {
             auto overlap = get_projection_extents(a, b, margin);
             return {
                 get<0>(overlap)
                     ? LineRelationship::INTERSECTING
-                    : LineRelationship::NONINTERSECTING,
+                    : LineRelationship::NON_INTERSECTING,
                 get<1>(overlap), get<2>(overlap)
             };
         }
