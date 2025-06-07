@@ -85,14 +85,14 @@ namespace Xyz
 
     namespace Details
     {
-        template <typename T, typename F = typename FloatType<T>::type>
+        template <typename T, typename F = FloatType_t<T>>
         [[nodiscard]]
         Vector<F, 4> to_homo(const Vector<T, 3>& v)
         {
             return push_back(vector_cast<F>(v), 1);
         }
 
-        template <typename T, typename F = typename FloatType<T>::type>
+        template <typename T, typename F = FloatType_t<T>>
         [[nodiscard]]
         Matrix<F, 4, 4> get_rotation(const Pgram3<T>& p)
         {
@@ -111,7 +111,7 @@ namespace Xyz
         }
     }
 
-    template <typename T, typename F = typename FloatType<T>::type>
+    template <typename T, typename F = FloatType_t<T>>
     [[nodiscard]]
     Matrix<F, 4, 4> get_clip_transform(const Pgram3<T>& p)
     {

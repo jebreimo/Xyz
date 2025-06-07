@@ -60,7 +60,7 @@ namespace Xyz
 
     template <typename T, unsigned N>
     [[nodiscard]]
-    typename FloatType<T>::type get_area(const Triangle<T, N>& triangle)
+    FloatType_t<T> get_area(const Triangle<T, N>& triangle)
     {
         return std::sqrt(get_area_squared(triangle));
     }

@@ -46,7 +46,7 @@ namespace Xyz
         }
     }
 
-    template <typename T, typename Float = typename FloatType<T>::type>
+    template <typename T, typename Float = FloatType_t<T>>
     std::tuple<LineRelationship, Float, Float>
     get_intersection_positions(const Line<T, 2>& a,
                                const Line<T, 2>& b,
@@ -74,7 +74,7 @@ namespace Xyz
         };
     }
 
-    template <typename T, typename Float = typename FloatType<T>::type>
+    template <typename T, typename Float = FloatType_t<T>>
     std::tuple<LineRelationship, Float, Float>
     get_intersection_positions(const LineSegment<T, 2>& a,
                                const LineSegment<T, 2>& b,
@@ -100,7 +100,7 @@ namespace Xyz
         return {LineRelationship::NON_INTERSECTING, t0, t1};
     }
 
-    template <typename T, typename Float = typename FloatType<T>::type>
+    template <typename T, typename Float = FloatType_t<T>>
     std::pair<bool, std::pair<Float, Float>>
     get_projection_extent(const LineSegment<T, 2>& a,
                           const LineSegment<T, 2>& b,
@@ -121,7 +121,7 @@ namespace Xyz
         return {true, {ta0, ta1}};
     }
 
-    template <typename T, typename Float = typename FloatType<T>::type>
+    template <typename T, typename Float = FloatType_t<T>>
     std::tuple<bool, std::pair<Float, Float>, std::pair<Float, Float>>
     get_projection_extents(const LineSegment<T, 2>& a,
                            const LineSegment<T, 2>& b,
@@ -134,7 +134,7 @@ namespace Xyz
         return {overlaps_a && overlaps_b, offsets_a, offsets_b};
     }
 
-    template <typename T, typename Float = typename FloatType<T>::type>
+    template <typename T, typename Float = FloatType_t<T>>
     std::tuple<LineRelationship,
                std::pair<Float, Float>,
                std::pair<Float, Float>>

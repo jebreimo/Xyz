@@ -17,7 +17,7 @@ namespace Xyz
     class LineSegment
     {
     public:
-        using FloatT = typename FloatType<T>::type;
+        using FloatT = FloatType_t<T>;
 
         Vector<T, N> start;
         Vector<T, N> end;
@@ -53,14 +53,14 @@ namespace Xyz
 
     template <typename T, unsigned N>
     Vector<T, N> get_point_at_t(const LineSegment<T, N>& line,
-                                typename FloatType<T>::type t)
+                                FloatType_t<T> t)
     {
         return line.start + vector_cast<T>(line.vector() * t);
     }
 
     // template <typename T, unsigned N>
     // T get_coordinate_at_t(const LineSegment<T, N>& line, size_t coord,
-    //                       typename FloatType<T>::type t)
+    //                       FloatType_t<T> t)
     // {
     //     auto v0 = line.start[coord];
     //     auto v1 = line.end[coord];

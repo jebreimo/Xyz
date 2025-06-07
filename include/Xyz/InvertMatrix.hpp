@@ -97,14 +97,14 @@ namespace Xyz
     {
         if (m[{0, 0}] == 0)
             XYZ_THROW("The matrix is not invertible.");
-        return Matrix<typename FloatType<T>::type, 1, 1>{
+        return Matrix<FloatType_t<T>, 1, 1>{
             1.0 / m[{0, 0}]};
     }
 
     template <typename T>
     Matrix<T, 2, 2> invert(const Matrix<T, 2, 2>& m)
     {
-        using Float = typename FloatType<T>::type;
+        using Float = FloatType_t<T>;
         auto det = m[{0, 0}] * m[{1, 1}] - m[{0, 1}] * m[{1, 0}];
         if (det == 0)
             XYZ_THROW("The matrix is not invertible.");

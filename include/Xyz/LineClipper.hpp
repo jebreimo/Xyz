@@ -18,7 +18,7 @@ namespace Xyz
     class LineClipper
     {
     public:
-        using FloatT = typename FloatType<T>::type;
+        using FloatT = FloatType_t<T>;
         static constexpr unsigned TransformDimension = N + 1;
         using Matrix = Matrix<FloatT, TransformDimension, TransformDimension>;
 

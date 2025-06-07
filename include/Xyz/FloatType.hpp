@@ -26,4 +26,7 @@ namespace Xyz
     {
         using type = long double;
     };
+
+    template <typename T>
+    using FloatType_t = typename FloatType<T>::type;
 }
