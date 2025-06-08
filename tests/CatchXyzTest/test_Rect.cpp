@@ -10,32 +10,15 @@
 
 TEST_CASE("Test Rectangle")
 {
-    Xyz::RectangleI rect({10, 20}, {100, 80});
-    REQUIRE(Xyz::get_center(rect) == Xyz::Vector2I(60, 60));
-    REQUIRE(Xyz::get_min(rect) == Xyz::Vector2I(10, 20));
-    REQUIRE(Xyz::get_bottom_left(rect) == Xyz::Vector2I(10, 20));
-    REQUIRE(Xyz::get_bottom_right(rect) == Xyz::Vector2I(110, 20));
-    REQUIRE(Xyz::get_top_left(rect) == Xyz::Vector2I(10, 100));
-    REQUIRE(Xyz::get_top_right(rect) == Xyz::Vector2I(110, 100));
-    REQUIRE(Xyz::get_max(rect) == Xyz::Vector2I(110, 100));
+    Xyz::RectangleD rect({10, 20}, {100, 80});
+    REQUIRE(Xyz::get_center(rect) == Xyz::Vector2D(60, 60));
+    REQUIRE(rect.point(0) == Xyz::Vector2I(10, 20));
+    REQUIRE(rect.point(1) == Xyz::Vector2I(110, 20));
+    REQUIRE(rect.point(3) == Xyz::Vector2I(10, 100));
+    REQUIRE(rect.point(2) == Xyz::Vector2I(110, 100));
 
-    Xyz::set_center(rect, Xyz::Vector2I(45, 75));
+    Xyz::set_center(rect, Xyz::Vector2D(45, 75));
     REQUIRE(rect.origin == Xyz::Vector2I(-5, 35));
-}
-
-TEST_CASE("Test Rectangle min and max")
-{
-    auto get_min = [](const Xyz::Rectangle<int>& r){return Xyz::get_min(r);};
-    auto get_max = [](const Xyz::Rectangle<int>& r){return Xyz::get_max(r);};
-
-    REQUIRE(get_min({{10, 15}, {10, 10}}) == Xyz::Vector2I(10, 15));
-    REQUIRE(get_max({{10, 15}, {10, 10}}) == Xyz::Vector2I(20, 25));
-    REQUIRE(get_min({{10, 15}, {-10, 10}}) == Xyz::Vector2I(0, 15));
-    REQUIRE(get_max({{10, 15}, {-10, 10}}) == Xyz::Vector2I(10, 25));
-    REQUIRE(get_min({{10, 15}, {10, -10}}) == Xyz::Vector2I(10, 5));
-    REQUIRE(get_max({{10, 15}, {10, -10}}) == Xyz::Vector2I(20, 15));
-    REQUIRE(get_min({{10, 15}, {-10, -10}}) == Xyz::Vector2I(0, 5));
-    REQUIRE(get_max({{10, 15}, {-10, -10}}) == Xyz::Vector2I(10, 15));
 }
 
 TEST_CASE("Test Rectangle is_empty")
@@ -46,11 +29,24 @@ TEST_CASE("Test Rectangle is_empty")
     REQUIRE(!is_empty(Xyz::RectangleF({2, 3}, {-1, -1})));
 }
 
-TEST_CASE("Test Rectangle normalize")
+TEST_CASE("Test Rectangle: normalize without angle")
 {
     using R = Xyz::RectangleD;
+    constexpr auto pi = Xyz::Constants<double>::PI;
     REQUIRE(Xyz::normalize(R({10, 15}, {10, 10})) == R({10, 15}, {10, 10}));
     REQUIRE(Xyz::normalize(R({10, 15}, {-10, 10})) == R({0, 15}, {10, 10}));
     REQUIRE(Xyz::normalize(R({10, 15}, {10, -10})) == R({10, 5}, {10, 10}));
     REQUIRE(Xyz::normalize(R({10, 15}, {-10, -10})) == R({0, 5}, {10, 10}));
+}
+
+TEST_CASE("Test Rectangle: normalize with angle")
+{
+    using R = Xyz::RectangleD;
+    using V = Xyz::Vector2D;
+    constexpr auto pi = Xyz::Constants<double>::PI;
+    const auto rect = R({10, 15}, {10, 10}, pi);
+    const auto result = Xyz::normalize(rect);
+    REQUIRE(Xyz::are_equal(result.origin, V(0, 5)));
+    REQUIRE(Xyz::are_equal(result.size, rect.size));
+    REQUIRE(result.angle == 0);
 }

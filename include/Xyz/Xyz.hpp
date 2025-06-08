@@ -10,7 +10,7 @@
 #include "ComplexApprox.hpp"
 #include "Interpolation.hpp"
 #include "Line.hpp"
-#include "LineClipping.hpp"
+#include "LineClipper.hpp"
 #include "LineLineIntersection.hpp"
 #include "LineSegment.hpp"
 #include "Matrix.hpp"

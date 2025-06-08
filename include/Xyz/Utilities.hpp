@@ -28,8 +28,10 @@ namespace Xyz
      * @brief Returns the @a radians as an angle between 0 and 2*PI.
      */
     template <typename T>
-    constexpr auto to_principal_angle(T radians)
+    constexpr T to_principal_angle(T radians)
     {
+        if (radians >= 0 && radians < T(2) * Constants<T>::PI)
+            return radians;
         auto result = fmod(radians, T(2) * Constants<T>::PI);
         return result >= 0 ? result : result + T(2) * Constants<T>::PI;
     }
