@@ -599,9 +599,9 @@ namespace Xyz
         auto angle = get_angle(get_projection(u, normal),
                                get_projection(v, normal));
 
-        auto c = cross(u, v);
         if (dot(normal, cross(u, v)) >= 0)
             return angle;
+
         return 2 * Constants<decltype(angle)>::PI - angle;
     }
 
