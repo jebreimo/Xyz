@@ -13,7 +13,7 @@ constexpr auto PI = Xyz::Constants<double>::PI;
 
 using Catch::Matchers::WithinAbs;
 
-TEST_CASE("Pgram3: invalid rectangle")
+TEST_CASE("Pgram3: invalid parallelogram")
 {
     using P = Xyz::Pgram3<float>;
     P rect;
@@ -22,10 +22,17 @@ TEST_CASE("Pgram3: invalid rectangle")
     REQUIRE(!rect.is_valid());
 }
 
-TEST_CASE("Pgram3: size of rectangle")
+TEST_CASE("Pgram3: size of parallelogram")
 {
     constexpr Xyz::Pgram3<float> rect{{0, 0, 0}, {-3, 4, 0}, {4, 3, 0}};
     REQUIRE(rect.size() == Xyz::Vector2F(5, 5));
+}
+
+TEST_CASE("Pgram3: rectangular parallelogram")
+{
+    using P = Xyz::Pgram3<float>;
+    REQUIRE(is_rectangle(P{{0, 0, 0}, {-3, 4, 0}, {4, 3, 0}}));
+    REQUIRE(!is_rectangle(P{{0, 0, 0}, {-3, 3, 0}, {4, 3, 0}}));
 }
 
 template <typename T>

@@ -39,7 +39,7 @@ namespace Xyz
         [[nodiscard]]
         bool is_valid() const
         {
-            return get_length_squared(normal()) != 0;
+            return normal() != Vector<T, 3>();
         }
 
         /**
@@ -111,6 +111,13 @@ namespace Xyz
         }
     }
 
+    template <typename T>
+    [[nodiscard]]
+    bool is_rectangle(const Pgram3<T>& p)
+    {
+        return p.is_valid() && dot(p.major, p.minor) == 0;
+    }
+
     template <typename T, typename F = FloatType_t<T>>
     [[nodiscard]]
     Matrix<F, 4, 4> get_clip_transform(const Pgram3<T>& p)
@@ -139,6 +146,6 @@ namespace Xyz
         return {rect.origin, rect.normal()};
     }
 
-    using PgramF = Pgram3<float>;
-    using PgramD = Pgram3<double>;
+    using Pgram3F = Pgram3<float>;
+    using Pgram3D = Pgram3<double>;
 }
