@@ -70,7 +70,7 @@ namespace Xyz
     [[nodiscard]]
     bool contains_point(const Triangle<T, 2>& triangle,
                         const Vector<U, 2>& point,
-                        Float margin = Constants<Float>::DEFAULT_MARGIN)
+                        Float margin = Margin<Float>::DEFAULT)
     {
         auto a = dot(get_normal(triangle[1] - triangle[0]),
                      point - triangle[0]);
@@ -90,7 +90,7 @@ namespace Xyz
     [[nodiscard]]
     bool contains_point_inclusive(const Triangle<T, 2>& triangle,
                                   const Vector<U, 2>& point,
-                                  Float margin = Constants<Float>::DEFAULT_MARGIN)
+                                  Float margin = Margin<Float>::DEFAULT)
     {
         auto a = dot(get_normal(triangle[1] - triangle[0]),
                      point - triangle[0]);

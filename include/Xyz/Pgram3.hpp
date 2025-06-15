@@ -37,9 +37,9 @@ namespace Xyz
         Vector<T, 3> minor;
 
         [[nodiscard]]
-        bool is_valid() const
+        bool is_valid(std::type_identity_t<T> margin = Margin<T>::DEFAULT) const
         {
-            return normal() != Vector<T, 3>();
+            return !are_equal(normal(), Vector<T, 3>(), margin);
         }
 
         /**
@@ -113,9 +113,24 @@ namespace Xyz
 
     template <typename T>
     [[nodiscard]]
-    bool is_rectangle(const Pgram3<T>& p)
+    bool is_rectangle(const Pgram3<T>& p,
+                      std::type_identity_t<T> margin = Margin<T>::DEFAULT)
     {
-        return p.is_valid() && dot(p.major, p.minor) == 0;
+        return p.is_valid(margin)
+            && std::abs(dot(p.major, p.minor)) <= margin;
+    }
+
+    template <typename T>
+    [[nodiscard]]
+    Pgram3<T> get_bounding_rectangle(const Pgram3<T>& pgram)
+    {
+        if (is_rectangle(pgram))
+            return pgram;
+
+        if (!pgram.is_valid())
+            return Pgram3<T>();
+
+
     }
 
     template <typename T, typename F = FloatType_t<T>>

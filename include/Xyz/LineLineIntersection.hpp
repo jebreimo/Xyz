@@ -10,47 +10,17 @@
 #include <tuple>
 #include "Approx.hpp"
 #include "FloatType.hpp"
+#include "IntersectionType.hpp"
 #include "Line.hpp"
 #include "LineSegment.hpp"
 
 namespace Xyz
 {
-    enum class LineRelationship
-    {
-        /* Lines or line segments are parallel, but not co-linear.
-         */
-        NON_INTERSECTING,
-        /* Lines or line segments are intersecting.
-         */
-        INTERSECTING,
-        /* Lines are overlapping.
-         */
-        OVERLAPPING,
-        /* Line segments are co-linear and may or may not overlap.
-         */
-        CO_LINEAR
-    };
-
-#define XYZ_CASE_OSTREAM_ENUM(name) \
-        case name: return os << #name
-
-    inline std::ostream& operator<<(std::ostream& os, LineRelationship e)
-    {
-        switch (e)
-        {
-        XYZ_CASE_OSTREAM_ENUM(LineRelationship::NON_INTERSECTING);
-        XYZ_CASE_OSTREAM_ENUM(LineRelationship::INTERSECTING);
-        XYZ_CASE_OSTREAM_ENUM(LineRelationship::OVERLAPPING);
-        XYZ_CASE_OSTREAM_ENUM(LineRelationship::CO_LINEAR);
-        default: return os << "Unknown value.";
-        }
-    }
-
     template <typename T, typename Float = FloatType_t<T>>
-    std::tuple<LineRelationship, Float, Float>
+    std::tuple<IntersectionType, Float, Float>
     get_intersection_positions(const Line<T, 2>& a,
                                const Line<T, 2>& b,
-                               Float margin = Constants<Float>::DEFAULT_MARGIN)
+                               Float margin = Margin<Float>::DEFAULT)
     {
         auto v_a = get_vector(a);
         auto n_b = get_normal(get_vector(b));
@@ -60,35 +30,35 @@ namespace Xyz
         {
             auto distance = dot(n_b, get_point(a) - get_point(b));
             if (Approx<Float>(distance, margin) == 0)
-                return {LineRelationship::OVERLAPPING, Float(), Float()};
+                return {IntersectionType::OVERLAPPING, Float(), Float()};
 
-            return {LineRelationship::NON_INTERSECTING, Float(), Float()};
+            return {IntersectionType::NON_INTERSECTING, Float(), Float()};
         }
 
         auto n_a = get_normal(get_vector(a));
         auto v_ab = get_point(b) - get_point(a);
         return {
-            LineRelationship::INTERSECTING,
+            IntersectionType::INTERSECTING,
             dot(v_ab, n_b) / denominator,
             dot(v_ab, n_a) / denominator
         };
     }
 
     template <typename T, typename Float = FloatType_t<T>>
-    std::tuple<LineRelationship, Float, Float>
+    std::tuple<IntersectionType, Float, Float>
     get_intersection_positions(const LineSegment<T, 2>& a,
                                const LineSegment<T, 2>& b,
-                               Float margin = Constants<Float>::DEFAULT_MARGIN)
+                               Float margin = Margin<Float>::DEFAULT)
     {
         auto [rel, t0, t1] = get_intersection_positions(make_line(a),
                                                         make_line(b),
                                                         margin);
-        if (rel == LineRelationship::OVERLAPPING)
+        if (rel == IntersectionType::OVERLAPPING)
         {
-            return {LineRelationship::CO_LINEAR, t0, t1};
+            return {IntersectionType::COLINEAR, t0, t1};
         }
 
-        if (rel == LineRelationship::INTERSECTING
+        if (rel == IntersectionType::INTERSECTING
             && 0.0 < Approx<Float>(t0, margin)
             && Approx<Float>(t0, margin) < 1.0
             && 0.0 < Approx<Float>(t1, margin)
@@ -97,18 +67,18 @@ namespace Xyz
             return {rel, t0, t1};
         }
 
-        return {LineRelationship::NON_INTERSECTING, t0, t1};
+        return {IntersectionType::NON_INTERSECTING, t0, t1};
     }
 
     template <typename T, typename Float = FloatType_t<T>>
     std::pair<bool, std::pair<Float, Float>>
     get_projection_extent(const LineSegment<T, 2>& a,
                           const LineSegment<T, 2>& b,
-                          Float margin = Constants<Float>::DEFAULT_MARGIN)
+                          Float margin = Margin<Float>::DEFAULT)
     {
-        auto length = Float(get_length_squared(get_vector(a)));
-        auto ta0 = dot(get_vector(a), get_start(b) - get_start(a)) / length;
-        auto ta1 = dot(get_vector(a), get_end(b) - get_start(a)) / length;
+        auto length = Float(get_length_squared(a.vector()));
+        auto ta0 = dot(a.vector(), b.start - a.start) / length;
+        auto ta1 = dot(a.vector(), b.end - a.start) / length;
         if ((Approx<Float>(ta0, margin) > 1
                 && Approx<Float>(ta1, margin) > 1)
             || (Approx<Float>(ta0, margin) < 0
@@ -125,7 +95,7 @@ namespace Xyz
     std::tuple<bool, std::pair<Float, Float>, std::pair<Float, Float>>
     get_projection_extents(const LineSegment<T, 2>& a,
                            const LineSegment<T, 2>& b,
-                           Float margin = Constants<Float>::DEFAULT_MARGIN)
+                           Float margin = Margin<Float>::DEFAULT)
     {
         auto [overlaps_a, offsets_a] = get_projection_extent(a, b, margin);
         auto [overlaps_b, offsets_b] = get_projection_extent(b, a, margin);
@@ -135,22 +105,22 @@ namespace Xyz
     }
 
     template <typename T, typename Float = FloatType_t<T>>
-    std::tuple<LineRelationship,
+    std::tuple<IntersectionType,
                std::pair<Float, Float>,
                std::pair<Float, Float>>
     get_intersection_extents(const LineSegment<T, 2>& a,
                              const LineSegment<T, 2>& b,
-                             Float margin = Constants<Float>::DEFAULT_MARGIN)
+                             Float margin = Margin<Float>::basic())
     {
         using std::get;
         auto isect = get_intersection_positions(a, b, margin);
-        if (get<0>(isect) == LineRelationship::CO_LINEAR)
+        if (get<0>(isect) == IntersectionType::COLINEAR)
         {
             auto overlap = get_projection_extents(a, b, margin);
             return {
                 get<0>(overlap)
-                    ? LineRelationship::INTERSECTING
-                    : LineRelationship::NON_INTERSECTING,
+                    ? IntersectionType::INTERSECTING
+                    : IntersectionType::NON_INTERSECTING,
                 get<1>(overlap), get<2>(overlap)
             };
         }

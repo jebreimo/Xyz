@@ -8,6 +8,7 @@
 #pragma once
 
 #include <cfloat>
+#include <type_traits>
 
 namespace Xyz
 {
@@ -15,13 +16,25 @@ namespace Xyz
     struct Constants
     {
         constexpr static double PI = 3.141592653589793;
-        constexpr static double DEFAULT_MARGIN = DBL_EPSILON * 100.0;
     };
 
     template <>
     struct Constants<float>
     {
         constexpr static float PI = 3.14159265f;
-        constexpr static float DEFAULT_MARGIN = FLT_EPSILON * 100.0;
+    };
+
+    template <typename T>
+    struct Margin
+    {
+        static constexpr T basic()
+        {
+            if constexpr (std::is_floating_point_v<T>)
+                return std::numeric_limits<T>::epsilon() * 100.0;
+            else
+                return T(0);
+        }
+
+        constexpr static T DEFAULT = basic();
     };
 }

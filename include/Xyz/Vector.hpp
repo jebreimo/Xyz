@@ -12,6 +12,7 @@
 #include <initializer_list>
 #include <ostream>
 #include <type_traits>
+
 #include "Clamp.hpp"
 #include "Constants.hpp"
 #include "XyzException.hpp"
@@ -536,7 +537,7 @@ namespace Xyz
     template <typename T, unsigned N>
     [[nodiscard]]
     bool are_equal(const Vector<T, N>& u, const Vector<T, N>& v,
-                   std::type_identity_t<T> margin = Constants<T>::DEFAULT_MARGIN)
+                   std::type_identity_t<T> margin = Margin<T>::DEFAULT)
     {
         return get_length_squared(u - v) <= margin;
     }
@@ -701,7 +702,7 @@ namespace Xyz
               std::enable_if_t<std::is_floating_point_v<T>, int>  = 0>
     [[nodiscard]]
     bool is_null(Vector<T, N>& v,
-                 std::type_identity_t<T> margin = Constants<T>::DEFAULT_MARGIN)
+                 std::type_identity_t<T> margin = Margin<T>::DEFAULT)
     {
         return std::none_of(v.begin(), v.end(),
                             [&](auto n) { return fabs(n) > margin; });

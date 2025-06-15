@@ -20,13 +20,13 @@ namespace Xyz
     public:
         using FloatT = FloatType_t<T>;
         static constexpr unsigned TransformDimension = N + 1;
-        using Matrix = Matrix<FloatT, TransformDimension, TransformDimension>;
+        using MatrixT = Matrix<FloatT, TransformDimension, TransformDimension>;
 
         LineClipper()
-            : transform(Matrix::identity())
+            : transform(MatrixT::identity())
         {}
 
-        explicit LineClipper(const Matrix& transform)
+        explicit LineClipper(const MatrixT& transform)
             : transform(transform)
         {}
 
@@ -48,6 +48,6 @@ namespace Xyz
             return segment.segment(ts->first, ts->second);
         }
 
-        Matrix transform;
+        MatrixT transform;
     };
 }

@@ -42,7 +42,7 @@ void require_is_clip_rect(const Xyz::Matrix<T, 4, 4>& m, const Xyz::Pgram3<T>& p
     CAPTURE(p.origin);
     CAPTURE(p.major);
     CAPTURE(p.minor);
-    T e = Xyz::Constants<T>::DEFAULT_MARGIN;
+    T e = Xyz::Margin<T>::DEFAULT;
     REQUIRE(are_equal(m * make_vector4(p.point(0), 1), V(0, 0, 0, 1), e));
     REQUIRE(are_equal(m * make_vector4(p.point(1), 1), V(1, 0, 0, 1), e));
     REQUIRE(are_equal(m * make_vector4(p.point(2), 1), V(1, 1, 0, 1), e));
