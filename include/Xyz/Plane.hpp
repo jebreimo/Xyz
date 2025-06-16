@@ -7,6 +7,7 @@
 //****************************************************************************
 #pragma once
 
+#include <optional>
 #include "Approx.hpp"
 #include "Line.hpp"
 #include "Matrix.hpp"
