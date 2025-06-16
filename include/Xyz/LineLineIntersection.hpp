@@ -22,21 +22,21 @@ namespace Xyz
                                const Line<T, 2>& b,
                                Float margin = Margin<Float>::DEFAULT)
     {
-        auto v_a = get_vector(a);
-        auto n_b = get_normal(get_vector(b));
+        auto v_a = a.vector;
+        auto n_b = get_normal(b.vector);
 
         Float denominator = dot(v_a, n_b);
         if (Approx<Float>(denominator, margin) == 0.0)
         {
-            auto distance = dot(n_b, get_point(a) - get_point(b));
+            auto distance = dot(n_b, a.point - b.point);
             if (Approx<Float>(distance, margin) == 0)
                 return {IntersectionType::OVERLAPPING, Float(), Float()};
 
             return {IntersectionType::NON_INTERSECTING, Float(), Float()};
         }
 
-        auto n_a = get_normal(get_vector(a));
-        auto v_ab = get_point(b) - get_point(a);
+        auto n_a = get_normal(a.vector);
+        auto v_ab = b.point - a.point;
         return {
             IntersectionType::INTERSECTING,
             dot(v_ab, n_b) / denominator,
@@ -110,7 +110,7 @@ namespace Xyz
                std::pair<Float, Float>>
     get_intersection_extents(const LineSegment<T, 2>& a,
                              const LineSegment<T, 2>& b,
-                             Float margin = Margin<Float>::basic())
+                             Float margin = Margin<Float>::DEFAULT)
     {
         using std::get;
         auto isect = get_intersection_positions(a, b, margin);

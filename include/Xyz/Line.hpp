@@ -16,49 +16,16 @@ namespace Xyz
     class Line
     {
     public:
+        Vector<T, N> point;
+        Vector<T, N> vector;
+
         Line() = default;
 
         Line(const Vector<T, N>& point, const Vector<T, N>& vector)
-            : m_point(point),
-              m_vector(vector)
+            : point(point),
+              vector(vector)
         {}
-
-        const Vector<T, N>& point() const
-        {
-            return m_point;
-        }
-
-        void set_point(const Vector<T, N>& point)
-        {
-            m_point = point;
-        }
-
-        const Vector<T, N>& vector() const
-        {
-            return m_vector;
-        }
-
-        void set_vector(const Vector<T, N>& vector)
-        {
-            m_vector = vector;
-        }
-
-    private:
-        Vector<T, N> m_point;
-        Vector<T, N> m_vector;
     };
-
-    template <typename T, unsigned N>
-    const Vector<T, N>& get_point(const Line<T, N>& line)
-    {
-        return line.point();
-    }
-
-    template <typename T, unsigned N>
-    const Vector<T, N>& get_vector(const Line<T, N>& line)
-    {
-        return line.vector();
-    }
 
     template <typename T, unsigned N>
     std::ostream& operator<<(std::ostream& os, const Line<T, N>& line)

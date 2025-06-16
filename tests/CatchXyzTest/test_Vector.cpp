@@ -10,7 +10,7 @@
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
 
 constexpr auto PI = Xyz::Constants<double>::PI;
-constexpr auto MARGIN = Xyz::Margin<double>::basic();
+constexpr auto MARGIN = Xyz::Margin<double>::default_margin();
 
 using Catch::Matchers::WithinAbs;
 

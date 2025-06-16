@@ -27,7 +27,7 @@ namespace Xyz
     template <typename T>
     struct Margin
     {
-        static constexpr T basic()
+        static constexpr T default_margin()
         {
             if constexpr (std::is_floating_point_v<T>)
                 return std::numeric_limits<T>::epsilon() * 100.0;
@@ -35,6 +35,6 @@ namespace Xyz
                 return T(0);
         }
 
-        constexpr static T DEFAULT = basic();
+        constexpr static T DEFAULT = default_margin();
     };
 }
