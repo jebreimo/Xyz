@@ -7,7 +7,7 @@
 //****************************************************************************
 #pragma once
 
-#include <cfloat>
+#include <limits>
 #include <type_traits>
 
 namespace Xyz
