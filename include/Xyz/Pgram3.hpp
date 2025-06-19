@@ -85,28 +85,21 @@ namespace Xyz
 
     namespace Details
     {
-        template <typename T, typename F = FloatType_t<T>>
+        template <std::floating_point T>
         [[nodiscard]]
-        Vector<F, 4> to_homo(const Vector<T, 3>& v)
+        Matrix<T, 4, 4> get_rotation(const Pgram3<T>& p)
         {
-            return push_back(vector_cast<F>(v), 1);
-        }
+            using V = Vector<T, 3>;
 
-        template <typename T, typename F = FloatType_t<T>>
-        [[nodiscard]]
-        Matrix<F, 4, 4> get_rotation(const Pgram3<T>& p)
-        {
-            using V = Vector<F, 3>;
-
-            auto z = get_ccw_angle(vector_cast<F>(p.major), V(1, 0, 0), V(0, 0, 1));
+            auto z = get_ccw_angle(p.major, V(1, 0, 0), V(0, 0, 1));
             auto m = rotate_z(z);
 
-            auto pt1 = m * to_homo(p.major);
-            auto y = get_ccw_angle(drop_back(pt1), V(1, 0, 0), V(0, 1, 0));
+            auto pt1 = m * to_hg(p.major);
+            auto y = get_ccw_angle(from_hg(pt1), V(1, 0, 0), V(0, 1, 0));
             m = rotate_y(y) * m;
 
-            auto pt2 = m * to_homo(p.minor);
-            auto x = get_ccw_angle(drop_back(pt2), V(0, 1, 0), V(1, 0, 0));
+            auto pt2 = m * to_hg(p.minor);
+            auto x = get_ccw_angle(from_hg(pt2), V(0, 1, 0), V(1, 0, 0));
             return rotate_x(x) * m;
         }
     }
@@ -133,25 +126,25 @@ namespace Xyz
 
     }
 
-    template <typename T, typename F = FloatType_t<T>>
+    template <std::floating_point T>
     [[nodiscard]]
-    Matrix<F, 4, 4> get_clip_transform(const Pgram3<T>& p)
+    Matrix<T, 4, 4> get_clip_transform(const Pgram3<T>& p)
     {
         auto m = Details::get_rotation(p);
 
-        auto minor = m * Details::to_homo(p.minor);
+        auto minor = m * to_hg(p.minor);
         if (minor[0] != 0 && minor[1] != 0)
         {
-            auto shearing = Matrix<F, 4, 4>::identity();
+            auto shearing = Matrix<T, 4, 4>::identity();
             shearing[{0, 1}] = -minor[0] / minor[1];
             m = shearing * m;
         }
 
-        auto dx = get_length(drop_back(m * Details::to_homo(p.major)));
-        auto dy = get_length(drop_back(m * Details::to_homo(p.minor)));
+        auto dx = get_length(from_hg(m * to_hg(p.major)));
+        auto dy = get_length(from_hg(m * to_hg(p.minor)));
         auto x_scale = dx != 0 ? 1 / dx : 1;
         auto y_scale = dy != 0 ? 1 / dy : 1;
-        return scale4(x_scale, y_scale, F(1)) * m * translate4(-p.origin);
+        return scale4(x_scale, y_scale, T(1)) * m * translate4(-p.origin);
     }
 
     template <typename T>

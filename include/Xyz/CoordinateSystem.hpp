@@ -11,60 +11,59 @@
 
 namespace Xyz
 {
-    template <typename T>
+    template <std::floating_point T>
     class CoordinateSystem
     {
     public:
         CoordinateSystem() = default;
 
-        CoordinateSystem(const Vector<T, 3>& origin,
-                         const Vector<T, 3>& axis1,
-                         const Vector<T, 3>& axis2,
-                         const Vector<T, 3>& axis3)
-                : m_origin(origin)
-        {
-            set_row(m_from_world, 0, axis1 / get_length_squared(axis1));
-            set_row(m_from_world, 1, axis2 / get_length_squared(axis2));
-            set_row(m_from_world, 2, axis3 / get_length_squared(axis3));
-            m_to_world = invert(m_from_world);
-        }
+        constexpr CoordinateSystem(const Vector<T, 3>& origin,
+                                   const Vector<T, 3>& axis1,
+                                   const Vector<T, 3>& axis2,
+                                   const Vector<T, 3>& axis3)
+            : CoordinateSystem(Matrix<T, 4, 4>(
+                axis1[0], axis1[1], axis1[2], -origin[0],
+                axis2[0], axis2[1], axis2[2], -origin[1],
+                axis3[0], axis3[1], axis3[2], -origin[2],
+                0, 0, 0, 1))
+        {}
 
-        CoordinateSystem(const Vector<T, 3>& origin,
-                         const Matrix<T, 3, 3>& from_world_transform)
-                : m_origin(origin),
-                  m_to_world(invert(from_world_transform)),
-                  m_from_world(from_world_transform)
+        explicit CoordinateSystem(const Matrix<T, 4, 4>& from_world_transform)
+            : from_world_(from_world_transform),
+              to_world_(invert(from_world_transform))
         {}
 
         constexpr const Vector<T, 3>& origin() const
         {
-            return m_origin;
+            return Vector<T, 3>{
+                from_world_[{0, 3}],
+                from_world_[{1, 3}],
+                from_world_[{2, 3}]
+            };
         }
 
-        constexpr const Matrix<T, 3, 3>& from_world_transform() const
+        constexpr const Matrix<T, 4, 4>& from_world_transform() const
         {
-            return m_from_world;
+            return from_world_;
         }
 
-        constexpr const Matrix<T, 3, 3>& to_world_transform() const
+        constexpr const Matrix<T, 4, 4>& to_world_transform() const
         {
-            return m_to_world;
+            return to_world_;
         }
 
-        template <typename U>
-        constexpr auto to_world_pos(const Vector<U, 3>& p) const
+        constexpr auto to_world_pos(const Vector<T, 3>& p) const
         {
-            return m_to_world * p + m_origin;
+            return from_hg(to_world_ * to_hg(p));
         }
 
-        template <typename U>
-        constexpr auto from_world_pos(const Vector<U, 3>& p) const
+        constexpr auto from_world_pos(const Vector<T, 3>& p) const
         {
-            return m_from_world * (p - m_origin);
+            return from_hg(from_world_ * to_hg(p));
         }
+
     private:
-        Vector<T, 3> m_origin;
-        Matrix<T, 3, 3> m_to_world;
-        Matrix<T, 3, 3> m_from_world;
+        Matrix<T, 4, 4> from_world_;
+        Matrix<T, 4, 4> to_world_;
     };
 }

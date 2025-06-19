@@ -81,25 +81,28 @@ namespace Xyz
             : values()
         {}
 
-        Matrix(T a11, T a12, T a21, T a22)
+        constexpr Matrix(T a11, T a12, T a21, T a22)
             : values{a11, a12, a21, a22}
         {}
 
-        explicit Matrix(T (&other)[SIZE])
+        explicit constexpr Matrix(T (&other)[SIZE])
         {
-            std::copy(std::begin(other), std::end(other), std::begin(values));
+            for (unsigned i = 0; i < SIZE; ++i)
+                values[i] = other[i];
         }
 
-        Matrix(const Matrix& other)
+        constexpr Matrix(const Matrix& other)
         {
-            std::copy(begin(other), end(other), std::begin(values));
+            for (unsigned i = 0; i < SIZE; ++i)
+                values[i] = other.values[i];
         }
 
-        Matrix& operator=(const Matrix& other)
+        constexpr Matrix& operator=(const Matrix& other)
         {
             if (&other == this)
                 return *this;
-            std::copy(begin(other), end(other), std::begin(values));
+            for (unsigned i = 0; i < SIZE; ++i)
+                values[i] = other.values[i];
             return *this;
         }
 
@@ -133,7 +136,7 @@ namespace Xyz
             : values()
         {}
 
-        Matrix(T a11, T a12, T a13,
+        constexpr Matrix(T a11, T a12, T a13,
                T a21, T a22, T a23,
                T a31, T a32, T a33)
             : values{
@@ -143,21 +146,23 @@ namespace Xyz
             }
         {}
 
-        explicit Matrix(T (&other)[SIZE])
+        explicit constexpr Matrix(T (&other)[SIZE])
         {
             std::copy(std::begin(other), std::end(other), std::begin(values));
         }
 
-        Matrix(const Matrix& other)
+        constexpr Matrix(const Matrix& other)
         {
-            std::copy(begin(other), end(other), std::begin(values));
+            for (size_t i = 0; i < SIZE; ++i)
+                values[i] = other.values[i];
         }
 
-        Matrix& operator=(const Matrix& other)
+        constexpr Matrix& operator=(const Matrix& other)
         {
             if (&other == this)
                 return *this;
-            std::copy(begin(other), end(other), std::begin(values));
+            for (size_t i = 0; i < SIZE; ++i)
+                values[i] = other.values[i];
             return *this;
         }
 
@@ -193,10 +198,10 @@ namespace Xyz
             : values()
         {}
 
-        Matrix(T a11, T a12, T a13, T a14,
-               T a21, T a22, T a23, T a24,
-               T a31, T a32, T a33, T a34,
-               T a41, T a42, T a43, T a44)
+        constexpr Matrix(T a11, T a12, T a13, T a14,
+                         T a21, T a22, T a23, T a24,
+                         T a31, T a32, T a33, T a34,
+                         T a41, T a42, T a43, T a44)
             : values{
                 a11, a12, a13, a14,
                 a21, a22, a23, a24,
@@ -205,21 +210,24 @@ namespace Xyz
             }
         {}
 
-        explicit Matrix(T (&other)[SIZE])
+        explicit constexpr Matrix(T (&other)[SIZE])
         {
-            std::copy(std::begin(other), std::end(other), std::begin(values));
+            for (size_t i = 0; i < SIZE; ++i)
+                values[i] = other.values[i];
         }
 
-        Matrix(const Matrix& other)
+        constexpr Matrix(const Matrix& other)
         {
-            std::copy(begin(other), end(other), std::begin(values));
+            for (size_t i = 0; i < SIZE; ++i)
+                values[i] = other.values[i];
         }
 
-        Matrix& operator=(const Matrix& other)
+        constexpr Matrix& operator=(const Matrix& other)
         {
             if (&other == this)
                 return *this;
-            std::copy(begin(other), end(other), std::begin(values));
+            for (size_t i = 0; i < SIZE; ++i)
+                values[i] = other.values[i];
             return *this;
         }
 
