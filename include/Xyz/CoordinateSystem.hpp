@@ -19,13 +19,13 @@ namespace Xyz
         CoordinateSystem() = default;
 
         constexpr CoordinateSystem(const Vector<T, 3>& origin,
+                                   const Vector<T, 3>& axis0,
                                    const Vector<T, 3>& axis1,
-                                   const Vector<T, 3>& axis2,
-                                   const Vector<T, 3>& axis3)
+                                   const Vector<T, 3>& axis2)
             : CoordinateSystem(Matrix<T, 4, 4>(
-                axis1[0], axis1[1], axis1[2], -origin[0],
-                axis2[0], axis2[1], axis2[2], -origin[1],
-                axis3[0], axis3[1], axis3[2], -origin[2],
+                axis0[0], axis0[1], axis0[2], -origin[0],
+                axis1[0], axis1[1], axis1[2], -origin[1],
+                axis2[0], axis2[1], axis2[2], -origin[2],
                 0, 0, 0, 1))
         {}
 
@@ -43,7 +43,7 @@ namespace Xyz
             };
         }
 
-        constexpr Vector<T, 3> axis1() const
+        constexpr Vector<T, 3> axis0() const
         {
             return Vector<T, 3>{
                 from_world_[{0, 0}],
@@ -52,7 +52,7 @@ namespace Xyz
             };
         }
 
-        constexpr Vector<T, 3> axis2() const
+        constexpr Vector<T, 3> axis1() const
         {
             return Vector<T, 3>{
                 from_world_[{1, 0}],
@@ -61,7 +61,7 @@ namespace Xyz
             };
         }
 
-        constexpr Vector<T, 3> axis3() const
+        constexpr Vector<T, 3> axis2() const
         {
             return Vector<T, 3>{
                 from_world_[{2, 0}],
@@ -99,9 +99,9 @@ namespace Xyz
     constexpr bool is_valid(const CoordinateSystem<T>& cs,
                             std::type_identity_t<T> margin = Margin<T>::DEFAULT)
     {
-        return 2 <= (are_equal(cs.axis1(), Vector<T, 3>(), margin) ? 0 : 1)
-            + (are_equal(cs.axis2(), Vector<T, 3>(), margin) ? 0 : 1)
-            + (are_equal(cs.axis3(), Vector<T, 3>(), margin) ? 0 : 1);
+        return 2 <= (are_equal(cs.axis0(), Vector<T, 3>(), margin) ? 0 : 1)
+            + (are_equal(cs.axis1(), Vector<T, 3>(), margin) ? 0 : 1)
+            + (are_equal(cs.axis2(), Vector<T, 3>(), margin) ? 0 : 1);
     }
 
     template <std::floating_point T>
@@ -132,8 +132,8 @@ namespace Xyz
         {
             axis1 = -axis1; // Ensure positive x-axis
         }
-        auto axis2 = get_unit(cross(plane.normal, axis1));
         auto axis3 = get_unit(plane.normal);
+        auto axis2 = get_unit(cross(axis3, axis1));
 
         return CoordinateSystem<T>( line->point, axis1, axis2, axis3);
     }

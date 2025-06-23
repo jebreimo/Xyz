@@ -15,9 +15,9 @@ namespace
         const Xyz::CoordinateSystem<double> cs({1, 1, 0}, {1, 1, 0},
                                           {-1, 1, 0}, {0, 0, 2});
         REQUIRE(cs.origin() == Xyz::Vector3D(1, 1, 0));
-        REQUIRE(cs.axis1() == Xyz::Vector3D(1, 1, 0));
-        REQUIRE(cs.axis2() == Xyz::Vector3D(-1, 1, 0));
-        REQUIRE(cs.axis3() == Xyz::Vector3D(0, 0, 2));
+        REQUIRE(cs.axis0() == Xyz::Vector3D(1, 1, 0));
+        REQUIRE(cs.axis1() == Xyz::Vector3D(-1, 1, 0));
+        REQUIRE(cs.axis2() == Xyz::Vector3D(0, 0, 2));
         Xyz::Vector3D p0 = {2, 0, 0.5};
         auto p1 = cs.from_world_pos(p0);
         auto p2 = cs.to_world_pos(p1);
@@ -35,7 +35,11 @@ namespace
 
     TEST_CASE("CoordinateSystem XY 2D", "[CoordinateSystem]")
     {
+        using V = Xyz::Vector3D;
         const auto cs = Xyz::make_coordinate_system<double>({{1, 1, 0}, {-1, -1, 1}});
-        REQUIRE(cs.origin() == Xyz::Vector3D(2, 0, 0));
+        REQUIRE(cs.origin() == V(2, 0, 0));
+        REQUIRE(are_equal(cs.axis0(), V(1 / sqrt(2), -1 / sqrt(2), 0)));
+        REQUIRE(are_equal(cs.axis1(), V(1 / sqrt(6), 1 / sqrt(6), sqrt(2. / 3))));
+        REQUIRE(are_equal(cs.axis2(), V(-1 / sqrt(3), -1 / sqrt(3), 1 / sqrt(3))));
     }
 }
