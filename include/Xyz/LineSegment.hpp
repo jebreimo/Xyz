@@ -36,7 +36,7 @@ namespace Xyz
 
         LineSegment segment(FloatT t0, FloatT t1) const
         {
-            auto vec = vector_cast<T>(vector());
+            auto vec = vector_cast<FloatT>(vector());
             return {
                 start + vector_cast<T>(vec * t0),
                 start + vector_cast<T>(vec * t1)

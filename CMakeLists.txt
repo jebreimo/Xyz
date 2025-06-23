@@ -67,6 +67,7 @@ add_library(Xyz STATIC
     src/Xyz/RandomGenerator.cpp
    include/Xyz/IntersectionType.hpp
     src/Xyz/IntersectionType.cpp
+    include/Xyz/PlanePlaneIntersection.hpp
 )
 
 include(GNUInstallDirs)

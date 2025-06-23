@@ -12,11 +12,15 @@ namespace
 {
     TEST_CASE("CoordinateSystem rotated XY", "[CoordinateSystem]")
     {
-        Xyz::CoordinateSystem<double> sys({1, 1, 0}, {1, 1, 0},
+        const Xyz::CoordinateSystem<double> cs({1, 1, 0}, {1, 1, 0},
                                           {-1, 1, 0}, {0, 0, 2});
+        REQUIRE(cs.origin() == Xyz::Vector3D(1, 1, 0));
+        REQUIRE(cs.axis1() == Xyz::Vector3D(1, 1, 0));
+        REQUIRE(cs.axis2() == Xyz::Vector3D(-1, 1, 0));
+        REQUIRE(cs.axis3() == Xyz::Vector3D(0, 0, 2));
         Xyz::Vector3D p0 = {2, 0, 0.5};
-        auto p1 = sys.from_world_pos(p0);
-        auto p2 = sys.to_world_pos(p1);
+        auto p1 = cs.from_world_pos(p0);
+        auto p2 = cs.to_world_pos(p1);
         REQUIRE(p0 == p2);
     }
 
@@ -27,5 +31,11 @@ namespace
         Xyz::Vector3D p1 = {-1, -1, 1};
         auto p2 = sys.to_world_pos(p1);
         REQUIRE(p2 == Xyz::make_vector3(1, -1, -1));
+    }
+
+    TEST_CASE("CoordinateSystem XY 2D", "[CoordinateSystem]")
+    {
+        const auto cs = Xyz::make_coordinate_system<double>({{1, 1, 0}, {-1, -1, 1}});
+        REQUIRE(cs.origin() == Xyz::Vector3D(2, 0, 0));
     }
 }

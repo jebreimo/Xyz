@@ -6,7 +6,6 @@
 // License text is included with the source distribution.
 //****************************************************************************
 #pragma once
-#include "FloatType.hpp"
 #include "MatrixTransformations.hpp"
 #include "Plane.hpp"
 #include "Vector.hpp"
@@ -21,20 +20,20 @@ namespace Xyz
     struct Pgram3
     {
         /**
-         * The origin point of the rectangle.
+         * The origin point of the parallelogram.
          * This is normally the point with the smallest coordinates.
          */
         Vector<T, 3> origin;
         /**
-         * The vector in the direction of the major axis of the rectangle.
+         * The vector in the direction of the first edge.
          * This is normally the vector that is closest to the x-axis.
          */
-        Vector<T, 3> major;
+        Vector<T, 3> edge0;
         /**
-         * The vector in the direction of the minor axis of the rectangle.
+         * The vector in the direction of the second edge.
          * This is normally the vector that is closest to the y-axis.
          */
-        Vector<T, 3> minor;
+        Vector<T, 3> edge1;
 
         [[nodiscard]]
         bool is_valid(std::type_identity_t<T> margin = Margin<T>::DEFAULT) const
@@ -48,7 +47,7 @@ namespace Xyz
         [[nodiscard]]
         constexpr Vector<T, 3> normal() const
         {
-            return cross(major, minor);
+            return cross(edge0, edge1);
         }
 
         /**
@@ -58,7 +57,7 @@ namespace Xyz
         [[nodiscard]]
         constexpr Vector<T, 2> size() const
         {
-            return {get_length(major), get_length(minor)};
+            return {get_length(edge0), get_length(edge1)};
         }
 
         /**
@@ -76,9 +75,9 @@ namespace Xyz
             {
             default:
             case 0: return origin;
-            case 1: return origin + major;
-            case 2: return origin + major + minor;
-            case 3: return origin + minor;
+            case 1: return origin + edge0;
+            case 2: return origin + edge0 + edge1;
+            case 3: return origin + edge1;
             }
         }
     };
@@ -91,14 +90,14 @@ namespace Xyz
         {
             using V = Vector<T, 3>;
 
-            auto z = get_ccw_angle(p.major, V(1, 0, 0), V(0, 0, 1));
+            auto z = get_ccw_angle(p.edge0, V(1, 0, 0), V(0, 0, 1));
             auto m = rotate_z(z);
 
-            auto pt1 = m * to_hg(p.major);
+            auto pt1 = m * to_hg(p.edge0);
             auto y = get_ccw_angle(from_hg(pt1), V(1, 0, 0), V(0, 1, 0));
             m = rotate_y(y) * m;
 
-            auto pt2 = m * to_hg(p.minor);
+            auto pt2 = m * to_hg(p.edge1);
             auto x = get_ccw_angle(from_hg(pt2), V(0, 1, 0), V(1, 0, 0));
             return rotate_x(x) * m;
         }
@@ -110,7 +109,7 @@ namespace Xyz
                       std::type_identity_t<T> margin = Margin<T>::DEFAULT)
     {
         return p.is_valid(margin)
-            && std::abs(dot(p.major, p.minor)) <= margin;
+            && std::abs(dot(p.edge0, p.edge1)) <= margin;
     }
 
     template <typename T>
@@ -132,16 +131,16 @@ namespace Xyz
     {
         auto m = Details::get_rotation(p);
 
-        auto minor = m * to_hg(p.minor);
-        if (minor[0] != 0 && minor[1] != 0)
+        auto edge1 = m * to_hg(p.edge1);
+        if (edge1[0] != 0 && edge1[1] != 0)
         {
             auto shearing = Matrix<T, 4, 4>::identity();
-            shearing[{0, 1}] = -minor[0] / minor[1];
+            shearing[{0, 1}] = -edge1[0] / edge1[1];
             m = shearing * m;
         }
 
-        auto dx = get_length(from_hg(m * to_hg(p.major)));
-        auto dy = get_length(from_hg(m * to_hg(p.minor)));
+        auto dx = get_length(from_hg(m * to_hg(p.edge0)));
+        auto dy = get_length(from_hg(m * to_hg(p.edge1)));
         auto x_scale = dx != 0 ? 1 / dx : 1;
         auto y_scale = dy != 0 ? 1 / dy : 1;
         return scale4(x_scale, y_scale, T(1)) * m * translate4(-p.origin);
@@ -149,7 +148,7 @@ namespace Xyz
 
     template <typename T>
     [[nodiscard]]
-    constexpr Plane<T, 3> get_plane(const Pgram3<T>& rect)
+    constexpr Plane<T> get_plane(const Pgram3<T>& rect)
     {
         return {rect.origin, rect.normal()};
     }
