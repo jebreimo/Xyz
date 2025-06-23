@@ -33,8 +33,8 @@ namespace Xyz
         std::optional<LineSegment<T, N>>
         clip(const LineSegment<T, N>& segment) const
         {
-            auto start = push_back(vector_cast<FloatT>(segment.start), 1);
-            auto end = push_back(vector_cast<FloatT>(segment.end), 1);
+            auto start = to_hg(vector_cast<FloatT>(segment.start));
+            auto end = to_hg(vector_cast<FloatT>(segment.end));
 
             // Apply the transformation.
             start = transform * start;
