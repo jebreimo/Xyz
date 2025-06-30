@@ -6,6 +6,7 @@
 // License text is included with the source distribution.
 //****************************************************************************
 #pragma once
+#include "CoordinateSystem.hpp"
 #include "MatrixTransformations.hpp"
 #include "Plane.hpp"
 #include "Vector.hpp"
@@ -50,14 +51,10 @@ namespace Xyz
             return cross(edge0, edge1);
         }
 
-        /**
-         * Returns the lengths of the plane segment in the direction of
-         * vector1 and vector2.
-         */
         [[nodiscard]]
-        constexpr Vector<T, 2> size() const
+        constexpr size_t size() const
         {
-            return {get_length(edge0), get_length(edge1)};
+            return 4;
         }
 
         /**
@@ -69,7 +66,7 @@ namespace Xyz
          * 3: origin + vector2
          */
         [[nodiscard]]
-        constexpr Vector<T, 3> point(size_t i) const
+        constexpr Vector<T, 3> operator[](size_t i) const
         {
             switch (i % 4)
             {
@@ -114,15 +111,21 @@ namespace Xyz
 
     template <typename T>
     [[nodiscard]]
-    Pgram3<T> get_bounding_rectangle(const Pgram3<T>& pgram)
+    std::pair<Vector<T, 3>, Vector<T, 3>>
+    get_bounding_box(const Pgram3<T>& pgram, CoordinateSystem<T> cs)
     {
-        if (is_rectangle(pgram))
-            return pgram;
-
-        if (!pgram.is_valid())
-            return Pgram3<T>();
-
-
+        Vector<T, 3> min = pgram[0];
+        Vector<T, 3> max = pgram[0];
+        for (size_t i = 1; i < 4; ++i)
+        {
+            auto p = pgram[i];
+            for (size_t j = 0; j < 3; ++j)
+            {
+                min[j] = std::min(min[j], p[j]);
+                max[j] = std::max(max[j], p[j]);
+            }
+        }
+        return {min, max};
     }
 
     template <std::floating_point T>

@@ -59,7 +59,7 @@ namespace Xyz
         }
 
         [[nodiscard]]
-        Vector point(size_t index) const
+        constexpr Vector operator[](size_t index) const
         {
             switch (index % 4)
             {

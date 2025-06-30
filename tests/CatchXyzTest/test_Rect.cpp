@@ -12,10 +12,10 @@ TEST_CASE("Test Rectangle")
 {
     Xyz::RectangleD rect({10, 20}, {100, 80});
     REQUIRE(Xyz::get_center(rect) == Xyz::Vector2D(60, 60));
-    REQUIRE(rect.point(0) == Xyz::Vector2I(10, 20));
-    REQUIRE(rect.point(1) == Xyz::Vector2I(110, 20));
-    REQUIRE(rect.point(3) == Xyz::Vector2I(10, 100));
-    REQUIRE(rect.point(2) == Xyz::Vector2I(110, 100));
+    REQUIRE(rect[0] == Xyz::Vector2I(10, 20));
+    REQUIRE(rect[1] == Xyz::Vector2I(110, 20));
+    REQUIRE(rect[3] == Xyz::Vector2I(10, 100));
+    REQUIRE(rect[2] == Xyz::Vector2I(110, 100));
 
     Xyz::set_center(rect, Xyz::Vector2D(45, 75));
     REQUIRE(rect.origin == Xyz::Vector2I(-5, 35));

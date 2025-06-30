@@ -22,12 +22,6 @@ TEST_CASE("Pgram3: invalid parallelogram")
     REQUIRE(!rect.is_valid());
 }
 
-TEST_CASE("Pgram3: size of parallelogram")
-{
-    constexpr Xyz::Pgram3<float> rect{{0, 0, 0}, {-3, 4, 0}, {4, 3, 0}};
-    REQUIRE(rect.size() == Xyz::Vector2F(5, 5));
-}
-
 TEST_CASE("Pgram3: rectangular parallelogram")
 {
     using P = Xyz::Pgram3<float>;
@@ -43,10 +37,10 @@ void require_is_clip_rect(const Xyz::Matrix<T, 4, 4>& m, const Xyz::Pgram3<T>& p
     CAPTURE(p.edge0);
     CAPTURE(p.edge1);
     T e = Xyz::Margin<T>::DEFAULT;
-    REQUIRE(are_equal(m * make_vector4(p.point(0), 1), V(0, 0, 0, 1), e));
-    REQUIRE(are_equal(m * make_vector4(p.point(1), 1), V(1, 0, 0, 1), e));
-    REQUIRE(are_equal(m * make_vector4(p.point(2), 1), V(1, 1, 0, 1), e));
-    REQUIRE(are_equal(m * make_vector4(p.point(3), 1), V(0, 1, 0, 1), e));
+    REQUIRE(are_equal(m * make_vector4(p[0], 1), V(0, 0, 0, 1), e));
+    REQUIRE(are_equal(m * make_vector4(p[1], 1), V(1, 0, 0, 1), e));
+    REQUIRE(are_equal(m * make_vector4(p[2], 1), V(1, 1, 0, 1), e));
+    REQUIRE(are_equal(m * make_vector4(p[3], 1), V(0, 1, 0, 1), e));
 }
 
 TEST_CASE("Pgram3: square_transform - translation")
@@ -93,4 +87,13 @@ TEST_CASE("Pgram3: clip_transform - float")
     const Xyz::Pgram3<float> p{{1, 2, 3}, {5, 3, 2}, {1, 4, 8}};
     const auto m = get_clip_transform(p);
     require_is_clip_rect(m, p);
+}
+
+TEST_CASE("Pgram3: bounding box")
+{
+    using P = Xyz::Pgram3<float>;
+    P pg{{0, 0, 0}, {-1, -4, 1}, {5, 1, -2}};
+    auto [min, max] = get_bounding_box(pg, {});
+    REQUIRE(min == Xyz::Vector3F(-1, -4, -2));
+    REQUIRE(max == Xyz::Vector3F(5, 1, 1));
 }

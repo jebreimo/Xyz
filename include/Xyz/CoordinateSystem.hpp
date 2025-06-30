@@ -91,8 +91,8 @@ namespace Xyz
         }
 
     private:
-        Matrix<T, 4, 4> from_world_;
-        Matrix<T, 4, 4> to_world_;
+        Matrix<T, 4, 4> from_world_ = Matrix<T, 4, 4>::identity();
+        Matrix<T, 4, 4> to_world_ = Matrix<T, 4, 4>::identity();
     };
 
     template <std::floating_point T>
