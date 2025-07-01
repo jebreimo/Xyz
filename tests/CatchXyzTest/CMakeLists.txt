@@ -41,4 +41,6 @@ target_link_libraries(CatchXyzTest
     Catch2::Catch2WithMain
 )
 
+Xyz_enable_all_warnings(CatchXyzTest)
+
 add_test(NAME CatchXyzTest COMMAND CatchXyzTest)

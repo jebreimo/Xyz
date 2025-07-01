@@ -188,7 +188,6 @@ TEST_CASE("Vector get_cw_angle 3D")
 TEST_CASE("get_ccw_angle 3D only considers the plane defined by the normal")
 {
     using V = Xyz::Vector3D;
-    auto q = sqrt(8);
     CHECK_THAT(get_ccw_angle(V(6, 0, 0), V(2, 0, 2), V(0, 0, 1)),
                 WithinAbs(0, 1e-10));
 }

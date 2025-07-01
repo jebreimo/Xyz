@@ -32,7 +32,6 @@ TEST_CASE("Test Rectangle is_empty")
 TEST_CASE("Test Rectangle: normalize without angle")
 {
     using R = Xyz::RectangleD;
-    constexpr auto pi = Xyz::Constants<double>::PI;
     REQUIRE(Xyz::normalize(R({10, 15}, {10, 10})) == R({10, 15}, {10, 10}));
     REQUIRE(Xyz::normalize(R({10, 15}, {-10, 10})) == R({0, 15}, {10, 10}));
     REQUIRE(Xyz::normalize(R({10, 15}, {10, -10})) == R({10, 5}, {10, 10}));

@@ -127,8 +127,8 @@ namespace Xyz
 
         auto axis1 = get_unit(line->vector);
         if (axis1[0] < 0
-            || axis1[0] == 0 && (axis1[1] < 0
-                || axis1[1] == 0 && axis1[2] < 0))
+            || (axis1[0] == 0 && (axis1[1] < 0
+                || (axis1[1] == 0 && axis1[2] < 0))))
         {
             axis1 = -axis1; // Ensure positive x-axis
         }

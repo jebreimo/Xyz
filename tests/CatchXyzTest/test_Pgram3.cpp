@@ -9,8 +9,6 @@
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
 
-constexpr auto PI = Xyz::Constants<double>::PI;
-
 using Catch::Matchers::WithinAbs;
 
 TEST_CASE("Pgram3: invalid parallelogram")
@@ -76,7 +74,6 @@ TEST_CASE("Pgram3: clip_transform - shearing")
 
 TEST_CASE("Pgram3: clip_transform - scale")
 {
-    auto d = 1 / sqrt(2);
     const Xyz::Pgram3<double> p{{1, 2, 3}, {5, 0, 0}, {0, 3, 0}};
     const auto m = get_clip_transform(p);
     require_is_clip_rect(m, p);

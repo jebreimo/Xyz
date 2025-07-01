@@ -8,7 +8,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 project(Xyz
-    VERSION 0.7.0
+    VERSION 0.7.1
     DESCRIPTION "A C++ library for 3D geometry and linear algebra"
 )
 
@@ -29,6 +29,15 @@ option(XYZ_BUILD_TEST "Build tests" ${XYZ_MASTER_PROJECT})
 
 # Install option
 option(XYZ_INSTALL "Generate the install target" ${XYZ_MASTER_PROJECT})
+
+function(Xyz_enable_all_warnings target)
+    target_compile_options(${target}
+        PRIVATE
+        $<$<CXX_COMPILER_ID:Clang>:-Wall>
+        $<$<CXX_COMPILER_ID:GNU>:-Wall>
+        $<$<CXX_COMPILER_ID:AppleClang>:-Wall>
+        $<$<CXX_COMPILER_ID:MSVC>:/W4>)
+endfunction()
 
 configure_file(src/Xyz/XyzVersion.hpp.in XyzVersion.hpp @ONLY)
 
@@ -82,6 +91,8 @@ target_include_directories(Xyz
 )
 
 add_library(Xyz::Xyz ALIAS Xyz)
+
+Xyz_enable_all_warnings(Xyz)
 
 ##
 ## Unit tests
