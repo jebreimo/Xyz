@@ -19,93 +19,109 @@ namespace Xyz
         CoordinateSystem() = default;
 
         constexpr CoordinateSystem(const Vector<T, 3>& origin,
-                                   const Vector<T, 3>& axis0,
-                                   const Vector<T, 3>& axis1,
-                                   const Vector<T, 3>& axis2)
+                                   const Vector<T, 3>& x_axis,
+                                   const Vector<T, 3>& y_axis,
+                                   const Vector<T, 3>& z_axis)
             : CoordinateSystem(Matrix<T, 4, 4>(
-                axis0[0], axis0[1], axis0[2], -origin[0],
-                axis1[0], axis1[1], axis1[2], -origin[1],
-                axis2[0], axis2[1], axis2[2], -origin[2],
+                x_axis[0], y_axis[0], z_axis[0], -origin[0],
+                x_axis[1], y_axis[1], z_axis[1], -origin[1],
+                x_axis[2], y_axis[2], z_axis[2], -origin[2],
                 0, 0, 0, 1))
         {}
 
-        explicit constexpr CoordinateSystem(const Matrix<T, 4, 4>& from_world)
-            : from_world_(from_world),
-              to_world_(invert(from_world))
+        explicit constexpr CoordinateSystem(const Matrix<T, 4, 4>& from_cs)
+            : from_cs_(from_cs),
+              to_cs_(invert(from_cs))
         {}
 
         constexpr Vector<T, 3> origin() const
         {
-            return Vector<T, 3>{
-                -from_world_[{0, 3}],
-                -from_world_[{1, 3}],
-                -from_world_[{2, 3}]
+            return {
+                -from_cs_[{0, 3}],
+                -from_cs_[{1, 3}],
+                -from_cs_[{2, 3}]
             };
         }
 
-        constexpr Vector<T, 3> axis0() const
+        constexpr Vector<T, 3> x_axis() const
         {
-            return Vector<T, 3>{
-                from_world_[{0, 0}],
-                from_world_[{0, 1}],
-                from_world_[{0, 2}]
+            return {
+                from_cs_[{0, 0}],
+                from_cs_[{1, 0}],
+                from_cs_[{2, 0}]
             };
         }
 
-        constexpr Vector<T, 3> axis1() const
+        constexpr Vector<T, 3> y_axis() const
         {
-            return Vector<T, 3>{
-                from_world_[{1, 0}],
-                from_world_[{1, 1}],
-                from_world_[{1, 2}]
+            return {
+                from_cs_[{0, 1}],
+                from_cs_[{1, 1}],
+                from_cs_[{2, 1}]
             };
         }
 
-        constexpr Vector<T, 3> axis2() const
+        constexpr Vector<T, 3> z_axis() const
         {
-            return Vector<T, 3>{
-                from_world_[{2, 0}],
-                from_world_[{2, 1}],
-                from_world_[{2, 2}]
+            return {
+                from_cs_[{0, 2}],
+                from_cs_[{1, 2}],
+                from_cs_[{2, 2}]
             };
         }
 
-        constexpr const Matrix<T, 4, 4>& from_world_transform() const
+        constexpr const Matrix<T, 4, 4>& from_cs_transform() const
         {
-            return from_world_;
+            return from_cs_;
         }
 
-        constexpr const Matrix<T, 4, 4>& to_world_transform() const
+        constexpr const Matrix<T, 4, 4>& to_cs_transform() const
         {
-            return to_world_;
+            return to_cs_;
         }
 
-        constexpr auto to_world_pos(const Vector<T, 3>& p) const
+        constexpr Vector<T, 3> to_cs(const Vector<T, 3>& p) const
         {
-            return from_hg(to_world_ * to_hg(p));
+            return drop_back(to_cs_ * to_hg(p));
         }
 
-        constexpr auto from_world_pos(const Vector<T, 3>& p) const
+        constexpr Vector<T, 3> from_cs(const Vector<T, 3>& p) const
         {
-            return from_hg(from_world_ * to_hg(p));
+            return drop_back(from_cs_ * to_hg(p));
+        }
+
+        constexpr Vector<T, 2> to_cs_xy(const Vector<T, 3>& p) const
+        {
+            return resize<2>(to_cs_ * to_hg(p));
+        }
+
+        constexpr Vector<T, 3> from_cs_xy(const Vector<T, 2>& p) const
+        {
+            return drop_back(from_cs_ * Vector<T, 4>(p[0], p[1], 0, 1));
         }
 
     private:
-        Matrix<T, 4, 4> from_world_ = Matrix<T, 4, 4>::identity();
-        Matrix<T, 4, 4> to_world_ = Matrix<T, 4, 4>::identity();
+        Matrix<T, 4, 4> from_cs_ = Matrix<T, 4, 4>::identity();
+        Matrix<T, 4, 4> to_cs_ = Matrix<T, 4, 4>::identity();
     };
 
+    /**
+     * @brief Checks if the coordinate system is valid.
+     *
+     * A coordinate system is valid if no pair of axes are parallel.
+     */
     template <std::floating_point T>
     constexpr bool is_valid(const CoordinateSystem<T>& cs,
                             std::type_identity_t<T> margin = Margin<T>::DEFAULT)
     {
-        return 2 <= (are_equal(cs.axis0(), Vector<T, 3>(), margin) ? 0 : 1)
-            + (are_equal(cs.axis1(), Vector<T, 3>(), margin) ? 0 : 1)
-            + (are_equal(cs.axis2(), Vector<T, 3>(), margin) ? 0 : 1);
+        constexpr Vector<T, 3> null;
+        return !are_equal(cross(cs.x_axis(), cs.y_axis()), null, margin)
+            && !are_equal(cross(cs.x_axis(), cs.z_axis()), null, margin)
+            && !are_equal(cross(cs.y_axis(), cs.z_axis()), null, margin);
     }
 
     template <std::floating_point T>
-    CoordinateSystem<T> make_coordinate_system(const Plane<T>& plane)
+    std::optional<CoordinateSystem<T>> make_coordinate_system(const Plane<T>& plane)
     {
         auto [x, y, z] = plane.normal;
         std::optional<Line<T, 3>> line;
@@ -123,7 +139,7 @@ namespace Xyz
         }
 
         if (!line)
-            return CoordinateSystem<T>();
+            return std::nullopt; // No intersection with any of the planes
 
         auto axis1 = get_unit(line->vector);
         if (axis1[0] < 0
@@ -135,6 +151,6 @@ namespace Xyz
         auto axis3 = get_unit(plane.normal);
         auto axis2 = get_unit(cross(axis3, axis1));
 
-        return CoordinateSystem<T>( line->point, axis1, axis2, axis3);
+        return CoordinateSystem<T>(line->point, axis1, axis2, axis3);
     }
 }

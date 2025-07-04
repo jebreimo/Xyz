@@ -23,6 +23,8 @@ namespace Xyz
     class Vector
     {
     public:
+        static_assert(N > 0, "N must be greater than 0.");
+
         using ValueType = T;
         static constexpr size_t SIZE = N;
 
@@ -756,6 +758,20 @@ namespace Xyz
     {
         Vector<T, N - 1> result;
         for (unsigned i = 0; i < N - 1; ++i)
+            result[i] = v[i];
+        return result;
+    }
+
+    /**
+     * @brief Returns a vector with the same coordinates as @a v, but with
+     *  the dimension changed to @a SIZE.
+     */
+    template <unsigned SIZE, typename T, unsigned N>
+    [[nodiscard]]
+    constexpr Vector<T, SIZE> resize(const Vector<T, N>& v)
+    {
+        Vector<T, SIZE> result;
+        for (unsigned i = 0; i < std::min(SIZE, N); ++i)
             result[i] = v[i];
         return result;
     }
