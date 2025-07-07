@@ -125,7 +125,15 @@ namespace Xyz
             return values[i];
         }
 
-        T values[2];
+        union
+        {
+            T values[2];
+            struct
+            {
+                T x;
+                T y;
+            };
+        };
     };
 
     template <typename T>
@@ -173,7 +181,22 @@ namespace Xyz
             return values[i];
         }
 
-        T values[3];
+        union
+        {
+            T values[3];
+            struct
+            {
+                T x;
+                T y;
+                T z;
+            };
+            struct
+            {
+                T r;
+                T g;
+                T b;
+            };
+        };
     };
 
     template <typename T>
@@ -221,7 +244,24 @@ namespace Xyz
             return values[i];
         }
 
-        T values[4];
+        union
+        {
+            T values[4];
+            struct
+            {
+                T x;
+                T y;
+                T z;
+                T w;
+            };
+            struct
+            {
+                T r;
+                T g;
+                T b;
+                T a;
+            };
+        };
     };
 
     template <typename T, unsigned N>

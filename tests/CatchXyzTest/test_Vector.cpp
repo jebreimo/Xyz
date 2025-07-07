@@ -249,10 +249,10 @@ TEST_CASE("Test Vector4D basics")
     CHECK(u[1] == 1);
     CHECK(u[2] == 4);
     CHECK(u[3] == 3);
-    CHECK(v[0] == 3);
-    CHECK(v[1] == 4);
-    CHECK(v[2] == -1);
-    CHECK(v[3] == -2);
+    CHECK(v.x == 3);
+    CHECK(v.y == 4);
+    CHECK(v.z == -1);
+    CHECK(v.w == -2);
     CHECK(u * v == Xyz::Vector4D(6, 4, -4, -6));
     CHECK(u + v == Xyz::Vector4D(5, 5, 3, 1));
     CHECK(u - v == Xyz::Vector4D(-1, -3, 5, 5));
