@@ -68,7 +68,7 @@ namespace Xyz
 
         Vertex normal(const Face& face) const
         {
-            return get_unit(cross(vertexes_[face[1]] - vertexes_[face[0]],
+            return normalize(cross(vertexes_[face[1]] - vertexes_[face[0]],
                                   vertexes_[face[2]] - vertexes_[face[1]]));
         }
     private:

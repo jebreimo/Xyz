@@ -16,8 +16,8 @@ namespace Xyz
                                         const Vector<T, 3>& center,
                                         const Vector<T, 3>& up)
     {
-        auto f = get_unit(center - eye);
-        auto s = cross(f, get_unit(up));
+        auto f = normalize(center - eye);
+        auto s = cross(f, normalize(up));
         auto u = cross(s, f);
         return Matrix<T, 4, 4>{
                 s[0], s[1], s[2], dot(-s, eye),

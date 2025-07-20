@@ -26,12 +26,13 @@ add_executable(CatchXyzTest
     test_Matrix.cpp
     test_MatrixDeterminant.cpp
     test_Mesh.cpp
+    test_Orientation.cpp
     test_Pgram3.cpp
     test_Plane.cpp
     test_Projections.cpp
     test_QuadraticEquation.cpp
     test_Rect.cpp
-    test_Transforms.cpp
+    test_Transformations.cpp
     test_Triangle.cpp
     test_Vector.cpp
 )

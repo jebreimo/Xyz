@@ -42,6 +42,8 @@ namespace
         Xyz::Vector3D p1 = {-1, -2, 3};
         auto p2 = sys.from_cs(p1);
         REQUIRE(p2 == Xyz::make_vector3(3, -1, -2));
+        auto p3 = sys.to_cs(p1);
+        REQUIRE(p3 == Xyz::make_vector3(-2, 3, -1));
     }
 
     TEST_CASE("CoordinateSystem from invalid plane", "[CoordinateSystem]")

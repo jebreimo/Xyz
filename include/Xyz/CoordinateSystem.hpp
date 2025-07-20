@@ -8,6 +8,7 @@
 #pragma once
 
 #include "InvertMatrix.hpp"
+#include "Orientation.hpp"
 #include "PlanePlaneIntersection.hpp"
 
 namespace Xyz
@@ -27,6 +28,11 @@ namespace Xyz
                 x_axis[1], y_axis[1], z_axis[1], -origin[1],
                 x_axis[2], y_axis[2], z_axis[2], -origin[2],
                 0, 0, 0, 1))
+        {}
+
+        explicit CoordinateSystem(const Orientation<T, 3>& orientation,
+                                  const Vector<T, 3>& origin = {0, 0, 0})
+            : CoordinateSystem(affine::to_matrix(orientation, origin))
         {}
 
         explicit constexpr CoordinateSystem(const Matrix<T, 4, 4>& from_cs)
@@ -141,15 +147,15 @@ namespace Xyz
         if (!line)
             return std::nullopt; // No intersection with any of the planes
 
-        auto axis1 = get_unit(line->vector);
+        auto axis1 = normalize(line->vector);
         if (axis1[0] < 0
             || (axis1[0] == 0 && (axis1[1] < 0
                 || (axis1[1] == 0 && axis1[2] < 0))))
         {
             axis1 = -axis1; // Ensure positive x-axis
         }
-        auto axis3 = get_unit(plane.normal);
-        auto axis2 = get_unit(cross(axis3, axis1));
+        auto axis3 = normalize(plane.normal);
+        auto axis2 = normalize(cross(axis3, axis1));
 
         return CoordinateSystem<T>(line->point, axis1, axis2, axis3);
     }

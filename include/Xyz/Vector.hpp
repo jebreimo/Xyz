@@ -623,7 +623,7 @@ namespace Xyz
     Vector<T, N> get_projection(const Vector<T, N>& v,
                                 const Vector<T, N>& normal)
     {
-        auto n = get_unit(normal);
+        auto n = normalize(normal);
         return v - dot(v, n) * n;
     }
 
@@ -650,7 +650,7 @@ namespace Xyz
 
     template <typename T, unsigned N>
     [[nodiscard]]
-    auto get_unit(const Vector<T, N>& v)
+    auto normalize(const Vector<T, N>& v)
     {
         return v / get_length(v);
     }
@@ -829,8 +829,8 @@ namespace Xyz
 
     /**
      * @brief Converts a vector from homogeneous coordinates by removing the
-     *  last coordinate if it is 1, or dividing all coordinates by the last
-     *  coordinate if it is not 1.
+     *  last coordinate. If the last coordinate is not 1, the result is
+     *  divided by the removed coordinate.
      * @throws XyzException if the last coordinate is zero.
      */
     template <std::floating_point T, unsigned N>

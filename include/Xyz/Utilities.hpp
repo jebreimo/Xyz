@@ -8,6 +8,7 @@
 #pragma once
 
 #include <cmath>
+#include <concepts>
 #include "Constants.hpp"
 
 namespace Xyz
@@ -25,14 +26,28 @@ namespace Xyz
     }
 
     /**
-     * @brief Returns the @a radians as an angle between 0 and 2*PI.
+     * @brief Returns the @a radians as an angle between 0 and 2*π.
      */
-    template <typename T>
+    template <std::floating_point T>
     constexpr T to_principal_angle(T radians)
     {
-        if (radians >= 0 && radians < T(2) * Constants<T>::PI)
+        constexpr auto pi2 = T(2) * Constants<T>::PI;
+        if (0 <= radians && radians < pi2)
             return radians;
-        auto result = fmod(radians, T(2) * Constants<T>::PI);
-        return result >= 0 ? result : result + T(2) * Constants<T>::PI;
+        auto result = fmod(radians, pi2);
+        return result >= 0 ? result : result + pi2;
+    }
+
+    /**
+     * @brief Returns the @a radians as an angle between -π and π.
+     */
+    template <std::floating_point T>
+    constexpr T to_signed_principal_angle(T radians)
+    {
+        constexpr auto pi = Constants<T>::PI;
+        if (-pi <= radians && radians < pi)
+            return radians;
+        auto result = fmod(radians + pi, T(2) * pi);
+        return result >= 0 ? result - pi : result + pi;
     }
 }

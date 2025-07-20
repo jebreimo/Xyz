@@ -14,7 +14,7 @@
 #include "LineLineIntersection.hpp"
 #include "LineSegment.hpp"
 #include "Matrix.hpp"
-#include "MatrixTransformations.hpp"
+#include "TransformationMatrix.hpp"
 #include "Mesh.hpp"
 #include "Pgram3.hpp"
 #include "ProjectionMatrix.hpp"

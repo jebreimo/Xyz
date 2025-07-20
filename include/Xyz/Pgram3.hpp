@@ -7,8 +7,9 @@
 //****************************************************************************
 #pragma once
 #include "CoordinateSystem.hpp"
-#include "MatrixTransformations.hpp"
 #include "Plane.hpp"
+#include "Rectangle.hpp"
+#include "TransformationMatrix.hpp"
 #include "Vector.hpp"
 
 namespace Xyz
@@ -17,7 +18,7 @@ namespace Xyz
      * @brief A 3D parallelogram defined by an origin point and two vectors
      * @tparam T The value type of the parallelogram.
      */
-    template <typename T>
+    template <std::floating_point T>
     struct Pgram3
     {
         /**
@@ -52,7 +53,21 @@ namespace Xyz
         }
 
         [[nodiscard]]
-        constexpr size_t size() const
+        T length() const
+        {
+            auto f1 = dot(edge0, edge1) / dot(edge0, edge0);
+            return (T(1) + f1) * get_length(edge0);
+        }
+
+        [[nodiscard]]
+        T width() const
+        {
+            auto f1 = dot(edge0, edge1) / dot(edge0, edge0);
+            return get_length(edge1 - f1 * edge0);
+        }
+
+        [[nodiscard]]
+        static constexpr size_t size()
         {
             return 4;
         }
@@ -88,19 +103,19 @@ namespace Xyz
             using V = Vector<T, 3>;
 
             auto z = get_ccw_angle(p.edge0, V(1, 0, 0), V(0, 0, 1));
-            auto m = rotate_z(z);
+            auto m = affine::rotate_z(z);
 
             auto pt1 = m * to_hg(p.edge0);
             auto y = get_ccw_angle(from_hg(pt1), V(1, 0, 0), V(0, 1, 0));
-            m = rotate_y(y) * m;
+            m = affine::rotate_y(y) * m;
 
             auto pt2 = m * to_hg(p.edge1);
             auto x = get_ccw_angle(from_hg(pt2), V(0, 1, 0), V(1, 0, 0));
-            return rotate_x(x) * m;
+            return affine::rotate_x(x) * m;
         }
     }
 
-    template <typename T>
+    template <std::floating_point T>
     [[nodiscard]]
     bool is_rectangle(const Pgram3<T>& p,
                       std::type_identity_t<T> margin = Margin<T>::DEFAULT)
@@ -109,23 +124,15 @@ namespace Xyz
             && std::abs(dot(p.edge0, p.edge1)) <= margin;
     }
 
-    template <typename T>
+    template <std::floating_point T>
     [[nodiscard]]
-    std::pair<Vector<T, 3>, Vector<T, 3>>
-    get_bounding_box(const Pgram3<T>& pgram, CoordinateSystem<T> cs)
+    Rectangle<T, 3>
+    get_bounding_rect(const Pgram3<T>& pgram)
     {
-        Vector<T, 3> min = pgram[0];
-        Vector<T, 3> max = pgram[0];
-        for (size_t i = 1; i < 4; ++i)
-        {
-            auto p = pgram[i];
-            for (size_t j = 0; j < 3; ++j)
-            {
-                min[j] = std::min(min[j], p[j]);
-                max[j] = std::max(max[j], p[j]);
-            }
-        }
-        return {min, max};
+        return {
+            pgram.origin, pgram.length(), pgram.width(),
+            to_orientation(pgram.edge0, pgram.edge1)
+        };
     }
 
     template <std::floating_point T>
@@ -146,10 +153,12 @@ namespace Xyz
         auto dy = get_length(from_hg(m * to_hg(p.edge1)));
         auto x_scale = dx != 0 ? 1 / dx : 1;
         auto y_scale = dy != 0 ? 1 / dy : 1;
-        return scale4(x_scale, y_scale, T(1)) * m * translate4(-p.origin);
+        return affine::scale3(x_scale, y_scale, T(1))
+            * m
+            * affine::translate3(-p.origin);
     }
 
-    template <typename T>
+    template <std::floating_point T>
     [[nodiscard]]
     constexpr Plane<T> get_plane(const Pgram3<T>& rect)
     {

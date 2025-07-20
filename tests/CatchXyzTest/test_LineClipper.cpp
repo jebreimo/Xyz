@@ -14,8 +14,8 @@
 TEST_CASE("Test 2D line-clipper with scale and translate transform",
           "[LineClipper][2D]")
 {
-    auto transform = Xyz::scale3<float>(0.05f, 0.05f) *
-        Xyz::translate3<float>(10.f, 10.f);
+    auto transform = Xyz::affine::scale2<float>(0.05f, 0.05f) *
+        Xyz::affine::translate2<float>(10.f, 10.f);
     const Xyz::LineClipper<float, 2> clipper(transform);
     using V = Xyz::Vector<float, 2>;
     SECTION("Partially inside rectangle")

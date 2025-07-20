@@ -627,6 +627,50 @@ namespace Xyz
         return result;
     }
 
+    /**
+     * @brief Converts a matrix to homogeneous coordinates.
+     * @details The last row and column are set to 1, and the rest of the
+     *  matrix is copied from @a m.
+     */
+    template <std::floating_point T, unsigned N>
+    [[nodiscard]]
+    Matrix<T, N + 1, N + 1> to_hg(const Matrix<T, N, N>& m)
+    {
+        Matrix<T, N + 1, N + 1> result;
+        for (unsigned r = 0; r < N; ++r)
+        {
+            for (unsigned c = 0; c < N; ++c)
+            {
+                result[{r, c}] = m[{r, c}];
+            }
+        }
+        result[{N, N}] = 1;
+        return result;
+    }
+
+    /**
+     * @brief Converts a matrix from homogeneous coordinates.
+     * @details The last row and column are dropped, and the rest of the
+     *  matrix is copied from @a m. If the last element of @a m is not 1,
+     *  the result is divided by that element.
+     */
+    template <std::floating_point T, unsigned N>
+    [[nodiscard]]
+    Matrix<T, N - 1, N - 1> from_hg(const Matrix<T, N, N>& m)
+    {
+        Matrix<T, N - 1, N - 1> result;
+        for (unsigned r = 0; r < N - 1; ++r)
+        {
+            for (unsigned c = 0; c < N - 1; ++c)
+                result[{r, c}] = m[{r, c}];
+        }
+
+        if (m[{N - 1, N - 1}] != 1)
+            result /= m[{N - 1, N - 1}];
+
+        return result;
+    }
+
     using Matrix2I = Matrix<int, 2, 2>;
     using Matrix2F = Matrix<float, 2, 2>;
     using Matrix2D = Matrix<double, 2, 2>;

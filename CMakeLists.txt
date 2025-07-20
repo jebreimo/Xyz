@@ -8,7 +8,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 project(Xyz
-    VERSION 0.7.2
+    VERSION 0.8.0
     DESCRIPTION "A C++ library for 3D geometry and linear algebra"
 )
 
@@ -50,6 +50,7 @@ add_library(Xyz STATIC
     include/Xyz/FloatType.hpp
     include/Xyz/HalfEdge.hpp
     include/Xyz/Interpolation.hpp
+    include/Xyz/IntersectionType.hpp
     include/Xyz/InvertMatrix.hpp
     include/Xyz/Line.hpp
     include/Xyz/LineClipper.hpp
@@ -58,25 +59,26 @@ add_library(Xyz STATIC
     include/Xyz/LineSegment.hpp
     include/Xyz/Matrix.hpp
     include/Xyz/MatrixDeterminant.hpp
-    include/Xyz/MatrixTransformations.hpp
     include/Xyz/Mesh.hpp
+    include/Xyz/Orientation.hpp
     include/Xyz/Pgram3.hpp
     include/Xyz/Plane.hpp
+    include/Xyz/PlanePlaneIntersection.hpp
     include/Xyz/ProjectionMatrix.hpp
     include/Xyz/QuadraticEquation.hpp
     include/Xyz/RandomGenerator.hpp
     include/Xyz/Rectangle.hpp
+    include/Xyz/RotationMatrix.hpp
     include/Xyz/SphericalPoint.hpp
+    include/Xyz/TransformationMatrix.hpp
     include/Xyz/Triangle.hpp
     include/Xyz/Utilities.hpp
     include/Xyz/Vector.hpp
     include/Xyz/Xyz.hpp
     include/Xyz/XyzException.hpp
     src/Xyz/Face.cpp
-    src/Xyz/RandomGenerator.cpp
-   include/Xyz/IntersectionType.hpp
     src/Xyz/IntersectionType.cpp
-    include/Xyz/PlanePlaneIntersection.hpp
+    src/Xyz/RandomGenerator.cpp
 )
 
 include(GNUInstallDirs)

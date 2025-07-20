@@ -89,8 +89,11 @@ TEST_CASE("Pgram3: clip_transform - float")
 TEST_CASE("Pgram3: bounding box")
 {
     using P = Xyz::Pgram3<float>;
-    P pg{{0, 0, 0}, {-1, -4, 1}, {5, 1, -2}};
-    auto [min, max] = get_bounding_box(pg, {});
-    REQUIRE(min == Xyz::Vector3F(-1, -4, -2));
-    REQUIRE(max == Xyz::Vector3F(5, 1, 1));
+    P pg{{0, 0, 0}, {4, 0, 0}, {2, 2, 0}};
+    auto rect = get_bounding_rect(pg);
+    REQUIRE(rect.origin == Xyz::Vector3F(0, 0, 0));
+    REQUIRE(rect.length == 6);
+    REQUIRE(rect.width == 2);
+    // REQUIRE(min == Xyz::Vector3F(-1, -4, -2));
+    // REQUIRE(max == Xyz::Vector3F(5, 1, 1));
 }

@@ -8,9 +8,9 @@
 #include <Xyz/Rectangle.hpp>
 #include <catch2/catch_test_macros.hpp>
 
-TEST_CASE("Test Rectangle")
+TEST_CASE("Test 2D rectangle")
 {
-    Xyz::RectangleD rect({10, 20}, {100, 80});
+    Xyz::Rectangle2D rect({10, 20}, 100, 80);
     REQUIRE(Xyz::get_center(rect) == Xyz::Vector2D(60, 60));
     REQUIRE(rect[0] == Xyz::Vector2I(10, 20));
     REQUIRE(rect[1] == Xyz::Vector2I(110, 20));
@@ -21,31 +21,32 @@ TEST_CASE("Test Rectangle")
     REQUIRE(rect.origin == Xyz::Vector2I(-5, 35));
 }
 
-TEST_CASE("Test Rectangle is_empty")
+TEST_CASE("Test 2D rectangle is_empty")
 {
-    REQUIRE(is_empty(Xyz::RectangleF({2, 3}, {0, 0})));
-    REQUIRE(is_empty(Xyz::RectangleF({2, 3}, {0, -1})));
-    REQUIRE(is_empty(Xyz::RectangleF({2, 3}, {-1, 0})));
-    REQUIRE(!is_empty(Xyz::RectangleF({2, 3}, {-1, -1})));
+    REQUIRE(is_empty(Xyz::Rectangle2F({2, 3}, 0, 0)));
+    REQUIRE(is_empty(Xyz::Rectangle2F({2, 3}, 0, -1)));
+    REQUIRE(is_empty(Xyz::Rectangle2F({2, 3}, -1, 0)));
+    REQUIRE(!is_empty(Xyz::Rectangle2F({2, 3}, -1, -1)));
 }
 
-TEST_CASE("Test Rectangle: normalize without angle")
+TEST_CASE("Test 2D rectangle: normalize without angle")
 {
-    using R = Xyz::RectangleD;
-    REQUIRE(Xyz::normalize(R({10, 15}, {10, 10})) == R({10, 15}, {10, 10}));
-    REQUIRE(Xyz::normalize(R({10, 15}, {-10, 10})) == R({0, 15}, {10, 10}));
-    REQUIRE(Xyz::normalize(R({10, 15}, {10, -10})) == R({10, 5}, {10, 10}));
-    REQUIRE(Xyz::normalize(R({10, 15}, {-10, -10})) == R({0, 5}, {10, 10}));
+    using R = Xyz::Rectangle2D;
+    REQUIRE(Xyz::normalize(R({10, 15}, 10, 10)) == R({10, 15}, 10, 10));
+    REQUIRE(Xyz::normalize(R({10, 15}, -10, 10)) == R({0, 15}, 10, 10));
+    REQUIRE(Xyz::normalize(R({10, 15}, 10, -10)) == R({10, 5}, 10, 10));
+    REQUIRE(Xyz::normalize(R({10, 15}, -10, -10)) == R({0, 5}, 10, 10));
 }
 
-TEST_CASE("Test Rectangle: normalize with angle")
+TEST_CASE("Test 2D rectangle: normalize with angle")
 {
-    using R = Xyz::RectangleD;
+    using R = Xyz::Rectangle2D;
     using V = Xyz::Vector2D;
     constexpr auto pi = Xyz::Constants<double>::PI;
-    const auto rect = R({10, 15}, {10, 10}, pi);
+    const auto rect = R({10, 15}, 10, 10, Xyz::Orientation2D(pi));
     const auto result = Xyz::normalize(rect);
     REQUIRE(Xyz::are_equal(result.origin, V(0, 5)));
-    REQUIRE(Xyz::are_equal(result.size, rect.size));
-    REQUIRE(result.angle == 0);
+    REQUIRE(result.length == rect.length);
+    REQUIRE(result.width == rect.width);
+    REQUIRE(result.orientation.angle == 0);
 }
