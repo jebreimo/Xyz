@@ -130,8 +130,8 @@ namespace Xyz
     get_bounding_rect(const Pgram3<T>& pgram)
     {
         return {
-            pgram.origin, pgram.length(), pgram.width(),
-            to_orientation(pgram.edge0, pgram.edge1)
+            {pgram.origin, to_orientation(pgram.edge0, pgram.edge1)},
+            pgram.length(), pgram.width()
         };
     }
 
