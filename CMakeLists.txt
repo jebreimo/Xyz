@@ -62,6 +62,7 @@ add_library(Xyz STATIC
     include/Xyz/Mesh.hpp
     include/Xyz/Orientation.hpp
     include/Xyz/Pgram3.hpp
+    include/Xyz/Placement.hpp
     include/Xyz/Plane.hpp
     include/Xyz/PlanePlaneIntersection.hpp
     include/Xyz/ProjectionMatrix.hpp
@@ -79,7 +80,6 @@ add_library(Xyz STATIC
     src/Xyz/Face.cpp
     src/Xyz/IntersectionType.cpp
     src/Xyz/RandomGenerator.cpp
-    include/Xyz/Placement.hpp
 )
 
 include(GNUInstallDirs)
