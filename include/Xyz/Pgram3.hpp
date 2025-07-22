@@ -94,6 +94,29 @@ namespace Xyz
         }
     };
 
+    template <std::floating_point T>
+    [[nodiscard]]
+    bool operator==(const Pgram3<T>& a, const Pgram3<T>& b)
+    {
+        return a.origin == b.origin
+            && a.edge0 == b.edge0
+            && a.edge1 == b.edge1;
+    }
+
+    template <std::floating_point T>
+    [[nodiscard]]
+    bool operator!=(const Pgram3<T>& a, const Pgram3<T>& b)
+    {
+        return !(a == b);
+    }
+
+    template <std::floating_point T>
+    std::ostream& operator<<(std::ostream& os, const Pgram3<T>& p)
+    {
+        return os << "{" << p.origin << ", " << p.edge0
+            << ", " << p.edge1 << "}";
+    }
+
     namespace Details
     {
         template <std::floating_point T>
