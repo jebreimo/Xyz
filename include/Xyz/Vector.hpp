@@ -20,9 +20,8 @@
 namespace Xyz
 {
     template <typename T, unsigned N>
-    class Vector
+    struct Vector
     {
-    public:
         static_assert(N > 0, "N must be greater than 0.");
 
         using ValueType = T;
@@ -74,9 +73,8 @@ namespace Xyz
     };
 
     template <typename T>
-    class Vector<T, 2>
+    struct Vector<T, 2>
     {
-    public:
         using ValueType = T;
         static constexpr size_t SIZE = 2;
 
@@ -125,21 +123,32 @@ namespace Xyz
             return values[i];
         }
 
-        union
+        constexpr const T& x() const noexcept
         {
-            T values[2];
-            struct
-            {
-                T x;
-                T y;
-            };
-        };
+            return values[0];
+        }
+
+        constexpr T& x() noexcept
+        {
+            return values[0];
+        }
+
+        constexpr const T& y() const noexcept
+        {
+            return values[1];
+        }
+
+        constexpr T& y() noexcept
+        {
+            return values[1];
+        }
+
+        T values[2];
     };
 
     template <typename T>
-    class Vector<T, 3>
+    struct Vector<T, 3>
     {
-    public:
         using ValueType = T;
         static constexpr size_t SIZE = 3;
 
@@ -181,26 +190,41 @@ namespace Xyz
             return values[i];
         }
 
-        union
+        constexpr const T& x() const noexcept
         {
-            T values[3];
-            struct
-            {
-                T x;
-                T y;
-                T z;
-            };
-            struct
-            {
-                T r;
-                T g;
-                T b;
-            };
-        };
+            return values[0];
+        }
+
+        constexpr T& x() noexcept
+        {
+            return values[0];
+        }
+
+        constexpr const T& y() const noexcept
+        {
+            return values[1];
+        }
+
+        constexpr T& y() noexcept
+        {
+            return values[1];
+        }
+
+        constexpr const T& z() const noexcept
+        {
+            return values[2];
+        }
+
+        constexpr T& z() noexcept
+        {
+            return values[2];
+        }
+
+        T values[3];
     };
 
     template <typename T>
-    class Vector<T, 4>
+    struct Vector<T, 4>
     {
     public:
         using ValueType = T;
@@ -244,24 +268,47 @@ namespace Xyz
             return values[i];
         }
 
-        union
+        constexpr const T& x() const noexcept
         {
-            T values[4];
-            struct
-            {
-                T x;
-                T y;
-                T z;
-                T w;
-            };
-            struct
-            {
-                T r;
-                T g;
-                T b;
-                T a;
-            };
-        };
+            return values[0];
+        }
+
+        constexpr T& x() noexcept
+        {
+            return values[0];
+        }
+
+        constexpr const T& y() const noexcept
+        {
+            return values[1];
+        }
+
+        constexpr T& y() noexcept
+        {
+            return values[1];
+        }
+
+        constexpr const T& z() const noexcept
+        {
+            return values[2];
+        }
+
+        constexpr T& z() noexcept
+        {
+            return values[2];
+        }
+
+        constexpr const T& w() const noexcept
+        {
+            return values[3];
+        }
+
+        constexpr T& w() noexcept
+        {
+            return values[3];
+        }
+
+        T values[4];
     };
 
     template <typename T, unsigned N>

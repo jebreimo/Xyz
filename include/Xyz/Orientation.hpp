@@ -13,12 +13,11 @@
 namespace Xyz
 {
     template <std::floating_point T, unsigned N>
-    class Orientation;
+    struct Orientation;
 
     template <std::floating_point T>
-    class Orientation<T, 2>
+    struct Orientation<T, 2>
     {
-    public:
         Orientation() = default;
 
         // ReSharper disable once CppNonExplicitConvertingConstructor
@@ -28,7 +27,6 @@ namespace Xyz
 
         union
         {
-            T angles[1] = {0};
             T angle;
             T yaw;
         };
@@ -105,35 +103,26 @@ namespace Xyz
     }
 
     template <std::floating_point T>
-    class Orientation<T, 3>
+    struct Orientation<T, 3>
     {
-    public:
         Orientation() = default;
 
         explicit Orientation(T yaw, T pitch = 0, T roll = 0)
             : yaw(yaw), pitch(pitch), roll(roll)
         {}
 
-        union
-        {
-            T angles[3] = {0, 0, 0};
-
-            struct
-            {
-                /**
-                 * @brief Rotation around z-axis, counterclockwise is positive
-                 */
-                T yaw;
-                /**
-                 * @brief Rotation around y-axis, "down" is positive
-                 */
-                T pitch;
-                /**
-                 * @brief Rotation around x-axis, "clockwise" is positive
-                 */
-                T roll;
-            };
-        };
+        /**
+         * @brief Rotation around z-axis, counterclockwise is positive
+         */
+        T yaw;
+        /**
+         * @brief Rotation around y-axis, "down" is positive
+         */
+        T pitch;
+        /**
+         * @brief Rotation around x-axis, "clockwise" is positive
+         */
+        T roll;
     };
 
     template <std::floating_point T>
@@ -250,8 +239,8 @@ namespace Xyz
     {
         const auto u = normalize(v);
         return Orientation<T, 3>(
-            std::atan2(u.y, u.x),
-            std::asin(-u.z),
+            std::atan2(u.y(), u.x()),
+            std::asin(-u.z()),
             0
         );
     }
@@ -265,9 +254,9 @@ namespace Xyz
         const auto lat = normalize(lateral);
         const auto up = cross(lon, lat);
         return Orientation<T, 3>(
-            std::atan2(lon.y, lon.x),
-            std::asin(lon.z),
-            std::atan2(lat.z, up.z)
+            std::atan2(lon.y(), lon.x()),
+            std::asin(lon.z()),
+            std::atan2(lat.z(), up.z())
         );
     }
 

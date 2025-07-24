@@ -74,14 +74,14 @@ TEST_CASE("Pgram3: clip_transform - shearing")
 
 TEST_CASE("Pgram3: clip_transform - scale")
 {
-    const Xyz::Pgram3<double> p{{1, 2, 3}, {5, 0, 0}, {0, 3, 0}};
+    constexpr Xyz::Pgram3<double> p{{1, 2, 3}, {5, 0, 0}, {0, 3, 0}};
     const auto m = get_clip_transform(p);
     require_is_clip_rect(m, p);
 }
 
 TEST_CASE("Pgram3: clip_transform - float")
 {
-    const Xyz::Pgram3<float> p{{1, 2, 3}, {5, 3, 2}, {1, 4, 8}};
+    constexpr Xyz::Pgram3<float> p{{1, 2, 3}, {5, 3, 2}, {1, 4, 8}};
     const auto m = get_clip_transform(p);
     require_is_clip_rect(m, p);
 }
@@ -89,11 +89,9 @@ TEST_CASE("Pgram3: clip_transform - float")
 TEST_CASE("Pgram3: bounding box")
 {
     using P = Xyz::Pgram3<float>;
-    P pg{{0, 0, 0}, {4, 0, 0}, {2, 2, 0}};
+    constexpr P pg{{0, 0, 0}, {4, 0, 0}, {2, 2, 0}};
     auto rect = get_bounding_rect(pg);
     REQUIRE(rect.placement.origin == Xyz::Vector3F(0, 0, 0));
-    REQUIRE(rect.length == 6);
-    REQUIRE(rect.width == 2);
-    // REQUIRE(min == Xyz::Vector3F(-1, -4, -2));
-    // REQUIRE(max == Xyz::Vector3F(5, 1, 1));
+    REQUIRE(rect.size.x() == 6);
+    REQUIRE(rect.size.y() == 2);
 }

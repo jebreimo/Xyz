@@ -154,7 +154,7 @@ namespace Xyz
     {
         return {
             {pgram.origin, to_orientation(pgram.edge0, pgram.edge1)},
-            pgram.length(), pgram.width()
+            {pgram.length(), pgram.width()}
         };
     }
 

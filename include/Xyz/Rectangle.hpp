@@ -20,50 +20,33 @@ namespace Xyz
     class Rectangle
     {
     public:
-        using VectorT = Vector<T, N>;
-
         /**
          * @brief The origin of the rectangle.
          */
         Placement<T, N> placement;
 
-        /**
-         * @brief The size of the rectangle.
-         *
-         * The first value is the length, and the second value is the width.
-         */
-        union
-        {
-            T size[2] = {0, 0};
-
-            struct
-            {
-                T length; ///< The length of the rectangle.
-                T width; ///< The width of the rectangle.
-            };
-        };
+        Vector<T, 2> size;
 
         Rectangle() = default;
 
         Rectangle(const Placement<T, N>& placement,
-                  T length, T width)
+                  const Vector<T, 2>& size)
             : placement(placement),
-              length(length),
-              width(width)
+              size(size)
         {}
 
-        [[nodiscard]] VectorT length_vector() const
+        [[nodiscard]] Vector<T, N> length_vector() const
         {
-            return length * get_x_vector(placement.orientation);
+            return size.x() * get_x_vector(placement.orientation);
         }
 
-        [[nodiscard]] VectorT width_vector() const
+        [[nodiscard]] Vector<T, N> width_vector() const
         {
-            return width * get_y_vector(placement.orientation);
+            return size.y() * get_y_vector(placement.orientation);
         }
 
         [[nodiscard]]
-        constexpr VectorT operator[](size_t index) const
+        constexpr Vector<T, N> operator[](size_t index) const
         {
             switch (index % 4)
             {
@@ -85,8 +68,7 @@ namespace Xyz
     bool operator==(const Rectangle<T, N>& a, const Rectangle<T, N>& b)
     {
         return a.placement == b.placement
-            && a.length == b.length
-            && a.width == b.width;
+            && a.size == b.size;
     }
 
     template <std::floating_point T, unsigned N>
@@ -99,14 +81,13 @@ namespace Xyz
     template <std::floating_point T, unsigned N>
     std::ostream& operator<<(std::ostream& os, const Rectangle<T, N>& rect)
     {
-        return os << '{' << rect.placement
-            << ", " << Vector(rect.size) << "}";
+        return os << '{' << rect.placement << ", " << rect.size << "}";
     }
 
     template <std::floating_point T, unsigned N>
     [[nodiscard]] bool is_empty(const Rectangle<T, N>& rect)
     {
-        return rect.length == 0 || rect.width == 0;
+        return rect.size.x() == 0 || rect.size.y() == 0;
     }
 
     template <std::floating_point T, unsigned N>
@@ -127,16 +108,16 @@ namespace Xyz
     [[nodiscard]]
     Rectangle<T, N> normalize(Rectangle<T, N> rect)
     {
-        if (rect.length < 0)
+        if (rect.size.x() < 0)
         {
             rect.placement.origin += rect.length_vector();
-            rect.length = -rect.length;
+            rect.size.x() = -rect.size.x();
         }
 
-        if (rect.width < 0)
+        if (rect.size.y() < 0)
         {
             rect.placement.origin += rect.width_vector();
-            rect.width = -rect.width;
+            rect.size.y() = -rect.size.y();
         }
 
         rect.placement.orientation = normalize(rect.placement.orientation);
