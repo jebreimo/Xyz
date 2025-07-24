@@ -95,3 +95,11 @@ TEST_CASE("Pgram3: bounding box")
     REQUIRE(rect.size.x() == 6);
     REQUIRE(rect.size.y() == 2);
 }
+
+TEST_CASE("Pgram3: length and width")
+{
+    using P = Xyz::Pgram3<float>;
+    constexpr P pg{{0, 0, 0}, {4, 1, 0}, {1, 4, 0}};
+    REQUIRE_THAT(pg.length(), WithinAbs((1.f + 8.f / 17.f) * sqrt(17.f), 1e-6));
+    REQUIRE_THAT(pg.width(), WithinAbs(sqrt(17.f - 64.f / 17.f), 1e-6));
+}
