@@ -8,6 +8,7 @@
 #pragma once
 
 #include <algorithm>
+#include <array>
 #include <cmath>
 #include <initializer_list>
 #include <ostream>
@@ -43,22 +44,6 @@ namespace Xyz
             std::copy(std::begin(arr), std::end(arr), std::begin(values));
         }
 
-        constexpr Vector(const Vector& other) noexcept
-        {
-            std::copy(std::begin(other.values), std::end(other.values),
-                      std::begin(values));
-        }
-
-        Vector& operator=(const Vector& other)
-        {
-            if (this != &other)
-            {
-                std::copy(std::begin(other.values), std::end(other.values),
-                          std::begin(values));
-            }
-            return *this;
-        }
-
         constexpr T operator[](unsigned i) const
         {
             return values[i];
@@ -69,7 +54,7 @@ namespace Xyz
             return values[i];
         }
 
-        T values[SIZE];
+        std::array<T, SIZE> values;
     };
 
     template <typename T>
@@ -95,22 +80,6 @@ namespace Xyz
         explicit constexpr Vector(T const (&arr)[2]) noexcept
         {
             std::copy(std::begin(arr), std::end(arr), std::begin(values));
-        }
-
-        constexpr Vector(const Vector& other) noexcept
-        {
-            std::copy(std::begin(other.values), std::end(other.values),
-                      std::begin(values));
-        }
-
-        constexpr Vector& operator=(const Vector& other)
-        {
-            if (this != &other)
-            {
-                std::copy(std::begin(other.values), std::end(other.values),
-                          std::begin(values));
-            }
-            return *this;
         }
 
         constexpr T operator[](unsigned i) const
@@ -143,7 +112,7 @@ namespace Xyz
             return values[1];
         }
 
-        T values[2];
+        std::array<T, 2> values;
     };
 
     template <typename T>
@@ -163,22 +132,6 @@ namespace Xyz
         explicit constexpr Vector(T const (&arr)[3]) noexcept
             : values{arr[0], arr[1], arr[2]}
         {}
-
-        constexpr Vector(const Vector& other) noexcept
-        {
-            std::copy(std::begin(other.values), std::end(other.values),
-                      std::begin(values));
-        }
-
-        constexpr Vector& operator=(const Vector& other)
-        {
-            if (this != &other)
-            {
-                std::copy(std::begin(other.values), std::end(other.values),
-                          std::begin(values));
-            }
-            return *this;
-        }
 
         constexpr T operator[](unsigned i) const
         {
@@ -220,13 +173,12 @@ namespace Xyz
             return values[2];
         }
 
-        T values[3];
+        std::array<T, 3> values;
     };
 
     template <typename T>
     struct Vector<T, 4>
     {
-    public:
         using ValueType = T;
         static constexpr size_t SIZE = 4;
 
@@ -241,22 +193,6 @@ namespace Xyz
         explicit Vector(T const (&arr)[4]) noexcept
             : values{arr[0], arr[1], arr[2], arr[3]}
         {}
-
-        constexpr Vector(const Vector& other) noexcept
-        {
-            std::copy(std::begin(other.values), std::end(other.values),
-                      std::begin(values));
-        }
-
-        constexpr Vector& operator=(const Vector& other)
-        {
-            if (this != &other)
-            {
-                std::copy(std::begin(other.values), std::end(other.values),
-                          std::begin(values));
-            }
-            return *this;
-        }
 
         constexpr T operator[](unsigned i) const
         {
@@ -308,7 +244,7 @@ namespace Xyz
             return values[3];
         }
 
-        T values[4];
+        std::array<T, 4> values;
     };
 
     template <typename T, unsigned N>

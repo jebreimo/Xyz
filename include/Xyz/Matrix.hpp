@@ -43,19 +43,6 @@ namespace Xyz
             std::copy(std::begin(other), std::end(other), std::begin(values));
         }
 
-        Matrix(const Matrix& other)
-        {
-            std::copy(begin(other), end(other), std::begin(values));
-        }
-
-        Matrix& operator=(const Matrix& other)
-        {
-            if (&other == this)
-                return *this;
-            std::copy(begin(other), end(other), std::begin(values));
-            return *this;
-        }
-
         constexpr T& operator[](RowCol pos)
         {
             return values[pos.row * COLS + pos.col];
@@ -66,7 +53,7 @@ namespace Xyz
             return values[pos.row * COLS + pos.col];
         }
 
-        T values[SIZE];
+        std::array<T, SIZE> values;
     };
 
     template <typename T>
@@ -91,21 +78,6 @@ namespace Xyz
                 values[i] = other[i];
         }
 
-        constexpr Matrix(const Matrix& other)
-        {
-            for (unsigned i = 0; i < SIZE; ++i)
-                values[i] = other.values[i];
-        }
-
-        constexpr Matrix& operator=(const Matrix& other)
-        {
-            if (&other == this)
-                return *this;
-            for (unsigned i = 0; i < SIZE; ++i)
-                values[i] = other.values[i];
-            return *this;
-        }
-
         constexpr T& operator[](RowCol pos)
         {
             return values[pos.row * COLS + pos.col];
@@ -121,7 +93,7 @@ namespace Xyz
             return Matrix(1, 0, 0, 1);
         }
 
-        T values[SIZE];
+        std::array<T, SIZE> values;
     };
 
     template <typename T>
@@ -151,21 +123,6 @@ namespace Xyz
             std::copy(std::begin(other), std::end(other), std::begin(values));
         }
 
-        constexpr Matrix(const Matrix& other)
-        {
-            for (size_t i = 0; i < SIZE; ++i)
-                values[i] = other.values[i];
-        }
-
-        constexpr Matrix& operator=(const Matrix& other)
-        {
-            if (&other == this)
-                return *this;
-            for (size_t i = 0; i < SIZE; ++i)
-                values[i] = other.values[i];
-            return *this;
-        }
-
         constexpr T& operator[](RowCol pos)
         {
             return values[pos.row * COLS + pos.col];
@@ -183,7 +140,7 @@ namespace Xyz
                           0, 0, 1);
         }
 
-        T values[SIZE];
+        std::array<T, SIZE> values;
     };
 
     template <typename T>
@@ -216,21 +173,6 @@ namespace Xyz
                 values[i] = other.values[i];
         }
 
-        constexpr Matrix(const Matrix& other)
-        {
-            for (size_t i = 0; i < SIZE; ++i)
-                values[i] = other.values[i];
-        }
-
-        constexpr Matrix& operator=(const Matrix& other)
-        {
-            if (&other == this)
-                return *this;
-            for (size_t i = 0; i < SIZE; ++i)
-                values[i] = other.values[i];
-            return *this;
-        }
-
         constexpr T& operator[](RowCol pos)
         {
             return values[pos.row * COLS + pos.col];
@@ -249,7 +191,7 @@ namespace Xyz
                           0, 0, 0, 1);
         }
 
-        T values[SIZE];
+        std::array<T, SIZE> values;
     };
 
     template <typename T, unsigned M, unsigned N>
@@ -408,8 +350,8 @@ namespace Xyz
     template <typename T, unsigned M, unsigned N>
     Matrix<T, M, N>& operator+=(Matrix<T, M, N>& a, const Matrix<T, M, N>& b)
     {
-        auto a_data = a.values;
-        auto b_data = b.values;
+        auto& a_data = a.values;
+        const auto& b_data = b.values;
         for (auto i = 0u; i < M * N; ++i)
             a_data[i] += b_data[i];
         return a;
@@ -427,8 +369,8 @@ namespace Xyz
     template <typename T, unsigned M, unsigned N>
     Matrix<T, M, N>& operator-=(Matrix<T, M, N>& a, const Matrix<T, M, N>& b)
     {
-        auto a_data = a.values;
-        auto b_data = b.values;
+        auto& a_data = a.values;
+        const auto& b_data = b.values;
         for (auto i = 0u; i < M * N; ++i)
             a_data[i] -= b_data[i];
         return a;
