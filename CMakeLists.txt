@@ -67,7 +67,7 @@ add_library(Xyz STATIC
     include/Xyz/PlanePlaneIntersection.hpp
     include/Xyz/ProjectionMatrix.hpp
     include/Xyz/QuadraticEquation.hpp
-    include/Xyz/RandomGenerator.hpp
+    include/Xyz/RandomNumberGenerator.hpp
     include/Xyz/Rectangle.hpp
     include/Xyz/RotationMatrix.hpp
     include/Xyz/SphericalPoint.hpp
@@ -79,7 +79,7 @@ add_library(Xyz STATIC
     include/Xyz/XyzException.hpp
     src/Xyz/Face.cpp
     src/Xyz/IntersectionType.cpp
-    src/Xyz/RandomGenerator.cpp
+    src/Xyz/RandomNumberGenerator.cpp
 )
 
 include(GNUInstallDirs)

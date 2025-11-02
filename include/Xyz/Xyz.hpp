@@ -19,7 +19,7 @@
 #include "Pgram3.hpp"
 #include "ProjectionMatrix.hpp"
 #include "QuadraticEquation.hpp"
-#include "RandomGenerator.hpp"
+#include "RandomNumberGenerator.hpp"
 #include "SphericalPoint.hpp"
 #include "Triangle.hpp"
 #include "Utilities.hpp"

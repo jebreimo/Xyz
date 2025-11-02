@@ -7,6 +7,7 @@
 //****************************************************************************
 #pragma once
 
+#include <concepts>
 #include <limits>
 #include <random>
 
@@ -14,7 +15,7 @@ namespace Xyz
 {
     std::default_random_engine& get_random_engine();
 
-    template <typename IntT>
+    template <std::integral IntT>
     class RandomIntGenerator
     {
     public:
@@ -41,7 +42,7 @@ namespace Xyz
         std::uniform_int_distribution<IntT> m_dist;
     };
 
-    template <typename RealT>
+    template <std::floating_point RealT>
     class RandomRealGenerator
     {
     public:
