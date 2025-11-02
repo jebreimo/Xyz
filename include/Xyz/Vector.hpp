@@ -437,6 +437,26 @@ namespace Xyz
         return w;
     }
 
+    template <std::integral T, unsigned N>
+    constexpr Vector<T, N> operator%(const Vector<T, N>& u,
+                                     const Vector<T, N>& v)
+    {
+        Vector<T, N> w;
+        for (unsigned i = 0; i < N; ++i)
+            w[i] = u[i] % v[i];
+        return w;
+    }
+
+    template <std::integral T, unsigned N>
+    constexpr Vector<T, N> operator%(const Vector<T, N>& u,
+                                     std::type_identity_t<T> scalar)
+    {
+        Vector<T, N> w;
+        for (unsigned i = 0; i < N; ++i)
+            w[i] = u[i] % scalar;
+        return w;
+    }
+
     template <typename T, unsigned N>
     std::ostream& operator<<(std::ostream& os, const Vector<T, N>& v)
     {

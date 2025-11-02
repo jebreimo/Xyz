@@ -237,8 +237,11 @@ TEST_CASE("Test Vector2D basics")
     CHECK((u /= v) == Xyz::Vector2D(6, 3));
     CHECK(dot(u, v) == 30);
     CHECK_THAT(get_length(v), WithinAbs(5, 1e-10));
-    std::pair values{1, 2};
-    CHECK(Xyz::Vector2F(values) == Xyz::Vector2D(1.0f, 2.0f));
+    std::pair values{7, 11};
+    CHECK(Xyz::Vector2F(values) == Xyz::Vector2D(7.0f, 11.0f));
+
+    CHECK(Xyz::Vector2I(values) % 3 == Xyz::Vector2I(1, 2));
+    CHECK(Xyz::Vector2I(values) % Xyz::Vector2I(4, 5) == Xyz::Vector2I(3, 1));
 }
 
 TEST_CASE("Test Vector4D basics")
