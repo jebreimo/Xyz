@@ -250,25 +250,25 @@ namespace Xyz
     template <typename T, unsigned N>
     constexpr T* begin(Vector<T, N>& v)
     {
-        return std::begin(v.values);
+        return v.values.data();
     }
 
     template <typename T, unsigned N>
     constexpr T* end(Vector<T, N>& v)
     {
-        return std::end(v.values);
+        return v.values.data() + N;
     }
 
     template <typename T, unsigned N>
     constexpr const T* begin(const Vector<T, N>& v)
     {
-        return std::begin(v.values);
+        return v.values.data();
     }
 
     template <typename T, unsigned N>
     constexpr const T* end(const Vector<T, N>& v)
     {
-        return std::end(v.values);
+        return v.values.data() + N;
     }
 
     template <typename T, typename S, unsigned N>
