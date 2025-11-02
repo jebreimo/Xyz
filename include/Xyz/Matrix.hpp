@@ -197,25 +197,25 @@ namespace Xyz
     template <typename T, unsigned M, unsigned N>
     constexpr T* begin(Matrix<T, M, N>& m)
     {
-        return std::begin(m.values);
+        return m.values.data();
     }
 
     template <typename T, unsigned M, unsigned N>
     constexpr T* end(Matrix<T, M, N>& m)
     {
-        return std::end(m.values);
+        return m.values.data() + M * N;
     }
 
     template <typename T, unsigned M, unsigned N>
     constexpr const T* begin(const Matrix<T, M, N>& m)
     {
-        return std::begin(m.values);
+        return m.values.data();
     }
 
     template <typename T, unsigned M, unsigned N>
     constexpr const T* end(const Matrix<T, M, N>& m)
     {
-        return std::end(m.values);
+        return m.values.data() + M * N;
     }
 
     template <typename T, unsigned M, unsigned N>
