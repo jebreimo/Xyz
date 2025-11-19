@@ -296,3 +296,16 @@ TEST_CASE("Test rotate Vector2D")
     CHECK(are_equal(rotate(V(1 / sqrt2, 1 / sqrt2), Xyz::to_radians(135)),
         V(-1, 0), 1e-10));
 }
+
+TEST_CASE("Test get_min")
+{
+    using V = Xyz::Vector2D;
+    CHECK(get_min(V(1, 5), V(3, 4)) == V(1, 4));
+}
+
+// Test for get_max
+TEST_CASE("Test get_max")
+{
+    using V = Xyz::Vector2D;
+    CHECK(get_max(V(1, 5), V(3, 4)) == V(3, 5));
+}

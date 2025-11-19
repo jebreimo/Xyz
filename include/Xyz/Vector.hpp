@@ -708,6 +708,30 @@ namespace Xyz
 
     template <typename T, unsigned N>
     [[nodiscard]]
+    constexpr Vector<T, N>
+    get_min(const Vector<T, N>& a,
+            const Vector<std::type_identity_t<T>, N>& b)
+    {
+        Vector<T, N> min;
+        for (unsigned i = 0; i < N; ++i)
+            min[i] = std::min(a[i], b[i]);
+        return min;
+    }
+
+    template <typename T, unsigned N>
+    [[nodiscard]]
+    constexpr Vector<T, N>
+    get_max(const Vector<T, N>& a,
+            const Vector<std::type_identity_t<T>, N>& b)
+    {
+        Vector<T, N> max;
+        for (unsigned i = 0; i < N; ++i)
+            max[i] = std::max(a[i], b[i]);
+        return max;
+    }
+
+    template <typename T, unsigned N>
+    [[nodiscard]]
     Vector<T, N> get_clamped(Vector<T, N> v,
                              const Vector<std::type_identity_t<T>, N>& min,
                              const Vector<std::type_identity_t<T>, N>& max)
@@ -735,7 +759,7 @@ namespace Xyz
     }
 
     template <typename T, unsigned N,
-              std::enable_if_t<std::is_integral_v<T>, int>  = 0>
+              std::enable_if_t<std::is_integral_v<T>, int> = 0>
     [[nodiscard]]
     bool is_null(Vector<T, N>& v, T = 0)
     {
@@ -744,7 +768,7 @@ namespace Xyz
     }
 
     template <typename T, unsigned N,
-              std::enable_if_t<std::is_floating_point_v<T>, int>  = 0>
+              std::enable_if_t<std::is_floating_point_v<T>, int> = 0>
     [[nodiscard]]
     bool is_null(Vector<T, N>& v,
                  std::type_identity_t<T> margin = Margin<T>::DEFAULT)
@@ -754,7 +778,7 @@ namespace Xyz
     }
 
     template <typename T, unsigned N,
-              std::enable_if_t<std::is_floating_point_v<T>, int>  = 0>
+              std::enable_if_t<std::is_floating_point_v<T>, int> = 0>
     [[nodiscard]]
     Vector<T, N> floor(const Vector<T, N>& v)
     {
@@ -765,7 +789,7 @@ namespace Xyz
     }
 
     template <typename T, unsigned N,
-              std::enable_if_t<std::is_floating_point_v<T>, int>  = 0>
+              std::enable_if_t<std::is_floating_point_v<T>, int> = 0>
     [[nodiscard]]
     Vector<T, N> ceil(const Vector<T, N>& v)
     {
