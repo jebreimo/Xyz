@@ -47,7 +47,7 @@ TEST_CASE("Vectors from 3D orientation, pitch only")
 {
     Xyz::Orientation3D o(0, to_radians(-135), 0);
     CHECK(are_equal(get_x_vector(o),
-        Xyz::Vector3D(-1.0 / sqrt(2), 0, 1.0 / sqrt(2))));
+        Xyz::Vector3D(-1.0 / sqrt(2), 0, -1.0 / sqrt(2))));
     CHECK(are_equal(get_y_vector(o),
         Xyz::Vector3D(0, 1, 0)));
     CHECK(are_equal(get_z_vector(o),

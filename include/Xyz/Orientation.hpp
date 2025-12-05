@@ -160,7 +160,7 @@ namespace Xyz
         return {
             c_a * c_b,
             s_a * c_b,
-            -s_b
+            s_b
         };
     }
 

@@ -21,7 +21,8 @@ namespace Xyz
     {
     public:
         /**
-         * @brief The origin of the rectangle.
+         * @brief The origin of the rectangle and the orientation of the
+         *  length vector (pitch and yaw), and the width vector (roll).
          */
         Placement<T, N> placement;
 
@@ -43,6 +44,12 @@ namespace Xyz
         [[nodiscard]] Vector<T, N> width_vector() const
         {
             return size.y() * get_y_vector(placement.orientation);
+        }
+
+        [[nodiscard]] Vector<T, N> normal_vector() const
+        {
+            static_assert(N == 3, "Normal vector is only defined for 3D rectangles");
+            return get_z_vector(placement.orientation);
         }
 
         [[nodiscard]]
