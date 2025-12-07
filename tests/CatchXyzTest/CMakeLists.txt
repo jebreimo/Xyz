@@ -31,7 +31,7 @@ add_executable(CatchXyzTest
     test_Plane.cpp
     test_Projections.cpp
     test_QuadraticEquation.cpp
-    test_Rect.cpp
+    test_Rectangle.cpp
     test_Transformations.cpp
     test_Triangle.cpp
     test_Vector.cpp

@@ -62,7 +62,7 @@ namespace Xyz
 
         /**
          * @brief Returns the homogeneous scaling matrix for 3D points.
-         * @param scales The scale factors in the x, y and z directions.
+         * @param scales The scale factors in the x, y, and z directions.
          */
         template <typename T>
         Matrix<T, 4, 4> scale3(const Vector<T, 3>& scales)
@@ -185,7 +185,7 @@ namespace Xyz
 
         /**
          * @brief Returns the homogeneous scaling matrix for 3D points.
-         * @param scales The scale factors in the x, y and z directions.
+         * @param scales The scale factors in the x, y, and z directions.
          */
         template <typename T>
         Matrix<T, 3, 3> scale3(const Vector<T, 3>& scales)

@@ -11,6 +11,13 @@
 
 namespace Xyz
 {
+    /**
+     * Brief description of the transformation:
+     * The origin is moved to the eye position. The negative
+     * z-axis is aligned with the forward vector (center - eye). The
+     * positive y-axis is aligned with the up vector as closely as
+     * possible.
+     */
     template <typename T>
     Matrix<T, 4, 4> make_look_at_matrix(const Vector<T, 3>& eye,
                                         const Vector<T, 3>& center,
@@ -26,6 +33,22 @@ namespace Xyz
                 0, 0, 0, 1};
     }
 
+    /**
+     * @brief Creates a perspective projection matrix.
+     *
+     * @note While the look_at matrix produces negative z coordinates,
+     * the frustum expects positive values for the near and far clipping
+     * planes. You have to pretend that the camera is looking in the
+     * positive z direction when setting up the frustum.
+     *
+     * @param l The coordinate for the left vertical clipping plane.
+     * @param r The coordinate for the right vertical clipping plane.
+     * @param b The coordinate for the bottom horizontal clipping plane.
+     * @param t The coordinate for the top horizontal clipping plane.
+     * @param n The distance to the near clipping plane. Must be positive.
+     * @param f The distance to the far clipping plane. Must be positive.
+     * @return The perspective projection matrix.
+     */
     template <typename T>
     Matrix<T, 4, 4> make_frustum_matrix(T l, T r, T b, T t, T n, T f)
     {

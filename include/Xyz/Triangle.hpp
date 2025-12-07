@@ -24,6 +24,7 @@ namespace Xyz
             : points{a, b, c}
         {}
 
+
         constexpr const Vector<T, N>& operator[](unsigned i) const
         {
             return points[i];
@@ -37,13 +38,12 @@ namespace Xyz
         Vector<T, N> points[3];
     };
 
-    template <typename T, unsigned N>
+    template <typename T>
     [[nodiscard]]
-    constexpr Triangle<T, N> make_triangle(const Vector<T, N>& a,
-                                           const Vector<T, N>& b,
-                                           const Vector<T, N>& c)
+    auto get_normal(const Triangle<T, 3>& tri)
     {
-        return Triangle<T, N>(a, b, c);
+        return cross(tri.points[1] - tri.points[0],
+                     tri.points[2] - tri.points[1]);
     }
 
     template <typename T, unsigned N>
@@ -66,7 +66,7 @@ namespace Xyz
     }
 
     template <typename T, typename U,
-              typename Float = typename FloatType<decltype(T() + U())>::type>
+              typename Float = FloatType<decltype(T() + U())>::type>
     [[nodiscard]]
     bool contains_point(const Triangle<T, 2>& triangle,
                         const Vector<U, 2>& point,
@@ -86,7 +86,7 @@ namespace Xyz
     }
 
     template <typename T, typename U,
-              typename Float = typename FloatType<decltype(T() + U())>::type>
+              typename Float = FloatType<decltype(T() + U())>::type>
     [[nodiscard]]
     bool contains_point_inclusive(const Triangle<T, 2>& triangle,
                                   const Vector<U, 2>& point,

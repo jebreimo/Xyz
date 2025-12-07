@@ -16,15 +16,26 @@ TEST_CASE("test_perspective_projection")
     CHECK(w == Xyz::Vector4D(-9, -9, -9, 9));
 }
 
-TEST_CASE("test_look_at")
+TEST_CASE("test look_at")
 {
-    auto m = Xyz::make_look_at_matrix(Xyz::Vector3D(5, 2, 3),
-                                      Xyz::Vector3D(1, 8, 3),
-                                      Xyz::Vector3D(0, 0, 1));
-    const auto result = m * Xyz::Vector4D(1.5, 4.0, 3.0, 1.0);
-    const auto expected = Xyz::Vector4D(-std::sqrt(1 + 1.5 * 1.5),
-                                        0.0,
-                                        -std::sqrt(2 * 2 + 3 * 3),
-                                        1.0);
+    using V = Xyz::Vector4D;
+    auto m = Xyz::make_look_at_matrix<double>({5, 2, 3},
+                                              {1, 8, 3},
+                                              {0, 0, 1});
+    const auto result = m * V(1.5, 4.0, 3.0, 1.0);
+    const auto expected = V(-std::sqrt(1 + 1.5 * 1.5),
+                            0.0,
+                            -std::sqrt(2 * 2 + 3 * 3),
+                            1.0);
     CHECK(are_equal(result, expected, 1e-10));
+
+    // Additional tests that makes it more obvious what the transformation
+    // actually does to the points.
+    const auto m2 = Xyz::make_look_at_matrix<double>(
+        {0, 0, -10},
+        {0, 0, 0},
+        {0, 1, 0});
+    REQUIRE(m2 * V{-1, -1, 0, 1} == V{1, -1, -10, 1});
+    REQUIRE(m2 * V{1, -1, 0, 1} == V{-1, -1, -10, 1});
+    REQUIRE(m2 * V{-1, 1, -1, 1} == V{1, 1, -9, 1});
 }
