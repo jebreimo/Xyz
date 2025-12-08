@@ -60,6 +60,16 @@ namespace Xyz
     }
 
     template <typename T>
+    Matrix<T, 4, 4> make_perspective_matrix(T fov_y, T aspect, T n, T f)
+    {
+        const T t = n * std::tan(fov_y / 2);
+        const T b = -t;
+        const T r = t * aspect;
+        const T l = -r;
+        return make_frustum_matrix(l, r, b, t, n, f);
+    }
+
+    template <typename T>
     Matrix<T, 4, 4> make_orthographic_matrix(T l, T r, T b, T t, T n, T f)
     {
         return Matrix<T, 4, 4> {
