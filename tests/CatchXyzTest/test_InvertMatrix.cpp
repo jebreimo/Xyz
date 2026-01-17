@@ -16,24 +16,42 @@ bool equals_identity_matrix(const Xyz::Matrix<T, N, N>& m)
 
 TEST_CASE("test invert2")
 {
-    Xyz::Matrix2D m{1, 4,
-               2, 1};
+    Xyz::Matrix2D m{
+        1, 4,
+        2, 1
+    };
     CHECK(equals_identity_matrix(m * invert(m)));
 }
 
 TEST_CASE("test invert3")
 {
-    Xyz::Matrix3D m{1, 4, 2,
-               2, 1, 3,
-               5, 7, 2};
+    Xyz::Matrix3D m{
+        1, 4, 2,
+        2, 1, 3,
+        5, 7, 2
+    };
     CHECK(equals_identity_matrix(m * invert(m)));
 }
 
 TEST_CASE("test invert4")
 {
-    Xyz::Matrix4D m{1, -2, 3, 2,
-               2, 3, 1, -1,
-               3, 7, 0, 3,
-               -1, 4, 2, 1};
+    Xyz::Matrix4D m{
+        1, -2, 3, 2,
+        2, 3, 1, -1,
+        3, 7, 0, 3,
+        -1, 4, 2, 1
+    };
+    CHECK(equals_identity_matrix(m * invert(m)));
+}
+
+TEST_CASE("test invert5")
+{
+    Xyz::Matrix<double, 5, 5> m{
+        1, -2, 3, 2, 5,
+        2, 3, 1, -1, 7,
+        3, 7, 0, 3, 3,
+        -1, 4, 2, 1, 2,
+        5, 0, -2, 4, 1
+    };
     CHECK(equals_identity_matrix(m * invert(m)));
 }

@@ -219,31 +219,26 @@ namespace Xyz
     }
 
     template <typename T, unsigned M, unsigned N>
-    Vector<T, N> row(const Matrix<T, M, N>& m, unsigned r)
+    Vector<T, N> get_row(const Matrix<T, M, N>& m, unsigned r)
     {
-        return Vector<T, N>(&m.values[r * N], N);
+        Vector<T, N> result;
+        std::copy(m.values.data() + r * N,
+                  m.values.data() + (r + 1) * N,
+                  begin(result));
+        return result;
     }
 
     template <typename T, unsigned M, unsigned N>
     void set_row(Matrix<T, M, N>& m, unsigned row, const Vector<T, N>& v)
     {
-        std::copy(begin(v), end(v), m.values + row * N);
+        std::copy(begin(v), end(v), m.values.data() + row * N);
     }
 
     template <typename T, unsigned M, unsigned N>
-    void set_row(Matrix<T, M, N>& m, unsigned row,
-                 const T* values, unsigned count)
-    {
-        if (count != N)
-            XYZ_THROW("Incorrect number of columns.");
-        std::copy(values, values + count, m.values + row * N);
-    }
-
-    template <typename T, unsigned M, unsigned N>
-    Vector<T, M> col(const Matrix<T, M, N>& m, unsigned c)
+    Vector<T, M> get_col(const Matrix<T, M, N>& m, unsigned c)
     {
         Vector<T, M> result;
-        auto ptr = m.values + c;
+        auto ptr = m.values.data() + c;
         for (unsigned i = 0; i < M; ++i)
         {
             result[i] = *ptr;
@@ -255,24 +250,10 @@ namespace Xyz
     template <typename T, unsigned M, unsigned N>
     void set_col(Matrix<T, M, N>& m, unsigned c, const Vector<T, M>& v)
     {
-        auto ptr = m.values + c;
+        auto ptr = m.values.data() + c;
         for (unsigned i = 0; i < M; ++i)
         {
             *ptr = v[i];
-            ptr += N;
-        }
-    }
-
-    template <typename T, unsigned M, unsigned N>
-    void set_col(Matrix<T, M, N>& m, unsigned c,
-                 const T* values, unsigned count)
-    {
-        if (count != M)
-            XYZ_THROW("Incorrect number of columns.");
-        auto ptr = m.values + c;
-        for (unsigned i = 0; i < M; ++i)
-        {
-            *ptr = values[i];
             ptr += N;
         }
     }
@@ -611,6 +592,13 @@ namespace Xyz
             result /= m[{N - 1, N - 1}];
 
         return result;
+    }
+
+    template <typename T, unsigned M, unsigned N>
+    void swap_rows(Matrix<T, M, N>& m, unsigned r1, unsigned r2)
+    {
+        for (unsigned c = 0; c < N; ++c)
+            std::swap(m[{r1, c}], m[{r2, c}]);
     }
 
     using Matrix2I = Matrix<int, 2, 2>;

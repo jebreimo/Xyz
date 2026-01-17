@@ -8,7 +8,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 project(Xyz
-    VERSION 0.9.4
+    VERSION 0.9.5
     DESCRIPTION "A C++ library for 3D geometry and linear algebra"
 )
 
@@ -80,6 +80,7 @@ add_library(Xyz STATIC
     src/Xyz/Face.cpp
     src/Xyz/IntersectionType.cpp
     src/Xyz/RandomNumberGenerator.cpp
+    include/Xyz/LuDecomposition.hpp
 )
 
 include(GNUInstallDirs)

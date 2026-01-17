@@ -29,7 +29,7 @@ TEST_CASE("test look_at")
                             1.0);
     CHECK(are_equal(result, expected, 1e-10));
 
-    // Additional tests that makes it more obvious what the transformation
+    // Additional tests that make it more obvious what the transformation
     // actually does to the points.
     const auto m2 = Xyz::make_look_at_matrix<double>(
         {0, 0, -10},
@@ -38,4 +38,22 @@ TEST_CASE("test look_at")
     REQUIRE(m2 * V{-1, -1, 0, 1} == V{1, -1, -10, 1});
     REQUIRE(m2 * V{1, -1, 0, 1} == V{-1, -1, -10, 1});
     REQUIRE(m2 * V{-1, 1, -1, 1} == V{1, 1, -9, 1});
+}
+
+TEST_CASE("decompose view matrix")
+{
+    using V = Xyz::Vector3D;
+    auto view = Xyz::make_look_at_matrix<double>(
+        {5, 2, 3},
+        {1, 8, 3},
+        {0, 0, 1});
+    const auto dec = Xyz::decompose_view_matrix(view);
+    CHECK(are_equal(dec.forward, V{-4 / sqrt(16 + 36 + 0),
+                                 6 / sqrt(16 + 36 + 0),
+                                 0}));
+    CHECK(are_equal(dec.up, V{0, 0, 1}));
+    CHECK(are_equal(dec.right, V{6 / sqrt(16 + 36 + 0),
+                                 4 / sqrt(16 + 36 + 0),
+                                 0}));
+    CHECK(are_equal(dec.position, V{5, 2, 3}));
 }

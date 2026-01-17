@@ -7,6 +7,7 @@
 //****************************************************************************
 #pragma once
 
+#include "LuDecomposition.hpp"
 #include "Matrix.hpp"
 
 namespace Xyz
@@ -27,10 +28,35 @@ namespace Xyz
         auto s = cross(f, normalize(up));
         auto u = cross(s, f);
         return Matrix<T, 4, 4>{
-                s[0], s[1], s[2], dot(-s, eye),
-                u[0], u[1], u[2], dot(-u, eye),
-                -f[0], -f[1], -f[2], dot(f, eye),
-                0, 0, 0, 1};
+            s[0], s[1], s[2], dot(-s, eye),
+            u[0], u[1], u[2], dot(-u, eye),
+            -f[0], -f[1], -f[2], dot(f, eye),
+            0, 0, 0, 1
+        };
+    }
+
+    template <typename T>
+    struct ViewMatrixComponents
+    {
+        Vector<T, 3> right;
+        Vector<T, 3> up;
+        Vector<T, 3> forward;
+        Vector<T, 3> position;
+    };
+
+    template <typename T>
+    ViewMatrixComponents<T> decompose_view_matrix(const Matrix<T, 4, 4>& view)
+    {
+        return {
+            {view[{0, 0}], view[{0, 1}], view[{0, 2}]},
+            {view[{1, 0}], view[{1, 1}], view[{1, 2}]},
+            {-view[{2, 0}], -view[{2, 1}], -view[{2, 2}]},
+            LuDecomposition<T, 3>({
+                -view[{0, 0}], -view[{0, 1}], -view[{0, 2}],
+                -view[{1, 0}], -view[{1, 1}], -view[{1, 2}],
+                -view[{2, 0}], -view[{2, 1}], -view[{2, 2}]
+            }).solve({view[{0, 3}], view[{1, 3}], view[{2, 3}]})
+        };
     }
 
     /**
@@ -53,10 +79,11 @@ namespace Xyz
     Matrix<T, 4, 4> make_frustum_matrix(T l, T r, T b, T t, T n, T f)
     {
         return Matrix<T, 4, 4>{
-                2 * n / (r - l),  0,  (r + l) / (r - l),  0,
-                0,  2 * n / (t - b),  (t + b) / (t - b),  0,
-                0,  0,  -(f + n) / (f - n),  -2 * f * n / (f - n),
-                0,  0,  -1,  0};
+            2 * n / (r - l), 0, (r + l) / (r - l), 0,
+            0, 2 * n / (t - b), (t + b) / (t - b), 0,
+            0, 0, -(f + n) / (f - n), -2 * f * n / (f - n),
+            0, 0, -1, 0
+        };
     }
 
     template <typename T>
@@ -72,10 +99,11 @@ namespace Xyz
     template <typename T>
     Matrix<T, 4, 4> make_orthographic_matrix(T l, T r, T b, T t, T n, T f)
     {
-        return Matrix<T, 4, 4> {
-                2 / (r - l),  0,  0,  -(r + l) / (r - l),
-                0,  2 / (t - b),  0,  -(t + b) / (t - b),
-                0,  0,  -2 / (f - n),  -(f + n) / (f - n),
-                0, 0, 0, 1};
+        return Matrix<T, 4, 4>{
+            2 / (r - l), 0, 0, -(r + l) / (r - l),
+            0, 2 / (t - b), 0, -(t + b) / (t - b),
+            0, 0, -2 / (f - n), -(f + n) / (f - n),
+            0, 0, 0, 1
+        };
     }
 }

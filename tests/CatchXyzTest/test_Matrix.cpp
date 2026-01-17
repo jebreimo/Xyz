@@ -150,3 +150,33 @@ TEST_CASE("Matrix: outer product")
     };
     CHECK(result == expected);
 }
+
+TEST_CASE("Matrix: get and set row")
+{
+    Xyz::Matrix3I m{
+        1, 2, 3,
+        4, 5, 6,
+        7, 8, 9
+    };
+    auto row = get_row(m, 1);
+    CHECK(row == Xyz::Vector3I{4, 5, 6});
+    set_row(m, 1, Xyz::Vector3I{10, 11, 12});
+    CHECK(m[RowCol(1, 0)] == 10);
+    CHECK(m[RowCol(1, 1)] == 11);
+    CHECK(m[RowCol(1, 2)] == 12);
+}
+
+TEST_CASE("Matrix: get and set column")
+{
+    Xyz::Matrix3I m{
+        1, 2, 3,
+        4, 5, 6,
+        7, 8, 9
+    };
+    auto col = get_col(m, 1);
+    CHECK(col == Xyz::Vector3I{2, 5, 8});
+    set_col(m, 1, Xyz::Vector3I{10, 11, 12});
+    CHECK(m[RowCol(0, 1)] == 10);
+    CHECK(m[RowCol(1, 1)] == 11);
+    CHECK(m[RowCol(2, 1)] == 12);
+}

@@ -9,6 +9,7 @@
 
 #include <array>
 #include "FloatType.hpp"
+#include "LuDecomposition.hpp"
 #include "Matrix.hpp"
 
 namespace Xyz
@@ -76,6 +77,13 @@ namespace Xyz
             }
             return c;
         }
+    }
+
+    template <typename T, unsigned N,
+              std::enable_if_t<(N > 4), int> = 0>
+    Matrix<T, N, N> invert(const Matrix<T, N, N>& m)
+    {
+        return LuDecomposition<T, N>(m).inverse();
     }
 
     template <typename T, unsigned N,
