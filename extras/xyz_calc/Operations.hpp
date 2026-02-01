@@ -6,6 +6,8 @@
 // License text is included with the source distribution.
 //****************************************************************************
 #pragma once
+#include <variant>
+#include <vector>
 #include "Xyz/Xyz.hpp"
 
 using ValueType = std::variant<double, Xyz::Vector3D, Xyz::Vector4D, Xyz::Matrix3D, Xyz::Matrix4D>;
