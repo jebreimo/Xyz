@@ -8,7 +8,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 project(Xyz
-    VERSION 0.9.5
+    VERSION 0.9.6
     DESCRIPTION "A C++ library for 3D geometry and linear algebra"
 )
 
@@ -26,6 +26,9 @@ endif ()
 
 # Test option
 option(XYZ_BUILD_TEST "Build tests" ${XYZ_MASTER_PROJECT})
+
+# Extras option
+option(XYZ_BUILD_EXTRAS "Build extras" ${XYZ_MASTER_PROJECT})
 
 # Install option
 option(XYZ_INSTALL "Generate the install target" ${XYZ_MASTER_PROJECT})
@@ -105,6 +108,14 @@ Xyz_enable_all_warnings(Xyz)
 if(XYZ_BUILD_TEST)
     enable_testing()
     add_subdirectory(tests/CatchXyzTest)
+endif()
+
+##
+## Extras
+##
+
+if(XYZ_BUILD_EXTRAS)
+    add_subdirectory(extras)
 endif()
 
 ##
