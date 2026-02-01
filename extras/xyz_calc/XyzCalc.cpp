@@ -7,6 +7,7 @@
 //****************************************************************************
 #include <iostream>
 #include <string>
+#include <strings.h>
 
 #include "linenoise/linenoise.h"
 #include "Xyz/Xyz.hpp"
