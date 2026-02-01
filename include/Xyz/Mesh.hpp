@@ -69,14 +69,15 @@ namespace Xyz
         Vertex normal(const Face& face) const
         {
             return normalize(cross(vertexes_[face[1]] - vertexes_[face[0]],
-                                  vertexes_[face[2]] - vertexes_[face[1]]));
+                                   vertexes_[face[2]] - vertexes_[face[1]]));
         }
+
     private:
         void assign_face_ids(std::vector<Face>& faces)
         {
             FaceId n = 0;
             std::for_each(faces.begin(), faces.end(),
-                          [&n](auto& f) {f.set_id(n++);});
+                          [&n](auto& f) { f.set_id(n++); });
         }
 
         std::vector<Vertex> vertexes_;
