@@ -5,9 +5,11 @@
 // This file is distributed under the Zero-Clause BSD License.
 // License text is included with the source distribution.
 //****************************************************************************
+#include <functional>
 #include <iostream>
 #include <string>
 #include <strings.h>
+#include <unordered_map>
 
 #include "linenoise/linenoise.h"
 #include "Xyz/Xyz.hpp"
