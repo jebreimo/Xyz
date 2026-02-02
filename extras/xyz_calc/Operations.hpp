@@ -52,4 +52,6 @@ bool invert(std::vector<ValueType>& stack);
 
 bool duplicate(std::vector<ValueType>& stack);
 
+bool matrix3(std::vector<ValueType>& stack);
+
 bool print(std::ostream& stream, const ValueType& value);

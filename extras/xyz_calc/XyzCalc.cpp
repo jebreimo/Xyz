@@ -12,7 +12,6 @@
 #include <unordered_map>
 
 #include "linenoise/linenoise.h"
-#include "Xyz/Xyz.hpp"
 #include "Operations.hpp"
 #include "ParserTools/DelimiterFinders.hpp"
 #include "ParserTools/StringTokenizer.hpp"
@@ -40,6 +39,7 @@ std::unordered_map<std::string, std::function<bool(std::vector<ValueType>&)>> co
     {"dot", inner_product},
     {"vec3", vec3},
     {"vec4", vec4},
+    {"mat3", matrix3},
     {"id3", identity3},
     {"id4", identity4},
     {"rot2", rotate2},
@@ -87,7 +87,7 @@ void parse_commands(std::string_view line, std::vector<ValueType>& stack)
                 double value = std::stod(std::string(token));
                 stack.emplace_back(value);
             }
-            catch (const std::exception& e)
+            catch (const std::exception&)
             {
                 std::cerr << "Unknown command or invalid number: "
                           << token << "\n";

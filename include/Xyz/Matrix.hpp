@@ -109,8 +109,8 @@ namespace Xyz
         {}
 
         constexpr Matrix(T a11, T a12, T a13,
-               T a21, T a22, T a23,
-               T a31, T a32, T a33)
+                         T a21, T a22, T a23,
+                         T a31, T a32, T a33)
             : values{
                 a11, a12, a13,
                 a21, a22, a23,
@@ -294,7 +294,7 @@ namespace Xyz
 
     template <unsigned K, unsigned L, typename T, unsigned M, unsigned N>
     Matrix<T, K, L> make_submatrix(const Matrix<T, M, N>& m,
-                                   const RowCol& pos)
+                                   const RowCol& pos = {})
     {
         static_assert(K <= M && L <= N,
                       "The submatrix cannot be larger than the source matrix.");
@@ -513,14 +513,14 @@ namespace Xyz
     }
 
     template <typename T, unsigned M, unsigned N,
-              std::enable_if_t<std::is_integral_v<T>, int>  = 0>
+              std::enable_if_t<std::is_integral_v<T>, int> = 0>
     bool are_equal(const Matrix<T, M, N>& a, const Matrix<T, M, N>& b, T = 0)
     {
         return a == b;
     }
 
     template <typename T, unsigned N,
-              std::enable_if_t<std::is_floating_point_v<T>, int>  = 0>
+              std::enable_if_t<std::is_floating_point_v<T>, int> = 0>
     bool are_equal(const Matrix<T, N, N>& a, const Matrix<T, N, N>& b,
                    double margin = 1e-12)
     {

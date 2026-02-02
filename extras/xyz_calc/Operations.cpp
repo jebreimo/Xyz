@@ -128,10 +128,6 @@ bool multiplication(std::vector<ValueType>& stack)
     {
         stack.emplace_back(std::get<Xyz::Vector4D>(a) * std::get<Xyz::Vector4D>(b));
     }
-    else if (std::holds_alternative<Xyz::Vector4D>(a) && std::holds_alternative<Xyz::Vector4D>(b))
-    {
-        stack.emplace_back(std::get<Xyz::Vector4D>(a) * std::get<Xyz::Vector4D>(b));
-    }
     else if (std::holds_alternative<Xyz::Matrix3D>(a) && std::holds_alternative<Xyz::Matrix3D>(b))
     {
         stack.emplace_back(std::get<Xyz::Matrix3D>(a) * std::get<Xyz::Matrix3D>(b));
@@ -296,6 +292,7 @@ bool scale3(std::vector<ValueType>& stack)
         Xyz::Vector3D(values[0], values[1], values[2])));
     return true;
 }
+
 bool transpose(std::vector<ValueType>& stack)
 {
     if (stack.empty())
@@ -342,6 +339,31 @@ bool invert(std::vector<ValueType>& stack)
     return true;
 }
 
+bool matrix3(std::vector<ValueType>& stack)
+{
+    if (stack.empty())
+    {
+        XYZ_THROW("Not enough values on stack for matrix3.");
+    }
+
+    if (std::holds_alternative<Xyz::Matrix4D>(stack.back()))
+    {
+        const auto m4 = std::get<Xyz::Matrix4D>(stack.back());
+        stack.pop_back();
+        Xyz::Matrix3D m3 = Xyz::make_submatrix<3, 3>(m4);
+        stack.emplace_back(m3);
+    }
+    else if (!std::holds_alternative<Xyz::Matrix3D>(stack.back()))
+    {
+        const auto values = get_doubles(stack, 9);
+        stack.emplace_back(Xyz::Matrix3D(values[0], values[1], values[2],
+                                         values[3], values[4], values[5],
+                                         values[6], values[7], values[8]));
+    }
+
+    return true;
+}
+
 bool duplicate(std::vector<ValueType>& stack)
 {
     if (stack.empty())
@@ -351,11 +373,52 @@ bool duplicate(std::vector<ValueType>& stack)
     return true;
 }
 
+double clean(double value)
+{
+    if (value == -0.0)
+        value = 0.0;
+
+    const auto whole = std::round(value);
+    if (std::fabs(value - whole) < 1e-10)
+        return whole;
+    return value;
+}
+
+template <typename T, unsigned N>
+Xyz::Vector<T, N> clean(const Xyz::Vector<T, N>& vector)
+{
+    Xyz::Vector<T, N> result;
+    for (unsigned i = 0; i < N; ++i)
+    {
+        result.values[i] = clean(vector.values[i]);
+    }
+    return result;
+}
+
+template <typename T, unsigned M, unsigned N>
+Xyz::Matrix<T, M, N> clean(const Xyz::Matrix<T, M, N>& matrix)
+{
+    Xyz::Matrix<T, M, N> result;
+    for (unsigned i = 0; i < M * N; ++i)
+    {
+        result.values[i] = clean(matrix.values[i]);
+    }
+    return result;
+}
+
+ValueType clean(ValueType value)
+{
+    return std::visit([](auto& v) -> ValueType
+    {
+        return clean(v);
+    }, value);
+}
+
 bool print(std::ostream& stream, const ValueType& value)
 {
     std::visit([&stream](const auto& v)
     {
-        stream << v;
+        stream << clean(v);
     }, value);
     return true;
 }
