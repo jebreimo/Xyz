@@ -5,4 +5,7 @@
 # This file is distributed under the Zero-Clause BSD License.
 # License text is included with the source distribution.
 # ===========================================================================
-add_subdirectory(xyz_calc)
+
+if (NOT WIN32)
+    add_subdirectory(xyz_calc)
+endif()
