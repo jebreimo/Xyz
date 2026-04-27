@@ -8,7 +8,7 @@
 #pragma once
 #include "CoordinateSystem.hpp"
 #include "Plane.hpp"
-#include "Rectangle.hpp"
+#include "OrientedRectangle.hpp"
 #include "TransformationMatrix.hpp"
 #include "Vector.hpp"
 
@@ -149,7 +149,7 @@ namespace Xyz
 
     template <std::floating_point T>
     [[nodiscard]]
-    Rectangle<T, 3>
+    OrientedRectangle<T, 3>
     get_bounding_rect(const Pgram3<T>& pgram)
     {
         return {

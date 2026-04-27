@@ -71,7 +71,7 @@ add_library(Xyz STATIC
     include/Xyz/ProjectionMatrix.hpp
     include/Xyz/QuadraticEquation.hpp
     include/Xyz/RandomNumberGenerator.hpp
-    include/Xyz/Rectangle.hpp
+    include/Xyz/OrientedRectangle.hpp
     include/Xyz/RotationMatrix.hpp
     include/Xyz/SphericalPoint.hpp
     include/Xyz/TransformationMatrix.hpp
