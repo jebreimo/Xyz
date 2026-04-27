@@ -259,14 +259,11 @@ namespace Xyz
     }
 
     template <typename T, unsigned N>
-    Matrix<T, N, N> make_identity_matrix()
+    constexpr Matrix<T, N, N> make_identity_matrix()
     {
-        static Matrix<T, N, N> matrix;
-        if (matrix[{0, 0}] == 0)
-        {
-            for (unsigned i = 0; i < N; ++i)
-                matrix[{i, i}] = 1;
-        }
+        Matrix<T, N, N> matrix;
+        for (unsigned i = 0; i < N; ++i)
+            matrix[{i, i}] = 1;
         return matrix;
     }
 
