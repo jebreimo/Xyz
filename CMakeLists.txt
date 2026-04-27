@@ -60,10 +60,12 @@ add_library(Xyz STATIC
     include/Xyz/LineClipping.hpp
     include/Xyz/LineLineIntersection.hpp
     include/Xyz/LineSegment.hpp
+    include/Xyz/LuDecomposition.hpp
     include/Xyz/Matrix.hpp
     include/Xyz/MatrixDeterminant.hpp
     include/Xyz/Mesh.hpp
     include/Xyz/Orientation.hpp
+    include/Xyz/OrientedRectangle.hpp
     include/Xyz/Pgram3.hpp
     include/Xyz/Placement.hpp
     include/Xyz/Plane.hpp
@@ -71,7 +73,7 @@ add_library(Xyz STATIC
     include/Xyz/ProjectionMatrix.hpp
     include/Xyz/QuadraticEquation.hpp
     include/Xyz/RandomNumberGenerator.hpp
-    include/Xyz/OrientedRectangle.hpp
+    include/Xyz/Rectangle.hpp
     include/Xyz/RotationMatrix.hpp
     include/Xyz/SphericalPoint.hpp
     include/Xyz/TransformationMatrix.hpp
@@ -83,7 +85,6 @@ add_library(Xyz STATIC
     src/Xyz/Face.cpp
     src/Xyz/IntersectionType.cpp
     src/Xyz/RandomNumberGenerator.cpp
-    include/Xyz/LuDecomposition.hpp
 )
 
 include(GNUInstallDirs)

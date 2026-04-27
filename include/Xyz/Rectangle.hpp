@@ -7,148 +7,105 @@
 //****************************************************************************
 #pragma once
 
-#include <cmath>
-#include <type_traits>
-
-#include "Orientation.hpp"
-#include "Utilities.hpp"
-#include "Placement.hpp"
+#include "Vector.hpp"
 
 namespace Xyz
 {
-    template <std::floating_point T, unsigned N>
+    template <typename T>
     class Rectangle
     {
     public:
-        /**
-         * @brief The origin of the rectangle and the orientation of the
-         *  length vector (pitch and yaw), and the width vector (roll).
-         */
-        Placement<T, N> placement;
-
-        Vector<T, 2> size;
-
         Rectangle() = default;
 
-        Rectangle(const Placement<T, N>& placement,
-                  const Vector<T, 2>& size)
-            : placement(placement),
-              size(size)
+        Rectangle(const Vector<T, 2>& origin, const Vector<T, 2>& size)
+            : origin(origin), size(size)
         {}
 
-        [[nodiscard]] Vector<T, N> length_vector() const
-        {
-            return size.x() * get_x_vector(placement.orientation);
-        }
-
-        [[nodiscard]] Vector<T, N> width_vector() const
-        {
-            return size.y() * get_y_vector(placement.orientation);
-        }
-
-        [[nodiscard]] Vector<T, N> normal_vector() const
-        {
-            static_assert(N == 3, "Normal vector is only defined for 3D rectangles");
-            return get_z_vector(placement.orientation);
-        }
-
-        [[nodiscard]]
-        constexpr Vector<T, N> operator[](size_t index) const
-        {
-            switch (index % 4)
-            {
-            default:
-            case 0:
-                return placement.origin;
-            case 1:
-                return placement.origin + length_vector();
-            case 2:
-                return placement.origin + length_vector() + width_vector();
-            case 3:
-                return placement.origin + width_vector();
-            }
-        }
+        Vector<T, 2> origin;
+        Vector<T, 2> size;
     };
 
-    template <std::floating_point T, unsigned N>
+    template <typename T>
     [[nodiscard]]
-    bool operator==(const Rectangle<T, N>& a, const Rectangle<T, N>& b)
+    bool operator==(const Rectangle<T>& a, const Rectangle<T>& b)
     {
-        return a.placement == b.placement
-            && a.size == b.size;
+        return a.origin == b.origin && a.size == b.size;
     }
 
-    template <std::floating_point T, unsigned N>
+    template <typename T>
     [[nodiscard]]
-    bool operator!=(const Rectangle<T, N>& a, const Rectangle<T, N>& b)
+    bool operator!=(const Rectangle<T>& a, const Rectangle<T>& b)
     {
-        return !(a == b);
+        return a.origin != b.origin || a.size != b.size;
     }
 
-    template <std::floating_point T, unsigned N>
-    std::ostream& operator<<(std::ostream& os, const Rectangle<T, N>& rect)
+    template <typename T>
+    std::ostream& operator<<(std::ostream& os, const Rectangle<T>& rect)
     {
-        return os << '{' << rect.placement << ", " << rect.size << "}";
+        return os << '{' << rect.origin << ", " << rect.size << "}";
     }
 
-    template <std::floating_point T, unsigned N>
-    [[nodiscard]] bool is_empty(const Rectangle<T, N>& rect)
-    {
-        return rect.size.x() == 0 || rect.size.y() == 0;
-    }
-
-    template <std::floating_point T, unsigned N>
+    template <typename T>
     [[nodiscard]]
-    Vector<T, 2> get_center(const Rectangle<T, N>& rect)
+    bool is_empty(const Rectangle<T>& rect)
     {
-        return rect.placement.origin + (rect.length_vector() + rect.width_vector()) / T(2);
+        return rect.size[0] == 0 || rect.size[1] == 0;
     }
 
-    template <std::floating_point T, unsigned N>
-    void set_center(Rectangle<T, N>& rect,
-                    const Vector<std::type_identity_t<T>, 2>& center)
-    {
-        rect.placement.origin = center - (rect.length_vector() + rect.width_vector()) / T(2);
-    }
-
-    template <std::floating_point T, unsigned N>
+    template <typename T>
     [[nodiscard]]
-    Rectangle<T, N> normalize(Rectangle<T, N> rect)
+    bool is_null(const Rectangle<T>& rect)
     {
-        if (rect.size.x() < 0)
+        return rect.size[0] == 0 && rect.size[1] == 0;
+    }
+
+    template <typename T>
+    [[nodiscard]]
+    constexpr Vector<T, 2> get_min(const Rectangle<T>& rect)
+    {
+        return get_min(rect.origin, rect.origin + rect.size);
+    }
+
+    template <typename T>
+    [[nodiscard]]
+    constexpr Vector<T, 2> get_max(const Rectangle<T>& rect)
+    {
+        return get_max(rect.origin, rect.origin + rect.size);
+    }
+
+    template <typename T>
+    [[nodiscard]]
+    constexpr Vector<T, 2> get_center(const Rectangle<T>& rect)
+    {
+        return rect.origin + rect.size / 2;
+    }
+
+    template <typename T>
+    void set_center(Rectangle<T>& rect, const Vector<std::type_identity_t<T>, 2>& center)
+    {
+        rect.origin = center - rect.size / 2;
+    }
+
+    template <typename T>
+    [[nodiscard]]
+    Rectangle<T> normalize(const Rectangle<T>& rectangle)
+    {
+        auto [x, y] = rectangle.origin;
+        auto [w, h] = rectangle.size;
+        if (w < 0)
         {
-            rect.placement.origin += rect.length_vector();
-            rect.size.x() = -rect.size.x();
+            x += w;
+            w = -w;
         }
-
-        if (rect.size.y() < 0)
+        if (h < 0)
         {
-            rect.placement.origin += rect.width_vector();
-            rect.size.y() = -rect.size.y();
+            y += h;
+            h = -h;
         }
-
-        rect.placement.orientation = normalize(rect.placement.orientation);
-
-        if constexpr (N == 2)
-        {
-            constexpr auto pi = Constants<T>::PI;
-
-            if (rect.placement.orientation.angle <= T(-0.5) * pi
-                || T(0.5) * pi <= rect.placement.orientation.angle)
-            {
-                rect.placement.origin += rect.length_vector() + rect.width_vector();
-                if (rect.placement.orientation.angle < 0)
-                    rect.placement.orientation.angle += pi;
-                else
-                    rect.placement.orientation.angle -= pi;
-            }
-        }
-
-        return rect;
+        return Rectangle<T>({x, y}, {w, h});
     }
 
-    using Rectangle2F = Rectangle<float, 2>;
-    using Rectangle2D = Rectangle<double, 2>;
-    using Rectangle3F = Rectangle<float, 3>;
-    using Rectangle3D = Rectangle<double, 3>;
+    using RectangleI = Rectangle<int>;
+    using RectangleF = Rectangle<float>;
+    using RectangleD = Rectangle<double>;
 }
