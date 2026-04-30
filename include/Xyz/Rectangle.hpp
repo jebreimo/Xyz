@@ -15,14 +15,35 @@ namespace Xyz
     class Rectangle
     {
     public:
+        Vector<T, 2> origin;
+        Vector<T, 2> size;
+
         Rectangle() = default;
 
         Rectangle(const Vector<T, 2>& origin, const Vector<T, 2>& size)
             : origin(origin), size(size)
         {}
 
-        Vector<T, 2> origin;
-        Vector<T, 2> size;
+        /**
+         * @note the points are only clockwise if both values of size are
+         *  either positive or negative.
+         */
+        [[nodiscard]]
+        constexpr Vector<T, 2> operator[](size_t index) const
+        {
+            switch (index % 4)
+            {
+            default:
+            case 0:
+                return origin;
+            case 1:
+                return origin + Vector<T, 2>(size.x(), 0);
+            case 2:
+                return origin + size;
+            case 3:
+                return origin + Vector<T, 2>(0, size.y());
+            }
+        }
     };
 
     template <typename T>

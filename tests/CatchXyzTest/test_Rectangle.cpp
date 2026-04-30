@@ -60,3 +60,14 @@ TEST_CASE("Rectangle: normalize")
     REQUIRE(normalize(R({2, 3}, {10, -20})) == R({2, -17}, {10, 20}));
     REQUIRE(normalize(R({2, 3}, {-10, -20})) == R({-8, -17}, {10, 20}));
 }
+
+TEST_CASE("Rectangle: indexed access")
+{
+    using V = Xyz::Vector2I;
+    const Xyz::RectangleI rect({2, 3}, {5, 7});
+    REQUIRE(rect[0] == V(2, 3));
+    REQUIRE(rect[1] == V(7, 3));
+    REQUIRE(rect[2] == V(7, 10));
+    REQUIRE(rect[3] == V(2, 10));
+    REQUIRE(rect[4] == V(2, 3));
+}
