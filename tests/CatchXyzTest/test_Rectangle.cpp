@@ -71,3 +71,43 @@ TEST_CASE("Rectangle: indexed access")
     REQUIRE(rect[3] == V(2, 10));
     REQUIRE(rect[4] == V(2, 3));
 }
+
+TEST_CASE("Rectangle: get_union (int)")
+{
+    using R = Xyz::RectangleI;
+
+    // Non-overlapping, side by side
+    REQUIRE(get_union(R({0, 0}, {5, 5}), R({10, 0}, {5, 5})) == R({0, 0}, {15, 5}));
+
+    // Overlapping
+    REQUIRE(get_union(R({0, 0}, {10, 10}), R({5, 5}, {10, 10})) == R({0, 0}, {15, 15}));
+
+    // One contains the other
+    REQUIRE(get_union(R({0, 0}, {10, 10}), R({2, 2}, {5, 5})) == R({0, 0}, {10, 10}));
+
+    // Identical rectangles
+    REQUIRE(get_union(R({1, 2}, {10, 0}), R({1, 2}, {0, 20})) == R({1, 2}, {10, 20}));
+
+    // Rectangles with negative sizes (get_min/get_max normalise them)
+    // R({10, 10}, {-5, -5}): min=(5,5), max=(10,10)
+    // R({0, 0}, {3, 3}):     min=(0,0), max=(3,3)
+    // union: origin=(0,0), size=(10,10)
+    REQUIRE(get_union(R({10, 10}, {-15, -15}), R({8, 8}, {3, 3})) == R({-5, -5}, {16, 16}));
+}
+
+TEST_CASE("Rectangle: get_union (float)")
+{
+    using R = Xyz::RectangleF;
+
+    // Non-overlapping
+    REQUIRE(get_union(R({0.f, 0.f}, {1.5f, 2.f}), R({3.f, 0.f}, {1.f, 2.f}))
+            == R({0.f, 0.f}, {4.f, 2.f}));
+
+    // Overlapping
+    REQUIRE(get_union(R({0.f, 0.f}, {2.f, 2.f}), R({1.f, 1.f}, {2.f, 2.f}))
+            == R({0.f, 0.f}, {3.f, 3.f}));
+
+    // One contains the other
+    REQUIRE(get_union(R({0.f, 0.f}, {10.f, 10.f}), R({2.5f, 2.5f}, {4.f, 4.f}))
+            == R({0.f, 0.f}, {10.f, 10.f}));
+}

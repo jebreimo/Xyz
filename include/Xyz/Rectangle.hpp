@@ -18,9 +18,9 @@ namespace Xyz
         Vector<T, 2> origin;
         Vector<T, 2> size;
 
-        Rectangle() = default;
+        constexpr Rectangle() = default;
 
-        Rectangle(const Vector<T, 2>& origin, const Vector<T, 2>& size)
+        constexpr Rectangle(const Vector<T, 2>& origin, const Vector<T, 2>& size)
             : origin(origin), size(size)
         {}
 
@@ -48,14 +48,14 @@ namespace Xyz
 
     template <typename T>
     [[nodiscard]]
-    bool operator==(const Rectangle<T>& a, const Rectangle<T>& b)
+    constexpr bool operator==(const Rectangle<T>& a, const Rectangle<T>& b)
     {
         return a.origin == b.origin && a.size == b.size;
     }
 
     template <typename T>
     [[nodiscard]]
-    bool operator!=(const Rectangle<T>& a, const Rectangle<T>& b)
+    constexpr bool operator!=(const Rectangle<T>& a, const Rectangle<T>& b)
     {
         return a.origin != b.origin || a.size != b.size;
     }
@@ -68,14 +68,14 @@ namespace Xyz
 
     template <typename T>
     [[nodiscard]]
-    bool is_empty(const Rectangle<T>& rect)
+    constexpr bool is_empty(const Rectangle<T>& rect)
     {
         return rect.size[0] == 0 || rect.size[1] == 0;
     }
 
     template <typename T>
     [[nodiscard]]
-    bool is_null(const Rectangle<T>& rect)
+    constexpr bool is_null(const Rectangle<T>& rect)
     {
         return rect.size[0] == 0 && rect.size[1] == 0;
     }
@@ -109,7 +109,7 @@ namespace Xyz
 
     template <typename T>
     [[nodiscard]]
-    Rectangle<T> normalize(const Rectangle<T>& rectangle)
+    constexpr Rectangle<T> normalize(const Rectangle<T>& rectangle)
     {
         auto [x, y] = rectangle.origin;
         auto [w, h] = rectangle.size;
@@ -123,7 +123,20 @@ namespace Xyz
             y += h;
             h = -h;
         }
-        return Rectangle<T>({x, y}, {w, h});
+        return {{x, y}, {w, h}};
+    }
+
+    template <typename T>
+    [[nodiscard]]
+    constexpr Rectangle<T> get_union(const Rectangle<T>& a, const Rectangle<T>& b)
+    {
+        const auto a_min = get_min(a);
+        const auto b_min = get_min(b);
+        const auto origin = get_min(a_min, b_min);
+        const auto a_max = get_max(a);
+        const auto b_max = get_max(b);
+        const auto size = get_max(a_max, b_max) - origin;
+        return {origin, size};
     }
 
     using RectangleI = Rectangle<int>;
