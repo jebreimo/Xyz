@@ -168,7 +168,7 @@ namespace Xyz
         if (edge1[0] != 0 && edge1[1] != 0)
         {
             auto shearing = Matrix<T, 4, 4>::identity();
-            shearing[{0, 1}] = -edge1[0] / edge1[1];
+            shearing[0, 1] = -edge1[0] / edge1[1];
             m = shearing * m;
         }
 

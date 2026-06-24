@@ -12,7 +12,7 @@ project(Xyz
     DESCRIPTION "A C++ library for 3D geometry and linear algebra"
 )
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 23)
 
 # Set XYZ_MASTER_PROJECT to ON if Xyz is the root level project.
 if (NOT DEFINED XYZ_MASTER_PROJECT)

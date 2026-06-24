@@ -10,7 +10,6 @@
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
 
 using Catch::Matchers::WithinAbs;
-using Xyz::RowCol;
 
 TEST_CASE("Matrix: test_basics")
 {
@@ -19,9 +18,9 @@ TEST_CASE("Matrix: test_basics")
         0, 1, 0,
         0, 0, 1
     };
-    CHECK(mat[RowCol(0, 0)] == 1.0);
-    CHECK(mat[RowCol(0, 1)] == 0.0);
-    CHECK(mat[RowCol(1, 1)] == 1.0);
+    CHECK(mat[0, 0] == 1.0);
+    CHECK(mat[0, 1] == 0.0);
+    CHECK(mat[1, 1] == 1.0);
 }
 
 TEST_CASE("Matrix: test_transpose")
@@ -122,7 +121,7 @@ TEST_CASE("Matrix: test_make_submatrix")
         9, 0, 1, 2,
         3, 4, 5, 6
     };
-    auto s = make_submatrix<3, 3>(m, {3, 2});
+    auto s = make_submatrix<3, 3>(m, 3, 2);
     Xyz::Matrix3I e{
         5, 6, 3,
         3, 4, 1,
@@ -134,8 +133,8 @@ TEST_CASE("Matrix: test_make_submatrix")
 TEST_CASE("Matrix: test_identity")
 {
     auto m1 = Xyz::make_identity_matrix<int, 4>();
-    CHECK(m1[RowCol(0, 0)] == 1);
-    CHECK(m1[RowCol(0, 1)] == 0);
+    CHECK(m1[0, 0] == 1);
+    CHECK(m1[0, 1] == 0);
 }
 
 TEST_CASE("Matrix: outer product")
@@ -161,9 +160,9 @@ TEST_CASE("Matrix: get and set row")
     auto row = get_row(m, 1);
     CHECK(row == Xyz::Vector3I{4, 5, 6});
     set_row(m, 1, Xyz::Vector3I{10, 11, 12});
-    CHECK(m[RowCol(1, 0)] == 10);
-    CHECK(m[RowCol(1, 1)] == 11);
-    CHECK(m[RowCol(1, 2)] == 12);
+    CHECK(m[1, 0] == 10);
+    CHECK(m[1, 1] == 11);
+    CHECK(m[1, 2] == 12);
 }
 
 TEST_CASE("Matrix: get and set column")
@@ -176,7 +175,7 @@ TEST_CASE("Matrix: get and set column")
     auto col = get_col(m, 1);
     CHECK(col == Xyz::Vector3I{2, 5, 8});
     set_col(m, 1, Xyz::Vector3I{10, 11, 12});
-    CHECK(m[RowCol(0, 1)] == 10);
-    CHECK(m[RowCol(1, 1)] == 11);
-    CHECK(m[RowCol(2, 1)] == 12);
+    CHECK(m[0, 1] == 10);
+    CHECK(m[1, 1] == 11);
+    CHECK(m[2, 1] == 12);
 }

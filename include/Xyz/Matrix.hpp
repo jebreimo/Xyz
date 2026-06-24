@@ -11,14 +11,6 @@
 
 namespace Xyz
 {
-    struct RowCol
-    {
-        RowCol() = default;
-        RowCol(unsigned r, unsigned c) : row(r), col(c) {}
-        unsigned row = 0;
-        unsigned col = 0;
-    };
-
     template <typename T, unsigned M, unsigned N>
     class Matrix
     {
@@ -43,14 +35,14 @@ namespace Xyz
             std::copy(std::begin(other), std::end(other), std::begin(values));
         }
 
-        constexpr T& operator[](RowCol pos)
+        constexpr T& operator[](size_t row, size_t col)
         {
-            return values[pos.row * COLS + pos.col];
+            return values[row * COLS + col];
         }
 
-        constexpr T operator[](RowCol pos) const
+        constexpr T operator[](size_t row, size_t col) const
         {
-            return values[pos.row * COLS + pos.col];
+            return values[row * COLS + col];
         }
 
         std::array<T, SIZE> values;
@@ -78,14 +70,14 @@ namespace Xyz
                 values[i] = other[i];
         }
 
-        constexpr T& operator[](RowCol pos)
+        constexpr T& operator[](size_t row, size_t col)
         {
-            return values[pos.row * COLS + pos.col];
+            return values[row * COLS + col];
         }
 
-        constexpr T operator[](RowCol pos) const
+        constexpr T operator[](size_t row, size_t col) const
         {
-            return values[pos.row * COLS + pos.col];
+            return values[row * COLS + col];
         }
 
         static constexpr Matrix identity()
@@ -123,14 +115,14 @@ namespace Xyz
             std::copy(std::begin(other), std::end(other), std::begin(values));
         }
 
-        constexpr T& operator[](RowCol pos)
+        constexpr T& operator[](size_t row, size_t col)
         {
-            return values[pos.row * COLS + pos.col];
+            return values[row * COLS + col];
         }
 
-        constexpr T operator[](RowCol pos) const
+        constexpr T operator[](size_t row, size_t col) const
         {
-            return values[pos.row * COLS + pos.col];
+            return values[row * COLS + col];
         }
 
         static constexpr Matrix identity()
@@ -173,14 +165,14 @@ namespace Xyz
                 values[i] = other.values[i];
         }
 
-        constexpr T& operator[](RowCol pos)
+        constexpr T& operator[](size_t row, size_t col)
         {
-            return values[pos.row * COLS + pos.col];
+            return values[row * COLS + col];
         }
 
-        constexpr T operator[](RowCol pos) const
+        constexpr T operator[](size_t row, size_t col) const
         {
-            return values[pos.row * COLS + pos.col];
+            return values[row * COLS + col];
         }
 
         static constexpr Matrix identity()
@@ -263,7 +255,7 @@ namespace Xyz
     {
         Matrix<T, N, N> matrix;
         for (unsigned i = 0; i < N; ++i)
-            matrix[{i, i}] = 1;
+            matrix[i, i] = 1;
         return matrix;
     }
 
@@ -291,18 +283,18 @@ namespace Xyz
 
     template <unsigned K, unsigned L, typename T, unsigned M, unsigned N>
     Matrix<T, K, L> make_submatrix(const Matrix<T, M, N>& m,
-                                   const RowCol& pos = {})
+                                   unsigned row = 0, unsigned col = 0)
     {
         static_assert(K <= M && L <= N,
                       "The submatrix cannot be larger than the source matrix.");
         Matrix<T, K, L> result;
         for (unsigned i = 0; i < K; ++i)
         {
-            auto i_m = (i + pos.row) % M;
+            auto i_m = (i + row) % M;
             for (unsigned j = 0; j < L; ++j)
             {
-                auto j_m = (j + pos.col) % N;
-                result[{i, j}] = m[{i_m, j_m}];
+                auto j_m = (j + col) % N;
+                result[i, j] = m[i_m, j_m];
             }
         }
         return result;
@@ -374,8 +366,8 @@ namespace Xyz
             {
                 T v = 0;
                 for (auto k = 0u; k < N; ++k)
-                    v += a[{i, k}] * b[{k, j}];
-                result[{i, j}] = v;
+                    v += a[i, k] * b[k, j];
+                result[i, j] = v;
             }
         }
         return result;
@@ -393,7 +385,7 @@ namespace Xyz
         for (unsigned i = 0; i < M; ++i)
         {
             for (unsigned j = 0; j < N; ++j)
-                a[{i, j}] *= s;
+                a[i, j] *= s;
         }
         return a;
     }
@@ -432,7 +424,7 @@ namespace Xyz
         {
             auto value = R();
             for (auto j = 0u; j < N; ++j)
-                value += m[{i, j}] * v[j];
+                value += m[i, j] * v[j];
             result[i] = value;
         }
         return result;
@@ -448,7 +440,7 @@ namespace Xyz
         {
             R value = 0;
             for (auto j = 0u; j < M; ++j)
-                value += v[j] * m[{j, i}];
+                value += v[j] * m[j, i];
             result[i] = value;
         }
         return result;
@@ -457,14 +449,14 @@ namespace Xyz
     template <typename T, unsigned M, unsigned N>
     std::ostream& operator<<(std::ostream& os, const Matrix<T, M, N>& m)
     {
-        os << m[{0, 0}];
+        os << m[0, 0];
         for (auto j = 1u; j < N; ++j)
-            os << " " << m[{0, j}];
+            os << " " << m[0, j];
         for (auto i = 1u; i < M; ++i)
         {
             os << " |";
             for (auto j = 0u; j < N; ++j)
-                os << " " << m[{i, j}];
+                os << " " << m[i, j];
         }
         return os;
     }
@@ -476,7 +468,7 @@ namespace Xyz
         for (auto i = 0u; i < N; ++i)
         {
             for (auto j = 0u; j < M; ++j)
-                result[{i, j}] = m[{j, i}];
+                result[i, j] = m[j, i];
         }
         return result;
     }
@@ -487,7 +479,7 @@ namespace Xyz
         for (auto i = 0u; i < N; ++i)
         {
             for (auto j = i + 1; j < N; ++j)
-                std::swap(m[{i, j}], m[{j, i}]);
+                std::swap(m[i, j], m[j, i]);
         }
     }
 
@@ -502,8 +494,8 @@ namespace Xyz
             {
                 T v = 0;
                 for (auto k = 0u; k < N; ++k)
-                    v += a[{i, k}] * b[{j, k}];
-                result[{i, j}] = v;
+                    v += a[i, k] * b[j, k];
+                result[i, j] = v;
             }
         }
         return result;
@@ -525,7 +517,7 @@ namespace Xyz
         {
             for (unsigned j = 0; j < N; ++j)
             {
-                if (std::abs(a[{i, j}] - b[{i, j}]) > margin)
+                if (std::abs(a[i, j] - b[i, j]) > margin)
                     return false;
             }
         }
@@ -541,7 +533,7 @@ namespace Xyz
         {
             for (unsigned j = 0; j < N; ++j)
             {
-                result[{i, j}] = u[i] * v[j];
+                result[i, j] = u[i] * v[j];
             }
         }
         return result;
@@ -561,10 +553,10 @@ namespace Xyz
         {
             for (unsigned c = 0; c < N; ++c)
             {
-                result[{r, c}] = m[{r, c}];
+                result[r, c] = m[r, c];
             }
         }
-        result[{N, N}] = 1;
+        result[N, N] = 1;
         return result;
     }
 
@@ -582,11 +574,11 @@ namespace Xyz
         for (unsigned r = 0; r < N - 1; ++r)
         {
             for (unsigned c = 0; c < N - 1; ++c)
-                result[{r, c}] = m[{r, c}];
+                result[r, c] = m[r, c];
         }
 
-        if (m[{N - 1, N - 1}] != 1)
-            result /= m[{N - 1, N - 1}];
+        if (m[N - 1, N - 1] != 1)
+            result /= m[N - 1, N - 1];
 
         return result;
     }
@@ -595,7 +587,7 @@ namespace Xyz
     void swap_rows(Matrix<T, M, N>& m, unsigned r1, unsigned r2)
     {
         for (unsigned c = 0; c < N; ++c)
-            std::swap(m[{r1, c}], m[{r2, c}]);
+            std::swap(m[r1, c], m[r2, c]);
     }
 
     using Matrix2I = Matrix<int, 2, 2>;

@@ -27,7 +27,7 @@ namespace Xyz
                 unsigned imax = k;
                 for (unsigned i = k; i < N; ++i)
                 {
-                    auto temp = scaling_factors[i] * std::abs(lu_[{i, k}]);
+                    auto temp = scaling_factors[i] * std::abs(lu_[i, k]);
                     if (temp > max)
                     {
                         max = temp;
@@ -41,14 +41,14 @@ namespace Xyz
                     scaling_factors[imax] = scaling_factors[k];
                 }
                 pivot_indices_[k] = imax;
-                if (lu_[{k, k}] == T(0))
-                    lu_[{k, k}] = T(1e-20); // Prevent division by zero.
+                if (lu_[k, k] == T(0))
+                    lu_[k, k] = T(1e-20); // Prevent division by zero.
                 for (unsigned i = k + 1; i < N; ++i)
                 {
-                    auto temp = lu_[{i, k}] /= lu_[{k, k}];
+                    auto temp = lu_[i, k] /= lu_[k, k];
                     for (unsigned j = k + 1; j < N; ++j)
                     {
-                        lu_[{i, j}] -= temp * lu_[{k, j}];
+                        lu_[i, j] -= temp * lu_[k, j];
                     }
                 }
             }
@@ -67,7 +67,7 @@ namespace Xyz
                 {
                     for (unsigned j = ii - 1; j < i; ++j)
                     {
-                        sum -= lu_[{i, j}] * x[j];
+                        sum -= lu_[i, j] * x[j];
                     }
                 }
                 else if (sum != T(0))
@@ -82,9 +82,9 @@ namespace Xyz
                 auto sum = x[i];
                 for (unsigned j = i + 1; j < N; ++j)
                 {
-                    sum -= lu_[{i, j}] * x[j];
+                    sum -= lu_[i, j] * x[j];
                 }
-                x[i] = sum / lu_[{i, i}];
+                x[i] = sum / lu_[i, i];
             }
             return x;
         }
@@ -124,7 +124,7 @@ namespace Xyz
                 auto big = T(0);
                 for (unsigned j = 0; j < N; ++j)
                 {
-                    auto temp = std::abs(lu_[{i, j}]);
+                    auto temp = std::abs(lu_[i, j]);
                     if (temp > big)
                         big = temp;
                 }

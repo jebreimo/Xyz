@@ -48,14 +48,14 @@ namespace Xyz
     ViewMatrixComponents<T> decompose_view_matrix(const Matrix<T, 4, 4>& view)
     {
         return {
-            {view[{0, 0}], view[{0, 1}], view[{0, 2}]},
-            {view[{1, 0}], view[{1, 1}], view[{1, 2}]},
-            {-view[{2, 0}], -view[{2, 1}], -view[{2, 2}]},
+            {view[0, 0], view[0, 1], view[0, 2]},
+            {view[1, 0], view[1, 1], view[1, 2]},
+            {-view[2, 0], -view[2, 1], -view[2, 2]},
             LuDecomposition<T, 3>({
-                -view[{0, 0}], -view[{0, 1}], -view[{0, 2}],
-                -view[{1, 0}], -view[{1, 1}], -view[{1, 2}],
-                -view[{2, 0}], -view[{2, 1}], -view[{2, 2}]
-            }).solve({view[{0, 3}], view[{1, 3}], view[{2, 3}]})
+                -view[0, 0], -view[0, 1], -view[0, 2],
+                -view[1, 0], -view[1, 1], -view[1, 2],
+                -view[2, 0], -view[2, 1], -view[2, 2]
+            }).solve({view[0, 3], view[1, 3], view[2, 3]})
         };
     }
 

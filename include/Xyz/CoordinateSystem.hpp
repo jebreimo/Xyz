@@ -43,36 +43,36 @@ namespace Xyz
         constexpr Vector<T, 3> origin() const
         {
             return {
-                -from_cs_[{0, 3}],
-                -from_cs_[{1, 3}],
-                -from_cs_[{2, 3}]
+                -from_cs_[0, 3],
+                -from_cs_[1, 3],
+                -from_cs_[2, 3]
             };
         }
 
         constexpr Vector<T, 3> x_axis() const
         {
             return {
-                from_cs_[{0, 0}],
-                from_cs_[{1, 0}],
-                from_cs_[{2, 0}]
+                from_cs_[0, 0],
+                from_cs_[1, 0],
+                from_cs_[2, 0]
             };
         }
 
         constexpr Vector<T, 3> y_axis() const
         {
             return {
-                from_cs_[{0, 1}],
-                from_cs_[{1, 1}],
-                from_cs_[{2, 1}]
+                from_cs_[0, 1],
+                from_cs_[1, 1],
+                from_cs_[2, 1]
             };
         }
 
         constexpr Vector<T, 3> z_axis() const
         {
             return {
-                from_cs_[{0, 2}],
-                from_cs_[{1, 2}],
-                from_cs_[{2, 2}]
+                from_cs_[0, 2],
+                from_cs_[1, 2],
+                from_cs_[2, 2]
             };
         }
 

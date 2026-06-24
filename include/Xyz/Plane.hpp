@@ -49,7 +49,7 @@ namespace Xyz
         // 3x3 part: I - nn^T / (n.n)
         for (unsigned i = 0; i < 3; ++i)
             for (unsigned j = 0; j < 3; ++j)
-                result[{i, j}] -= n[i] * n[j] / nn;
+                result[i, j] -= n[i] * n[j] / nn;
 
         // translation part: (p0.n / n.n) * n
         auto d = dot(p0, n) / nn;
@@ -57,7 +57,7 @@ namespace Xyz
 
         // Fill 4x4 matrix
         for (unsigned i = 0; i < 3; ++i)
-            result[{i, 3}] = t[i];
+            result[i, 3] = t[i];
 
         return result;
     }
