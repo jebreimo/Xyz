@@ -7,7 +7,6 @@
 //****************************************************************************
 #pragma once
 #include "FloatType.hpp"
-#include "InvertMatrix.hpp"
 #include "LineClipping.hpp"
 #include "LineSegment.hpp"
 #include "Matrix.hpp"
@@ -33,15 +32,12 @@ namespace Xyz
         std::optional<LineSegment<T, N>>
         clip(const LineSegment<T, N>& segment) const
         {
-            auto start = to_hg(vector_cast<FloatT>(segment.start));
-            auto end = to_hg(vector_cast<FloatT>(segment.end));
-
             // Apply the transformation.
-            start = transform * start;
-            end = transform * end;
+            auto start = transform_vector(transform, vector_cast<FloatT>(segment.start));
+            auto end = transform_vector(transform, vector_cast<FloatT>(segment.end));
 
             // Clip the transformed segment.
-            auto ts = get_clipping_positions<FloatT>({start[0], start[1]}, {end[0], end[1]});
+            auto ts = get_clipping_positions<FloatT>(start, end);
             if (!ts)
                 return std::nullopt;
 
