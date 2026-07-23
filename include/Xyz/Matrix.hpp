@@ -590,6 +590,20 @@ namespace Xyz
             std::swap(m[r1, c], m[r2, c]);
     }
 
+    template <typename T, unsigned N>
+    Vector<T, N - 1>
+    transform_vector(const Matrix<T, N, N>& m, const Vector<T, N - 1>& v)
+    {
+        Vector<T, N - 1> result;
+        for (unsigned i = 0; i < N - 1; ++i)
+        {
+            result[i] = m[i, N - 1];
+            for (unsigned j = 0; j < N - 1; ++j)
+                result[i] += m[i, j] * v[j];
+        }
+        return result;
+    }
+
     using Matrix2I = Matrix<int, 2, 2>;
     using Matrix2F = Matrix<float, 2, 2>;
     using Matrix2D = Matrix<double, 2, 2>;

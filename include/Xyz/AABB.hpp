@@ -27,13 +27,11 @@ namespace Xyz
 
         explicit AABB(const Vector<T, N>& pos)
             : min(pos), max(pos)
-        {
-        }
+        {}
 
         AABB(const Vector<T, N>& min, const Vector<T, N>& max)
             : min(min), max(max)
-        {
-        }
+        {}
 
         constexpr explicit operator bool() const
         {
@@ -80,7 +78,8 @@ namespace Xyz
     };
 
     template <typename T, size_t N>
-    AABB<T, N> get_transformed(const AABB<T, N>& box, const Matrix<T, N, N>& m)
+    AABB<T, N> transform_aabb(const AABB<T, N>& box,
+                              const Matrix<T, N + 1, N + 1>& m)
     {
         if (!box)
             return {};
@@ -90,15 +89,7 @@ namespace Xyz
             Vector<T, N> corner;
             for (size_t j = 0; j < N; ++j)
                 corner[j] = (i & (1 << j)) ? box.max[j] : box.min[j];
-            Vector<T, N> transformed_corner;
-            for (size_t j = 0; j < N; ++j)
-            {
-                transformed_corner[j] = m[j, 0] * corner[0];
-                for (size_t k = 1; k < N; ++k)
-                    transformed_corner[j] += m[j, k] * corner[k];
-                transformed_corner[j] += m[j, N];
-            }
-            result += transformed_corner;
+            result += transform_vector(m, corner);
         }
         return result;
     }
