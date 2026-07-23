@@ -32,6 +32,11 @@ namespace Xyz
             : values()
         {}
 
+        explicit constexpr Vector(T value) noexcept
+        {
+            std::fill(std::begin(values), std::end(values), value);
+        }
+
         constexpr Vector(std::initializer_list<T> v)
         {
             if (v.size() != SIZE)
@@ -66,6 +71,11 @@ namespace Xyz
         constexpr Vector() noexcept
             : values()
         {}
+
+        explicit constexpr Vector(T value) noexcept
+            : values{value, value}
+        {
+        }
 
         constexpr Vector(T x, T y) noexcept
             : values{x, y}
@@ -124,6 +134,11 @@ namespace Xyz
         constexpr Vector() noexcept
             : values()
         {}
+
+        explicit constexpr Vector(T value) noexcept
+            : values{value, value, value}
+        {
+        }
 
         constexpr Vector(T x, T y, T z) noexcept
             : values{x, y, z}
@@ -185,6 +200,11 @@ namespace Xyz
         constexpr Vector() noexcept
             : values()
         {}
+
+        explicit constexpr Vector(T value) noexcept
+            : values{value, value, value, value}
+        {
+        }
 
         constexpr Vector(T x, T y, T z, T w) noexcept
             : values{x, y, z, w}
