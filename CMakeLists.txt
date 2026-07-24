@@ -45,6 +45,7 @@ endfunction()
 configure_file(src/Xyz/XyzVersion.hpp.in XyzVersion.hpp @ONLY)
 
 add_library(Xyz STATIC
+    include/Xyz/BBox.hpp
     include/Xyz/Clamp.hpp
     include/Xyz/ComplexApprox.hpp
     include/Xyz/Constants.hpp
@@ -85,7 +86,6 @@ add_library(Xyz STATIC
     src/Xyz/Face.cpp
     src/Xyz/IntersectionType.cpp
     src/Xyz/RandomNumberGenerator.cpp
-    include/Xyz/BBox.hpp
 )
 
 include(GNUInstallDirs)
