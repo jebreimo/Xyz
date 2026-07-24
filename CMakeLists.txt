@@ -8,7 +8,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 project(Xyz
-    VERSION 0.11.3
+    VERSION 0.11.4
     DESCRIPTION "A C++ library for 3D geometry and linear algebra"
 )
 

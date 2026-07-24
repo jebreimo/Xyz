@@ -123,8 +123,8 @@ namespace Xyz
         return result;
     }
 
-    using AABB2F = BoundingBox<float, 2>;
-    using AABB2D = BoundingBox<double, 2>;
-    using AABB3F = BoundingBox<float, 3>;
-    using AABB3D = BoundingBox<double, 3>;
+    using BoundingBox2F = BoundingBox<float, 2>;
+    using BoundingBox2D = BoundingBox<double, 2>;
+    using BoundingBox3F = BoundingBox<float, 3>;
+    using BoundingBox3D = BoundingBox<double, 3>;
 }
