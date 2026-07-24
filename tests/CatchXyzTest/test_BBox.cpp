@@ -5,20 +5,20 @@
 // This file is distributed under the Zero-Clause BSD License.
 // License text is included with the source distribution.
 //****************************************************************************
-#include <Xyz/BoundingBox.hpp>
+#include <Xyz/BBox.hpp>
 #include <Xyz/TransformationMatrix.hpp>
 #include <catch2/catch_test_macros.hpp>
 
 namespace
 {
-    using AABB2I = Xyz::BoundingBox<int, 2>;
-    using AABB3I = Xyz::BoundingBox<int, 3>;
+    using AABB2I = Xyz::BBox<int, 2>;
+    using AABB3I = Xyz::BBox<int, 3>;
     using V2 = Xyz::Vector2I;
     using V3 = Xyz::Vector3I;
     using V3F = Xyz::Vector3F;
 }
 
-TEST_CASE("BoundingBox: operator bool")
+TEST_CASE("BBox: operator bool")
 {
     // Default constructed box is invalid (min > max in every dimension).
     REQUIRE(!static_cast<bool>(AABB2I()));
@@ -37,7 +37,7 @@ TEST_CASE("BoundingBox: operator bool")
     REQUIRE(!static_cast<bool>(AABB2I(V2(10, 20), V2(0, 0))));
 }
 
-TEST_CASE("BoundingBox: operator+= with BoundingBox")
+TEST_CASE("BBox: operator+= with BBox")
 {
     AABB2I a(V2(0, 0), V2(10, 10));
     AABB2I b(V2(5, -5), V2(20, 8));
@@ -53,7 +53,7 @@ TEST_CASE("BoundingBox: operator+= with BoundingBox")
     REQUIRE(c.max == V2(2, 2));
 }
 
-TEST_CASE("BoundingBox: operator+= with Vector")
+TEST_CASE("BBox: operator+= with Vector")
 {
     AABB2I a(V2(0, 0), V2(10, 10));
     a += V2(15, 5);
@@ -80,7 +80,7 @@ TEST_CASE("BoundingBox: operator+= with Vector")
     REQUIRE(&ref == &a);
 }
 
-TEST_CASE("BoundingBox: operator+ BoundingBox and BoundingBox")
+TEST_CASE("BBox: operator+ BBox and BBox")
 {
     AABB2I a(V2(0, 0), V2(10, 10));
     AABB2I b(V2(5, -5), V2(20, 8));
@@ -95,7 +95,7 @@ TEST_CASE("BoundingBox: operator+ BoundingBox and BoundingBox")
     REQUIRE(b.max == V2(20, 8));
 }
 
-TEST_CASE("BoundingBox: operator+ BoundingBox and Vector")
+TEST_CASE("BBox: operator+ BBox and Vector")
 {
     AABB2I a(V2(0, 0), V2(10, 10));
     AABB2I c = a + V2(15, -5);
@@ -107,37 +107,37 @@ TEST_CASE("BoundingBox: operator+ BoundingBox and Vector")
     REQUIRE(a.max == V2(10, 10));
 }
 
-TEST_CASE("BoundingBox: operator+ Vector and BoundingBox")
+TEST_CASE("BBox: operator+ Vector and BBox")
 {
     AABB2I a(V2(0, 0), V2(10, 10));
     AABB2I c = V2(15, -5) + a;
     REQUIRE(c.min == V2(0, -5));
     REQUIRE(c.max == V2(15, 10));
 
-    // Commutative with the BoundingBox + Vector overload.
+    // Commutative with the BBox + Vector overload.
     REQUIRE((V2(15, -5) + a).min == (a + V2(15, -5)).min);
     REQUIRE((V2(15, -5) + a).max == (a + V2(15, -5)).max);
 }
 
-TEST_CASE("BoundingBox: transform_aabb translation (3D float)")
+TEST_CASE("BBox: transform_bbox translation (3D float)")
 {
-    Xyz::BoundingBox3F box(V3F(0, 0, 0), V3F(2, 4, 6));
-    auto result = transform_aabb(box, Xyz::affine::translate3(10.f, -5.f, 3.f));
+    Xyz::BBox3F box(V3F(0, 0, 0), V3F(2, 4, 6));
+    auto result = transform_bbox(box, Xyz::affine::translate3(10.f, -5.f, 3.f));
     REQUIRE(are_equal(result.min, V3F(10, -5, 3)));
     REQUIRE(are_equal(result.max, V3F(12, -1, 9)));
 }
 
-TEST_CASE("BoundingBox: transform_aabb scaling with axis flip (3D float)")
+TEST_CASE("BBox: transform_bbox scaling with axis flip (3D float)")
 {
     // A negative scale factor flips an axis, so min/max on that axis swap.
-    // transform_aabb must recompute the bounds from the transformed corners.
-    Xyz::BoundingBox3F box(V3F(1, 2, 3), V3F(3, 4, 5));
-    auto result = transform_aabb(box, Xyz::affine::scale3(2.f, 0.5f, -1.f));
+    // transform_bbox must recompute the bounds from the transformed corners.
+    Xyz::BBox3F box(V3F(1, 2, 3), V3F(3, 4, 5));
+    auto result = transform_bbox(box, Xyz::affine::scale3(2.f, 0.5f, -1.f));
     REQUIRE(are_equal(result.min, V3F(2, 1, -5)));
     REQUIRE(are_equal(result.max, V3F(6, 2, -3)));
 }
 
-TEST_CASE("BoundingBox: transform_aabb rotation grows the box (3D float)")
+TEST_CASE("BBox: transform_bbox rotation grows the box (3D float)")
 {
     // 90 degree rotation about the z axis: (x, y, z) -> (-y, x, z).
     const Xyz::Matrix4F rot_z_90 = {
@@ -146,49 +146,49 @@ TEST_CASE("BoundingBox: transform_aabb rotation grows the box (3D float)")
         0, 0, 1, 0,
         0, 0, 0, 1
     };
-    Xyz::BoundingBox3F box(V3F(0, 0, 0), V3F(2, 4, 6));
-    auto result = transform_aabb(box, rot_z_90);
+    Xyz::BBox3F box(V3F(0, 0, 0), V3F(2, 4, 6));
+    auto result = transform_bbox(box, rot_z_90);
     REQUIRE(are_equal(result.min, V3F(-4, 0, 0)));
     REQUIRE(are_equal(result.max, V3F(0, 2, 6)));
 }
 
-TEST_CASE("BoundingBox: transform_aabb composed transform (3D float)")
+TEST_CASE("BBox: transform_bbox composed transform (3D float)")
 {
     // Scale by 2, then translate by (1, 2, 3). Matrices apply right-to-left.
     const auto m = Xyz::affine::translate3(1.f, 2.f, 3.f)
                    * Xyz::affine::scale3(2.f, 2.f, 2.f);
-    Xyz::BoundingBox3F box(V3F(0, 0, 0), V3F(1, 1, 1));
-    auto result = transform_aabb(box, m);
+    Xyz::BBox3F box(V3F(0, 0, 0), V3F(1, 1, 1));
+    auto result = transform_bbox(box, m);
     REQUIRE(are_equal(result.min, V3F(1, 2, 3)));
     REQUIRE(are_equal(result.max, V3F(3, 4, 5)));
 }
 
-TEST_CASE("BoundingBox: transform_aabb of an invalid box stays invalid (3D float)")
+TEST_CASE("BBox: transform_bbox of an invalid box stays invalid (3D float)")
 {
-    Xyz::BoundingBox3F box;  // default-constructed: min > max, i.e. invalid/empty
+    Xyz::BBox3F box;  // default-constructed: min > max, i.e. invalid/empty
     REQUIRE(!static_cast<bool>(box));
-    auto result = transform_aabb(box, Xyz::affine::translate3(1.f, 2.f, 3.f));
+    auto result = transform_bbox(box, Xyz::affine::translate3(1.f, 2.f, 3.f));
     REQUIRE(!static_cast<bool>(result));
 }
 
-TEST_CASE("BoundingBox: transform_aabb_no_w translation (3D float)")
+TEST_CASE("BBox: transform_bbox_no_w translation (3D float)")
 {
-    Xyz::BoundingBox3F box(V3F(0, 0, 0), V3F(2, 4, 6));
-    auto result = transform_aabb_no_w(box, Xyz::affine::translate3(10.f, -5.f, 3.f));
+    Xyz::BBox3F box(V3F(0, 0, 0), V3F(2, 4, 6));
+    auto result = transform_bbox_no_w(box, Xyz::affine::translate3(10.f, -5.f, 3.f));
     REQUIRE(are_equal(result.min, V3F(10, -5, 3)));
     REQUIRE(are_equal(result.max, V3F(12, -1, 9)));
 }
 
-TEST_CASE("BoundingBox: transform_aabb_no_w scaling with axis flip (3D float)")
+TEST_CASE("BBox: transform_bbox_no_w scaling with axis flip (3D float)")
 {
     // A negative scale factor flips an axis, so min/max on that axis swap.
-    Xyz::BoundingBox3F box(V3F(1, 2, 3), V3F(3, 4, 5));
-    auto result = transform_aabb_no_w(box, Xyz::affine::scale3(2.f, 0.5f, -1.f));
+    Xyz::BBox3F box(V3F(1, 2, 3), V3F(3, 4, 5));
+    auto result = transform_bbox_no_w(box, Xyz::affine::scale3(2.f, 0.5f, -1.f));
     REQUIRE(are_equal(result.min, V3F(2, 1, -5)));
     REQUIRE(are_equal(result.max, V3F(6, 2, -3)));
 }
 
-TEST_CASE("BoundingBox: transform_aabb_no_w rotation grows the box (3D float)")
+TEST_CASE("BBox: transform_bbox_no_w rotation grows the box (3D float)")
 {
     // 90 degree rotation about the z axis: (x, y, z) -> (-y, x, z).
     const Xyz::Matrix4F rot_z_90 = {
@@ -197,35 +197,35 @@ TEST_CASE("BoundingBox: transform_aabb_no_w rotation grows the box (3D float)")
         0, 0, 1, 0,
         0, 0, 0, 1
     };
-    Xyz::BoundingBox3F box(V3F(0, 0, 0), V3F(2, 4, 6));
-    auto result = transform_aabb_no_w(box, rot_z_90);
+    Xyz::BBox3F box(V3F(0, 0, 0), V3F(2, 4, 6));
+    auto result = transform_bbox_no_w(box, rot_z_90);
     REQUIRE(are_equal(result.min, V3F(-4, 0, 0)));
     REQUIRE(are_equal(result.max, V3F(0, 2, 6)));
 }
 
-TEST_CASE("BoundingBox: transform_aabb_no_w matches transform_aabb for affine matrices (3D float)")
+TEST_CASE("BBox: transform_bbox_no_w matches transform_bbox for affine matrices (3D float)")
 {
     // With an affine matrix (last row 0,0,0,1) w is always 1, so the optimized
-    // no-w version must agree with the general transform_aabb.
+    // no-w version must agree with the general transform_bbox.
     const auto m = Xyz::affine::translate3(1.f, 2.f, 3.f)
                    * Xyz::affine::scale3(2.f, 2.f, 2.f);
-    Xyz::BoundingBox3F box(V3F(-1, -2, -3), V3F(1, 2, 3));
+    Xyz::BBox3F box(V3F(-1, -2, -3), V3F(1, 2, 3));
 
-    auto general = transform_aabb(box, m);
-    auto no_w = transform_aabb_no_w(box, m);
+    auto general = transform_bbox(box, m);
+    auto no_w = transform_bbox_no_w(box, m);
     REQUIRE(are_equal(no_w.min, general.min));
     REQUIRE(are_equal(no_w.max, general.max));
 }
 
-TEST_CASE("BoundingBox: transform_aabb_no_w of an invalid box stays invalid (3D float)")
+TEST_CASE("BBox: transform_bbox_no_w of an invalid box stays invalid (3D float)")
 {
-    Xyz::BoundingBox3F box;  // default-constructed: min > max, i.e. invalid/empty
+    Xyz::BBox3F box;  // default-constructed: min > max, i.e. invalid/empty
     REQUIRE(!static_cast<bool>(box));
-    auto result = transform_aabb_no_w(box, Xyz::affine::translate3(1.f, 2.f, 3.f));
+    auto result = transform_bbox_no_w(box, Xyz::affine::translate3(1.f, 2.f, 3.f));
     REQUIRE(!static_cast<bool>(result));
 }
 
-TEST_CASE("BoundingBox: operators work in 3 dimensions")
+TEST_CASE("BBox: operators work in 3 dimensions")
 {
     AABB3I a(V3(0, 0, 0), V3(10, 10, 10));
     a += V3(-5, 12, 3);

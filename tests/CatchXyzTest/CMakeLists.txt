@@ -15,7 +15,7 @@ FetchContent_Declare(catch
 FetchContent_MakeAvailable(catch)
 
 add_executable(CatchXyzTest
-    test_BoundingBox.cpp
+    test_BBox.cpp
     test_Approx.cpp
     test_ComplexApprox.cpp
     test_CoordinateSystem.cpp

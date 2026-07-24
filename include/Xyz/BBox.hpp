@@ -17,19 +17,19 @@ namespace Xyz
      * @tparam N The coordinate dimension.
      */
     template <typename T, size_t N>
-    class BoundingBox
+    class BBox
     {
     public:
         Vector<T, N> min = Vector<T, N>(std::numeric_limits<T>::max());
         Vector<T, N> max = Vector<T, N>(std::numeric_limits<T>::lowest());
 
-        BoundingBox() noexcept = default;
+        BBox() noexcept = default;
 
-        explicit BoundingBox(const Vector<T, N>& pos)
+        explicit BBox(const Vector<T, N>& pos)
             : min(pos), max(pos)
         {}
 
-        BoundingBox(const Vector<T, N>& min, const Vector<T, N>& max)
+        BBox(const Vector<T, N>& min, const Vector<T, N>& max)
             : min(min), max(max)
         {}
 
@@ -43,35 +43,35 @@ namespace Xyz
             return true;
         }
 
-        friend constexpr BoundingBox& operator+=(BoundingBox& a, const BoundingBox& b)
+        friend constexpr BBox& operator+=(BBox& a, const BBox& b)
         {
             a.min = get_min(a.min, b.min);
             a.max = get_max(a.max, b.max);
             return a;
         }
 
-        friend constexpr BoundingBox& operator+=(BoundingBox& a, const Vector<T, N>& b)
+        friend constexpr BBox& operator+=(BBox& a, const Vector<T, N>& b)
         {
             a.min = get_min(a.min, b);
             a.max = get_max(a.max, b);
             return a;
         }
 
-        friend constexpr BoundingBox operator+(const BoundingBox& a, const BoundingBox& b)
+        friend constexpr BBox operator+(const BBox& a, const BBox& b)
         {
-            BoundingBox result = a;
+            BBox result = a;
             result += b;
             return result;
         }
 
-        friend constexpr BoundingBox operator+(const BoundingBox& a, const Vector<T, N>& b)
+        friend constexpr BBox operator+(const BBox& a, const Vector<T, N>& b)
         {
-            BoundingBox result = a;
+            BBox result = a;
             result += b;
             return result;
         }
 
-        friend constexpr BoundingBox operator+(const Vector<T, N>& a, const BoundingBox& b)
+        friend constexpr BBox operator+(const Vector<T, N>& a, const BBox& b)
         {
             return b + a;
         }
@@ -82,12 +82,12 @@ namespace Xyz
      * transformed.
      */
     template <typename T, size_t N>
-    BoundingBox<T, N> transform_aabb(const BoundingBox<T, N>& box,
+    BBox<T, N> transform_bbox(const BBox<T, N>& box,
                               const Matrix<T, N + 1, N + 1>& m)
     {
         if (!box)
             return {};
-        BoundingBox<T, N> result;
+        BBox<T, N> result;
         for (size_t i = 0; i < (1 << N); ++i)
         {
             Vector<T, N> corner;
@@ -102,17 +102,17 @@ namespace Xyz
      * Returns the axis-aligned bounding box of @a box after it has been
      * transformed without considering the w component.
      *
-     * This is an optimized version of transform_aabb, but must only be
+     * This is an optimized version of transform_bbox, but must only be
      * used when the final row of matrix @a m consists of 0s followed by
      * a single 1.
      */
     template <typename T, size_t N>
-    BoundingBox<T, N> transform_aabb_no_w(const BoundingBox<T, N>& box,
+    BBox<T, N> transform_bbox_no_w(const BBox<T, N>& box,
                                    const Matrix<T, N + 1, N + 1>& m)
     {
         if (!box)
             return {};
-        BoundingBox<T, N> result;
+        BBox<T, N> result;
         for (size_t i = 0; i < (1 << N); ++i)
         {
             Vector<T, N> corner;
@@ -123,8 +123,8 @@ namespace Xyz
         return result;
     }
 
-    using BoundingBox2F = BoundingBox<float, 2>;
-    using BoundingBox2D = BoundingBox<double, 2>;
-    using BoundingBox3F = BoundingBox<float, 3>;
-    using BoundingBox3D = BoundingBox<double, 3>;
+    using BBox2F = BBox<float, 2>;
+    using BBox2D = BBox<double, 2>;
+    using BBox3F = BBox<float, 3>;
+    using BBox3D = BBox<double, 3>;
 }
