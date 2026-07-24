@@ -17,19 +17,19 @@ namespace Xyz
      * @tparam N The coordinate dimension.
      */
     template <typename T, size_t N>
-    class AABB
+    class BoundingBox
     {
     public:
         Vector<T, N> min = Vector<T, N>(std::numeric_limits<T>::max());
         Vector<T, N> max = Vector<T, N>(std::numeric_limits<T>::lowest());
 
-        AABB() noexcept = default;
+        BoundingBox() noexcept = default;
 
-        explicit AABB(const Vector<T, N>& pos)
+        explicit BoundingBox(const Vector<T, N>& pos)
             : min(pos), max(pos)
         {}
 
-        AABB(const Vector<T, N>& min, const Vector<T, N>& max)
+        BoundingBox(const Vector<T, N>& min, const Vector<T, N>& max)
             : min(min), max(max)
         {}
 
@@ -43,35 +43,35 @@ namespace Xyz
             return true;
         }
 
-        friend constexpr AABB& operator+=(AABB& a, const AABB& b)
+        friend constexpr BoundingBox& operator+=(BoundingBox& a, const BoundingBox& b)
         {
             a.min = get_min(a.min, b.min);
             a.max = get_max(a.max, b.max);
             return a;
         }
 
-        friend constexpr AABB& operator+=(AABB& a, const Vector<T, N>& b)
+        friend constexpr BoundingBox& operator+=(BoundingBox& a, const Vector<T, N>& b)
         {
             a.min = get_min(a.min, b);
             a.max = get_max(a.max, b);
             return a;
         }
 
-        friend constexpr AABB operator+(const AABB& a, const AABB& b)
+        friend constexpr BoundingBox operator+(const BoundingBox& a, const BoundingBox& b)
         {
-            AABB result = a;
+            BoundingBox result = a;
             result += b;
             return result;
         }
 
-        friend constexpr AABB operator+(const AABB& a, const Vector<T, N>& b)
+        friend constexpr BoundingBox operator+(const BoundingBox& a, const Vector<T, N>& b)
         {
-            AABB result = a;
+            BoundingBox result = a;
             result += b;
             return result;
         }
 
-        friend constexpr AABB operator+(const Vector<T, N>& a, const AABB& b)
+        friend constexpr BoundingBox operator+(const Vector<T, N>& a, const BoundingBox& b)
         {
             return b + a;
         }
@@ -82,12 +82,12 @@ namespace Xyz
      * transformed.
      */
     template <typename T, size_t N>
-    AABB<T, N> transform_aabb(const AABB<T, N>& box,
+    BoundingBox<T, N> transform_aabb(const BoundingBox<T, N>& box,
                               const Matrix<T, N + 1, N + 1>& m)
     {
         if (!box)
             return {};
-        AABB<T, N> result;
+        BoundingBox<T, N> result;
         for (size_t i = 0; i < (1 << N); ++i)
         {
             Vector<T, N> corner;
@@ -107,12 +107,12 @@ namespace Xyz
      * a single 1.
      */
     template <typename T, size_t N>
-    AABB<T, N> transform_aabb_no_w(const AABB<T, N>& box,
+    BoundingBox<T, N> transform_aabb_no_w(const BoundingBox<T, N>& box,
                                    const Matrix<T, N + 1, N + 1>& m)
     {
         if (!box)
             return {};
-        AABB<T, N> result;
+        BoundingBox<T, N> result;
         for (size_t i = 0; i < (1 << N); ++i)
         {
             Vector<T, N> corner;
@@ -123,8 +123,8 @@ namespace Xyz
         return result;
     }
 
-    using AABB2F = AABB<float, 2>;
-    using AABB2D = AABB<double, 2>;
-    using AABB3F = AABB<float, 3>;
-    using AABB3D = AABB<double, 3>;
+    using AABB2F = BoundingBox<float, 2>;
+    using AABB2D = BoundingBox<double, 2>;
+    using AABB3F = BoundingBox<float, 3>;
+    using AABB3D = BoundingBox<double, 3>;
 }

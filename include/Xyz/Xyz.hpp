@@ -7,7 +7,7 @@
 //****************************************************************************
 #pragma once
 
-#include "AABB.hpp"
+#include "BoundingBox.hpp"
 #include "ComplexApprox.hpp"
 #include "Interpolation.hpp"
 #include "Line.hpp"
