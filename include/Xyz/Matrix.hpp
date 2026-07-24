@@ -591,15 +591,50 @@ namespace Xyz
     }
 
     template <typename T, unsigned N>
+    Vector<T, N>
+    transform_vector(const Matrix<T, N, N>& m, const Vector<T, N>& v)
+    {
+        auto result = m * v;
+
+        const auto w = result[N - 1];
+        if (w != 1)
+        {
+            for (unsigned i = 0; i < N - 1; ++i)
+                result[i] /= w;
+            result[N - 1] = 1;
+        }
+
+        return result;
+    }
+
+    template <typename T, unsigned N>
     Vector<T, N - 1>
     transform_vector(const Matrix<T, N, N>& m, const Vector<T, N - 1>& v)
     {
-        Vector<T, N - 1> result;
+        return from_hg(transform_vector(m, to_hg(v)));
+    }
+
+    /**
+     * @brief Transforms a vector using a matrix without considering
+     *  the w component.
+     * @tparam T The coordinate type, e.g. float or double.
+     * @tparam N The coordinate dimension.
+     * @param m The transformation matrix. Its final row should be 0s followed
+     *  by a single 1.
+     * @param v The vector to transform.
+     * @return The transformed vector.
+     */
+    template <typename T, unsigned N>
+    Vector<T, N - 1>
+    transform_vector_no_w(const Matrix<T, N, N>& m, const Vector<T, N - 1>& v)
+    {
+        Vector<T, N-1> result;
         for (unsigned i = 0; i < N - 1; ++i)
         {
-            result[i] = m[i, N - 1];
+            T value = m[i, N - 1];
             for (unsigned j = 0; j < N - 1; ++j)
-                result[i] += m[i, j] * v[j];
+                value += m[i, j] * v[j];
+            result[i] = value;
         }
         return result;
     }

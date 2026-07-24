@@ -88,22 +88,22 @@ namespace Xyz
 
         constexpr Vector<T, 3> to_cs(const Vector<T, 3>& p) const
         {
-            return drop_back(to_cs_ * to_hg(p));
+            return transform_vector(to_cs_, p);
         }
 
         constexpr Vector<T, 3> from_cs(const Vector<T, 3>& p) const
         {
-            return drop_back(from_cs_ * to_hg(p));
+            return transform_vector(from_cs_, p);
         }
 
         constexpr Vector<T, 2> to_cs_xy(const Vector<T, 3>& p) const
         {
-            return resize<2>(to_cs_ * to_hg(p));
+            return resize<2>(transform_vector(to_cs_, p));
         }
 
         constexpr Vector<T, 3> from_cs_xy(const Vector<T, 2>& p) const
         {
-            return drop_back(from_cs_ * Vector<T, 4>(p[0], p[1], 0, 1));
+            return transform_vector(from_cs_, Vector<T, 3>(p[0], p[1], 0));
         }
 
     private:

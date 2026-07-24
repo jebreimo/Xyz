@@ -77,6 +77,10 @@ namespace Xyz
         }
     };
 
+    /**
+     * Returns the axis-aligned bounding box of @a box after it has been
+     * transformed.
+     */
     template <typename T, size_t N>
     AABB<T, N> transform_aabb(const AABB<T, N>& box,
                               const Matrix<T, N + 1, N + 1>& m)
@@ -90,6 +94,31 @@ namespace Xyz
             for (size_t j = 0; j < N; ++j)
                 corner[j] = (i & (1 << j)) ? box.max[j] : box.min[j];
             result += transform_vector(m, corner);
+        }
+        return result;
+    }
+
+    /**
+     * Returns the axis-aligned bounding box of @a box after it has been
+     * transformed without considering the w component.
+     *
+     * This is an optimized version of transform_aabb, but must only be
+     * used when the final row of matrix @a m consists of 0s followed by
+     * a single 1.
+     */
+    template <typename T, size_t N>
+    AABB<T, N> transform_aabb_no_w(const AABB<T, N>& box,
+                                   const Matrix<T, N + 1, N + 1>& m)
+    {
+        if (!box)
+            return {};
+        AABB<T, N> result;
+        for (size_t i = 0; i < (1 << N); ++i)
+        {
+            Vector<T, N> corner;
+            for (size_t j = 0; j < N; ++j)
+                corner[j] = (i & (1 << j)) ? box.max[j] : box.min[j];
+            result += transform_vector_no_w(m, corner);
         }
         return result;
     }

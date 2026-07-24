@@ -13,36 +13,6 @@ namespace Xyz
 {
     namespace affine
     {
-        /**
-         * @brief Converts a vector to homogeneous coordinates by adding a
-         *  coordinate with value 1 at the end.
-         */
-        template <std::floating_point T, unsigned N>
-        [[nodiscard]]
-        Vector<T, N + 1> to_hg(const Vector<T, N>& v)
-        {
-            return push_back(v, 1);
-        }
-
-        /**
-         * @brief Converts a vector from homogeneous coordinates by removing the
-         *  last coordinate if it is 1, or dividing all coordinates by the last
-         *  coordinate if it is not 1.
-         * @throws XyzException if the last coordinate is zero.
-         */
-        template <std::floating_point T, unsigned N>
-        [[nodiscard]]
-        Vector<T, N - 1> from_hg(const Vector<T, N>& v)
-        {
-            if (v[N - 1] == 1)
-                return drop_back(v);
-
-            if (v[N - 1] == 0)
-                XYZ_THROW("Cannot convert from homogeneous coordinates: last coordinate is zero.");
-
-            return drop_back(v) / v[N - 1];
-        }
-
         template <typename T>
         Matrix<T, 3, 3> rotate2(T angle)
         {

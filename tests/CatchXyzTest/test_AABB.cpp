@@ -171,6 +171,60 @@ TEST_CASE("AABB: transform_aabb of an invalid box stays invalid (3D float)")
     REQUIRE(!static_cast<bool>(result));
 }
 
+TEST_CASE("AABB: transform_aabb_no_w translation (3D float)")
+{
+    Xyz::AABB3F box(V3F(0, 0, 0), V3F(2, 4, 6));
+    auto result = transform_aabb_no_w(box, Xyz::affine::translate3(10.f, -5.f, 3.f));
+    REQUIRE(are_equal(result.min, V3F(10, -5, 3)));
+    REQUIRE(are_equal(result.max, V3F(12, -1, 9)));
+}
+
+TEST_CASE("AABB: transform_aabb_no_w scaling with axis flip (3D float)")
+{
+    // A negative scale factor flips an axis, so min/max on that axis swap.
+    Xyz::AABB3F box(V3F(1, 2, 3), V3F(3, 4, 5));
+    auto result = transform_aabb_no_w(box, Xyz::affine::scale3(2.f, 0.5f, -1.f));
+    REQUIRE(are_equal(result.min, V3F(2, 1, -5)));
+    REQUIRE(are_equal(result.max, V3F(6, 2, -3)));
+}
+
+TEST_CASE("AABB: transform_aabb_no_w rotation grows the box (3D float)")
+{
+    // 90 degree rotation about the z axis: (x, y, z) -> (-y, x, z).
+    const Xyz::Matrix4F rot_z_90 = {
+        0, -1, 0, 0,
+        1, 0, 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1
+    };
+    Xyz::AABB3F box(V3F(0, 0, 0), V3F(2, 4, 6));
+    auto result = transform_aabb_no_w(box, rot_z_90);
+    REQUIRE(are_equal(result.min, V3F(-4, 0, 0)));
+    REQUIRE(are_equal(result.max, V3F(0, 2, 6)));
+}
+
+TEST_CASE("AABB: transform_aabb_no_w matches transform_aabb for affine matrices (3D float)")
+{
+    // With an affine matrix (last row 0,0,0,1) w is always 1, so the optimized
+    // no-w version must agree with the general transform_aabb.
+    const auto m = Xyz::affine::translate3(1.f, 2.f, 3.f)
+                   * Xyz::affine::scale3(2.f, 2.f, 2.f);
+    Xyz::AABB3F box(V3F(-1, -2, -3), V3F(1, 2, 3));
+
+    auto general = transform_aabb(box, m);
+    auto no_w = transform_aabb_no_w(box, m);
+    REQUIRE(are_equal(no_w.min, general.min));
+    REQUIRE(are_equal(no_w.max, general.max));
+}
+
+TEST_CASE("AABB: transform_aabb_no_w of an invalid box stays invalid (3D float)")
+{
+    Xyz::AABB3F box;  // default-constructed: min > max, i.e. invalid/empty
+    REQUIRE(!static_cast<bool>(box));
+    auto result = transform_aabb_no_w(box, Xyz::affine::translate3(1.f, 2.f, 3.f));
+    REQUIRE(!static_cast<bool>(result));
+}
+
 TEST_CASE("AABB: operators work in 3 dimensions")
 {
     AABB3I a(V3(0, 0, 0), V3(10, 10, 10));

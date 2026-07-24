@@ -128,12 +128,12 @@ namespace Xyz
             auto z = get_ccw_angle(p.edge0, V(1, 0, 0), V(0, 0, 1));
             auto m = affine::rotate_z(z);
 
-            auto pt1 = m * to_hg(p.edge0);
-            auto y = get_ccw_angle(from_hg(pt1), V(1, 0, 0), V(0, 1, 0));
+            auto pt1 = transform_vector(m, p.edge0);
+            auto y = get_ccw_angle(pt1, V(1, 0, 0), V(0, 1, 0));
             m = affine::rotate_y(y) * m;
 
-            auto pt2 = m * to_hg(p.edge1);
-            auto x = get_ccw_angle(from_hg(pt2), V(0, 1, 0), V(1, 0, 0));
+            auto pt2 = transform_vector(m, p.edge1);
+            auto x = get_ccw_angle(pt2, V(0, 1, 0), V(1, 0, 0));
             return affine::rotate_x(x) * m;
         }
     }
@@ -164,7 +164,7 @@ namespace Xyz
     {
         auto m = Details::get_rotation(p);
 
-        auto edge1 = m * to_hg(p.edge1);
+        auto edge1 = transform_vector(m, p.edge1);
         if (edge1[0] != 0 && edge1[1] != 0)
         {
             auto shearing = Matrix<T, 4, 4>::identity();
@@ -172,8 +172,8 @@ namespace Xyz
             m = shearing * m;
         }
 
-        auto dx = get_length(from_hg(m * to_hg(p.edge0)));
-        auto dy = get_length(from_hg(m * to_hg(p.edge1)));
+        auto dx = get_length(transform_vector(m, p.edge0));
+        auto dy = get_length(transform_vector(m, p.edge1));
         auto x_scale = dx != 0 ? 1 / dx : 1;
         auto y_scale = dy != 0 ? 1 / dy : 1;
         return affine::scale3(x_scale, y_scale, T(1))
