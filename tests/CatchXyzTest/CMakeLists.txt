@@ -37,6 +37,7 @@ add_executable(CatchXyzTest
     test_Transformations.cpp
     test_Triangle.cpp
     test_Vector.cpp
+    test_MeshBufferBuilder.cpp
 )
 
 target_link_libraries(CatchXyzTest

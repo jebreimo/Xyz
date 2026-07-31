@@ -87,6 +87,7 @@ add_library(Xyz STATIC
     src/Xyz/IntersectionType.cpp
     src/Xyz/Mesh/Face.cpp
     src/Xyz/RandomNumberGenerator.cpp
+    include/Xyz/MeshBufferBuilder.hpp
 )
 
 include(GNUInstallDirs)
