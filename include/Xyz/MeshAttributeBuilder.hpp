@@ -100,7 +100,7 @@ namespace Xyz
     private:
         void set(size_t row, const void* bytes, size_t size)
         {
-            assert(size < (stride_ - offset_) * sizeof(typename BufferType::value_type));
+            assert(size <= (stride_ - offset_) * sizeof(typename BufferType::value_type));
             auto ptr = reinterpret_cast<char*>(buffer_.data());
             ptr += (row * stride_ + offset_)
                 * sizeof(typename BufferType::value_type);
