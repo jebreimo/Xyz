@@ -30,7 +30,7 @@ namespace Xyz
     concept AssignableType = std::is_standard_layout_v<T>
         && std::is_trivially_copyable_v<T>;
 
-    template <ResizableBuffer BufferType>
+    template <AssignableType ValueType, ResizableBuffer BufferType>
     class MeshAttributeBuilder
     {
     public:
@@ -42,7 +42,13 @@ namespace Xyz
               rows_(rows),
               stride_(stride),
               offset_(offset)
-        {}
+        {
+            if (sizeof(ValueType) > (stride - offset) * sizeof(typename BufferType::value_type))
+            {
+                throw std::invalid_argument(
+                    "ValueType is too large for the given stride and offset.");
+            }
+        }
 
         void resize(size_t rows)
         {
@@ -52,48 +58,33 @@ namespace Xyz
             rows_ = rows;
         }
 
-        template <AssignableType ValueType>
         void add(const ValueType& value)
         {
             resize(rows_ + 1);
             set(rows_ - 1, value);
         }
 
-
-        void add(std::span<std::byte> bytes)
-        {
-            resize(rows_ + 1);
-            set(rows_ - 1,  bytes);
-        }
-
-        template <AssignableType ValueType>
         void add_n(const ValueType& value, size_t n)
         {
             resize(rows_ + n);
             set_n(rows_ - n, value, n);
         }
 
-        template <AssignableType ValueType>
+        ValueType get(size_t row) const
+        {
+            ValueType value;
+            auto ptr = reinterpret_cast<const char*>(buffer_.data());
+            ptr += (row * stride_ + offset_)
+                * sizeof(typename BufferType::value_type);
+            memcpy(&value, ptr, sizeof(ValueType));
+            return value;
+        }
+
         void set(size_t row, const ValueType& value)
         {
             set(row, &value, sizeof(ValueType));
-            //auto ptr = reinterpret_cast<char*>(buffer_.data());
-            //ptr += (rows_ * stride_ + offset_)
-            //       * sizeof(typename BufferType::value_type);
-            //std::copy_n(reinterpret_cast<const char*>(&value), sizeof(ValueType), ptr);
-            //rows_++;
         }
 
-        void set(size_t row, const void* bytes, size_t size)
-        {
-            assert(size < (stride_ - offset_) * sizeof(typename BufferType::value_type));
-            auto ptr = reinterpret_cast<char*>(buffer_.data());
-            ptr += (row * stride_ + offset_)
-                * sizeof(typename BufferType::value_type);
-            memcpy(ptr, bytes, size);
-        }
-
-        template <AssignableType ValueType>
         void set_n(size_t first_row, const ValueType& value, size_t n)
         {
             auto ptr = reinterpret_cast<char*>(buffer_.data());
@@ -107,6 +98,15 @@ namespace Xyz
         }
 
     private:
+        void set(size_t row, const void* bytes, size_t size)
+        {
+            assert(size < (stride_ - offset_) * sizeof(typename BufferType::value_type));
+            auto ptr = reinterpret_cast<char*>(buffer_.data());
+            ptr += (row * stride_ + offset_)
+                * sizeof(typename BufferType::value_type);
+            memcpy(ptr, bytes, size);
+        }
+
         BufferType& buffer_;
         size_t rows_;
         size_t stride_;

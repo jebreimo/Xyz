@@ -14,7 +14,7 @@ TEST_CASE("MeshBufferBuilder: test 1")
 {
     std::vector<float> buffer;
 
-    Xyz::MeshAttributeBuilder pos_builder(buffer, 8);
+    Xyz::MeshAttributeBuilder<Xyz::Vector3F, std::vector<float>> pos_builder(buffer, 8);
     pos_builder.add(Xyz::Vector3F(1, 2, 3));
     REQUIRE(buffer.size() == 8);
     REQUIRE(buffer[0] == 1);
