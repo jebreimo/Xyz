@@ -8,24 +8,13 @@
 #pragma once
 #include <algorithm>
 #include <cassert>
-#include <concepts>
-#include <cstddef>
 #include <span>
 #include <type_traits>
 
+#include "ResizableBuffer.hpp"
+
 namespace Xyz
 {
-    template <typename T>
-    concept ResizableBuffer = requires(T t, size_t count)
-        {
-            typename T::value_type;
-            t.resize(count);
-            { t.size() } -> std::convertible_to<size_t>;
-            { t.data() } -> std::convertible_to<void*>;
-        }
-        && std::is_standard_layout_v<typename T::value_type>
-        && std::is_trivially_copyable_v<typename T::value_type>;
-
     template <typename T>
     concept AssignableType = std::is_standard_layout_v<T>
         && std::is_trivially_copyable_v<T>;

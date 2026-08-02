@@ -8,7 +8,7 @@
 #include <Xyz/Mesh.hpp>
 #include <catch2/catch_test_macros.hpp>
 
-#include <Xyz/MeshAttributeBuilder.hpp>
+#include <Xyz/MeshBuilder/MeshAttributeBuilder.hpp>
 
 TEST_CASE("MeshAttributeBuilder: interleaved position and normal attributes")
 {

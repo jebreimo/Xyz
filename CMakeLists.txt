@@ -66,6 +66,7 @@ add_library(Xyz STATIC
     include/Xyz/Mesh/Face.hpp
     include/Xyz/Mesh/HalfEdge.hpp
     include/Xyz/Mesh/Mesh.hpp
+    include/Xyz/MeshBuilder/MeshAttributeBuilder.hpp
     include/Xyz/Orientation.hpp
     include/Xyz/OrientedRectangle.hpp
     include/Xyz/Pgram.hpp
@@ -87,7 +88,7 @@ add_library(Xyz STATIC
     src/Xyz/IntersectionType.cpp
     src/Xyz/Mesh/Face.cpp
     src/Xyz/RandomNumberGenerator.cpp
-    include/Xyz/MeshAttributeBuilder.hpp
+    include/Xyz/MeshBuilder/ResizableBuffer.hpp
 )
 
 include(GNUInstallDirs)
