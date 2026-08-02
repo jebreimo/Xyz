@@ -26,9 +26,9 @@ namespace Xyz
         MeshAttributeBuilder(BufferType& buffer,
                              size_t stride,
                              size_t offset = 0,
-                             size_t rows = 0)
+                             size_t first_row = 0)
             : buffer_(buffer),
-              rows_(rows),
+              rows_(first_row),
               stride_(stride),
               offset_(offset)
         {
