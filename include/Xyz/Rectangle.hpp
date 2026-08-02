@@ -23,27 +23,6 @@ namespace Xyz
         constexpr Rectangle(const Vector<T, 2>& origin, const Vector<T, 2>& size)
             : origin(origin), size(size)
         {}
-
-        /**
-         * @note the points are only clockwise if both values of size are
-         *  either positive or negative.
-         */
-        [[nodiscard]]
-        constexpr Vector<T, 2> operator[](size_t index) const
-        {
-            switch (index % 4)
-            {
-            default:
-            case 0:
-                return origin;
-            case 1:
-                return origin + Vector<T, 2>(size.x(), 0);
-            case 2:
-                return origin + size;
-            case 3:
-                return origin + Vector<T, 2>(0, size.y());
-            }
-        }
     };
 
     template <typename T>
@@ -105,6 +84,24 @@ namespace Xyz
     void set_center(Rectangle<T>& rect, const Vector<std::type_identity_t<T>, 2>& center)
     {
         rect.origin = center - rect.size / 2;
+    }
+
+    template <typename T>
+    [[nodiscard]]
+    constexpr Vector<T, 2>
+    rel_to_abs(const Rectangle<T>& rect,
+               const Vector<std::type_identity_t<T>, 2>& rel_pos)
+    {
+        return rect.origin + rel_pos * rect.size;
+    }
+
+    template <typename T>
+    [[nodiscard]]
+    constexpr Vector<T, 2>
+    abs_to_rel(const Rectangle<T>& rect,
+               const Vector<std::type_identity_t<T>, 2>& abs_pos)
+    {
+        return (abs_pos - rect.origin) / rect.size;
     }
 
     template <typename T>
