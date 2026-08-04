@@ -58,7 +58,7 @@ TEST_CASE("Test 3D rectangle")
     const auto sq2 = sqrt(2) / 2;
     const auto sq3 = sqrt(3) / 2;
     const Xyz::OrientedRectangle3D rect({{10, 10, 10}, Xyz::Orientation3D{PI / 4, PI / 6, PI / 2}}, {10, 10});
-    REQUIRE(are_equal(rect.length_vector(), V(sq2 * sq3, sq2 * sq3, 0.5) * 10));
+    REQUIRE(are_equal(rect.length_vector(), V(sq2 * sq3, sq2 * sq3, -0.5) * 10));
     REQUIRE(are_equal(rect.width_vector(), V(sqrt(25.0 / 2), sqrt(25.0 / 2), sq3 * 10)));
     REQUIRE(are_equal(rect.normal_vector(), V(sq2, -sq2, 0)));
 

@@ -203,7 +203,7 @@ TEST_CASE("BBox: transform_bbox_no_w rotation grows the box (3D float)")
     REQUIRE(are_equal(result.max, V3F(0, 2, 6)));
 }
 
-TEST_CASE("BBox: transform_bbox_no_w matches transform_bbox for affine matrices (3D float)")
+TEST_CASE("BBox: transform_bbox_no_w matches transform_bbox for affine matrices")
 {
     // With an affine matrix (last row 0,0,0,1) w is always 1, so the optimized
     // no-w version must agree with the general transform_bbox.

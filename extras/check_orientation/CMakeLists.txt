@@ -5,9 +5,12 @@
 # This file is distributed under the Zero-Clause BSD License.
 # License text is included with the source distribution.
 # ===========================================================================
+cmake_minimum_required(VERSION 3.16)
 
-add_subdirectory(check_orientation)
+add_executable(check_orientation
+    CheckOrientation.cpp
+)
 
-if (NOT WIN32)
-    add_subdirectory(xyz_calc)
-endif()
+target_link_libraries(check_orientation
+        Xyz::Xyz
+)

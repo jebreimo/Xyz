@@ -152,15 +152,15 @@ namespace Xyz
     [[nodiscard]]
     Vector<T, 3> get_x_vector(const Orientation<T, 3>& o)
     {
-        auto c_a = std::cos(o.yaw);
-        auto s_a = std::sin(o.yaw);
-        auto c_b = std::cos(o.pitch);
-        auto s_b = std::sin(o.pitch);
+        auto c_y = std::cos(o.yaw);
+        auto s_y = std::sin(o.yaw);
+        auto c_p = std::cos(o.pitch);
+        auto s_p = std::sin(o.pitch);
 
         return {
-            c_a * c_b,
-            s_a * c_b,
-            s_b
+            c_y * c_p,
+            s_y * c_p,
+            -s_p
         };
     }
 
@@ -168,17 +168,17 @@ namespace Xyz
     [[nodiscard]]
     Vector<T, 3> get_y_vector(const Orientation<T, 3>& o)
     {
-        auto c_a = std::cos(o.yaw);
-        auto s_a = std::sin(o.yaw);
-        auto c_b = std::cos(o.pitch);
-        auto s_b = std::sin(o.pitch);
-        auto c_c = std::cos(o.roll);
-        auto s_c = std::sin(o.roll);
+        auto c_y = std::cos(o.yaw);
+        auto s_y = std::sin(o.yaw);
+        auto c_p = std::cos(o.pitch);
+        auto s_p = std::sin(o.pitch);
+        auto c_r = std::cos(o.roll);
+        auto s_r = std::sin(o.roll);
 
         return {
-            c_a * s_b * s_c - s_a * c_c,
-            s_a * s_b * s_c + c_a * c_c,
-            c_b * s_c
+            c_y * s_p * s_r - s_y * c_r,
+            s_y * s_p * s_r + c_y * c_r,
+            c_p * s_r
         };
     }
 
@@ -186,17 +186,39 @@ namespace Xyz
     [[nodiscard]]
     Vector<T, 3> get_z_vector(const Orientation<T, 3>& o)
     {
-        auto c_a = std::cos(o.yaw);
-        auto s_a = std::sin(o.yaw);
-        auto c_b = std::cos(o.pitch);
-        auto s_b = std::sin(o.pitch);
-        auto c_c = std::cos(o.roll);
-        auto s_c = std::sin(o.roll);
+        auto c_y = std::cos(o.yaw);
+        auto s_y = std::sin(o.yaw);
+        auto c_p = std::cos(o.pitch);
+        auto s_p = std::sin(o.pitch);
+        auto c_r = std::cos(o.roll);
+        auto s_r = std::sin(o.roll);
 
         return {
-            c_a * s_b * c_c + s_a * s_c,
-            s_a * s_b * c_c - c_a * s_c,
-            c_b * c_c
+            c_y * s_p * c_r + s_y * s_r,
+            s_y * s_p * c_r - c_y * s_r,
+            c_p * c_r
+        };
+    }
+
+    template <std::floating_point T>
+    std::tuple<Vector<T, 3>, Vector<T, 3>, Vector<T, 3>>
+    get_axis_vectors(const Orientation<T, 3>& o)
+    {
+        auto c_y = std::cos(o.yaw);
+        auto s_y = std::sin(o.yaw);
+        auto c_p = std::cos(o.pitch);
+        auto s_p = std::sin(o.pitch);
+        auto c_r = std::cos(o.roll);
+        auto s_r = std::sin(o.roll);
+
+        return {
+            Vector<T, 3>{c_y * c_p, s_y * c_p, -s_p},
+            Vector<T, 3>{c_y * s_p * s_r - s_y * c_r,
+                         s_y * s_p * s_r + c_y * c_r,
+                         c_p * s_r},
+            Vector<T, 3>{c_y * s_p * c_r + s_y * s_r,
+                         s_y * s_p * c_r - c_y * s_r,
+                         c_p * c_r}
         };
     }
 
