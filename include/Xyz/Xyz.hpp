@@ -17,7 +17,7 @@
 #include "Matrix.hpp"
 #include "TransformationMatrix.hpp"
 #include "Mesh.hpp"
-#include "Pgram3.hpp"
+#include "Pgram.hpp"
 #include "ProjectionMatrix.hpp"
 #include "QuadraticEquation.hpp"
 #include "RandomNumberGenerator.hpp"

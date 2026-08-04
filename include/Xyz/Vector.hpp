@@ -607,6 +607,22 @@ namespace Xyz
         return get_length_squared(u - v) <= margin;
     }
 
+    template <typename T>
+    [[nodiscard]]
+    constexpr bool are_parallel(const Vector<T, 2>& a, const Vector<T, 2>& b,
+                                std::type_identity_t<T> margin = Margin<T>::DEFAULT)
+    {
+        return std::abs(a[0] * b[1] - a[1] * b[0]) <= margin;
+    }
+
+    template <typename T>
+    [[nodiscard]]
+    constexpr bool are_parallel(const Vector<T, 3>& a, const Vector<T, 3>& b,
+                                std::type_identity_t<T> margin = Margin<T>::DEFAULT)
+    {
+        return are_equal(cross(a, b), Vector<T, 3>(), margin);
+    }
+
     template <typename T, unsigned N>
     [[nodiscard]]
     auto get_cos_angle(const Vector<T, N>& u, const Vector<T, N>& v)

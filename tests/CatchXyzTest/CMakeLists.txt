@@ -28,7 +28,7 @@ add_executable(CatchXyzTest
     test_MatrixDeterminant.cpp
     test_Mesh.cpp
     test_Orientation.cpp
-    test_Pgram3.cpp
+    test_Pgram.cpp
     test_Plane.cpp
     test_Projections.cpp
     test_QuadraticEquation.cpp

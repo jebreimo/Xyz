@@ -67,7 +67,7 @@ add_library(Xyz STATIC
     include/Xyz/Mesh.hpp
     include/Xyz/Orientation.hpp
     include/Xyz/OrientedRectangle.hpp
-    include/Xyz/Pgram3.hpp
+    include/Xyz/Pgram.hpp
     include/Xyz/Placement.hpp
     include/Xyz/Plane.hpp
     include/Xyz/PlanePlaneIntersection.hpp

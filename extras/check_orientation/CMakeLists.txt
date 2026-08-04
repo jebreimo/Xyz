@@ -12,5 +12,5 @@ add_executable(check_orientation
 )
 
 target_link_libraries(check_orientation
-        Xyz::Xyz
+    Xyz::Xyz
 )
