@@ -34,14 +34,12 @@ namespace Xyz
         }
     };
 
-    template <typename T, typename FloatT = FloatType_t<T>>
+    template <typename T, std::floating_point FloatT = FloatType_t<T>>
     [[nodiscard]]
     Matrix<FloatT, 4, 4> make_projection_matrix(const Plane<T>& plane)
     {
         const auto& n = vector_cast<FloatT>(plane.normal);
-        const auto& p0 = vector_cast<FloatT>(plane.origin
-        )
-        ;
+        const auto& p0 = vector_cast<FloatT>(plane.origin);
         auto nn = dot(n, n);
 
         auto result = Matrix<FloatT, 4, 4>::identity();

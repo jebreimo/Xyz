@@ -15,7 +15,7 @@
 namespace Xyz
 {
     /**
-     * @brief A 3D parallelogram defined by an origin point and two vectors
+     * @brief A parallelogram defined by an origin point and two vectors
      * @tparam T The value type of the parallelogram.
      */
     template <typename T, unsigned N>
@@ -135,10 +135,10 @@ namespace Xyz
             && std::abs(dot(p.edge0, p.edge1)) <= margin;
     }
 
-    template <std::floating_point T, unsigned N>
+    template <std::floating_point T>
     [[nodiscard]]
     OrientedRectangle<T, 3>
-    get_bounding_rect(const Pgram<T, N>& pgram)
+    get_bounding_rect(const Pgram<T, 3>& pgram)
     {
         return {
             {pgram.origin, to_orientation(pgram.edge0, pgram.edge1)},
@@ -146,9 +146,9 @@ namespace Xyz
         };
     }
 
-    template <typename T, unsigned N>
+    template <typename T>
     [[nodiscard]]
-    Matrix<T, 4, 4> get_clip_transform(const Pgram<T, N>& p)
+    Matrix<T, 4, 4> get_clip_transform(const Pgram<T, 3>& p)
     {
         auto m = Details::get_rotation(p);
 
@@ -171,9 +171,9 @@ namespace Xyz
 
     template <typename T, unsigned N>
     [[nodiscard]]
-    constexpr Plane<T> get_plane(const Pgram<T, N>& rect)
+    constexpr Plane<T> get_plane(const Pgram<T, 3>& pgram)
     {
-        return {rect.origin, rect.normal()};
+        return {pgram.origin, cross(pgram.edge0, pgram.edge1)};
     }
 
     using Pgram3F = Pgram<float, 3>;
