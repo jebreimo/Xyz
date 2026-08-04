@@ -1,7 +1,6 @@
 //
 // Created by jeb on 04.08.2026.
 //
-#include <format>
 #include <iostream>
 #include <Xyz/Xyz.hpp>
 
@@ -20,7 +19,7 @@ void check_z_axis()
                 if (!are_equal(z, zz))
                 {
                     ++n;
-                    std::cout << std::format("{}: {}, {}, {}: {} vs {}\n", n, yaw, pitch, roll, z, zz);
+                    std::cout << n << ": " << yaw << ", " << pitch << ", " << roll << ": " << z << " vs " << zz << "\n";
                 }
             }
         }
