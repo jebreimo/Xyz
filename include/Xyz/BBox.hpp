@@ -16,7 +16,7 @@ namespace Xyz
      * @tparam T The coordinate type, e.g. float or double.
      * @tparam N The coordinate dimension.
      */
-    template <typename T, size_t N>
+    template <typename T, unsigned N>
     class BBox
     {
     public:
@@ -35,7 +35,7 @@ namespace Xyz
 
         constexpr explicit operator bool() const
         {
-            for (size_t i = 0; i < N; ++i)
+            for (unsigned i = 0; i < N; ++i)
             {
                 if (min[i] > max[i])
                     return false;
@@ -81,17 +81,17 @@ namespace Xyz
      * Returns the axis-aligned bounding box of @a box after it has been
      * transformed.
      */
-    template <typename T, size_t N>
+    template <typename T, unsigned N>
     BBox<T, N> transform_bbox(const BBox<T, N>& box,
                               const Matrix<T, N + 1, N + 1>& m)
     {
         if (!box)
             return {};
         BBox<T, N> result;
-        for (size_t i = 0; i < (1 << N); ++i)
+        for (unsigned i = 0; i < (1 << N); ++i)
         {
             Vector<T, N> corner;
-            for (size_t j = 0; j < N; ++j)
+            for (unsigned j = 0; j < N; ++j)
                 corner[j] = (i & (1 << j)) ? box.max[j] : box.min[j];
             result += transform_vector(m, corner);
         }
@@ -106,17 +106,17 @@ namespace Xyz
      * used when the final row of matrix @a m consists of 0s followed by
      * a single 1.
      */
-    template <typename T, size_t N>
+    template <typename T, unsigned N>
     BBox<T, N> transform_bbox_no_w(const BBox<T, N>& box,
                                    const Matrix<T, N + 1, N + 1>& m)
     {
         if (!box)
             return {};
         BBox<T, N> result;
-        for (size_t i = 0; i < (1 << N); ++i)
+        for (unsigned i = 0; i < (1 << N); ++i)
         {
             Vector<T, N> corner;
-            for (size_t j = 0; j < N; ++j)
+            for (unsigned j = 0; j < N; ++j)
                 corner[j] = (i & (1 << j)) ? box.max[j] : box.min[j];
             result += transform_vector_no_w(m, corner);
         }

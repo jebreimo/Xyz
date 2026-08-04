@@ -30,7 +30,7 @@ namespace Xyz
         static constexpr T default_margin()
         {
             if constexpr (std::is_floating_point_v<T>)
-                return std::numeric_limits<T>::epsilon() * 100.0;
+                return std::numeric_limits<T>::epsilon() * T(100.0);
             else
                 return T(0);
         }
