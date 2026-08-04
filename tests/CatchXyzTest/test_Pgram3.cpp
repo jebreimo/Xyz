@@ -66,7 +66,7 @@ TEST_CASE("Pgram3: clip_transform - rotation xz")
 
 TEST_CASE("Pgram3: clip_transform - shearing")
 {
-    auto d = 1.f / sqrt(2.f);
+    auto d = 1.f / std::sqrt(2.f);
     const Xyz::Pgram3<float> p{{1, 2, 3}, {1, 0, 0}, {1, d, d}};
     const auto m = get_clip_transform(p);
     require_is_clip_rect(m, p);
