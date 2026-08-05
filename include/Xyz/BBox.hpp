@@ -42,40 +42,45 @@ namespace Xyz
             }
             return true;
         }
-
-        friend constexpr BBox& operator+=(BBox& a, const BBox& b)
-        {
-            a.min = get_min(a.min, b.min);
-            a.max = get_max(a.max, b.max);
-            return a;
-        }
-
-        friend constexpr BBox& operator+=(BBox& a, const Vector<T, N>& b)
-        {
-            a.min = get_min(a.min, b);
-            a.max = get_max(a.max, b);
-            return a;
-        }
-
-        friend constexpr BBox operator+(const BBox& a, const BBox& b)
-        {
-            BBox result = a;
-            result += b;
-            return result;
-        }
-
-        friend constexpr BBox operator+(const BBox& a, const Vector<T, N>& b)
-        {
-            BBox result = a;
-            result += b;
-            return result;
-        }
-
-        friend constexpr BBox operator+(const Vector<T, N>& a, const BBox& b)
-        {
-            return b + a;
-        }
     };
+
+    template <typename T, unsigned N>
+    constexpr BBox<T, N>& operator+=(BBox<T, N>& a, const BBox<T, N>& b)
+    {
+        a.min = get_min(a.min, b.min);
+        a.max = get_max(a.max, b.max);
+        return a;
+    }
+
+    template <typename T, unsigned N>
+    constexpr BBox<T, N>& operator+=(BBox<T, N>& a, const Vector<T, N>& b)
+    {
+        a.min = get_min(a.min, b);
+        a.max = get_max(a.max, b);
+        return a;
+    }
+
+    template <typename T, unsigned N>
+    constexpr BBox<T, N> operator+(const BBox<T, N>& a, const BBox<T, N>& b)
+    {
+        BBox<T, N> result = a;
+        result += b;
+        return result;
+    }
+
+    template <typename T, unsigned N>
+    constexpr BBox<T, N> operator+(const BBox<T, N>& a, const Vector<T, N>& b)
+    {
+        BBox<T, N> result = a;
+        result += b;
+        return result;
+    }
+
+    template <typename T, unsigned N>
+    constexpr BBox<T, N> operator+(const Vector<T, N>& a, const BBox<T, N>& b)
+    {
+        return b + a;
+    }
 
     /**
      * Returns the axis-aligned bounding box of @a box after it has been
