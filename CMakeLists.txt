@@ -50,9 +50,7 @@ add_library(Xyz STATIC
     include/Xyz/ComplexApprox.hpp
     include/Xyz/Constants.hpp
     include/Xyz/CoordinateSystem.hpp
-    include/Xyz/Face.hpp
     include/Xyz/FloatType.hpp
-    include/Xyz/HalfEdge.hpp
     include/Xyz/Interpolation.hpp
     include/Xyz/IntersectionType.hpp
     include/Xyz/InvertMatrix.hpp
@@ -64,7 +62,9 @@ add_library(Xyz STATIC
     include/Xyz/LuDecomposition.hpp
     include/Xyz/Matrix.hpp
     include/Xyz/MatrixDeterminant.hpp
-    include/Xyz/Mesh.hpp
+    include/Xyz/Mesh/Face.hpp
+    include/Xyz/Mesh/HalfEdge.hpp
+    include/Xyz/Mesh/Mesh.hpp
     include/Xyz/Orientation.hpp
     include/Xyz/OrientedRectangle.hpp
     include/Xyz/Pgram.hpp
@@ -83,8 +83,8 @@ add_library(Xyz STATIC
     include/Xyz/Vector.hpp
     include/Xyz/Xyz.hpp
     include/Xyz/XyzException.hpp
-    src/Xyz/Face.cpp
     src/Xyz/IntersectionType.cpp
+    src/Xyz/Mesh/Face.cpp
     src/Xyz/RandomNumberGenerator.cpp
 )
 

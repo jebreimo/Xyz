@@ -15,11 +15,11 @@ namespace Xyz
     using FaceId = uint32_t;
     using HalfEdgeId = uint32_t;
 
-    constexpr VertexId INVALID_VERTEX_ID = ~VertexId(0);
-    constexpr FaceId INVALID_FACE_ID = ~FaceId(0);
-    constexpr HalfEdgeId INVALID_HALF_EDGE_ID = ~HalfEdgeId(0);
+    constexpr VertexId INVALID_VERTEX_ID = ~VertexId{0};
+    constexpr FaceId INVALID_FACE_ID = ~FaceId{0};
+    constexpr HalfEdgeId INVALID_HALF_EDGE_ID = ~HalfEdgeId{0};
 
-    struct HalfEdge
+    class HalfEdge
     {
     public:
         HalfEdge()

@@ -8,7 +8,7 @@
 #pragma once
 #include <vector>
 #include "Face.hpp"
-#include "Vector.hpp"
+#include "../Vector.hpp"
 
 namespace Xyz
 {

@@ -5,7 +5,7 @@
 // This file is distributed under the Zero-Clause BSD License.
 // License text is included with the source distribution.
 //****************************************************************************
-#include "Xyz/Face.hpp"
+#include "../../../include/Xyz/Mesh/Face.hpp"
 #include <array>
 
 namespace Xyz

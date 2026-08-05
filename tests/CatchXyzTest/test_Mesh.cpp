@@ -5,7 +5,7 @@
 // This file is distributed under the Zero-Clause BSD License.
 // License text is included with the source distribution.
 //****************************************************************************
-#include <Xyz/Mesh.hpp>
+#include <Xyz/Mesh/Mesh.hpp>
 #include <catch2/catch_test_macros.hpp>
 
 TEST_CASE("Cube mesh")
