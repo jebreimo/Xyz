@@ -9,6 +9,7 @@
 
 #include "BBox.hpp"
 #include "ComplexApprox.hpp"
+#include "Cuboid.hpp"
 #include "Interpolation.hpp"
 #include "Line.hpp"
 #include "LineClipper.hpp"

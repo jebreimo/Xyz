@@ -50,6 +50,7 @@ add_library(Xyz STATIC
     include/Xyz/ComplexApprox.hpp
     include/Xyz/Constants.hpp
     include/Xyz/CoordinateSystem.hpp
+    include/Xyz/Cuboid.hpp
     include/Xyz/FloatType.hpp
     include/Xyz/Interpolation.hpp
     include/Xyz/IntersectionType.hpp
