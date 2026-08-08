@@ -6,8 +6,7 @@
 // License text is included with the source distribution.
 //****************************************************************************
 #pragma once
-#include <algorithm>
-#include <cassert>
+#include <cstring>
 #include <span>
 #include <type_traits>
 
@@ -39,27 +38,19 @@ namespace Xyz
             }
         }
 
-        void resize(size_t rows)
+        [[nodiscard]] size_t size() const
+        {
+            return rows_;
+        }
+
+        void reserve(size_t rows)
         {
             const size_t required_size = rows * stride_;
             if (static_cast<size_t>(buffer_.size()) < required_size)
                 buffer_.resize(required_size);
-            rows_ = rows;
         }
 
-        void add(const ValueType& value)
-        {
-            resize(rows_ + 1);
-            set(rows_ - 1, value);
-        }
-
-        void add_n(const ValueType& value, size_t n)
-        {
-            resize(rows_ + n);
-            set_n(rows_ - n, value, n);
-        }
-
-        ValueType get(size_t row) const
+        [[nodiscard]] ValueType get(size_t row) const
         {
             ValueType value;
             auto ptr = reinterpret_cast<const char*>(buffer_.data());
@@ -69,9 +60,26 @@ namespace Xyz
             return value;
         }
 
-        void set(size_t row, const ValueType& value)
+        void add(const ValueType& value)
         {
-            set(row, &value, sizeof(ValueType));
+            reserve(rows_ + 1);
+            set(rows_++, &value, sizeof(ValueType));
+        }
+
+        void add_n(const ValueType& value, size_t n)
+        {
+            reserve(rows_ + n);
+            set_n(rows_, value, n);
+            rows_ += n;
+        }
+
+    private:
+        void set(size_t row, const void* bytes, size_t size)
+        {
+            auto ptr = reinterpret_cast<char*>(buffer_.data());
+            ptr += (row * stride_ + offset_)
+                * sizeof(typename BufferType::value_type);
+            memcpy(ptr, bytes, size);
         }
 
         void set_n(size_t first_row, const ValueType& value, size_t n)
@@ -84,16 +92,6 @@ namespace Xyz
                 memcpy(ptr, &value, sizeof(ValueType));
                 ptr += stride_ * sizeof(typename BufferType::value_type);
             }
-        }
-
-    private:
-        void set(size_t row, const void* bytes, size_t size)
-        {
-            assert(size <= (stride_ - offset_) * sizeof(typename BufferType::value_type));
-            auto ptr = reinterpret_cast<char*>(buffer_.data());
-            ptr += (row * stride_ + offset_)
-                * sizeof(typename BufferType::value_type);
-            memcpy(ptr, bytes, size);
         }
 
         BufferType& buffer_;

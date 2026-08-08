@@ -7,11 +7,9 @@
 //****************************************************************************
 #pragma once
 
-#include <cmath>
 #include <type_traits>
 
 #include "Orientation.hpp"
-#include "Utilities.hpp"
 #include "Placement.hpp"
 
 namespace Xyz

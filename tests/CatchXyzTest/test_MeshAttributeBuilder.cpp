@@ -60,20 +60,6 @@ TEST_CASE("MeshAttributeBuilder: get respects the offset")
     REQUIRE(nrm.get(0) == Xyz::Vector3F(-1, 0, 1));
 }
 
-TEST_CASE("MeshAttributeBuilder: set overwrites an existing row")
-{
-    std::vector<float> buffer;
-    Xyz::MeshAttributeBuilder<Xyz::Vector3F, std::vector<float>> builder(buffer, 8);
-    builder.add(Xyz::Vector3F(1, 2, 3));
-    builder.add(Xyz::Vector3F(4, 5, 6));
-
-    builder.set(0, Xyz::Vector3F(7, 8, 9));
-
-    REQUIRE(builder.get(0) == Xyz::Vector3F(7, 8, 9));
-    REQUIRE(builder.get(1) == Xyz::Vector3F(4, 5, 6));
-    REQUIRE(buffer.size() == 16);
-}
-
 TEST_CASE("MeshAttributeBuilder: add_n appends the same value n times")
 {
     std::vector<float> buffer;
@@ -88,20 +74,6 @@ TEST_CASE("MeshAttributeBuilder: add_n appends the same value n times")
     REQUIRE(builder.get(3) == Xyz::Vector3F(2, 3, 4));
 }
 
-TEST_CASE("MeshAttributeBuilder: set_n writes a run of rows in place")
-{
-    std::vector<float> buffer;
-    Xyz::MeshAttributeBuilder<Xyz::Vector3F, std::vector<float>> builder(buffer, 8);
-    builder.add_n(Xyz::Vector3F(0, 0, 0), 4);
-
-    builder.set_n(1, Xyz::Vector3F(5, 6, 7), 2);
-
-    REQUIRE(builder.get(0) == Xyz::Vector3F(0, 0, 0));
-    REQUIRE(builder.get(1) == Xyz::Vector3F(5, 6, 7));
-    REQUIRE(builder.get(2) == Xyz::Vector3F(5, 6, 7));
-    REQUIRE(builder.get(3) == Xyz::Vector3F(0, 0, 0));
-}
-
 TEST_CASE("MeshAttributeBuilder: initial row count and resize grows the buffer")
 {
     std::vector<float> buffer;
@@ -112,14 +84,14 @@ TEST_CASE("MeshAttributeBuilder: initial row count and resize grows the buffer")
     REQUIRE(builder.get(2) == Xyz::Vector3F(1, 2, 3));
 }
 
-TEST_CASE("MeshAttributeBuilder: resize does not shrink the buffer")
+TEST_CASE("MeshAttributeBuilder: reserve does not shrink the buffer")
 {
     std::vector<float> buffer;
     Xyz::MeshAttributeBuilder<Xyz::Vector3F, std::vector<float>> builder(buffer, 8);
     builder.add_n(Xyz::Vector3F(1, 2, 3), 4);
     REQUIRE(buffer.size() == 4 * 8);
 
-    builder.resize(2);
+    builder.reserve(2);
     REQUIRE(buffer.size() == 4 * 8);
 }
 

@@ -15,13 +15,23 @@
 
 namespace Xyz
 {
-    template <ResizableBuffer BufferType, std::integral IndexType = uint32_t>
+    template <
+        ResizableBuffer BufferType,
+        std::floating_point ValueTypeT,
+        std::integral IndexTypeT = uint32_t>
     struct MeshBuilder
     {
-        MeshAttributeBuilder<Vector3F, BufferType> position;
-        MeshAttributeBuilder<Vector3F, BufferType> normal;
-        std::optional<MeshAttributeBuilder<Vector3F, BufferType>> tangent;
-        std::optional<MeshAttributeBuilder<Vector2F, BufferType>> texCoord;
-        MeshIndexBuilder<IndexType> index;
+        using ValueType = ValueTypeT;
+        using IndexType = IndexTypeT;
+
+        using Vector2 = Vector<ValueType, 2>;
+        using Vector3 = Vector<ValueType, 3>;
+        using Vector4 = Vector<ValueType, 4>;
+
+        MeshIndexBuilder<IndexTypeT> indexes;
+        MeshAttributeBuilder<Vector3, BufferType> positions;
+        std::optional<MeshAttributeBuilder<Vector3, BufferType>> normals;
+        std::optional<MeshAttributeBuilder<Vector4, BufferType>> tangents;
+        std::optional<MeshAttributeBuilder<Vector2, BufferType>> tex_coords;
     };
 }
