@@ -29,7 +29,7 @@ namespace Xyz
         OrientedRectangle() = default;
 
         OrientedRectangle(const Placement<T, N>& placement,
-                  const Vector<T, 2>& size)
+                          const Vector<T, 2>& size)
             : placement(placement),
               size(size)
         {}
@@ -93,6 +93,16 @@ namespace Xyz
     [[nodiscard]] bool is_empty(const OrientedRectangle<T, N>& rect)
     {
         return rect.size.x() == 0 || rect.size.y() == 0;
+    }
+
+
+    template <std::floating_point T, unsigned N>
+    [[nodiscard]]
+    std::tuple<Vector<T, N>, Vector<T, N>>
+    get_vectors(const OrientedRectangle<T, N>& rect)
+    {
+        const auto [x, y, _] = get_axis_vectors(rect.placement.orientation);
+        return {x * rect.size.x(), y * rect.size.y()};
     }
 
     template <std::floating_point T, unsigned N>

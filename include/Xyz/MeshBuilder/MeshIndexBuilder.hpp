@@ -20,6 +20,11 @@ namespace Xyz
               base_index_(base_index)
         {}
 
+        [[nodiscard]] size_t size() const
+        {
+            return buffer_.size();
+        }
+
         void reserve(size_t size)
         {
             buffer_.reserve(size);

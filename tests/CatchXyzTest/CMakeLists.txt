@@ -38,6 +38,7 @@ add_executable(CatchXyzTest
     test_Triangle.cpp
     test_Vector.cpp
     test_MeshAttributeBuilder.cpp
+    test_BuildMesh.cpp
 )
 
 target_link_libraries(CatchXyzTest

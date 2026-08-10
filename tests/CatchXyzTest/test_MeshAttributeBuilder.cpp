@@ -5,7 +5,7 @@
 // This file is distributed under the Zero-Clause BSD License.
 // License text is included with the source distribution.
 //****************************************************************************
-#include <Xyz/Mesh.hpp>
+#include <Xyz/Vector.hpp>
 #include <catch2/catch_test_macros.hpp>
 
 #include <Xyz/MeshBuilder/MeshAttributeBuilder.hpp>
@@ -123,8 +123,8 @@ TEST_CASE("MeshAttributeBuilder: works with a byte buffer and a custom value typ
     // Stride/offset are counted in buffer elements (bytes here).
     Xyz::MeshAttributeBuilder<Vec2f, std::vector<std::byte>> builder(
         buffer, sizeof(Vec2f) * 3, sizeof(Vec2f));
-    builder.add(Vec2f{1.0f, 2.0f});
-    builder.add(Vec2f{3.0f, 4.0f});
+    builder.add({1.0f, 2.0f});
+    builder.add({3.0f, 4.0f});
 
     REQUIRE(buffer.size() == 2 * sizeof(Vec2f) * 3);
     REQUIRE(builder.get(0) == Vec2f{1.0f, 2.0f});

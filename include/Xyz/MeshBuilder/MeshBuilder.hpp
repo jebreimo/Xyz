@@ -29,9 +29,9 @@ namespace Xyz
         using Vector4 = Vector<ValueType, 4>;
 
         MeshIndexBuilder<IndexTypeT> indexes;
-        MeshAttributeBuilder<Vector3, BufferType> positions;
-        std::optional<MeshAttributeBuilder<Vector3, BufferType>> normals;
-        std::optional<MeshAttributeBuilder<Vector4, BufferType>> tangents;
-        std::optional<MeshAttributeBuilder<Vector2, BufferType>> tex_coords;
+        MeshAttributeBuilder<Vector3, BufferType> coords;
+        std::optional<MeshAttributeBuilder<Vector3, BufferType>> normals = {};
+        std::optional<MeshAttributeBuilder<Vector4, BufferType>> tangents = {};
+        std::optional<MeshAttributeBuilder<Vector2, BufferType>> tex_coords = {};
     };
 }

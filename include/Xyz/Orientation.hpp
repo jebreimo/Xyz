@@ -105,24 +105,18 @@ namespace Xyz
     template <std::floating_point T>
     struct Orientation<T, 3>
     {
-        Orientation() = default;
-
-        explicit Orientation(T yaw, T pitch = 0, T roll = 0)
-            : yaw(yaw), pitch(pitch), roll(roll)
-        {}
-
         /**
          * @brief Rotation around z-axis, counterclockwise is positive
          */
-        T yaw;
+        T yaw = {};
         /**
          * @brief Rotation around y-axis, "down" is positive
          */
-        T pitch;
+        T pitch = {};
         /**
          * @brief Rotation around x-axis, "clockwise" is positive
          */
-        T roll;
+        T roll = {};
     };
 
     template <std::floating_point T>

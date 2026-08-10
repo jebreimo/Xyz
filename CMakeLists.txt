@@ -66,10 +66,10 @@ add_library(Xyz STATIC
     include/Xyz/Mesh/Face.hpp
     include/Xyz/Mesh/HalfEdge.hpp
     include/Xyz/Mesh/Mesh.hpp
+    include/Xyz/MeshBuilder/BuildMesh.hpp
     include/Xyz/MeshBuilder/MeshAttributeBuilder.hpp
     include/Xyz/MeshBuilder/MeshBuilder.hpp
     include/Xyz/MeshBuilder/MeshIndexBuilder.hpp
-    include/Xyz/MeshBuilder/PgramMesh.hpp
     include/Xyz/MeshBuilder/ResizableBuffer.hpp
     include/Xyz/Orientation.hpp
     include/Xyz/OrientedRectangle.hpp
