@@ -111,3 +111,11 @@ TEST_CASE("Rectangle: get_union (float)")
     REQUIRE(get_union(R({0.f, 0.f}, {10.f, 10.f}), R({2.5f, 2.5f}, {4.f, 4.f}))
             == R({0.f, 0.f}, {10.f, 10.f}));
 }
+
+TEST_CASE("Rectangle: get_rel_rectangle")
+{
+    using R = Xyz::RectangleF;
+    const R rect({2.f, 0.f}, {10.f, -10.f});
+    const R rel_subrect({0.2f, 0.3f}, {0.5f, 0.4f});
+    REQUIRE(get_rel_rectangle(rect, rel_subrect) == R({4.f, -3.f}, {5.f, -4.f}));
+}
