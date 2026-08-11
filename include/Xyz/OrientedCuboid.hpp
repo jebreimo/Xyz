@@ -15,9 +15,18 @@ namespace Xyz
      * @tparam T
      */
     template <std::floating_point T>
-    struct Cuboid
+    struct OrientedCuboid
     {
         Placement<T, 3> placement;
         Vector<T, 3> size;
     };
+
+    template <std::floating_point T>
+    [[nodiscard]] std::tuple<Vector<T, 3>, Vector<T, 3>, Vector<T, 3>>
+    get_vectors(const OrientedCuboid<T>& cuboid)
+    {
+        const auto [x, y, z] = get_vectors(cuboid.placement.orientation);
+        const auto [l, w, h] = cuboid.size;
+        return {x * l, y * w, z * h};
+    }
 }

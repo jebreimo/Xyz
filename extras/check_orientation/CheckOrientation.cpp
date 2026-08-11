@@ -14,7 +14,7 @@ void check_z_axis()
             for (int roll = 0; roll < 360; roll += 30)
             {
                 const Xyz::Orientation3D o(Xyz::to_radians(yaw), Xyz::to_radians(pitch), Xyz::to_radians(roll));
-                auto [x, y, z] = get_axis_vectors(o);
+                auto [x, y, z] = get_vectors(o);
                 auto zz = normalize(cross(x, y));
                 if (!are_equal(z, zz))
                 {

@@ -61,6 +61,14 @@ namespace Xyz
 
     template <typename T>
     [[nodiscard]]
+    std::tuple<Vector<T, 2>, Vector<T, 2>>
+    get_vectors(const Rectangle<T>& rect)
+    {
+        return {{rect.size.x(), T()}, {T(), rect.size.y()}};
+    }
+
+    template <typename T>
+    [[nodiscard]]
     constexpr Vector<T, 2> get_min(const Rectangle<T>& rect)
     {
         return get_min(rect.origin, rect.origin + rect.size);

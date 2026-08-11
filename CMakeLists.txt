@@ -50,7 +50,6 @@ add_library(Xyz STATIC
     include/Xyz/ComplexApprox.hpp
     include/Xyz/Constants.hpp
     include/Xyz/CoordinateSystem.hpp
-    include/Xyz/Cuboid.hpp
     include/Xyz/FloatType.hpp
     include/Xyz/Interpolation.hpp
     include/Xyz/IntersectionType.hpp
@@ -72,6 +71,7 @@ add_library(Xyz STATIC
     include/Xyz/MeshBuilder/MeshIndexBuilder.hpp
     include/Xyz/MeshBuilder/ResizableBuffer.hpp
     include/Xyz/Orientation.hpp
+    include/Xyz/OrientedCuboid.hpp
     include/Xyz/OrientedRectangle.hpp
     include/Xyz/Pgram.hpp
     include/Xyz/Placement.hpp

@@ -95,13 +95,12 @@ namespace Xyz
         return rect.size.x() == 0 || rect.size.y() == 0;
     }
 
-
     template <std::floating_point T, unsigned N>
     [[nodiscard]]
     std::tuple<Vector<T, N>, Vector<T, N>>
     get_vectors(const OrientedRectangle<T, N>& rect)
     {
-        const auto [x, y, _] = get_axis_vectors(rect.placement.orientation);
+        const auto [x, y, _] = get_vectors(rect.placement.orientation);
         return {x * rect.size.x(), y * rect.size.y()};
     }
 

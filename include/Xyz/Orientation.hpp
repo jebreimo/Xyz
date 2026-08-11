@@ -69,6 +69,16 @@ namespace Xyz
 
     template <std::floating_point T>
     [[nodiscard]]
+    std::tuple<Vector<T, 2>, Vector<T, 2>>
+    get_vectors(const Orientation<T, 2>& o)
+    {
+        const auto c = std::cos(o.angle);
+        const auto s = std::sin(o.angle);
+        return {{c, s}, {-s, c}};
+    }
+
+    template <std::floating_point T>
+    [[nodiscard]]
     Orientation<T, 2> normalize(const Orientation<T, 2>& o)
     {
         return {to_signed_principal_angle(o.angle)};
@@ -195,8 +205,9 @@ namespace Xyz
     }
 
     template <std::floating_point T>
+    [[nodiscard]]
     std::tuple<Vector<T, 3>, Vector<T, 3>, Vector<T, 3>>
-    get_axis_vectors(const Orientation<T, 3>& o)
+    get_vectors(const Orientation<T, 3>& o)
     {
         auto c_y = std::cos(o.yaw);
         auto s_y = std::sin(o.yaw);
