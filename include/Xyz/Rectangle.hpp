@@ -114,6 +114,18 @@ namespace Xyz
 
     template <typename T>
     [[nodiscard]]
+    constexpr Rectangle<T>
+    get_rel_rectangle(const Rectangle<T>& rect,
+                      const Rectangle<std::type_identity_t<T>>& rel_subrect)
+    {
+        return {
+            rel_to_abs(rect, rel_subrect.origin),
+            rel_subrect.size * rect.size
+        };
+    }
+
+    template <typename T>
+    [[nodiscard]]
     constexpr Rectangle<T> normalize(const Rectangle<T>& rectangle)
     {
         auto [x, y] = rectangle.origin;
