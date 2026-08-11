@@ -18,11 +18,11 @@ namespace Xyz
 {
     template <ResizableBuffer BufferType,
         std::floating_point ValueType,
-        std::integral IndexType = uint32_t>
+        std::integral IndexType>
     void build_mesh(MeshBuilder<BufferType, ValueType, IndexType>& builder,
                     const Pgram<ValueType, 3>& pgram,
                     const Rectangle<ValueType>& tex_rect = {},
-                    IndexType base_index = 0)
+                    std::type_identity_t<IndexType> base_index = {})
     {
         const auto& v0 = pgram.edge0;
         const auto& v1 = pgram.edge1;
@@ -68,11 +68,11 @@ namespace Xyz
 
     template <ResizableBuffer BufferType,
         std::floating_point ValueType,
-        std::integral IndexType = uint32_t>
+        std::integral IndexType>
     void build_mesh(MeshBuilder<BufferType, ValueType, IndexType>& builder,
                     const OrientedRectangle<ValueType, 3>& rect,
                     const Rectangle<ValueType>& tex_rect = {},
-                    IndexType base_index = 0)
+                    std::type_identity_t<IndexType> base_index = {})
     {
         const auto [x, y] = get_vectors(rect);
         build_mesh(builder,
@@ -93,11 +93,11 @@ namespace Xyz
      */
     template <ResizableBuffer BufferType,
         std::floating_point ValueType,
-        std::integral IndexType = uint32_t>
+        std::integral IndexType>
     void build_mesh(MeshBuilder<BufferType, ValueType, IndexType>& builder,
                     const OrientedCuboid<ValueType>& cuboid,
                     std::function<Rectangle<ValueType>(int)> tex_rect_func = {},
-                    IndexType base_index = 0)
+                    std::type_identity_t<IndexType> base_index = {})
     {
         using P = Pgram<ValueType, 3>;
         using R = Rectangle<ValueType>;
