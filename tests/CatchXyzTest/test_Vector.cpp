@@ -27,7 +27,7 @@ void test_from_xyz_to_spherical_and_back(Xyz::Vector3D cartesian,
     REQUIRE_THAT(p[2], WithinAbs(cartesian[2], MARGIN));
 }
 
-TEST_CASE("xyz to spherical")
+TEST_CASE("Vector: xyz to spherical")
 {
     SECTION("0°, -45°")
     {
@@ -85,7 +85,7 @@ TEST_CASE("xyz to spherical")
     }
 }
 
-TEST_CASE("clamp vector")
+TEST_CASE("Vector: clamp")
 {
     Xyz::Vector4D v1(1, -2, 3, -4);
     auto v2 = get_clamped(v1, -1, 1);
@@ -95,7 +95,7 @@ TEST_CASE("clamp vector")
     REQUIRE(v1 == Xyz::Vector4D(1, -1, 1, -1));
 }
 
-TEST_CASE("clamp vector with min and max vectors")
+TEST_CASE("Vector: clamp with min and max vectors")
 {
     using Vec = Xyz::Vector2D;
     constexpr Vec min(-2, 3);
@@ -107,7 +107,7 @@ TEST_CASE("clamp vector with min and max vectors")
     REQUIRE(get_clamped(Vec(-2, 14), min, max) == Vec(-2, 13));
 }
 
-TEST_CASE("scale vector")
+TEST_CASE("Vector: scale vector")
 {
     Xyz::Vector4D v1(1, -2, 3, -4);
     const auto v2 = get_scaled(v1, 1);
@@ -118,32 +118,32 @@ TEST_CASE("scale vector")
     REQUIRE(are_equal(v1, Xyz::Vector4D(1 / root, -2 / root, 3 / root, -4 / root)));
 }
 
-TEST_CASE("vector floor")
+TEST_CASE("Vector: floor")
 {
     constexpr Xyz::Vector4D v(1.2, -2.2, 3.2, -4.9);
     REQUIRE(floor(v) == Xyz::Vector4D(1, -3, 3, -5));
 }
 
-TEST_CASE("vector ceil")
+TEST_CASE("Vector: ceil")
 {
     constexpr Xyz::Vector4D v(1.2, -2.2, 3.2, -4.9);
     REQUIRE(ceil(v) == Xyz::Vector4D(2, -2, 4, -4));
 }
 
-TEST_CASE("Vector cross product")
+TEST_CASE("Vector: cross product")
 {
     const auto u = Xyz::make_vector3(1, 2, 3);
     const auto v = Xyz::make_vector3(0, 1, 2);
     CHECK(cross(u, v) == Xyz::make_vector3(1, -2, 1));
 }
 
-TEST_CASE("Vector get_cos_angle")
+TEST_CASE("Vector: get_cos_angle")
 {
     using V = Xyz::Vector2D;
     CHECK_THAT(get_cos_angle(V(3, 0), V(5, 5)), WithinAbs(1.0 / sqrt(2), 1e-10));
 }
 
-TEST_CASE("Vector get_angle")
+TEST_CASE("Vector: get_angle")
 {
     using V = Xyz::Vector3D;
     CHECK_THAT(get_angle(V(1, 0, 0), V(0, 1, 0)),
@@ -156,14 +156,14 @@ TEST_CASE("Vector get_angle")
                WithinAbs(3 * PI / 4, 1e-10));
 }
 
-TEST_CASE("Vector get_ccw_angle 2D")
+TEST_CASE("Vector: get_ccw_angle 2D")
 {
     using V = Xyz::Vector2I;
     CHECK_THAT(get_ccw_angle(V(6, 6), V(4, -4)),
                WithinAbs(3 * PI / 2, 1e-10));
 }
 
-TEST_CASE("Vector get_cw_angle 3D")
+TEST_CASE("Vector: get_cw_angle 3D")
 {
     using V = Xyz::Vector3D;
     auto q = sqrt(8);
@@ -185,14 +185,14 @@ TEST_CASE("Vector get_cw_angle 3D")
                WithinAbs(0, 1e-10));
 }
 
-TEST_CASE("get_ccw_angle 3D only considers the plane defined by the normal")
+TEST_CASE("Vector: get_ccw_angle 3D only considers the plane defined by the normal")
 {
     using V = Xyz::Vector3D;
     CHECK_THAT(get_ccw_angle(V(6, 0, 0), V(2, 0, 2), V(0, 0, 1)),
                 WithinAbs(0, 1e-10));
 }
 
-TEST_CASE("Test vector types")
+TEST_CASE("Vector: Test vector types")
 {
     auto u = Xyz::make_vector2(1, 2);
     CHECK(typeid(typename decltype(u)::ValueType).name() == typeid(int).name());
@@ -203,7 +203,7 @@ TEST_CASE("Test vector types")
     CHECK(typeid(typename decltype(w)::ValueType).name() == typeid(double).name());
 }
 
-TEST_CASE("Test vector constructors")
+TEST_CASE("Vector: Test vector constructors")
 {
     const auto u = Xyz::make_vector4(1, 2, 0, 1);
     Xyz::Vector<double, 4> v = vector_cast<double>(u);
@@ -213,7 +213,7 @@ TEST_CASE("Test vector constructors")
     CHECK(v[3] == 1);
 }
 
-TEST_CASE("Test Vector2D basics")
+TEST_CASE("Vector: Test Vector2D basics")
 {
     auto u = Xyz::Vector2D(2.0, 1.0);
     auto v = Xyz::Vector2D(3.0, 4.0);
@@ -244,7 +244,7 @@ TEST_CASE("Test Vector2D basics")
     CHECK(Xyz::Vector2I(values) % Xyz::Vector2I(4, 5) == Xyz::Vector2I(3, 1));
 }
 
-TEST_CASE("Test Vector4D basics")
+TEST_CASE("Vector: Test Vector4D basics")
 {
     auto u = Xyz::Vector4D(2.0, 1.0, 4.0, 3.0);
     auto v = Xyz::Vector4D(3.0, 4.0, -1.0, -2.0);
@@ -274,7 +274,7 @@ TEST_CASE("Test Vector4D basics")
     CHECK_THAT(get_length(v), WithinAbs(sqrt(9 + 16 + 1 + 4), 1e-10));
 }
 
-TEST_CASE("Test rotate Vector2D")
+TEST_CASE("Vector: rotate Vector2D")
 {
     using V = Xyz::Vector2D;
     auto sqrt2 = std::sqrt(2);
@@ -297,14 +297,14 @@ TEST_CASE("Test rotate Vector2D")
         V(-1, 0), 1e-10));
 }
 
-TEST_CASE("Test get_min")
+TEST_CASE("Vector: get_min")
 {
     using V = Xyz::Vector2D;
     CHECK(get_min(V(1, 5), V(3, 4)) == V(1, 4));
 }
 
 // Test for get_max
-TEST_CASE("Test get_max")
+TEST_CASE("Vector: get_max")
 {
     using V = Xyz::Vector2D;
     CHECK(get_max(V(1, 5), V(3, 4)) == V(3, 5));

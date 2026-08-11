@@ -12,7 +12,7 @@
 using Xyz::to_radians;
 using Catch::Matchers::WithinAbs;
 
-TEST_CASE("Vectors from 2D orientation")
+TEST_CASE("Orientation: Vectors from 2D orientation")
 {
     Xyz::Orientation2D o(to_radians(-135.0));
     CHECK(are_equal(get_x_vector(o),
@@ -21,7 +21,7 @@ TEST_CASE("Vectors from 2D orientation")
         Xyz::Vector2D(1.0 / sqrt(2), -1.0 / sqrt(2))));
 }
 
-TEST_CASE("Vectors from 3D orientation, yaw only")
+TEST_CASE("Orientation: Vectors from 3D orientation, yaw only")
 {
     Xyz::Orientation3D o(to_radians(-135.0));
     CHECK(are_equal(get_x_vector(o),
@@ -32,7 +32,7 @@ TEST_CASE("Vectors from 3D orientation, yaw only")
         Xyz::Vector3D(0, 0, 1)));
 }
 
-TEST_CASE("Vectors from 3D orientation, roll only")
+TEST_CASE("Orientation: Vectors from 3D orientation, roll only")
 {
     Xyz::Orientation3D o(0, 0, to_radians(-135.0));
     CHECK(are_equal(get_x_vector(o),
@@ -43,7 +43,7 @@ TEST_CASE("Vectors from 3D orientation, roll only")
         Xyz::Vector3D(0, 1.0 / sqrt(2), -1.0 / sqrt(2))));
 }
 
-TEST_CASE("Vectors from 3D orientation, pitch only")
+TEST_CASE("Orientation: Vectors from 3D orientation, pitch only")
 {
     Xyz::Orientation3D o(0, to_radians(-135), 0);
     CHECK(are_equal(get_x_vector(o),
@@ -54,14 +54,14 @@ TEST_CASE("Vectors from 3D orientation, pitch only")
         Xyz::Vector3D(-1.0 / sqrt(2), 0, -1.0 / sqrt(2))));
 }
 
-TEST_CASE("Normalize 2D orientation")
+TEST_CASE("Orientation: Normalize 2D orientation")
 {
     Xyz::Orientation2D o(to_radians(-500.0));
     auto no = normalize(o);
     CHECK_THAT(no.angle, WithinAbs(to_radians(-140.0), 1e-10));
 }
 
-TEST_CASE("Normalize 3D orientation, yaw and roll only")
+TEST_CASE("Orientation: Normalize 3D orientation, yaw and roll only")
 {
     Xyz::Orientation3D o(to_radians(-500.0), 0, to_radians(200.0));
     auto no = normalize(o);
@@ -70,7 +70,7 @@ TEST_CASE("Normalize 3D orientation, yaw and roll only")
     CHECK_THAT(no.roll, WithinAbs(to_radians(-160.0), 1e-10));
 }
 
-TEST_CASE("Normalize 3D orientation, pitch only")
+TEST_CASE("Orientation: Normalize 3D orientation, pitch only")
 {
     Xyz::Orientation3D o(0, to_radians(-500.0), 0);
     auto no = normalize(o);
@@ -79,7 +79,7 @@ TEST_CASE("Normalize 3D orientation, pitch only")
     CHECK_THAT(no.roll, WithinAbs(to_radians(180), 1e-10));
 }
 
-TEST_CASE("Reverse 3D orientation")
+TEST_CASE("Orientation: Reverse 3D orientation")
 {
     Xyz::Orientation3D o(to_radians(-500.0), to_radians(200.0), to_radians(100.0));
     auto ro = reverse(o);
@@ -88,7 +88,7 @@ TEST_CASE("Reverse 3D orientation")
     CHECK_THAT(ro.roll, WithinAbs(to_radians(-80.0), 1e-10));
 }
 
-TEST_CASE("to_orientation from 3D vector")
+TEST_CASE("Orientation: to_orientation from 3D vector")
 {
     Xyz::Vector3D v(1, 2, 3);
     auto o = to_orientation(v);
@@ -97,7 +97,7 @@ TEST_CASE("to_orientation from 3D vector")
     CHECK_THAT(o.roll, WithinAbs(0.0, 1e-10));
 }
 
-TEST_CASE("to_orientation from 3D vectors, no roll")
+TEST_CASE("Orientation: to_orientation from 3D vectors, no roll")
 {
     Xyz::Vector3D longitudinal(1, 2, 3);
     Xyz::Vector3D lateral(-1, 0.5, 0);
@@ -107,7 +107,7 @@ TEST_CASE("to_orientation from 3D vectors, no roll")
     CHECK_THAT(o.roll, WithinAbs(0, 1e-10));
 }
 
-TEST_CASE("to_orientation from 3D vectors, no pitch")
+TEST_CASE("Orientation: to_orientation from 3D vectors, no pitch")
 {
     Xyz::Vector3D longitudinal(1, 2, 0);
     Xyz::Vector3D lateral(-1, 0.5, 1);
@@ -117,7 +117,7 @@ TEST_CASE("to_orientation from 3D vectors, no pitch")
     CHECK_THAT(o.roll, WithinAbs(std::atan2(1, std::hypot(-1, 0.5)), 1e-10));
 }
 
-TEST_CASE("to_orientation from 3D vectors, no pitch, non-orthogonal lateral")
+TEST_CASE("Orientation: to_orientation from 3D vectors, no pitch, non-orthogonal lateral")
 {
     Xyz::Vector3D longitudinal(1, 1, 0);
     Xyz::Vector3D lateral(0, 4, 2);

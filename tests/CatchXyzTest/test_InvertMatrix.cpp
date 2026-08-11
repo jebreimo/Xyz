@@ -8,13 +8,16 @@
 #include "Xyz/InvertMatrix.hpp"
 #include <catch2/catch_test_macros.hpp>
 
-template <typename T, unsigned N>
-bool equals_identity_matrix(const Xyz::Matrix<T, N, N>& m)
+namespace
 {
-    return are_equal(m, Xyz::make_identity_matrix<T, N>());
+    template <typename T, unsigned N>
+    bool equals_identity_matrix(const Xyz::Matrix<T, N, N>& m)
+    {
+        return are_equal(m, Xyz::make_identity_matrix<T, N>());
+    }
 }
 
-TEST_CASE("test invert2")
+TEST_CASE("InvertMatrix: invert2")
 {
     Xyz::Matrix2D m{
         1, 4,
@@ -23,7 +26,7 @@ TEST_CASE("test invert2")
     CHECK(equals_identity_matrix(m * invert(m)));
 }
 
-TEST_CASE("test invert3")
+TEST_CASE("InvertMatrix: invert3")
 {
     Xyz::Matrix3D m{
         1, 4, 2,
@@ -33,7 +36,7 @@ TEST_CASE("test invert3")
     CHECK(equals_identity_matrix(m * invert(m)));
 }
 
-TEST_CASE("test invert4")
+TEST_CASE("InvertMatrix: invert4")
 {
     Xyz::Matrix4D m{
         1, -2, 3, 2,
@@ -44,7 +47,7 @@ TEST_CASE("test invert4")
     CHECK(equals_identity_matrix(m * invert(m)));
 }
 
-TEST_CASE("test invert5")
+TEST_CASE("InvertMatrix: invert5")
 {
     Xyz::Matrix<double, 5, 5> m{
         1, -2, 3, 2, 5,

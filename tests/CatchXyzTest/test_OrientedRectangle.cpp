@@ -10,7 +10,7 @@
 
 constexpr auto PI = Xyz::Constants<double>::PI;
 
-TEST_CASE("Test 2D rectangle")
+TEST_CASE("OrientedRectangle: Test 2D rectangle")
 {
     Xyz::OrientedRectangle2D rect({{10, 20}}, {100, 80});
     REQUIRE(Xyz::get_center(rect) == Xyz::Vector2D(60, 60));
@@ -23,7 +23,7 @@ TEST_CASE("Test 2D rectangle")
     REQUIRE(rect.placement.origin == Xyz::Vector2I(-5, 35));
 }
 
-TEST_CASE("Test 2D rectangle is_empty")
+TEST_CASE("OrientedRectangle: Test 2D rectangle is_empty")
 {
     REQUIRE(is_empty(Xyz::OrientedRectangle2F({{2, 3}}, {0, 0})));
     REQUIRE(is_empty(Xyz::OrientedRectangle2F({{2, 3}}, {0, -1})));
@@ -31,7 +31,7 @@ TEST_CASE("Test 2D rectangle is_empty")
     REQUIRE(!is_empty(Xyz::OrientedRectangle2F({{2, 3}}, {-1, -1})));
 }
 
-TEST_CASE("Test 2D rectangle: normalize without angle")
+TEST_CASE("OrientedRectangle: Test 2D rectangle: normalize without angle")
 {
     using R = Xyz::OrientedRectangle2D;
     REQUIRE(Xyz::normalize(R({{10, 15}}, {10, 10})) == R({{10, 15}}, {10, 10}));
@@ -40,7 +40,7 @@ TEST_CASE("Test 2D rectangle: normalize without angle")
     REQUIRE(Xyz::normalize(R({{10, 15}}, {-10, -10})) == R({{0, 5}}, {10, 10}));
 }
 
-TEST_CASE("Test 2D rectangle: normalize with angle")
+TEST_CASE("OrientedRectangle: Test 2D rectangle: normalize with angle")
 {
     using R = Xyz::OrientedRectangle2D;
     using V = Xyz::Vector2D;
@@ -52,7 +52,7 @@ TEST_CASE("Test 2D rectangle: normalize with angle")
     REQUIRE(result.placement.orientation.angle == 0);
 }
 
-TEST_CASE("Test 3D rectangle")
+TEST_CASE("OrientedRectangle: Test 3D rectangle")
 {
     using V = Xyz::Vector3D;
     const auto sq2 = sqrt(2) / 2;

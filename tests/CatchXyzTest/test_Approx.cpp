@@ -8,7 +8,7 @@
 #include <Xyz/Approx.hpp>
 #include <catch2/catch_test_macros.hpp>
 
-TEST_CASE("Approx comparisons")
+TEST_CASE("Approx: comparisons")
 {
     Xyz::Approx<double> a(1, 0.01);
 
@@ -49,7 +49,7 @@ TEST_CASE("Approx comparisons")
     REQUIRE_FALSE(a <= 0.989);
 }
 
-TEST_CASE("Approx-Approx comparisons")
+TEST_CASE("Approx: Approx-Approx comparisons")
 {
     Xyz::Approx<float> a(1.0, 0.01);
     Xyz::Approx<double> b(1.009, 0.003);

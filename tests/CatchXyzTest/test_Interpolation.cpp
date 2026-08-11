@@ -9,7 +9,7 @@
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
 
-TEST_CASE("bilinear interpolation with min and max")
+TEST_CASE("Interpolation: bilinear interpolation with min and max")
 {
     using namespace Xyz;
     using Catch::Matchers::WithinAbs;
@@ -27,7 +27,7 @@ TEST_CASE("bilinear interpolation with min and max")
     REQUIRE_THAT(bilinear(q, V{12.5, 15}, p1, p2), WithinAbs(3.5f, 0.00001f));
 }
 
-TEST_CASE("bilinear interpolation with default min and max")
+TEST_CASE("Interpolation: bilinear interpolation with default min and max")
 {
     using namespace Xyz;
     using Catch::Matchers::WithinAbs;

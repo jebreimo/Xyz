@@ -8,7 +8,7 @@
 #include <Xyz/ComplexApprox.hpp>
 #include <catch2/catch_test_macros.hpp>
 
-TEST_CASE("ComplexApprox comparisons")
+TEST_CASE("ComplexApprox: comparisons")
 {
     Xyz::ComplexApprox<double> a({1, 1}, {0.01, 0.01});
 

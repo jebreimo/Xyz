@@ -11,7 +11,7 @@
 
 #include "Xyz/LineClipper.hpp"
 
-TEST_CASE("Test 2D line-clipper with scale and translate transform",
+TEST_CASE("LineClipper: Test 2D line-clipper with scale and translate transform",
           "[LineClipper][2D]")
 {
     auto transform = Xyz::affine::scale2<float>(0.05f, 0.05f) *

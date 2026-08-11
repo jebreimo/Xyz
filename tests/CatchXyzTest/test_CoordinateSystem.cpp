@@ -10,7 +10,7 @@
 
 namespace
 {
-    TEST_CASE("CoordinateSystem rotated XY", "[CoordinateSystem]")
+    TEST_CASE("CoordinateSystem: rotated XY", "[CoordinateSystem]")
     {
         const Xyz::CoordinateSystem<double> cs({1, 1, 0}, {1, 1, 0},
                                           {-1, 1, 0}, {0, 0, 2});
@@ -24,7 +24,7 @@ namespace
         REQUIRE(p0 == p2);
     }
 
-    TEST_CASE("CoordinateSystem z is off", "[CoordinateSystem]")
+    TEST_CASE("CoordinateSystem: z is off", "[CoordinateSystem]")
     {
         using V2 = Xyz::Vector2D;
         using V3 = Xyz::Vector3D;
@@ -35,7 +35,7 @@ namespace
         REQUIRE(are_equal(cs.from_cs_xy({2, 2}), V3(2, 2, 0)));
     }
 
-    TEST_CASE("CoordinateSystem YZX", "[CoordinateSystem]")
+    TEST_CASE("CoordinateSystem: YZX", "[CoordinateSystem]")
     {
         Xyz::CoordinateSystem<double> sys({0, 0, 0}, {0, 1, 0},
                                           {0, 0, 1}, {1, 0, 0});
@@ -46,13 +46,13 @@ namespace
         REQUIRE(p3 == Xyz::make_vector3(-2, 3, -1));
     }
 
-    TEST_CASE("CoordinateSystem from invalid plane", "[CoordinateSystem]")
+    TEST_CASE("CoordinateSystem: from invalid plane", "[CoordinateSystem]")
     {
         const auto cs = Xyz::make_coordinate_system<double>({{1, 1, 0}, {0, 0, 0}});
         REQUIRE(!cs);
     }
 
-    TEST_CASE("CoordinateSystem from XY plane 2D", "[CoordinateSystem]")
+    TEST_CASE("CoordinateSystem: from XY plane 2D", "[CoordinateSystem]")
     {
         using V = Xyz::Vector3D;
         const auto cs = Xyz::make_coordinate_system<double>({{1, 1, 0}, {-1, -1, 1}});

@@ -11,7 +11,7 @@
 
 using Catch::Matchers::WithinAbs;
 
-TEST_CASE("Pgram3: invalid parallelogram")
+TEST_CASE("Pgram: invalid parallelogram")
 {
     using P = Xyz::Pgram<float, 3>;
     P rect;
@@ -20,7 +20,7 @@ TEST_CASE("Pgram3: invalid parallelogram")
     REQUIRE(!rect.is_valid());
 }
 
-TEST_CASE("Pgram3: rectangular parallelogram")
+TEST_CASE("Pgram: rectangular parallelogram")
 {
     using P = Xyz::Pgram<float, 3>;
     REQUIRE(is_rectangle(P{{0, 0, 0}, {-3, 4, 0}, {4, 3, 0}}));
@@ -41,14 +41,14 @@ void require_is_clip_rect(const Xyz::Matrix<T, 4, 4>& m, const Xyz::Pgram<T, 3>&
     REQUIRE(are_equal(m * make_vector4(Xyz::rel_to_abs(p, {0, 1}), 1), V(0, 1, 0, 1), e));
 }
 
-TEST_CASE("Pgram3: square_transform - translation")
+TEST_CASE("Pgram: square_transform - translation")
 {
     constexpr Xyz::Pgram<double, 3> p{{1, 2, 3}, {1, 0, 0}, {0, 1, 0}};
     const auto m = get_clip_transform(p);
     require_is_clip_rect(m, p);
 }
 
-TEST_CASE("Pgram3: clip_transform - rotation xy")
+TEST_CASE("Pgram: clip_transform - rotation xy")
 {
     auto d = 1 / sqrt(2);
     const Xyz::Pgram<double, 3> p{{1, 2, 3}, {d, d, 0}, {-d, d, 0}};
@@ -56,7 +56,7 @@ TEST_CASE("Pgram3: clip_transform - rotation xy")
     require_is_clip_rect(m, p);
 }
 
-TEST_CASE("Pgram3: clip_transform - rotation xz")
+TEST_CASE("Pgram: clip_transform - rotation xz")
 {
     auto d = 1 / sqrt(2);
     const Xyz::Pgram<double, 3> p{{1, 2, 3}, {d, 0, d}, {-d, 0, d}};
@@ -64,7 +64,7 @@ TEST_CASE("Pgram3: clip_transform - rotation xz")
     require_is_clip_rect(m, p);
 }
 
-TEST_CASE("Pgram3: clip_transform - shearing")
+TEST_CASE("Pgram: clip_transform - shearing")
 {
     auto d = 1.f / std::sqrt(2.f);
     const Xyz::Pgram<float, 3> p{{1, 2, 3}, {1, 0, 0}, {1, d, d}};
@@ -72,21 +72,21 @@ TEST_CASE("Pgram3: clip_transform - shearing")
     require_is_clip_rect(m, p);
 }
 
-TEST_CASE("Pgram3: clip_transform - scale")
+TEST_CASE("Pgram: clip_transform - scale")
 {
     constexpr Xyz::Pgram<double, 3> p{{1, 2, 3}, {5, 0, 0}, {0, 3, 0}};
     const auto m = get_clip_transform(p);
     require_is_clip_rect(m, p);
 }
 
-TEST_CASE("Pgram3: clip_transform - float")
+TEST_CASE("Pgram: clip_transform - float")
 {
     constexpr Xyz::Pgram<float, 3> p{{1, 2, 3}, {5, 3, 2}, {1, 4, 8}};
     const auto m = get_clip_transform(p);
     require_is_clip_rect(m, p);
 }
 
-TEST_CASE("Pgram3: bounding box")
+TEST_CASE("Pgram: bounding box")
 {
     using P = Xyz::Pgram<float, 3>;
     constexpr P pg{{0, 0, 0}, {4, 0, 0}, {2, 2, 0}};
@@ -96,7 +96,7 @@ TEST_CASE("Pgram3: bounding box")
     REQUIRE(rect.size.y() == 2);
 }
 
-TEST_CASE("Pgram3: length and width")
+TEST_CASE("Pgram: length and width")
 {
     using P = Xyz::Pgram<float, 3>;
     constexpr P pg{{0, 0, 0}, {4, 1, 0}, {1, 4, 0}};

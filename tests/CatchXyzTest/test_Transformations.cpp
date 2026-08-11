@@ -8,21 +8,21 @@
 #include "Xyz/Xyz.hpp"
 #include <catch2/catch_test_macros.hpp>
 
-TEST_CASE("test_rotate z")
+TEST_CASE("Transformations: test rotate z")
 {
     auto trans = Xyz::affine::rotate_z(Xyz::to_radians(90.0));
     auto v = trans * Xyz::Vector4D(1, 1, 1, 1);
     CHECK(are_equal(v, Xyz::Vector4D(-1, 1, 1, 1), 1e-10));
 }
 
-TEST_CASE("test translate4")
+TEST_CASE("Transformations: test translate4")
 {
     auto trans = Xyz::affine::translate3(1.0, 2.0, 3.0);
     auto v = trans * Xyz::Vector4D(1, 1, 1, 1);
     CHECK(are_equal(v, Xyz::Vector4D(2, 3, 4, 1)));
 }
 
-TEST_CASE("test_rotate_z_and_transposed translate4")
+TEST_CASE("Transformations: test rotate_z and transposed_translate4")
 {
     auto trans = multiply_transposed(
             Xyz::affine::rotate_z(Xyz::to_radians(90.0)),

@@ -12,7 +12,7 @@
 
 using Catch::Matchers::WithinAbs;
 
-TEST_CASE("get_intersection_positions")
+TEST_CASE("Intersections: get_intersection_positions")
 {
     using V2 = Xyz::Vector2I;
     const auto a = Xyz::LineSegment(V2(-4, -2), V2(4, 2));
@@ -23,7 +23,7 @@ TEST_CASE("get_intersection_positions")
     CHECK(std::get<2>(intersection) == 0.75);
 }
 
-TEST_CASE("get_intersection_extents")
+TEST_CASE("Intersections: get_intersection_extents")
 {
     using V2 = Xyz::Vector2F;
     const Xyz::LineSegment a(V2(-1, -1), V2(1, 1.f / 3.f));

@@ -8,7 +8,7 @@
 #include "Xyz/MatrixDeterminant.hpp"
 #include <catch2/catch_test_macros.hpp>
 
-TEST_CASE("test get determinant3")
+TEST_CASE("MatrixDeterminant: get determinant3")
 {
     const Xyz::Matrix3I m{
         1, 4, 3,
@@ -18,7 +18,7 @@ TEST_CASE("test get determinant3")
     CHECK(get_determinant(m) == 46);
 }
 
-TEST_CASE("test get determinant4")
+TEST_CASE("MatrixDeterminant: get determinant4")
 {
     const Xyz::Matrix4I m{
         1, -2, 3, 2,

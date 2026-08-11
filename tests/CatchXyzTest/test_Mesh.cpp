@@ -8,7 +8,7 @@
 #include <Xyz/Mesh/Mesh.hpp>
 #include <catch2/catch_test_macros.hpp>
 
-TEST_CASE("Cube mesh")
+TEST_CASE("Mesh: Cube mesh")
 {
     Xyz::Mesh<float> cube(
         {

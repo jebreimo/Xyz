@@ -33,7 +33,7 @@ void clip_fails(const Xyz::Vector2D& start,
     REQUIRE(!ts);
 }
 
-TEST_CASE("LineClipping", "[LineClipping]")
+TEST_CASE("LineClipping: Test line clipping", "[LineClipping]")
 {
     SECTION("Line inside rectangle")
     {

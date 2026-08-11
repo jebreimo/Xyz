@@ -9,7 +9,7 @@
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
 
-TEST_CASE("test contains point")
+TEST_CASE("Triangle: test contains point")
 {
     const auto tri = Xyz::Triangle(Xyz::Vector2I(-5, 0),
                                    Xyz::Vector2I(5, 0),
@@ -18,7 +18,7 @@ TEST_CASE("test contains point")
     REQUIRE(!contains_point(tri, Xyz::Vector2I(-3, 2), 1e-12));
 }
 
-TEST_CASE("test contains point inclusive")
+TEST_CASE("Triangle: test contains point inclusive")
 {
     const auto tri = Xyz::Triangle(Xyz::Vector2I(-5, 0),
                                    Xyz::Vector2I(5, 0),
@@ -27,7 +27,7 @@ TEST_CASE("test contains point inclusive")
     REQUIRE(contains_point_inclusive(tri, Xyz::Vector2I(-3, 2), 1e-12));
 }
 
-TEST_CASE("test get area")
+TEST_CASE("Triangle: test get area")
 {
     using Catch::Matchers::WithinAbs;
     const auto tri = Xyz::Triangle(Xyz::Vector3I(3, 1, 2),
@@ -37,7 +37,7 @@ TEST_CASE("test get area")
     REQUIRE_THAT(Xyz::get_area(tri), WithinAbs(12, 1e-10));
 }
 
-TEST_CASE("test get normal")
+TEST_CASE("Triangle: test get normal")
 {
     const auto tri = Xyz::Triangle(Xyz::Vector3D(1, 0, 0),
                                    Xyz::Vector3D(0, 1, 0),

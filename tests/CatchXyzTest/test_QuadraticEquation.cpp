@@ -9,7 +9,7 @@
 #include <Xyz/QuadraticEquation.hpp>
 #include <catch2/catch_test_macros.hpp>
 
-TEST_CASE("Find real solution to quadratic equation")
+TEST_CASE("QuadraticEquation: Find real solution to quadratic equation")
 {
     auto solution = Xyz::solve_real_quadratic_equation(4, 18, -70);
     REQUIRE(bool(solution));
@@ -18,13 +18,13 @@ TEST_CASE("Find real solution to quadratic equation")
     REQUIRE(hi == 2.5);
 }
 
-TEST_CASE("Equation without real solution")
+TEST_CASE("QuadraticEquation: Equation without real solution")
 {
     auto solution = Xyz::solve_real_quadratic_equation(1, 0, 1);
     REQUIRE_FALSE(bool(solution));
 }
 
-TEST_CASE("Equation with complex solution")
+TEST_CASE("QuadraticEquation: Equation with complex solution")
 {
     auto [lo, hi] = Xyz::solve_complex_quadratic_equation<double>(1, 0, 1);
     using C = std::complex<double>;

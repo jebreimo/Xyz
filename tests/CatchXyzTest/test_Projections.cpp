@@ -8,7 +8,7 @@
 #include "Xyz/Xyz.hpp"
 #include <catch2/catch_test_macros.hpp>
 
-TEST_CASE("test_perspective_projection")
+TEST_CASE("Projections: test perspective projection")
 {
     auto m = Xyz::make_frustum_matrix<double>(-1, 1, -1, 1, 9, 11);
     auto v = Xyz::Vector4D(-1.0, -1.0, -9.0, 1.0);
@@ -16,7 +16,7 @@ TEST_CASE("test_perspective_projection")
     CHECK(w == Xyz::Vector4D(-9, -9, -9, 9));
 }
 
-TEST_CASE("test look_at")
+TEST_CASE("Projections: test look-at")
 {
     using V = Xyz::Vector4D;
     auto m = Xyz::make_look_at_matrix<double>({5, 2, 3},
@@ -40,7 +40,7 @@ TEST_CASE("test look_at")
     REQUIRE(m2 * V{-1, 1, -1, 1} == V{1, 1, -9, 1});
 }
 
-TEST_CASE("decompose view matrix")
+TEST_CASE("Projections: decompose view matrix")
 {
     using V = Xyz::Vector3D;
     auto view = Xyz::make_look_at_matrix<double>(
