@@ -26,7 +26,6 @@ add_executable(CatchXyzTest
     test_LineClipping.cpp
     test_Matrix.cpp
     test_MatrixDeterminant.cpp
-    test_Mesh.cpp
     test_Orientation.cpp
     test_Pgram.cpp
     test_Plane.cpp

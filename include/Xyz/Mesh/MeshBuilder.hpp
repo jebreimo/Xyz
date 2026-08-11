@@ -10,7 +10,6 @@
 
 #include "MeshAttributeBuilder.hpp"
 #include "MeshIndexBuilder.hpp"
-#include "ResizableBuffer.hpp"
 #include "Xyz/Vector.hpp"
 
 namespace Xyz

@@ -62,14 +62,11 @@ add_library(Xyz STATIC
     include/Xyz/LuDecomposition.hpp
     include/Xyz/Matrix.hpp
     include/Xyz/MatrixDeterminant.hpp
-    include/Xyz/Mesh/Face.hpp
-    include/Xyz/Mesh/HalfEdge.hpp
-    include/Xyz/Mesh/Mesh.hpp
-    include/Xyz/MeshBuilder/BuildMesh.hpp
-    include/Xyz/MeshBuilder/MeshAttributeBuilder.hpp
-    include/Xyz/MeshBuilder/MeshBuilder.hpp
-    include/Xyz/MeshBuilder/MeshIndexBuilder.hpp
-    include/Xyz/MeshBuilder/ResizableBuffer.hpp
+    include/Xyz/Mesh/BuildMesh.hpp
+    include/Xyz/Mesh/MeshAttributeBuilder.hpp
+    include/Xyz/Mesh/MeshBuilder.hpp
+    include/Xyz/Mesh/MeshIndexBuilder.hpp
+    include/Xyz/Mesh/ResizableBuffer.hpp
     include/Xyz/Orientation.hpp
     include/Xyz/OrientedCuboid.hpp
     include/Xyz/OrientedRectangle.hpp
@@ -90,7 +87,6 @@ add_library(Xyz STATIC
     include/Xyz/Xyz.hpp
     include/Xyz/XyzException.hpp
     src/Xyz/IntersectionType.cpp
-    src/Xyz/Mesh/Face.cpp
     src/Xyz/RandomNumberGenerator.cpp
 )
 

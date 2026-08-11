@@ -8,11 +8,11 @@
 #include <Xyz/Vector.hpp>
 #include <catch2/catch_test_macros.hpp>
 
-#include <Xyz/MeshBuilder/MeshAttributeBuilder.hpp>
+#include <Xyz/Mesh/MeshAttributeBuilder.hpp>
 
 #include "Xyz/OrientedCuboid.hpp"
 #include "Xyz/OrientedRectangle.hpp"
-#include "Xyz/MeshBuilder/BuildMesh.hpp"
+#include "Xyz/Mesh/BuildMesh.hpp"
 
 TEST_CASE("BuildMesh: make mesh from OrientedRectangle")
 {
