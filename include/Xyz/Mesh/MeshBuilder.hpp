@@ -6,6 +6,7 @@
 // License text is included with the source distribution.
 //****************************************************************************
 #pragma once
+#include <cstdint>
 #include <optional>
 
 #include "MeshAttributeBuilder.hpp"
