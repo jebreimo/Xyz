@@ -36,7 +36,6 @@ namespace Xyz
     }
 
     template <std::floating_point T>
-    [[nodiscard]]
     std::ostream& operator<<(std::ostream& os, const Orientation<T, 2>& o)
     {
         return os << "{angle: " << o.angle << "}";
@@ -133,7 +132,6 @@ namespace Xyz
     }
 
     template <std::floating_point T>
-    [[nodiscard]]
     std::ostream& operator<<(std::ostream& os, const Orientation<T, 3>& o)
     {
         return os << "{yaw: " << o.yaw
