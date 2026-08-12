@@ -20,6 +20,7 @@
 #include "Pgram.hpp"
 #include "ProjectionMatrix.hpp"
 #include "QuadraticEquation.hpp"
+#include "Quaternion.hpp"
 #include "RandomNumberGenerator.hpp"
 #include "SphericalPoint.hpp"
 #include "TransformationMatrix.hpp"

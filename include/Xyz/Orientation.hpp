@@ -7,6 +7,7 @@
 //****************************************************************************
 #pragma once
 #include <concepts>
+#include "Quaternion.hpp"
 #include "RotationMatrix.hpp"
 #include "Utilities.hpp"
 
@@ -272,6 +273,65 @@ namespace Xyz
             std::asin(lon.z()),
             std::atan2(lat.z(), up.z())
         );
+    }
+
+    /**
+     * @brief Returns the unit quaternion that corresponds to @a o.
+     */
+    template <std::floating_point T>
+    [[nodiscard]]
+    Quaternion<T> to_quaternion(const Orientation<T, 3>& o)
+    {
+        const auto c_y = std::cos(o.yaw / 2);
+        const auto s_y = std::sin(o.yaw / 2);
+        const auto c_p = std::cos(o.pitch / 2);
+        const auto s_p = std::sin(o.pitch / 2);
+        const auto c_r = std::cos(o.roll / 2);
+        const auto s_r = std::sin(o.roll / 2);
+
+        // The rotations are applied in the order roll, pitch, yaw, so the
+        // quaternion is the product yaw * pitch * roll.
+        return {
+            c_r * c_p * c_y + s_r * s_p * s_y,
+            s_r * c_p * c_y - c_r * s_p * s_y,
+            c_r * s_p * c_y + s_r * c_p * s_y,
+            c_r * c_p * s_y - s_r * s_p * c_y
+        };
+    }
+
+    /**
+     * @brief Returns the orientation that corresponds to @a q.
+     *
+     * The result is normalized, i.e. pitch is in the range [-PI/2, PI/2] and
+     * yaw and roll are in the range [-PI, PI]. When the pitch is straight up
+     * or down, yaw and roll represent the same rotation, and the whole
+     * rotation is assigned to yaw.
+     */
+    template <std::floating_point T>
+    [[nodiscard]]
+    Orientation<T, 3> to_orientation(const Quaternion<T>& q)
+    {
+        const auto u = normalize(q);
+        const auto [x, y, z] = u.v;
+        const auto w = u.w;
+
+        const auto sin_pitch = T(2) * (w * y - z * x);
+        if (std::abs(sin_pitch) >= 1 - Margin<T>::DEFAULT)
+        {
+            // Gimbal lock: the roll and yaw axes coincide, so pick roll = 0.
+            constexpr auto pi = Constants<T>::PI;
+            return {
+                T(2) * std::atan2(z, w),
+                sin_pitch > 0 ? pi / 2 : -pi / 2,
+                0
+            };
+        }
+
+        return {
+            std::atan2(T(2) * (w * z + x * y), T(1) - T(2) * (y * y + z * z)),
+            std::asin(sin_pitch),
+            std::atan2(T(2) * (w * x + y * z), T(1) - T(2) * (x * x + y * y))
+        };
     }
 
     namespace linear
