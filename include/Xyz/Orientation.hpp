@@ -18,18 +18,7 @@ namespace Xyz
     template <std::floating_point T>
     struct Orientation<T, 2>
     {
-        Orientation() = default;
-
-        // ReSharper disable once CppNonExplicitConvertingConstructor
-        Orientation(T angle)
-            : angle(angle)
-        {}
-
-        union
-        {
-            T angle;
-            T yaw;
-        };
+        T angle;
     };
 
     template <std::floating_point T>
@@ -88,7 +77,7 @@ namespace Xyz
     [[nodiscard]]
     Orientation<T, 2> reverse(const Orientation<T, 2>& o)
     {
-        constexpr auto pi = Xyz::Constants<double>::PI;
+        constexpr auto pi = Constants<double>::PI;
         return {o.angle + (o.angle < 0 ? pi : -pi)};
     }
 

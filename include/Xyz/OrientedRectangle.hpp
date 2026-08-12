@@ -49,23 +49,6 @@ namespace Xyz
             static_assert(N == 3, "Normal vector is only defined for 3D rectangles");
             return get_z_vector(placement.orientation);
         }
-
-        [[nodiscard]]
-        constexpr Vector<T, N> operator[](size_t index) const
-        {
-            switch (index % 4)
-            {
-            default:
-            case 0:
-                return placement.origin;
-            case 1:
-                return placement.origin + length_vector();
-            case 2:
-                return placement.origin + length_vector() + width_vector();
-            case 3:
-                return placement.origin + width_vector();
-            }
-        }
     };
 
     template <std::floating_point T, unsigned N>
@@ -95,10 +78,19 @@ namespace Xyz
         return rect.size.x() == 0 || rect.size.y() == 0;
     }
 
-    template <std::floating_point T, unsigned N>
+    template <std::floating_point T>
     [[nodiscard]]
-    std::tuple<Vector<T, N>, Vector<T, N>>
-    get_vectors(const OrientedRectangle<T, N>& rect)
+    std::tuple<Vector<T, 2>, Vector<T, 2>>
+    get_vectors(const OrientedRectangle<T, 2>& rect)
+    {
+        const auto [x, y] = get_vectors(rect.placement.orientation);
+        return {x * rect.size.x(), y * rect.size.y()};
+    }
+
+    template <std::floating_point T>
+    [[nodiscard]]
+    std::tuple<Vector<T, 3>, Vector<T, 3>>
+    get_vectors(const OrientedRectangle<T, 3>& rect)
     {
         const auto [x, y, _] = get_vectors(rect.placement.orientation);
         return {x * rect.size.x(), y * rect.size.y()};
