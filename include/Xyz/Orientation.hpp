@@ -275,17 +275,29 @@ namespace Xyz
         );
     }
 
+    /**
+     * @brief Returns the orientation whose x-axis is @a longitudinal and
+     *  whose y-axis is the part of @a lateral that is perpendicular to
+     *  @a longitudinal.
+     *
+     * The z-axis ends up along the cross product of the two vectors. Neither
+     * vector has to be of unit length, and @a lateral doesn't have to be
+     * perpendicular to @a longitudinal.
+     */
     template <std::floating_point T>
     [[nodiscard]]
     Orientation<T, 3> to_orientation(const Vector<T, 3>& longitudinal,
                                      const Vector<T, 3>& lateral)
     {
         const auto lon = normalize(longitudinal);
-        const auto lat = normalize(lateral);
-        const auto up = cross(lon, lat);
+        const auto up = cross(longitudinal, lateral);
+        // The part of the lateral vector that is perpendicular to the
+        // longitudinal one. Deriving it from up keeps the basis orthogonal,
+        // and gives it the same length as up, which is all atan2 needs.
+        const auto lat = cross(up, lon);
         return Orientation<T, 3>(
             std::atan2(lon.y(), lon.x()),
-            std::asin(lon.z()),
+            std::asin(-lon.z()),
             std::atan2(lat.z(), up.z())
         );
     }

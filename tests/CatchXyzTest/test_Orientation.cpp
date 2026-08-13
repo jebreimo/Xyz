@@ -104,8 +104,33 @@ TEST_CASE("Orientation: to_orientation from 3D vectors, no roll")
     Xyz::Vector3D lateral(-1, 0.5, 0);
     auto o = to_orientation(longitudinal, lateral);
     CHECK_THAT(o.yaw, WithinAbs(std::atan2(2, 1), 1e-10));
-    CHECK_THAT(o.pitch, WithinAbs(std::atan2(3, sqrt(5)), 1e-10));
+    CHECK_THAT(o.pitch, WithinAbs(-std::atan2(3, sqrt(5)), 1e-10));
     CHECK_THAT(o.roll, WithinAbs(0, 1e-10));
+
+    // The orientation's axis vectors are the vectors it was made from.
+    const auto [x, y, z] = get_vectors(o);
+    CHECK(are_equal(x, normalize(longitudinal), 1e-10));
+    CHECK(are_equal(y, normalize(lateral), 1e-10));
+    CHECK(are_equal(z, normalize(cross(longitudinal, lateral)), 1e-10));
+}
+
+TEST_CASE("Orientation: to_orientation ignores the lateral vector's longitudinal part")
+{
+    // Adding a multiple of the longitudinal vector to the lateral one leaves
+    // the frame they define unchanged, and must leave the orientation
+    // unchanged too, pitch or no pitch.
+    const Xyz::Vector3D longitudinal(1, 2, 3);
+    const Xyz::Vector3D lateral(-1, 0.5, 0);
+    const auto o = to_orientation(longitudinal, lateral);
+    for (const auto factor : {-2.0, -0.3, 0.7, 5.0})
+    {
+        CAPTURE(factor);
+        const auto o2 = to_orientation(longitudinal,
+                                       lateral + factor * longitudinal);
+        CHECK_THAT(o2.yaw, WithinAbs(o.yaw, 1e-10));
+        CHECK_THAT(o2.pitch, WithinAbs(o.pitch, 1e-10));
+        CHECK_THAT(o2.roll, WithinAbs(o.roll, 1e-10));
+    }
 }
 
 TEST_CASE("Orientation: to_orientation from 3D vectors, no pitch")

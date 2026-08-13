@@ -157,6 +157,62 @@ TEST_CASE("Quaternion: to_quaternion of the identity matrix")
                     Xyz::QuaternionD(), MARGIN));
 }
 
+TEST_CASE("Quaternion: to_quaternion from longitudinal and lateral vectors")
+{
+    const Xyz::Vector3D longitudinal(1, 2, 3);
+    const Xyz::Vector3D lateral(-1, 0.5, 0);
+    const auto q = to_quaternion(longitudinal, lateral);
+    CHECK_THAT(get_length(q), WithinAbs(1.0, 1e-9));
+    CHECK(are_equal(rotate(q, X_AXIS), normalize(longitudinal), 1e-9));
+    CHECK(are_equal(rotate(q, Y_AXIS), normalize(lateral), 1e-9));
+    CHECK(are_equal(rotate(q, Z_AXIS),
+                    normalize(cross(longitudinal, lateral)), 1e-9));
+}
+
+TEST_CASE("Quaternion: to_quaternion orthogonalizes the lateral vector")
+{
+    const Xyz::Vector3D longitudinal(1, 1, 0);
+    const Xyz::Vector3D lateral(0, 4, 2);
+    const auto q = to_quaternion(longitudinal, lateral);
+    const auto x = rotate(q, X_AXIS);
+    const auto y = rotate(q, Y_AXIS);
+    CHECK(are_equal(x, normalize(longitudinal), 1e-9));
+    // The y-axis is the lateral vector with its longitudinal part removed.
+    CHECK(are_equal(y, normalize(lateral - dot(lateral, x) * x), 1e-9));
+    CHECK_THAT(dot(x, y), WithinAbs(0.0, 1e-9));
+}
+
+TEST_CASE("Quaternion: to_quaternion of the standard axes is the identity")
+{
+    CHECK(are_equal(to_quaternion(X_AXIS, Y_AXIS), Xyz::QuaternionD(), MARGIN));
+}
+
+TEST_CASE("Quaternion: to_quaternion agrees with rotating both vectors")
+{
+    const auto q = make_quaternion(to_radians(75.0), Xyz::Vector3D(2, -1, 4));
+    const Xyz::Vector3D longitudinal(3, 1, -2);
+    const Xyz::Vector3D lateral(0, 2, 1);
+    // Rotating an orientation's vectors by q must give the orientation of q
+    // followed by the original one.
+    const auto q2 = to_quaternion(rotate(q, longitudinal), rotate(q, lateral));
+    CHECK(are_equivalent(q2, q * to_quaternion(longitudinal, lateral), 1e-9));
+}
+
+TEST_CASE("Quaternion: to_quaternion matches to_orientation")
+{
+    const Xyz::Vector3D longitudinal(1, 2, 3);
+    const Xyz::Vector3D lateral(-1, 0.5, 0);
+    const auto q = to_quaternion(longitudinal, lateral);
+    const auto o = Xyz::to_orientation(longitudinal, lateral);
+    CHECK(are_equivalent(q, to_quaternion(o), 1e-9));
+}
+
+TEST_CASE("Quaternion: to_quaternion rejects parallel vectors")
+{
+    CHECK_THROWS(to_quaternion(Xyz::Vector3D(1, 2, 3), Xyz::Vector3D(2, 4, 6)));
+    CHECK_THROWS(to_quaternion(Xyz::Vector3D(1, 2, 3), Xyz::Vector3D()));
+}
+
 TEST_CASE("Orientation: to_quaternion matches to_matrix")
 {
     const Xyz::Orientation3D orientations[] = {

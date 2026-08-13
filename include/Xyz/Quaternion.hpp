@@ -373,6 +373,36 @@ namespace Xyz
             m[2, 0], m[2, 1], m[2, 2]));
     }
 
+    /**
+     * @brief Returns the unit quaternion that rotates the x-axis onto
+     *  @a longitudinal and the y-axis onto the part of @a lateral that is
+     *  perpendicular to @a longitudinal.
+     *
+     * The z-axis ends up along the cross product of the two vectors. Neither
+     * vector has to be of unit length, and @a lateral doesn't have to be
+     * perpendicular to @a longitudinal, but the two must be non-zero and not
+     * parallel.
+     */
+    template <std::floating_point T>
+    [[nodiscard]]
+    Quaternion<T> to_quaternion(const Vector<T, 3>& longitudinal,
+                                const Vector<T, 3>& lateral)
+    {
+        auto z = cross(longitudinal, lateral);
+        if (get_length_squared(z) == 0)
+            XYZ_THROW("The vectors are zero or parallel.");
+        z = normalize(z);
+        const auto x = normalize(longitudinal);
+        // The part of the lateral vector that is perpendicular to the
+        // longitudinal one. Deriving it from z keeps the basis orthonormal.
+        const auto y = cross(z, x);
+        // The rotation matrix has the axis vectors as its columns.
+        return to_quaternion(Matrix<T, 3, 3>(
+            x[0], y[0], z[0],
+            x[1], y[1], z[1],
+            x[2], y[2], z[2]));
+    }
+
     using QuaternionF = Quaternion<float>;
     using QuaternionD = Quaternion<double>;
 }
