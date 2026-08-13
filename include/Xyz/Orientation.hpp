@@ -83,6 +83,9 @@ namespace Xyz
 
     namespace linear
     {
+        /**
+         * @brief Returns the rotation matrix that corresponds to @a o.
+         */
         template <std::floating_point T>
         [[nodiscard]]
         Matrix<T, 2, 2> to_matrix(const Orientation<T, 2>& o)
@@ -93,11 +96,23 @@ namespace Xyz
 
     namespace affine
     {
+        /**
+         * @brief Returns the transformation matrix that rotates by @a o and
+         *  then translates by @a offset.
+         */
         template <std::floating_point T>
         [[nodiscard]]
-        Matrix<T, 3, 3> to_matrix(const Orientation<T, 2>& o)
+        Matrix<T, 3, 3>
+        to_matrix(const Orientation<T, 2>& o,
+                  const Vector<std::type_identity_t<T>, 2>& offset = {})
         {
-            return rotate2(o.angle);
+            const auto c = std::cos(o.angle);
+            const auto s = std::sin(o.angle);
+            return {
+                c, -s, offset[0],
+                s, c, offset[1],
+                0, 0, 1
+            };
         }
     }
 
@@ -360,7 +375,7 @@ namespace Xyz
         [[nodiscard]]
         Matrix<T, 4, 4>
         to_matrix(const Orientation<T, 3>& o,
-                  const Vector<std::type_identity<T>, 3>& offset = {})
+                  const Vector<std::type_identity_t<T>, 3>& offset = {})
         {
             auto c_a = std::cos(o.yaw);
             auto s_a = std::sin(o.yaw);

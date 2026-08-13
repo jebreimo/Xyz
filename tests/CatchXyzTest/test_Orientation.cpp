@@ -6,6 +6,7 @@
 // License text is included with the source distribution.
 //****************************************************************************
 #include <Xyz/Orientation.hpp>
+#include <Xyz/TransformationMatrix.hpp>
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
 
@@ -125,4 +126,33 @@ TEST_CASE("Orientation: to_orientation from 3D vectors, no pitch, non-orthogonal
     CHECK_THAT(o.yaw, WithinAbs(to_radians(45), 1e-10));
     CHECK_THAT(o.pitch, WithinAbs(0, 1e-10));
     CHECK_THAT(o.roll, WithinAbs(atan2(1, sqrt(2)), 1e-10));
+}
+
+TEST_CASE("Orientation: 2D linear to_matrix has the axes as its columns")
+{
+    Xyz::Orientation2D o(to_radians(-135.0));
+    const auto m = Xyz::linear::to_matrix(o);
+    const auto [x, y] = get_vectors(o);
+
+    CHECK(are_equal(m * Xyz::Vector2D(1, 0), x, 1e-10));
+    CHECK(are_equal(m * Xyz::Vector2D(0, 1), y, 1e-10));
+    CHECK(are_equal(m, Xyz::linear::rotate2(o.angle), 1e-10));
+}
+
+TEST_CASE("Orientation: 2D affine to_matrix adds the translation")
+{
+    const auto angle = to_radians(35.0);
+    Xyz::Orientation2D o(angle);
+    const Xyz::Vector2D offset(7, 8);
+
+    CHECK(are_equal(Xyz::affine::to_matrix(o, offset),
+                    Xyz::affine::translate2(offset)
+                    * Xyz::affine::rotate2(angle), 1e-10));
+}
+
+TEST_CASE("Orientation: 2D affine to_matrix defaults to no translation")
+{
+    Xyz::Orientation2D o(to_radians(35.0));
+    CHECK(are_equal(Xyz::affine::to_matrix(o),
+                    Xyz::affine::rotate2(o.angle), 1e-10));
 }
