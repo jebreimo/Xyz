@@ -13,7 +13,7 @@ namespace Xyz
 {
     namespace affine
     {
-        template <typename T>
+        template <std::floating_point T>
         Matrix<T, 3, 3> rotate2(T angle)
         {
             auto c = std::cos(angle);
@@ -28,7 +28,7 @@ namespace Xyz
         /**
          * @brief Rotation around the z axis.
          */
-        template <typename T>
+        template <std::floating_point T>
         Matrix<T, 4, 4> rotate_z(T angle)
         {
             auto c = std::cos(angle);
@@ -41,7 +41,7 @@ namespace Xyz
             };
         }
 
-        template <typename T>
+        template <std::floating_point T>
         Matrix<T, 4, 4> rotate_y(T angle)
         {
             auto c = std::cos(angle);
@@ -54,7 +54,7 @@ namespace Xyz
             };
         }
 
-        template <typename T>
+        template <std::floating_point T>
         Matrix<T, 4, 4> rotate_x(T angle)
         {
             auto c = std::cos(angle);
@@ -67,8 +67,8 @@ namespace Xyz
             };
         }
 
-        template <typename T>
-        Matrix<T, 4, 4> rotate3(T angle, const Vector<T, 3>& axis)
+        template <std::floating_point T>
+        Matrix<T, 4, 4> rotate3(T angle, const Vector<std::type_identity_t<T>, 3>& axis)
         {
             auto c = std::cos(angle);
             auto s = std::sin(angle);
@@ -84,7 +84,7 @@ namespace Xyz
             };
         }
 
-        template <typename T>
+        template <std::floating_point T>
         Matrix<T, 3, 3> transposed_rotate2_hg(T angle)
         {
             auto c = std::cos(angle);
@@ -96,7 +96,7 @@ namespace Xyz
             };
         }
 
-        template <typename T>
+        template <std::floating_point T>
         Matrix<T, 4, 4> transposed_rotate_z_hg(T angle)
         {
             auto c = std::cos(angle);
@@ -109,7 +109,7 @@ namespace Xyz
             };
         }
 
-        template <typename T>
+        template <std::floating_point T>
         Matrix<T, 4, 4> transposed_rotate_y_hg(T angle)
         {
             auto c = std::cos(angle);
@@ -122,7 +122,7 @@ namespace Xyz
             };
         }
 
-        template <typename T>
+        template <std::floating_point T>
         Matrix<T, 4, 4> transposed_rotate_x_hg(T angle)
         {
             auto c = std::cos(angle);
@@ -135,8 +135,8 @@ namespace Xyz
             };
         }
 
-        template <typename T>
-        Matrix<T, 4, 4> transposed_rotate3_hg(T angle, const Vector<T, 3>& axis)
+        template <std::floating_point T>
+        Matrix<T, 4, 4> transposed_rotate3_hg(T angle, const Vector<std::type_identity_t<T>, 3>& axis)
         {
             auto c = std::cos(angle);
             auto s = std::sin(angle);
@@ -155,7 +155,7 @@ namespace Xyz
 
     namespace linear
     {
-        template <typename T>
+        template <std::floating_point T>
         Matrix<T, 2, 2> rotate2(T angle)
         {
             auto c = std::cos(angle);
@@ -166,7 +166,7 @@ namespace Xyz
             };
         }
 
-        template <typename T>
+        template <std::floating_point T>
         Matrix<T, 3, 3> rotate_z(T angle)
         {
             auto c = std::cos(angle);
@@ -190,8 +190,8 @@ namespace Xyz
             };
         }
 
-        template <typename T>
-        Matrix<T, 3, 3> rotate3(T angle, const Vector<T, 3>& axis)
+        template <std::floating_point T>
+        Matrix<T, 3, 3> rotate3(T angle, const Vector<std::type_identity_t<T>, 3>& axis)
         {
             auto c = std::cos(angle);
             auto s = std::sin(angle);
