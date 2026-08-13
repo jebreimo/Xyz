@@ -85,10 +85,11 @@ TEST_CASE("Quaternion: to_matrix matches the axis rotation matrices")
 
     CHECK(are_equal(Xyz::linear::to_matrix(make_quaternion(angle, Z_AXIS)),
                     Xyz::linear::rotate_z(angle), MARGIN));
+    CHECK(are_equal(Xyz::linear::to_matrix(make_quaternion(angle, Y_AXIS)),
+                    Xyz::linear::rotate_y(angle), MARGIN));
     CHECK(are_equal(Xyz::linear::to_matrix(make_quaternion(angle, X_AXIS)),
                     Xyz::linear::rotate_x(angle), MARGIN));
 
-    // There is no linear::rotate_y, so compare with the generic axis rotation.
     for (const auto& axis : {X_AXIS, Y_AXIS, Z_AXIS})
     {
         CAPTURE(axis);

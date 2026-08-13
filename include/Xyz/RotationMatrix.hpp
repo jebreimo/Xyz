@@ -178,7 +178,19 @@ namespace Xyz
             };
         }
 
-        template <typename T>
+        template <std::floating_point T>
+        Matrix<T, 3, 3> rotate_y(T angle)
+        {
+            auto c = std::cos(angle);
+            auto s = std::sin(angle);
+            return {
+                c, 0, s,
+                0, 1, 0,
+                -s, 0, c
+            };
+        }
+
+        template <std::floating_point T>
         Matrix<T, 3, 3> rotate_x(T angle)
         {
             auto c = std::cos(angle);
