@@ -100,29 +100,35 @@ namespace Xyz
         using P = Pgram<ValueType, 3>;
         using R = Rectangle<ValueType>;
         const auto [x, y, z] = get_vectors(cuboid);
+        // Left face (-x)
         build_mesh(builder,
-                   P(cuboid.placement.origin + y, -y, z),
+                   P(cuboid.placement.origin - z, z, y),
                    tex_rect_func ? tex_rect_func(0) : R{},
                    base_index);
+        // Front face (+z)
         build_mesh(builder,
-                   P(cuboid.placement.origin, x, z),
+                   P(cuboid.placement.origin, x, y),
                    tex_rect_func ? tex_rect_func(1) : R{},
                    base_index + 4);
+        // Right face (+x)
         build_mesh(builder,
-                   P(cuboid.placement.origin + x, y, z),
+                   P(cuboid.placement.origin + x, -z, y),
                    tex_rect_func ? tex_rect_func(2) : R{},
                    base_index + 8);
+        // Back face (-z)
         build_mesh(builder,
-                   P(cuboid.placement.origin + x + y, -x, z),
+                   P(cuboid.placement.origin + x - z, -x, y),
                    tex_rect_func ? tex_rect_func(3) : R{},
                    base_index + 12);
+        // Bottom face (-y)
         build_mesh(builder,
-                   P(cuboid.placement.origin + z, x, y),
-                   tex_rect_func ? tex_rect_func(4) : R{},
-                   base_index + 16);
-        build_mesh(builder,
-                   P(cuboid.placement.origin + y, x, -y),
+                   P(cuboid.placement.origin -z, x, z),
                    tex_rect_func ? tex_rect_func(5) : R{},
+                   base_index + 16);
+        // Top face (+y)
+        build_mesh(builder,
+                   P(cuboid.placement.origin + y, x, -z),
+                   tex_rect_func ? tex_rect_func(4) : R{},
                    base_index + 20);
     }
 }
