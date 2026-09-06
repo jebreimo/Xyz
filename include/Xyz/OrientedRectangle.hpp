@@ -33,22 +33,6 @@ namespace Xyz
             : placement(placement),
               size(size)
         {}
-
-        [[nodiscard]] Vector<T, N> length_vector() const
-        {
-            return size.x() * get_x_vector(placement.orientation);
-        }
-
-        [[nodiscard]] Vector<T, N> width_vector() const
-        {
-            return size.y() * get_y_vector(placement.orientation);
-        }
-
-        [[nodiscard]] Vector<T, N> normal_vector() const
-        {
-            static_assert(N == 3, "Normal vector is only defined for 3D rectangles");
-            return get_z_vector(placement.orientation);
-        }
     };
 
     template <std::floating_point T, unsigned N>
@@ -100,29 +84,32 @@ namespace Xyz
     [[nodiscard]]
     Vector<T, 2> get_center(const OrientedRectangle<T, N>& rect)
     {
-        return rect.placement.origin + (rect.length_vector() + rect.width_vector()) / T(2);
+        const auto [x, y] = get_vectors(rect);
+        return rect.placement.origin + (x + y) / T(2);
     }
 
     template <std::floating_point T, unsigned N>
     void set_center(OrientedRectangle<T, N>& rect,
                     const Vector<std::type_identity_t<T>, 2>& center)
     {
-        rect.placement.origin = center - (rect.length_vector() + rect.width_vector()) / T(2);
+        const auto [x, y] = get_vectors(rect);
+        rect.placement.origin = center - (x + y) / T(2);
     }
 
     template <std::floating_point T, unsigned N>
     [[nodiscard]]
     OrientedRectangle<T, N> normalize(OrientedRectangle<T, N> rect)
     {
+        const auto [x, y] = get_vectors(rect);
         if (rect.size.x() < 0)
         {
-            rect.placement.origin += rect.length_vector();
+            rect.placement.origin += x;
             rect.size.x() = -rect.size.x();
         }
 
         if (rect.size.y() < 0)
         {
-            rect.placement.origin += rect.width_vector();
+            rect.placement.origin += y;
             rect.size.y() = -rect.size.y();
         }
 
@@ -135,7 +122,7 @@ namespace Xyz
             if (rect.placement.orientation.angle <= T(-0.5) * pi
                 || T(0.5) * pi <= rect.placement.orientation.angle)
             {
-                rect.placement.origin += rect.length_vector() + rect.width_vector();
+                rect.placement.origin += x + y;
                 if (rect.placement.orientation.angle < 0)
                     rect.placement.orientation.angle += pi;
                 else

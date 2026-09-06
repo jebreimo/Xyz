@@ -88,6 +88,14 @@ namespace Xyz
             << ", " << p.edge1 << "}";
     }
 
+    template <typename T, unsigned N>
+    [[nodiscard]]
+    constexpr std::pair<Vector<T, N>, Vector<T, N>>
+    get_vectors(const Pgram<T, N>& p)
+    {
+        return {p.edge0, p.edge1};
+    }
+
     namespace Details
     {
         template <std::floating_point T>

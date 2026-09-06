@@ -24,18 +24,16 @@ namespace Xyz
                     const Rectangle<ValueType>& tex_rect = {},
                     std::type_identity_t<IndexType> base_index = {})
     {
-        const auto& v0 = pgram.edge0;
-        const auto& v1 = pgram.edge1;
-
+        const auto [x, y] = get_vectors(pgram);
         builder.coords.reserve(builder.coords.size() + 4);
         builder.coords.add(pgram.origin);
-        builder.coords.add(pgram.origin + v0);
-        builder.coords.add(pgram.origin + v0 + v1);
-        builder.coords.add(pgram.origin + v1);
+        builder.coords.add(pgram.origin + x);
+        builder.coords.add(pgram.origin + x + y);
+        builder.coords.add(pgram.origin + y);
 
         if (builder.normals)
         {
-            builder.normals->add_n(normalize(cross(v0, v1)), 4);
+            builder.normals->add_n(normalize(cross(x, y)), 4);
         }
 
         if (builder.tangents)
@@ -48,17 +46,17 @@ namespace Xyz
             // rectangle mirrors exactly one of the two axes.
             const auto u = tex_rect.size.x() < 0 ? ValueType(-1) : ValueType(1);
             const auto v = tex_rect.size.y() < 0 ? ValueType(-1) : ValueType(1);
-            builder.tangents->add_n(make_vector4(normalize(v0) * u, u * v), 4);
+            builder.tangents->add_n(make_vector4(normalize(x) * u, u * v), 4);
         }
 
         if (builder.tex_coords)
         {
             builder.tex_coords->reserve(builder.tex_coords->size() + 4);
-            const auto [tv0, tv1] = get_vectors(tex_rect);
+            const auto [tx, ty] = get_vectors(tex_rect);
             builder.tex_coords->add(tex_rect.origin);
-            builder.tex_coords->add(tex_rect.origin + tv0);
+            builder.tex_coords->add(tex_rect.origin + tx);
             builder.tex_coords->add(tex_rect.origin + tex_rect.size);
-            builder.tex_coords->add(tex_rect.origin + tv1);
+            builder.tex_coords->add(tex_rect.origin + ty);
         }
 
         builder.indexes.reserve(builder.indexes.size() + 6);

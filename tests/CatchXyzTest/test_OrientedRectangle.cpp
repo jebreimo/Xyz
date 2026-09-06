@@ -61,9 +61,12 @@ TEST_CASE("OrientedRectangle: 3D rectangle with rotation")
     const auto sq2 = sqrt(2) / 2;
     const auto sq3 = sqrt(3) / 2;
     const R3D rect({{10, 10, 10}, {PI / 4, PI / 6, PI / 2}}, {10, 10});
-    REQUIRE(are_equal(rect.length_vector(), V(sq2 * sq3, sq2 * sq3, -0.5) * 10));
-    REQUIRE(are_equal(rect.width_vector(), V(sqrt(25.0 / 2), sqrt(25.0 / 2), sq3 * 10)));
-    REQUIRE(are_equal(rect.normal_vector(), V(sq2, -sq2, 0)));
+    const auto [x, y] = Xyz::get_vectors(rect);
+
+    REQUIRE(are_equal(x, V(sq2 * sq3, sq2 * sq3, -0.5) * 10));
+    REQUIRE(are_equal(y, V(sqrt(25.0 / 2), sqrt(25.0 / 2), sq3 * 10)));
+    auto normal = normalize(cross(x, y));
+    REQUIRE(are_equal(normal, V(sq2, -sq2, 0)));
 }
 
 TEST_CASE("OrientedRectangle: 3D rectangle without rotation")
@@ -77,7 +80,8 @@ TEST_CASE("OrientedRectangle: 3D rectangle without rotation")
     REQUIRE(are_equal(o + x, V(-1, -1, 1)));
     REQUIRE(are_equal(o + x + y, V(-1, 1, 1)));
     REQUIRE(are_equal(o + y, V(1, 1, 1)));
-    REQUIRE(are_equal(rect.normal_vector(), V(0, 0, 1)));
+    auto normal = normalize(cross(x, y));
+    REQUIRE(are_equal(normal, V(0, 0, -1)));
 }
 
 TEST_CASE("OrientedRectangle: 3D rectangle with roll")
@@ -91,5 +95,6 @@ TEST_CASE("OrientedRectangle: 3D rectangle with roll")
     REQUIRE(are_equal(o + x, V(-1, 1, 1)));
     REQUIRE(are_equal(o + x + y, V(-1, -1, 1)));
     REQUIRE(are_equal(o + y, V(1, -1, 1)));
-    REQUIRE(are_equal(rect3.normal_vector(), V(0, 0, -1)));
+    auto normal = normalize(cross(x, y));
+    REQUIRE(are_equal(normal, V(0, 0, 1)));
 }
