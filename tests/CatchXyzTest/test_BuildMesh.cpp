@@ -86,12 +86,12 @@ TEST_CASE("BuildMesh: make mesh from OrientedCuboid")
 
     // The faces are added in the order left, front, right, back, top, bottom.
     constexpr Xyz::Vector3F expected_coords[24] = {
-        {0, 0, -4}, {0, 0, 0}, {0, 3, 0}, {0, 3, -4}, // left (x = 0)
-        {0, 0, 0}, {2, 0, 0}, {2, 3, 0}, {0, 3, 0}, // front (z = 0)
-        {2, 0, 0}, {2, 0, -4}, {2, 3, -4}, {2, 3, 0}, // right (x = 2)
-        {2, 0, -4}, {0, 0, -4}, {0, 3, -4}, {2, 3, -4}, // back (z = -4)
-        {0, 0, -4}, {2, 0, -4}, {2, 0, 0}, {0, 0, 0},  // bottom (y = 0)
-        {0, 3, 0}, {2, 3, 0}, {2, 3, -4}, {0, 3, -4}, // top (y = 3)
+        {0, 0, 0}, {0, 0, 4}, {0, 3, 4}, {0, 3, 0}, // left (x = 0)
+        {0, 0, 4}, {2, 0, 4}, {2, 3, 4}, {0, 3, 4}, // front (z = 4)
+        {2, 0, 4}, {2, 0, 0}, {2, 3, 0}, {2, 3, 4}, // right (x = 2)
+        {2, 0, 0}, {0, 0, 0}, {0, 3, 0}, {2, 3, 0}, // back (z = 0)
+        {0, 0, 0}, {2, 0, 0}, {2, 0, 4}, {0, 0, 4}, // bottom (y = 0)
+        {0, 3, 4}, {2, 3, 4}, {2, 3, 0}, {0, 3, 0}, // top (y = 3)
     };
 
     // The normals are unit vectors pointing out of the cuboid.
