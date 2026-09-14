@@ -367,16 +367,16 @@ namespace Xyz
         [[nodiscard]]
         Matrix<T, 3, 3> to_matrix(const Orientation<T, 3>& o)
         {
-            auto c_a = std::cos(o.yaw);
-            auto s_a = std::sin(o.yaw);
-            auto c_b = std::cos(o.pitch);
-            auto s_b = std::sin(o.pitch);
-            auto c_c = std::cos(o.roll);
-            auto s_c = std::sin(o.roll);
+            auto c_y = std::cos(o.yaw);
+            auto s_y = std::sin(o.yaw);
+            auto c_p = std::cos(o.pitch);
+            auto s_p = std::sin(o.pitch);
+            auto c_r = std::cos(o.roll);
+            auto s_r = std::sin(o.roll);
             return {
-                c_a * c_b, c_a * s_b * s_c - s_a * c_c, c_a * s_b * c_c + s_a * s_c,
-                s_a * c_b, s_a * s_b * s_c + c_a * c_c, s_a * s_b * c_c - c_a * s_c,
-                -s_b, c_b * s_c, c_b * c_c
+                c_y * c_p, c_y * s_p * s_r - s_y * c_r, c_y * s_p * c_r + s_y * s_r,
+                s_y * c_p, s_y * s_p * s_r + c_y * c_r, s_y * s_p * c_r - c_y * s_r,
+                -s_p, c_p * s_r, c_p * c_r
             };
         }
     }
@@ -389,16 +389,16 @@ namespace Xyz
         to_matrix(const Orientation<T, 3>& o,
                   const Vector<std::type_identity_t<T>, 3>& offset = {})
         {
-            auto c_a = std::cos(o.yaw);
-            auto s_a = std::sin(o.yaw);
-            auto c_b = std::cos(o.pitch);
-            auto s_b = std::sin(o.pitch);
-            auto c_c = std::cos(o.roll);
-            auto s_c = std::sin(o.roll);
+            auto c_y = std::cos(o.yaw);
+            auto s_y = std::sin(o.yaw);
+            auto c_p = std::cos(o.pitch);
+            auto s_p = std::sin(o.pitch);
+            auto c_r = std::cos(o.roll);
+            auto s_r = std::sin(o.roll);
             return {
-                c_a * c_b, c_a * s_b * s_c - s_a * c_c, c_a * s_b * c_c + s_a * s_c, offset.x,
-                s_a * c_b, s_a * s_b * s_c + c_a * c_c, s_a * s_b * c_c - c_a * s_c, offset.y,
-                -s_b, c_b * s_c, c_b * c_c, offset.z,
+                c_y * c_p, c_y * s_p * s_r - s_y * c_r, c_y * s_p * c_r + s_y * s_r, offset.x,
+                s_y * c_p, s_y * s_p * s_r + c_y * c_r, s_y * s_p * c_r - c_y * s_r, offset.y,
+                -s_p, c_p * s_r, c_p * c_r, offset.z,
                 0, 0, 0, 1
             };
         }
