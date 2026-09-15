@@ -18,9 +18,9 @@ namespace Xyz
         X = 0,
         Y = 1,
         Z = 2,
-        NEG_X = 4,
-        NEG_Y = 5,
-        NEG_Z = 6
+        NEGATIVE_X = 4,
+        NEGATIVE_Y = 5,
+        NEGATIVE_Z = 6
     };
 
     constexpr Axis operator-(Axis axis)
@@ -33,21 +33,21 @@ namespace Xyz
         return (static_cast<uint8_t>(axis) & 0x4) != 0;
     }
 
-    template <typename T, unsigned N>
+    template<typename T, unsigned N>
     struct AxisSwizzler;
 
-    template <typename T>
+    template<typename T>
     struct AxisSwizzler<T, 3>
     {
-        uint8_t indexes[3];
-        int8_t signs[3];
+        unsigned indexes[3];
+        T signs[3];
 
         Vector<T, 3> operator()(const Vector<T, 3>& v) const
         {
             return {
-                static_cast<T>(signs[0]) * v[indexes[0]],
-                static_cast<T>(signs[1]) * v[indexes[1]],
-                static_cast<T>(signs[2]) * v[indexes[2]]
+                signs[0] * v[indexes[0]],
+                signs[1] * v[indexes[1]],
+                signs[2] * v[indexes[2]]
             };
         }
     };
@@ -57,9 +57,10 @@ namespace Xyz
     public:
         AxisSystem() = default;
 
-        AxisSystem(Axis primary, Axis secondary, Axis up)
-            : flags_(encode(primary, secondary, up))
-        {}
+        AxisSystem(Axis forward, Axis side, Axis up)
+            : flags_(encode(forward, side, up))
+        {
+        }
 
         [[nodiscard]]
         std::tuple<Axis, Axis, Axis> get_axes() const
@@ -67,51 +68,53 @@ namespace Xyz
             return decode(flags_);
         }
 
-        template <typename T>
+        template<typename T>
         [[nodiscard]]
         AxisSwizzler<T, 3> get_swizzler() const
         {
-            const auto [primary, secondary, up] = decode(flags_);
-            return {
-                {static_cast<uint8_t>(primary) & 3,
-                 static_cast<uint8_t>(secondary) & 3,
-                 static_cast<uint8_t>(up) & 3},
-                {is_negative(primary) ? -1 : 1,
-                 is_negative(secondary) ? -1 : 1,
-                 is_negative(up) ? -1 : 1}
-            };
+            const auto [forward, side, up] = decode(flags_);
+
+            const auto f = static_cast<unsigned>(forward) & 3;
+            const auto s = static_cast<unsigned>(side) & 3;
+            const auto u = static_cast<unsigned>(up) & 3;
+            AxisSwizzler<T, 3> swizzler;
+            swizzler.indexes[f] = 0;
+            swizzler.indexes[s] = 1;
+            swizzler.indexes[u] = 2;
+            swizzler.signs[f] = is_negative(forward) ? T(-1) : T(1);
+            swizzler.signs[s] = is_negative(side) ? T(-1) : T(1);
+            swizzler.signs[u] = is_negative(up) ? T(-1) : T(1);
+
+            return swizzler;
         }
 
     private:
-        static uint8_t encode(Axis primary, Axis secondary, Axis up)
+        static uint8_t encode(Axis forward, Axis side, Axis up)
         {
-            const auto p = static_cast<uint8_t>(primary);
-            const auto s = static_cast<uint8_t>(secondary);
+            const auto f = static_cast<uint8_t>(forward);
+            const auto s = static_cast<uint8_t>(side);
             const auto u = static_cast<uint8_t>(up);
 
-            if ((p & 3) == (s & 3) || (p & 3) == (u & 3) || (s & 3) == (u & 3))
-                XYZ_THROW("Axes must be different.");
+            if ((f & 3) == (s & 3) || (f & 3) == (u & 3) || (s & 3) == (u & 3))
+                XYZ_THROW("Forward, side, and up axes must be different.");
 
-            const uint8_t axes = (p & 3) * 2 + (1 + (s & 3) - (p & 3)) % 2;
-            const uint8_t signs = (p & 4) | ((s & 4) << 1) | ((u & 4) << 2);
+            const uint8_t axes = (f & 3) * 2 + (2 + (s & 3) - (f & 3)) % 3;
+            const uint8_t signs = (f & 4) | ((s & 4) << 1) | ((u & 4) << 2);
             return axes | signs << 1;
         }
 
         static std::tuple<Axis, Axis, Axis> decode(uint8_t flags)
         {
-            auto axes = flags & 0x7;
-            auto signs = (flags >> 3) & 0x7;
+            const uint8_t axes = flags & 0x7;
+            const uint8_t signs = (flags >> 3) & 0x7;
 
-            const uint8_t unsigned_primary = axes / 2;
-            const auto primary = static_cast<Axis>(unsigned_primary | ((signs & 1) << 2));
-            axes %= 2;
-            signs >>= 1;
-            const auto unsigned_secondary = (unsigned_primary + 1 + axes) % 3;
-            const auto secondary = static_cast<Axis>(unsigned_secondary | ((signs & 1) << 2));
-            signs >>= 1;
-            const auto up = static_cast<Axis>((unsigned_primary + unsigned_secondary + 1) % 3 | ((signs & 1) << 2));
+            const uint8_t unsigned_f = axes / 2;
+            const uint8_t unsigned_s = (unsigned_f + 1 + axes % 2) % 3;
+            const auto f = static_cast<Axis>(unsigned_f | ((signs & 1) << 2));
+            const auto s = static_cast<Axis>(unsigned_s | ((signs & 2) << 1));
+            const auto u = static_cast<Axis>(3 - (unsigned_f + unsigned_s) | (signs & 4));
 
-            return {primary, secondary, up};
+            return {f, s, u};
         }
 
         uint8_t flags_ = 0;

@@ -7,6 +7,8 @@
 //****************************************************************************
 #pragma once
 #include <concepts>
+
+#include "AxisSystem.hpp"
 #include "Quaternion.hpp"
 #include "RotationMatrix.hpp"
 #include "Utilities.hpp"
@@ -176,6 +178,16 @@ namespace Xyz
                          s_y * s_p * c_r - c_y * s_r,
                          c_p * c_r}
         };
+    }
+
+    template <std::floating_point T>
+    [[nodiscard]]
+    std::tuple<Vector<T, 3>, Vector<T, 3>, Vector<T, 3>>
+    get_vectors(const Orientation<T, 3>& o, AxisSystem axis_system)
+    {
+        const auto [f, s, u] = get_vectors(o);
+        auto swizzler = axis_system.get_swizzler<T>();
+        return {swizzler(f), swizzler(s), swizzler(u)};
     }
 
     template <std::floating_point T>

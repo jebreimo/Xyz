@@ -13,12 +13,12 @@
 TEST_CASE("AxisSystem: operator-")
 {
     using Xyz::Axis;
-    CHECK(-Axis::X == Axis::NEG_X);
-    CHECK(-Axis::Y == Axis::NEG_Y);
-    CHECK(-Axis::Z == Axis::NEG_Z);
-    CHECK(-Axis::NEG_X == Axis::X);
-    CHECK(-Axis::NEG_Y == Axis::Y);
-    CHECK(-Axis::NEG_Z == Axis::Z);
+    CHECK(-Axis::X == Axis::NEGATIVE_X);
+    CHECK(-Axis::Y == Axis::NEGATIVE_Y);
+    CHECK(-Axis::Z == Axis::NEGATIVE_Z);
+    CHECK(-Axis::NEGATIVE_X == Axis::X);
+    CHECK(-Axis::NEGATIVE_Y == Axis::Y);
+    CHECK(-Axis::NEGATIVE_Z == Axis::Z);
 }
 
 TEST_CASE("AxisSystem: is_negative")
@@ -27,9 +27,9 @@ TEST_CASE("AxisSystem: is_negative")
     CHECK(!Xyz::is_negative(Axis::X));
     CHECK(!Xyz::is_negative(Axis::Y));
     CHECK(!Xyz::is_negative(Axis::Z));
-    CHECK(Xyz::is_negative(Axis::NEG_X));
-    CHECK(Xyz::is_negative(Axis::NEG_Y));
-    CHECK(Xyz::is_negative(Axis::NEG_Z));
+    CHECK(Xyz::is_negative(Axis::NEGATIVE_X));
+    CHECK(Xyz::is_negative(Axis::NEGATIVE_Y));
+    CHECK(Xyz::is_negative(Axis::NEGATIVE_Z));
 }
 
 TEST_CASE("AxisSystem: AxisSwizzler")
@@ -85,9 +85,18 @@ TEST_CASE("AxisSystem: AxisSystem constructor")
     {
         AxisSystem axis_system(-Axis::Z, Axis::X, Axis::Y);
         auto [primary, secondary, up] = axis_system.get_axes();
-        CHECK(primary == Axis::NEG_Z);
+        CHECK(primary == Axis::NEGATIVE_Z);
         CHECK(secondary == Axis::X);
         CHECK(up == Axis::Y);
+    }
+
+    SECTION("Valid axis system {Z, -Y, -X}")
+    {
+        AxisSystem axis_system(Axis::Z, -Axis::Y, -Axis::X);
+        auto [primary, secondary, up] = axis_system.get_axes();
+        CHECK(primary == Axis::Z);
+        CHECK(secondary == Axis::NEGATIVE_Y);
+        CHECK(up == Axis::NEGATIVE_X);
     }
 
     SECTION("Invalid axis system: primary and secondary axes are the same")
@@ -103,5 +112,21 @@ TEST_CASE("AxisSystem: AxisSystem constructor")
     SECTION("Invalid axis system: secondary and up axes are the same")
     {
         CHECK_THROWS_AS(AxisSystem(Axis::X, Axis::Y, Axis::Y), Xyz::XyzException);
+    }
+}
+
+TEST_CASE("AxisSystem: get_swizzler")
+{
+    using Xyz::Axis;
+    using Xyz::AxisSystem;
+    Xyz::Vector3D v{1, 2, 3};
+
+    SECTION("Swizzle to {-Y, X, -Z}")
+    {
+        auto swizzler = AxisSystem(-Axis::Y, Axis::X, -Axis::Z).get_swizzler<double>();
+        auto result = swizzler(v);
+        CHECK_THAT(result[0], Catch::Matchers::WithinAbs(2, 1e-6));
+        CHECK_THAT(result[1], Catch::Matchers::WithinAbs(-1, 1e-6));
+        CHECK_THAT(result[2], Catch::Matchers::WithinAbs(-3, 1e-6));
     }
 }
