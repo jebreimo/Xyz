@@ -81,10 +81,9 @@ namespace Xyz
 
     /**
      * @brief Builds a mesh for an OrientedCuboid.
-     * @note The front face is the one pointing in the direction of the
-     *       cuboid's local z-axis, and the top face is the one pointing in
-     *       the direction of the cuboid's local y-axis. The left face is the
-     *       one pointing in the direction of the cuboid's local -x-axis.
+     * @note Unless the cuboid is rotated, the front face is the one whose
+     *       normal points in the direction of the x-axis, and the top face's
+     *       normal points in the direction of the z-axis.
      * @param builder The mesh builder to use.
      * @param cuboid The OrientedCuboid to build a mesh for.
      * @param tex_rect_func A function that returns the texture rectangle for each
@@ -104,34 +103,34 @@ namespace Xyz
         using P = Pgram<ValueType, 3>;
         using R = Rectangle<ValueType>;
         const auto [x, y, z] = get_vectors(cuboid);
-        // Left face (-x)
-        build_mesh(builder,
-                   P(cuboid.placement.origin, z, y),
-                   tex_rect_func ? tex_rect_func(0) : R{},
-                   base_index + 0);
-        // Front face (+z)
-        build_mesh(builder,
-                   P(cuboid.placement.origin + z, x, y),
-                   tex_rect_func ? tex_rect_func(1) : R{},
-                   base_index + 4);
-        // Right face (+x)
-        build_mesh(builder,
-                   P(cuboid.placement.origin + x + z, -z, y),
-                   tex_rect_func ? tex_rect_func(2) : R{},
-                   base_index + 8);
-        // Back face (-z)
-        build_mesh(builder,
-                   P(cuboid.placement.origin + x, -x, y),
-                   tex_rect_func ? tex_rect_func(3) : R{},
-                   base_index + 12);
-        // Bottom face (-y)
+        // Left face (-y)
         build_mesh(builder,
                    P(cuboid.placement.origin, x, z),
+                   tex_rect_func ? tex_rect_func(0) : R{},
+                   base_index + 0);
+        // Front face (+x)
+        build_mesh(builder,
+                   P(cuboid.placement.origin + x, y, z),
+                   tex_rect_func ? tex_rect_func(1) : R{},
+                   base_index + 4);
+        // Right face (+y)
+        build_mesh(builder,
+                   P(cuboid.placement.origin + x + y, -x, z),
+                   tex_rect_func ? tex_rect_func(2) : R{},
+                   base_index + 8);
+        // Back face (-x)
+        build_mesh(builder,
+                   P(cuboid.placement.origin + y, -y, z),
+                   tex_rect_func ? tex_rect_func(3) : R{},
+                   base_index + 12);
+        // Bottom face (-z)
+        build_mesh(builder,
+                   P(cuboid.placement.origin + y, x, -y),
                    tex_rect_func ? tex_rect_func(4) : R{},
                    base_index + 16);
-        // Top face (+y)
+        // Top face (+z)
         build_mesh(builder,
-                   P(cuboid.placement.origin + y + z, x, -z),
+                   P(cuboid.placement.origin + z, x, y),
                    tex_rect_func ? tex_rect_func(5) : R{},
                    base_index + 20);
     }

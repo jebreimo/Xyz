@@ -86,25 +86,25 @@ TEST_CASE("BuildMesh: make mesh from OrientedCuboid")
 
     // The faces are added in the order left, front, right, back, top, bottom.
     constexpr Xyz::Vector3F expected_coords[24] = {
-        {0, 0, 0}, {0, 0, 4}, {0, 3, 4}, {0, 3, 0}, // left (x = 0)
-        {0, 0, 4}, {2, 0, 4}, {2, 3, 4}, {0, 3, 4}, // front (z = 4)
-        {2, 0, 4}, {2, 0, 0}, {2, 3, 0}, {2, 3, 4}, // right (x = 2)
-        {2, 0, 0}, {0, 0, 0}, {0, 3, 0}, {2, 3, 0}, // back (z = 0)
-        {0, 0, 0}, {2, 0, 0}, {2, 0, 4}, {0, 0, 4}, // bottom (y = 0)
-        {0, 3, 4}, {2, 3, 4}, {2, 3, 0}, {0, 3, 0}, // top (y = 3)
+        {0, 0, 0}, {2, 0, 0}, {2, 0, 4}, {0, 0, 4}, // left (y = 0)
+        {2, 0, 0}, {2, 3, 0}, {2, 3, 4}, {2, 0, 4}, // front (x = 2)
+        {2, 3, 0}, {0, 3, 0}, {0, 3, 4}, {2, 3, 4}, // right (y = 3)
+        {0, 3, 0}, {0, 0, 0}, {0, 0, 4}, {0, 3, 4}, // back (x = 0)
+        {0, 3, 0}, {2, 3, 0}, {2, 0, 0}, {0, 0, 0}, // bottom (z = 0)
+        {0, 0, 4}, {2, 0, 4}, {2, 3, 4}, {0, 3, 4}, // top (z = 4)
     };
 
     // The normals are unit vectors pointing out of the cuboid.
     constexpr Xyz::Vector3F expected_normals[6] = {
-        {-1, 0, 0}, {0, 0, 1}, {1, 0, 0},
-        {0, 0, -1}, {0, -1, 0}, {0, 1, 0}
+        {0, -1, 0}, {1, 0, 0}, {0, 1, 0},
+        {-1, 0, 0}, {0, 0, -1}, {0, 0, 1}
     };
 
     // The tangents are unit vectors along the face's first edge, with the
     // handedness in the fourth component.
     constexpr Xyz::Vector4F expected_tangents[6] = {
-        {0, 0, 1, 1}, {1, 0, 0, 1}, {0, 0, -1, 1},
-        {-1, 0, 0, 1}, {1, 0, 0, 1}, {1, 0, 0, 1}
+        {1, 0, 0, 1}, {0, 1, 0, 1}, {-1, 0, 0, 1},
+        {0, -1, 0, 1}, {1, 0, 0, 1}, {1, 0, 0, 1}
     };
 
     for (size_t i = 0; i < 24; ++i)
