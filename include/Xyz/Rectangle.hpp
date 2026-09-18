@@ -15,14 +15,8 @@ namespace Xyz
     class Rectangle
     {
     public:
-        Vector<T, 2> origin;
-        Vector<T, 2> size;
-
-        constexpr Rectangle() = default;
-
-        constexpr Rectangle(const Vector<T, 2>& origin, const Vector<T, 2>& size)
-            : origin(origin), size(size)
-        {}
+        Vector<T, 2> origin = {};
+        Vector<T, 2> size = {};
     };
 
     template <typename T>

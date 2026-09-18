@@ -22,17 +22,9 @@ namespace Xyz
          * @brief The origin of the rectangle and the orientation of the
          *  length vector (pitch and yaw), and the width vector (roll).
          */
-        Placement<T, N> placement;
+        Placement<T, N> placement = {};
 
-        Vector<T, 2> size;
-
-        OrientedRectangle() = default;
-
-        OrientedRectangle(const Placement<T, N>& placement,
-                          const Vector<T, 2>& size)
-            : placement(placement),
-              size(size)
-        {}
+        Vector<T, 2> size = {};
     };
 
     template <std::floating_point T, unsigned N>
