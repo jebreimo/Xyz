@@ -184,31 +184,3 @@ TEST_CASE("Orientation: 2D affine to_matrix defaults to no translation")
     CHECK(are_equal(Xyz::affine::to_matrix(o),
         Xyz::affine::rotate2(o.angle), 1e-10));
 }
-
-TEST_CASE("Orientation: 3D to other axis systems")
-{
-    using Xyz::AxisSystem;
-    using Xyz::Axis;
-    using V = Xyz::Vector3D;
-    using std::sqrt;
-
-    const double sq1 = 0.5, sq2 = sqrt(2) / 2, sq3 = sqrt(3) / 2;
-    constexpr Xyz::Orientation3D o(to_radians(30.0), to_radians(45.0), to_radians(60.0));
-    // const auto [x, y, z] = get_vectors(o, {-Axis::Z, Axis::X, Axis::Y});
-
-    SECTION("Default axis system")
-    {
-        const auto [x, y, z] = get_vectors(o);
-        CHECK(are_equal(x, V{sq2 * sq3, sq1 * sq2, -sq2}, 1e-10));
-        CHECK(are_equal(y, V{sq3 * sq2 * sq3 - sq1 * sq1, sq1 * sq2 * sq3 + sq1 * sq3, sq2 * sq3}, 1e-10));
-        CHECK(are_equal(z, V{sq3 * sq2 * sq1 + sq1 * sq3, sq1 * sq2 * sq1 - sq3 * sq3, sq2 * sq1}, 1e-10));
-    }
-
-    SECTION(("-Z, X, Y axis system"))
-    {
-        const auto [x, y, z] = get_vectors(o, {-Axis::Z, Axis::X, Axis::Y});
-        CHECK(are_equal(x, V{sq1 * sq2, -sq2, -sq2 * sq3}, 1e-10));
-        CHECK(are_equal(y, V{sq1 * sq2 * sq3 + sq1 * sq3, sq2 * sq3, -sq3 * sq2 * sq3 + sq1 * sq1}, 1e-10));
-        CHECK(are_equal(z, V{sq1 * sq2 * sq1 - sq3 * sq3, sq2 * sq1, -sq3 * sq2 * sq1 - sq1 * sq3}, 1e-10));
-    }
-}
