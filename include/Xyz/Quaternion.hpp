@@ -7,6 +7,7 @@
 //****************************************************************************
 #pragma once
 #include <concepts>
+#include <tuple>
 #include "Constants.hpp"
 #include "Matrix.hpp"
 #include "Vector.hpp"
@@ -256,6 +257,29 @@ namespace Xyz
         if (length == 0)
             return {1, 0, 0};
         return q.v / length;
+    }
+
+    /**
+     * @brief Returns the vectors that the x-, y- and z-axes are rotated
+     *  onto by @a q, i.e. the columns of the corresponding rotation matrix.
+     */
+    template <std::floating_point T>
+    [[nodiscard]]
+    std::tuple<Vector<T, 3>, Vector<T, 3>, Vector<T, 3>>
+    get_vectors(const Quaternion<T>& q)
+    {
+        const auto [x, y, z] = q.v;
+        // Scaling by the squared length makes the vectors unit length even
+        // when the quaternion isn't.
+        const auto s = T(2) / get_length_squared(q);
+        const auto xx = s * x * x, yy = s * y * y, zz = s * z * z;
+        const auto xy = s * x * y, xz = s * x * z, yz = s * y * z;
+        const auto wx = s * q.w * x, wy = s * q.w * y, wz = s * q.w * z;
+        return {
+            Vector<T, 3>{T(1) - yy - zz, xy + wz, xz - wy},
+            Vector<T, 3>{xy - wz, T(1) - xx - zz, yz + wx},
+            Vector<T, 3>{xz + wy, yz - wx, T(1) - xx - yy}
+        };
     }
 
     namespace linear

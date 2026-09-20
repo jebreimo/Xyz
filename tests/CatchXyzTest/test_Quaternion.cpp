@@ -198,6 +198,48 @@ TEST_CASE("Quaternion: to_quaternion agrees with rotating both vectors")
     CHECK(are_equivalent(q2, q * to_quaternion(longitudinal, lateral), 1e-9));
 }
 
+TEST_CASE("Quaternion: get_vectors returns the rotated axes")
+{
+    const auto q = make_quaternion(to_radians(90.0), Z_AXIS);
+    const auto [x, y, z] = get_vectors(q);
+    CHECK(are_equal(x, Y_AXIS, MARGIN));
+    CHECK(are_equal(y, -X_AXIS, MARGIN));
+    CHECK(are_equal(z, Z_AXIS, MARGIN));
+}
+
+TEST_CASE("Quaternion: get_vectors matches rotate and to_matrix")
+{
+    // Deliberately not of unit length.
+    const Xyz::QuaternionD q(0.5, 1.5, -2.0, 3.0);
+    const auto [x, y, z] = get_vectors(q);
+    const auto u = normalize(q);
+
+    CHECK(are_equal(x, rotate(u, X_AXIS), MARGIN));
+    CHECK(are_equal(y, rotate(u, Y_AXIS), MARGIN));
+    CHECK(are_equal(z, rotate(u, Z_AXIS), MARGIN));
+
+    // The axis vectors are the columns of the rotation matrix.
+    const auto m = Xyz::linear::to_matrix(q);
+    for (unsigned i = 0; i < 3; ++i)
+    {
+        CAPTURE(i);
+        CHECK_THAT(x[i], WithinAbs(m[i, 0], MARGIN));
+        CHECK_THAT(y[i], WithinAbs(m[i, 1], MARGIN));
+        CHECK_THAT(z[i], WithinAbs(m[i, 2], MARGIN));
+    }
+}
+
+TEST_CASE("Quaternion: get_vectors matches the one for Orientation")
+{
+    const Xyz::Orientation3D o(to_radians(35.0), to_radians(-20.0),
+                               to_radians(125.0));
+    const auto [x, y, z] = get_vectors(to_quaternion(o));
+    const auto [ox, oy, oz] = get_vectors(o);
+    CHECK(are_equal(x, ox, 1e-9));
+    CHECK(are_equal(y, oy, 1e-9));
+    CHECK(are_equal(z, oz, 1e-9));
+}
+
 TEST_CASE("Quaternion: to_quaternion matches to_orientation")
 {
     const Xyz::Vector3D longitudinal(1, 2, 3);
