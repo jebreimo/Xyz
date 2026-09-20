@@ -10,7 +10,7 @@
 
 TEST_CASE("Approx: comparisons")
 {
-    Xyz::Approx<double> a(1, 0.01);
+    Xyz::Approx a(1.0, 0.01);
 
     REQUIRE(a == 0.991);
     REQUIRE_FALSE(a == 0.989);
@@ -51,9 +51,9 @@ TEST_CASE("Approx: comparisons")
 
 TEST_CASE("Approx: Approx-Approx comparisons")
 {
-    Xyz::Approx<float> a(1.0, 0.01);
-    Xyz::Approx<double> b(1.009, 0.003);
-    Xyz::Approx<double> c(1.011, 0.003);
+    Xyz::Approx a(1.0f, 0.01f);
+    Xyz::Approx b(1.009, 0.003);
+    Xyz::Approx c(1.011, 0.003);
 
     REQUIRE(a == b);
     REQUIRE(b == c);
