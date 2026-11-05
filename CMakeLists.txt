@@ -12,8 +12,6 @@ project(Xyz
     DESCRIPTION "A C++ library for 3D geometry and linear algebra"
 )
 
-set(CMAKE_CXX_STANDARD 23)
-
 # Set XYZ_MASTER_PROJECT to ON if Xyz is the root level project.
 if (NOT DEFINED XYZ_MASTER_PROJECT)
     if (CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
@@ -66,6 +64,7 @@ add_library(Xyz STATIC
     include/Xyz/Mesh/MeshAttributeBuilder.hpp
     include/Xyz/Mesh/MeshBuilder.hpp
     include/Xyz/Mesh/MeshIndexBuilder.hpp
+    include/Xyz/Mesh/PlatonicSolids.hpp
     include/Xyz/Mesh/ResizableBuffer.hpp
     include/Xyz/Orientation.hpp
     include/Xyz/OrientedCuboid.hpp
@@ -102,6 +101,8 @@ target_include_directories(Xyz
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
+
+target_compile_features(Xyz PUBLIC cxx_std_20)
 
 add_library(Xyz::Xyz ALIAS Xyz)
 
