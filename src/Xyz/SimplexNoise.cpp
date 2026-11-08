@@ -8,6 +8,7 @@
 #include "Xyz/SimplexNoise.hpp"
 
 #include <algorithm>
+#include <cmath>
 
 namespace Xyz
 {
@@ -18,7 +19,7 @@ namespace Xyz
     {
         // Hash lookup table as defined by Ken SimplexNoise. This is a randomly
         // arranged array of all numbers from 0-255 inclusive.
-        uint8_t PERMUTATION[256] = {
+        std::array<uint8_t, 256> PERMUTATION = {
             151, 160, 137, 91, 90, 15, 131, 13, 201, 95, 96, 53, 194, 233,
             7, 225, 140, 36, 103, 30, 69, 142, 8, 99, 37, 240, 21, 10,
             23, 190, 6, 148, 247, 120, 234, 75, 0, 26, 197, 62, 94, 252,
@@ -76,9 +77,9 @@ namespace Xyz
     SimplexNoise::SimplexNoise()
     {
         std::copy(std::begin(PERMUTATION), std::end(PERMUTATION),
-                  permutation_);
+                  permutation_.begin());
         std::copy(std::begin(PERMUTATION), std::end(PERMUTATION),
-                  permutation_ + 256);
+                  permutation_.begin() + 256);
     }
 
     double SimplexNoise::simplex(double x, double y, double z)
@@ -90,36 +91,34 @@ namespace Xyz
         int xi = int(x) & 255;
         int yi = int(y) & 255;
         int zi = int(z) & 255;
-        double xf = x - int(x);
-        double yf = y - int(y);
-        double zf = z - int(z);
-        double u = fade(xf);
-        double v = fade(yf);
-        double w = fade(zf);
+        const double xf = x - int(x);
+        const double yf = y - int(y);
+        const double zf = z - int(z);
+        const double u = fade(xf);
+        const double v = fade(yf);
+        const double w = fade(zf);
 
-        int aaa, aba, aab, abb, baa, bba, bab, bbb;
-        aaa = permutation_[permutation_[permutation_[xi] + yi] + zi];
-        aba = permutation_[permutation_[permutation_[xi] + ++yi] + zi];
-        aab = permutation_[permutation_[permutation_[xi] + yi] + ++zi];
-        abb = permutation_[permutation_[permutation_[xi] + ++yi] + ++zi];
-        baa = permutation_[permutation_[permutation_[++xi] + yi] + zi];
-        bba = permutation_[permutation_[permutation_[++xi] + ++yi] + zi];
-        bab = permutation_[permutation_[permutation_[++xi] + yi] + ++zi];
-        bbb = permutation_[permutation_[permutation_[++xi] + ++yi] + ++zi];
+        const int aaa = permutation_[permutation_[permutation_[xi] + yi] + zi];
+        const int aba = permutation_[permutation_[permutation_[xi] + ++yi] + zi];
+        const int aab = permutation_[permutation_[permutation_[xi] + yi] + ++zi];
+        const int abb = permutation_[permutation_[permutation_[xi] + ++yi] + ++zi];
+        const int baa = permutation_[permutation_[permutation_[++xi] + yi] + zi];
+        const int bba = permutation_[permutation_[permutation_[++xi] + ++yi] + zi];
+        const int bab = permutation_[permutation_[permutation_[++xi] + yi] + ++zi];
+        const int bbb = permutation_[permutation_[permutation_[++xi] + ++yi] + ++zi];
 
-        double x1, x2, y1, y2;
         // The gradient function calculates the dot product between a pseudorandom
         // gradient vector and the vector from the input coordinate to the 8
         // surrounding points in its unit cube.
-        x1 = std::lerp(gradient(aaa, xf, yf, zf),
-                       gradient(baa, xf - 1, yf, zf),
-                       u);
+        double x1 = std::lerp(gradient(aaa, xf, yf, zf),
+                              gradient(baa, xf - 1, yf, zf),
+                              u);
         // This is all then lerped together as a sort of weighted average based on
         // the faded (u,v,w) values we made earlier.
-        x2 = std::lerp(gradient(aba, xf, yf - 1, zf),
-                       gradient(bba, xf - 1, yf - 1, zf),
-                       u);
-        y1 = std::lerp(x1, x2, v);
+        double x2 = std::lerp(gradient(aba, xf, yf - 1, zf),
+                              gradient(bba, xf - 1, yf - 1, zf),
+                              u);
+        const double y1 = std::lerp(x1, x2, v);
 
         x1 = std::lerp(gradient(aab, xf, yf, zf - 1),
                        gradient(bab, xf - 1, yf, zf - 1),
@@ -127,7 +126,7 @@ namespace Xyz
         x2 = std::lerp(gradient(abb, xf, yf - 1, zf - 1),
                        gradient(bbb, xf - 1, yf - 1, zf - 1),
                        u);
-        y2 = std::lerp(x1, x2, v);
+        const double y2 = std::lerp(x1, x2, v);
         // For convenience, we reduce it to 0 - 1 (theoretical min/max before
         // is -1 - 1)
         return (std::lerp(y1, y2, w) + 1) / 2;
@@ -143,7 +142,7 @@ namespace Xyz
         for (int i = 0; i < octaves; i++)
         {
             total += simplex(x * frequency, y * frequency, z * frequency)
-                     * amplitude;
+                * amplitude;
             max_value += amplitude;
             amplitude *= persistence;
             frequency *= 2;

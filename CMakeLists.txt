@@ -64,6 +64,7 @@ add_library(Xyz STATIC
     include/Xyz/Mesh/MeshAttributeBuilder.hpp
     include/Xyz/Mesh/MeshBuilder.hpp
     include/Xyz/Mesh/MeshIndexBuilder.hpp
+    include/Xyz/Mesh/MeshUtilities.hpp
     include/Xyz/Mesh/PlatonicSolids.hpp
     include/Xyz/Mesh/ResizableBuffer.hpp
     include/Xyz/Orientation.hpp
@@ -79,6 +80,7 @@ add_library(Xyz STATIC
     include/Xyz/RandomNumberGenerator.hpp
     include/Xyz/Rectangle.hpp
     include/Xyz/RotationMatrix.hpp
+    include/Xyz/SimplexNoise.hpp
     include/Xyz/SphericalPoint.hpp
     include/Xyz/TransformationMatrix.hpp
     include/Xyz/Triangle.hpp
@@ -88,7 +90,7 @@ add_library(Xyz STATIC
     include/Xyz/XyzException.hpp
     src/Xyz/IntersectionType.cpp
     src/Xyz/RandomNumberGenerator.cpp
-    include/Xyz/Mesh/MeshUtilities.hpp
+    src/Xyz/SimplexNoise.cpp
 )
 
 include(GNUInstallDirs)

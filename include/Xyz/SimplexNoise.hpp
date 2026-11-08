@@ -6,6 +6,7 @@
 // License text is included with the source distribution.
 //****************************************************************************
 #pragma once
+#include <array>
 #include <cstdint>
 
 namespace Xyz
@@ -20,6 +21,6 @@ namespace Xyz
         double simplex(double x, double y, double z,
                        int octaves, double persistence);
     private:
-        uint8_t permutation_[512];
+        std::array<uint8_t, 512> permutation_;
     };
 }
