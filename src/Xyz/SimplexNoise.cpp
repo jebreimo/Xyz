@@ -8,6 +8,7 @@
 #include "Xyz/SimplexNoise.hpp"
 
 #include <algorithm>
+#include <cmath>
 
 namespace Xyz
 {

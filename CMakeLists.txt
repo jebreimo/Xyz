@@ -81,6 +81,7 @@ add_library(Xyz STATIC
     include/Xyz/RandomNumberGenerator.hpp
     include/Xyz/Rectangle.hpp
     include/Xyz/RotationMatrix.hpp
+    include/Xyz/SimplexNoise.hpp
     include/Xyz/SphericalPoint.hpp
     include/Xyz/TransformationMatrix.hpp
     include/Xyz/Triangle.hpp
@@ -90,7 +91,7 @@ add_library(Xyz STATIC
     include/Xyz/XyzException.hpp
     src/Xyz/IntersectionType.cpp
     src/Xyz/RandomNumberGenerator.cpp
-    include/Xyz/Mesh/MeshUtilities.hpp
+    src/Xyz/SimplexNoise.cpp
 )
 
 include(GNUInstallDirs)
