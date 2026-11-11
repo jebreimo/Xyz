@@ -8,6 +8,4 @@
 
 add_subdirectory(check_orientation)
 
-if (NOT WIN32)
-    add_subdirectory(xyz_calc)
-endif()
+add_subdirectory(xyz_calc)

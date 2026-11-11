@@ -8,29 +8,12 @@
 #include <functional>
 #include <iostream>
 #include <string>
-#include <strings.h>
 #include <unordered_map>
 
-#include "linenoise/linenoise.h"
+#include <isocline.h>
 #include "Operations.hpp"
 #include "ParserTools/DelimiterFinders.hpp"
 #include "ParserTools/StringTokenizer.hpp"
-
-void completion(const char *buf, linenoiseCompletions *lc) {
-    if (buf[0] == 'h') {
-        linenoiseAddCompletion(lc,"hello");
-        linenoiseAddCompletion(lc,"hello there");
-    }
-}
-
-char *hints(const char *buf, int *color, int *bold) {
-    if (!strcasecmp(buf,"hello")) {
-        *color = 35;
-        *bold = 0;
-        return const_cast<char*>(" World");
-    }
-    return nullptr;
-}
 
 std::unordered_map<std::string, std::function<bool(std::vector<ValueType>&)>> commands = {
     {"+", addition},
@@ -66,6 +49,22 @@ std::unordered_map<std::string, std::function<bool(std::vector<ValueType>&)>> co
     {"inv", invert},
     {"dup", duplicate},
 };
+
+void complete_command(ic_completion_env_t* cenv, const char* word)
+{
+    if (word[0] == '\0')
+        return;
+    for (const auto& [name, _] : commands)
+    {
+        if (ic_starts_with(name.c_str(), word))
+            ic_add_completion(cenv, name.c_str());
+    }
+}
+
+void completer(ic_completion_env_t* cenv, const char* input)
+{
+    ic_complete_word(cenv, input, complete_command, ic_char_is_nonwhite);
+}
 
 void parse_commands(std::string_view line, std::vector<ValueType>& stack)
 {
@@ -110,23 +109,22 @@ void parse_commands(std::string_view line, std::vector<ValueType>& stack)
 
 int main(int argc, char** argv)
 {
-    linenoiseSetCompletionCallback(completion);
-    linenoiseSetHintsCallback(hints);
-    linenoiseHistoryLoad("history.txt");
+    // Loads the history file, and saves to it after every line.
+    ic_set_history("history.txt", -1);
+    ic_set_default_completer(completer, nullptr);
 
     std::vector<ValueType> stack;
 
     while (true)
     {
-        char *line = linenoise("xyz-calc> ");
+        // isocline appends the prompt marker "> " and adds non-empty
+        // lines to the history.
+        char* line = ic_readline("xyz-calc");
         if (line == nullptr)
             break;
-        if (line[0] != '\0') {
+        if (line[0] != '\0')
             parse_commands(line, stack);
-            linenoiseHistoryAdd(line);
-            linenoiseHistorySave("history.txt");
-        }
-        free(line);
+        ic_free(line);
     }
     return 0;
 }
