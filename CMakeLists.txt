@@ -104,7 +104,7 @@ target_include_directories(Xyz
         ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
-target_compile_features(Xyz PUBLIC cxx_std_20)
+target_compile_features(Xyz PUBLIC cxx_std_23)
 
 add_library(Xyz::Xyz ALIAS Xyz)
 

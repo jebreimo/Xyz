@@ -6,6 +6,7 @@
 // License text is included with the source distribution.
 //****************************************************************************
 #include "Operations.hpp"
+#include <cmath>
 #include <vector>
 
 bool addition(std::vector<ValueType>& stack)
@@ -151,6 +152,246 @@ bool multiplication(std::vector<ValueType>& stack)
     return true;
 }
 
+
+bool division(std::vector<ValueType>& stack)
+{
+    if (stack.size() < 2)
+        XYZ_THROW("Not enough values on stack for division.");
+
+    auto b = stack.back();
+    stack.pop_back();
+    auto a = stack.back();
+    stack.pop_back();
+
+    if (std::holds_alternative<double>(a) && std::holds_alternative<double>(b))
+    {
+        stack.emplace_back(std::get<double>(a) / std::get<double>(b));
+    }
+    else if (std::holds_alternative<Xyz::Vector3D>(a) && std::holds_alternative<double>(b))
+    {
+        stack.emplace_back(std::get<Xyz::Vector3D>(a) / std::get<double>(b));
+    }
+    else if (std::holds_alternative<Xyz::Vector4D>(a) && std::holds_alternative<double>(b))
+    {
+        stack.emplace_back(std::get<Xyz::Vector4D>(a) / std::get<double>(b));
+    }
+    else if (std::holds_alternative<Xyz::Matrix3D>(a) && std::holds_alternative<double>(b))
+    {
+        stack.emplace_back(std::get<Xyz::Matrix3D>(a) / std::get<double>(b));
+    }
+    else if (std::holds_alternative<Xyz::Matrix4D>(a) && std::holds_alternative<double>(b))
+    {
+        stack.emplace_back(std::get<Xyz::Matrix4D>(a) / std::get<double>(b));
+    }
+    else if (std::holds_alternative<Xyz::Vector3D>(a) && std::holds_alternative<Xyz::Vector3D>(b))
+    {
+        stack.emplace_back(std::get<Xyz::Vector3D>(a) / std::get<Xyz::Vector3D>(b));
+    }
+    else if (std::holds_alternative<Xyz::Vector4D>(a) && std::holds_alternative<Xyz::Vector4D>(b))
+    {
+        stack.emplace_back(std::get<Xyz::Vector4D>(a) / std::get<Xyz::Vector4D>(b));
+    }
+    else
+    {
+        XYZ_THROW("Incompatible types for division.");
+    }
+    return true;
+}
+
+bool square_root(std::vector<ValueType>& stack)
+{
+    if (stack.empty())
+        XYZ_THROW("Not enough values on stack for square root.");
+
+    const auto a = stack.back();
+    stack.pop_back();
+
+    if (std::holds_alternative<double>(a))
+    {
+        stack.emplace_back(std::sqrt(std::get<double>(a)));
+    }
+    else
+    {
+        XYZ_THROW("Incompatible type for square root.");
+    }
+    return true;
+}
+
+bool power(std::vector<ValueType>& stack)
+{
+    if (stack.size() < 2)
+        XYZ_THROW("Not enough values on stack for power.");
+
+    auto b = stack.back();
+    stack.pop_back();
+    auto a = stack.back();
+    stack.pop_back();
+
+    if (std::holds_alternative<double>(a) && std::holds_alternative<double>(b))
+    {
+        stack.emplace_back(std::pow(std::get<double>(a), std::get<double>(b)));
+    }
+    else
+    {
+        XYZ_THROW("Incompatible types for power.");
+    }
+    return true;
+}
+
+bool sine(std::vector<ValueType>& stack)
+{
+    if (stack.empty())
+        XYZ_THROW("Not enough values on stack for sine.");
+
+    const auto a = stack.back();
+    stack.pop_back();
+
+    if (std::holds_alternative<double>(a))
+    {
+        stack.emplace_back(std::sin(std::get<double>(a)));
+    }
+    else
+    {
+        XYZ_THROW("Incompatible type for sine.");
+    }
+    return true;
+}
+
+bool cosine(std::vector<ValueType>& stack)
+{
+    if (stack.empty())
+        XYZ_THROW("Not enough values on stack for cosine.");
+
+    const auto a = stack.back();
+    stack.pop_back();
+
+    if (std::holds_alternative<double>(a))
+    {
+        stack.emplace_back(std::cos(std::get<double>(a)));
+    }
+    else
+    {
+        XYZ_THROW("Incompatible type for cosine.");
+    }
+    return true;
+}
+
+bool tangent(std::vector<ValueType>& stack)
+{
+    if (stack.empty())
+        XYZ_THROW("Not enough values on stack for tangent.");
+
+    const auto a = stack.back();
+    stack.pop_back();
+
+    if (std::holds_alternative<double>(a))
+    {
+        stack.emplace_back(std::tan(std::get<double>(a)));
+    }
+    else
+    {
+        XYZ_THROW("Incompatible type for tangent.");
+    }
+    return true;
+}
+
+bool arcsine(std::vector<ValueType>& stack)
+{
+    if (stack.empty())
+        XYZ_THROW("Not enough values on stack for arcsine.");
+
+    const auto a = stack.back();
+    stack.pop_back();
+
+    if (std::holds_alternative<double>(a))
+    {
+        stack.emplace_back(std::asin(std::get<double>(a)));
+    }
+    else
+    {
+        XYZ_THROW("Incompatible type for arcsine.");
+    }
+    return true;
+}
+
+bool arccosine(std::vector<ValueType>& stack)
+{
+    if (stack.empty())
+        XYZ_THROW("Not enough values on stack for arccosine.");
+
+    const auto a = stack.back();
+    stack.pop_back();
+
+    if (std::holds_alternative<double>(a))
+    {
+        stack.emplace_back(std::acos(std::get<double>(a)));
+    }
+    else
+    {
+        XYZ_THROW("Incompatible type for arccosine.");
+    }
+    return true;
+}
+
+bool arctangent(std::vector<ValueType>& stack)
+{
+    if (stack.empty())
+        XYZ_THROW("Not enough values on stack for arctangent.");
+
+    const auto a = stack.back();
+    stack.pop_back();
+
+    if (std::holds_alternative<double>(a))
+    {
+        stack.emplace_back(std::atan(std::get<double>(a)));
+    }
+    else
+    {
+        XYZ_THROW("Incompatible type for arctangent.");
+    }
+    return true;
+}
+
+bool arctangent2(std::vector<ValueType>& stack)
+{
+    if (stack.size() < 2)
+        XYZ_THROW("Not enough values on stack for arctangent2.");
+
+    auto b = stack.back();
+    stack.pop_back();
+    auto a = stack.back();
+    stack.pop_back();
+
+    if (std::holds_alternative<double>(a) && std::holds_alternative<double>(b))
+    {
+        stack.emplace_back(std::atan2(std::get<double>(a), std::get<double>(b)));
+    }
+    else
+    {
+        XYZ_THROW("Incompatible types for arctangent2.");
+    }
+    return true;
+}
+
+bool logarithm(std::vector<ValueType>& stack)
+{
+    if (stack.empty())
+        XYZ_THROW("Not enough values on stack for logarithm.");
+
+    const auto a = stack.back();
+    stack.pop_back();
+
+    if (std::holds_alternative<double>(a))
+    {
+        stack.emplace_back(std::log(std::get<double>(a)));
+    }
+    else
+    {
+        XYZ_THROW("Incompatible type for logarithm.");
+    }
+    return true;
+}
+
 bool inner_product(std::vector<ValueType>& stack)
 {
     if (stack.size() < 2)
@@ -176,6 +417,28 @@ bool inner_product(std::vector<ValueType>& stack)
     else
     {
         XYZ_THROW("Incompatible types for inner product.");
+    }
+    return true;
+}
+
+bool cross_product(std::vector<ValueType>& stack)
+{
+    if (stack.size() < 2)
+        XYZ_THROW("Not enough values on stack for cross product.");
+
+    auto b = stack.back();
+    stack.pop_back();
+    auto a = stack.back();
+    stack.pop_back();
+
+    if (std::holds_alternative<Xyz::Vector3D>(a) && std::holds_alternative<Xyz::Vector3D>(b))
+    {
+        stack.emplace_back(Xyz::cross(std::get<Xyz::Vector3D>(a),
+                                      std::get<Xyz::Vector3D>(b)));
+    }
+    else
+    {
+        XYZ_THROW("Incompatible types for cross product.");
     }
     return true;
 }

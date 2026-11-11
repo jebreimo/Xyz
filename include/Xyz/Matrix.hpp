@@ -380,17 +380,6 @@ namespace Xyz
     }
 
     template <typename T, unsigned M, unsigned N>
-    Matrix<T, M, N> operator*(Matrix<T, M, N> a, std::type_identity_t<T> s)
-    {
-        for (unsigned i = 0; i < M; ++i)
-        {
-            for (unsigned j = 0; j < N; ++j)
-                a[i, j] *= s;
-        }
-        return a;
-    }
-
-    template <typename T, unsigned M, unsigned N>
     Matrix<T, M, N>& operator*=(Matrix<T, M, N>& a, std::type_identity_t<T> s)
     {
         for (auto& v : a)
@@ -399,11 +388,15 @@ namespace Xyz
     }
 
     template <typename T, unsigned M, unsigned N>
+    Matrix<T, M, N> operator*(Matrix<T, M, N> a, std::type_identity_t<T> s)
+    {
+        return a *= s;
+    }
+
+    template <typename T, unsigned M, unsigned N>
     Matrix<T, M, N> operator*(std::type_identity_t<T> s, Matrix<T, M, N> a)
     {
-        for (auto& v : a)
-            v *= s;
-        return a;
+        return a *= s;
     }
 
     template <typename T, unsigned M, unsigned N>
@@ -412,6 +405,12 @@ namespace Xyz
         for (auto& v : a)
             v /= s;
         return a;
+    }
+
+    template <typename T, unsigned M, unsigned N>
+    Matrix<T, M, N> operator/(Matrix<T, M, N> a, std::type_identity_t<T> s)
+    {
+        return a /= s;
     }
 
     template <typename T, typename U, unsigned M, unsigned N>
