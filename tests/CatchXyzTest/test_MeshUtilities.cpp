@@ -104,7 +104,7 @@ TEST_CASE("MeshUtilities: triangle_fan_to_line_indexes with several triangles")
                                            1, 2, 2, 3, 3, 4});
 }
 
-TEST_CASE("MeshUtilities: triangle_fan_to_line_indexes removes duplicate edge in closed fan")
+TEST_CASE("MeshUtilities: removes duplicate edge in closed fan")
 {
     // The last index repeats the second one, closing the fan.
     std::vector<uint32_t> indexes = {0, 1, 2, 3, 4, 1};
@@ -113,7 +113,7 @@ TEST_CASE("MeshUtilities: triangle_fan_to_line_indexes removes duplicate edge in
                                            1, 2, 1, 4, 2, 3, 3, 4});
 }
 
-TEST_CASE("MeshUtilities: triangle_fan_to_line_indexes orders each edge and sorts edges")
+TEST_CASE("MeshUtilities: orders each edge and sorts edges")
 {
     std::vector<uint32_t> indexes = {5, 3, 9, 1};
     auto lines = Xyz::triangle_fan_to_line_indexes<uint32_t>(indexes);
@@ -153,7 +153,7 @@ TEST_CASE("MeshUtilities: triangle_strip_to_line_indexes with several triangles"
                                            2, 3, 2, 4, 3, 4});
 }
 
-TEST_CASE("MeshUtilities: triangle_strip_to_line_indexes removes duplicate edges in closed strip")
+TEST_CASE("MeshUtilities: removes duplicate edges in closed strip")
 {
     // The last two indexes repeat the first two, closing the strip.
     std::vector<uint32_t> indexes = {0, 1, 2, 3, 0, 1};
@@ -161,7 +161,7 @@ TEST_CASE("MeshUtilities: triangle_strip_to_line_indexes removes duplicate edges
     REQUIRE(lines == std::vector<uint32_t>{0, 1, 0, 2, 0, 3, 1, 2, 1, 3, 2, 3});
 }
 
-TEST_CASE("MeshUtilities: triangle_strip_to_line_indexes orders each edge and sorts edges")
+TEST_CASE("MeshUtilities: ...strip_to_line orders each edge and sorts edges")
 {
     std::vector<uint32_t> indexes = {9, 4, 7, 2};
     auto lines = Xyz::triangle_strip_to_line_indexes<uint32_t>(indexes);
