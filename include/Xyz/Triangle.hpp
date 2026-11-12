@@ -22,8 +22,8 @@ namespace Xyz
                            const Vector<T, N>& b,
                            const Vector<T, N>& c)
             : points{a, b, c}
-        {}
-
+        {
+        }
 
         constexpr const Vector<T, N>& operator[](unsigned i) const
         {
@@ -42,8 +42,8 @@ namespace Xyz
     [[nodiscard]]
     auto get_normal(const Triangle<T, 3>& tri)
     {
-        return cross(tri.points[1] - tri.points[0],
-                     tri.points[2] - tri.points[1]);
+        return normalize(cross(tri.points[1] - tri.points[0],
+                               tri.points[2] - tri.points[1]));
     }
 
     template <typename T, unsigned N>

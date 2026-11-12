@@ -43,15 +43,16 @@ TEST_CASE("Triangle: test get normal")
                                    Xyz::Vector3D(0, 1, 0),
                                    Xyz::Vector3D(0, 0, 1));
     const auto normal = Xyz::get_normal(tri);
-    REQUIRE(Xyz::are_equal(normal, Xyz::Vector3D(1, 1, 1)));
+    const auto inv_sqrt3 = 1 / std::sqrt(3.0);
+    REQUIRE(Xyz::are_equal(normal, Xyz::Vector3D(inv_sqrt3, inv_sqrt3, inv_sqrt3)));
 
     auto tri2 = Xyz::Triangle(Xyz::Vector3D(0, 0, 0),
                                     Xyz::Vector3D(1, 2, 0),
                                     Xyz::Vector3D(2, 0, 0));
     const auto normal2 = Xyz::get_normal(tri2);
-    REQUIRE(Xyz::are_equal(normal2, Xyz::Vector3D(0, 0, -4)));
+    REQUIRE(Xyz::are_equal(normal2, Xyz::Vector3D(0, 0, -1)));
 
     std::swap(tri2[1], tri2[2]);
     const auto normal3 = Xyz::get_normal(tri2);
-    REQUIRE(Xyz::are_equal(normal3, Xyz::Vector3D(0, 0, 4)));
+    REQUIRE(Xyz::are_equal(normal3, Xyz::Vector3D(0, 0, 1)));
 }
