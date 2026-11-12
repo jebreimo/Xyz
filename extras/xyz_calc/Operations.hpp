@@ -18,9 +18,11 @@ bool subtraction(std::vector<ValueType>& stack);
 
 bool multiplication(std::vector<ValueType>& stack);
 
-bool square_root(std::vector<ValueType>& stack);
-
 bool division(std::vector<ValueType>& stack);
+
+bool negate(std::vector<ValueType>& stack);
+
+bool square_root(std::vector<ValueType>& stack);
 
 bool power(std::vector<ValueType>& stack);
 
@@ -74,7 +76,19 @@ bool transpose(std::vector<ValueType>& stack);
 
 bool invert(std::vector<ValueType>& stack);
 
+bool normalize(std::vector<ValueType>& stack);
+
 bool duplicate(std::vector<ValueType>& stack);
+
+bool swap(std::vector<ValueType>& stack);
+
+bool rotate(std::vector<ValueType>& stack);
+
+bool pop(std::vector<ValueType>& stack);
+
+bool clear(std::vector<ValueType>& stack);
+
+bool print_stack(std::vector<ValueType>& stack);
 
 bool matrix3(std::vector<ValueType>& stack);
 

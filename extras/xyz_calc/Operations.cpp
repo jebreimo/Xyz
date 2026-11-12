@@ -6,7 +6,9 @@
 // License text is included with the source distribution.
 //****************************************************************************
 #include "Operations.hpp"
+#include <algorithm>
 #include <cmath>
+#include <iostream>
 #include <vector>
 
 bool addition(std::vector<ValueType>& stack)
@@ -24,22 +26,22 @@ bool addition(std::vector<ValueType>& stack)
         stack.emplace_back(std::get<double>(a) + std::get<double>(b));
     }
     else if (std::holds_alternative<Xyz::Vector3D>(a) &&
-        std::holds_alternative<Xyz::Vector3D>(b))
+             std::holds_alternative<Xyz::Vector3D>(b))
     {
         stack.emplace_back(std::get<Xyz::Vector3D>(a) + std::get<Xyz::Vector3D>(b));
     }
     else if (std::holds_alternative<Xyz::Vector4D>(a) &&
-        std::holds_alternative<Xyz::Vector4D>(b))
+             std::holds_alternative<Xyz::Vector4D>(b))
     {
         stack.emplace_back(std::get<Xyz::Vector4D>(a) + std::get<Xyz::Vector4D>(b));
     }
     else if (std::holds_alternative<Xyz::Matrix3D>(a) &&
-        std::holds_alternative<Xyz::Matrix3D>(b))
+             std::holds_alternative<Xyz::Matrix3D>(b))
     {
         stack.emplace_back(std::get<Xyz::Matrix3D>(a) + std::get<Xyz::Matrix3D>(b));
     }
     else if (std::holds_alternative<Xyz::Matrix4D>(a) &&
-        std::holds_alternative<Xyz::Matrix4D>(b))
+             std::holds_alternative<Xyz::Matrix4D>(b))
     {
         stack.emplace_back(std::get<Xyz::Matrix4D>(a) + std::get<Xyz::Matrix4D>(b));
     }
@@ -65,22 +67,22 @@ bool subtraction(std::vector<ValueType>& stack)
         stack.emplace_back(std::get<double>(a) - std::get<double>(b));
     }
     else if (std::holds_alternative<Xyz::Vector3D>(a) &&
-        std::holds_alternative<Xyz::Vector3D>(b))
+             std::holds_alternative<Xyz::Vector3D>(b))
     {
         stack.emplace_back(std::get<Xyz::Vector3D>(a) - std::get<Xyz::Vector3D>(b));
     }
     else if (std::holds_alternative<Xyz::Vector4D>(a) &&
-        std::holds_alternative<Xyz::Vector4D>(b))
+             std::holds_alternative<Xyz::Vector4D>(b))
     {
         stack.emplace_back(std::get<Xyz::Vector4D>(a) - std::get<Xyz::Vector4D>(b));
     }
     else if (std::holds_alternative<Xyz::Matrix3D>(a) &&
-        std::holds_alternative<Xyz::Matrix3D>(b))
+             std::holds_alternative<Xyz::Matrix3D>(b))
     {
         stack.emplace_back(std::get<Xyz::Matrix3D>(a) - std::get<Xyz::Matrix3D>(b));
     }
     else if (std::holds_alternative<Xyz::Matrix4D>(a) &&
-        std::holds_alternative<Xyz::Matrix4D>(b))
+             std::holds_alternative<Xyz::Matrix4D>(b))
     {
         stack.emplace_back(std::get<Xyz::Matrix4D>(a) - std::get<Xyz::Matrix4D>(b));
     }
@@ -194,6 +196,42 @@ bool division(std::vector<ValueType>& stack)
     else
     {
         XYZ_THROW("Incompatible types for division.");
+    }
+    return true;
+}
+
+
+bool negate(std::vector<ValueType>& stack)
+{
+    if (stack.empty())
+        XYZ_THROW("Not enough values on stack for negate.");
+
+    const auto a = stack.back();
+    stack.pop_back();
+
+    if (std::holds_alternative<double>(a))
+    {
+        stack.emplace_back(-std::get<double>(a));
+    }
+    else if (std::holds_alternative<Xyz::Vector3D>(a))
+    {
+        stack.emplace_back(-std::get<Xyz::Vector3D>(a));
+    }
+    else if (std::holds_alternative<Xyz::Vector4D>(a))
+    {
+        stack.emplace_back(-std::get<Xyz::Vector4D>(a));
+    }
+    else if (std::holds_alternative<Xyz::Matrix3D>(a))
+    {
+        stack.emplace_back(-std::get<Xyz::Matrix3D>(a));
+    }
+    else if (std::holds_alternative<Xyz::Matrix4D>(a))
+    {
+        stack.emplace_back(-std::get<Xyz::Matrix4D>(a));
+    }
+    else
+    {
+        XYZ_THROW("Incompatible type for negate.");
     }
     return true;
 }
@@ -409,7 +447,7 @@ bool inner_product(std::vector<ValueType>& stack)
                                     std::get<Xyz::Vector3D>(b)));
     }
     else if (std::holds_alternative<Xyz::Vector4D>(a)
-        && std::holds_alternative<Xyz::Vector4D>(b))
+             && std::holds_alternative<Xyz::Vector4D>(b))
     {
         stack.emplace_back(Xyz::dot(std::get<Xyz::Vector4D>(a),
                                     std::get<Xyz::Vector4D>(b)));
@@ -426,9 +464,9 @@ bool cross_product(std::vector<ValueType>& stack)
     if (stack.size() < 2)
         XYZ_THROW("Not enough values on stack for cross product.");
 
-    auto b = stack.back();
+    const auto b = stack.back();
     stack.pop_back();
-    auto a = stack.back();
+    const auto a = stack.back();
     stack.pop_back();
 
     if (std::holds_alternative<Xyz::Vector3D>(a) && std::holds_alternative<Xyz::Vector3D>(b))
@@ -602,6 +640,29 @@ bool invert(std::vector<ValueType>& stack)
     return true;
 }
 
+bool normalize(std::vector<ValueType>& stack)
+{
+    if (stack.empty())
+        XYZ_THROW("Not enough values on stack for normalize.");
+
+    const auto value = stack.back();
+    stack.pop_back();
+
+    if (std::holds_alternative<Xyz::Vector3D>(value))
+    {
+        stack.emplace_back(Xyz::normalize(std::get<Xyz::Vector3D>(value)));
+    }
+    else if (std::holds_alternative<Xyz::Vector4D>(value))
+    {
+        stack.emplace_back(Xyz::normalize(std::get<Xyz::Vector4D>(value)));
+    }
+    else
+    {
+        XYZ_THROW("Incompatible type for normalize.");
+    }
+    return true;
+}
+
 bool matrix3(std::vector<ValueType>& stack)
 {
     if (stack.empty())
@@ -636,6 +697,50 @@ bool duplicate(std::vector<ValueType>& stack)
     return true;
 }
 
+bool swap(std::vector<ValueType>& stack)
+{
+    if (stack.size() < 2)
+        XYZ_THROW("Not enough values on stack for swap.");
+
+    std::swap(stack[stack.size() - 2], stack.back());
+    return true;
+}
+
+bool rotate(std::vector<ValueType>& stack)
+{
+    if (stack.size() < 3)
+        XYZ_THROW("Not enough values on stack for rotate.");
+
+    // Moves the third value from the top to the top: a b c -> b c a
+    std::rotate(stack.end() - 3, stack.end() - 2, stack.end());
+    return true;
+}
+
+bool pop(std::vector<ValueType>& stack)
+{
+    if (stack.empty())
+        XYZ_THROW("Not enough values on stack for pop.");
+
+    stack.pop_back();
+    return false;
+}
+
+bool clear(std::vector<ValueType>& stack)
+{
+    stack.clear();
+    return false;
+}
+
+bool print_stack(std::vector<ValueType>& stack)
+{
+    for (const auto& value : stack)
+    {
+        print(std::cout, value);
+        std::cout << "\n";
+    }
+    return false;
+}
+
 double clean(double value)
 {
     if (value == -0.0)
@@ -647,7 +752,7 @@ double clean(double value)
     return value;
 }
 
-template <typename T, unsigned N>
+template<typename T, unsigned N>
 Xyz::Vector<T, N> clean(const Xyz::Vector<T, N>& vector)
 {
     Xyz::Vector<T, N> result;
@@ -658,7 +763,7 @@ Xyz::Vector<T, N> clean(const Xyz::Vector<T, N>& vector)
     return result;
 }
 
-template <typename T, unsigned M, unsigned N>
+template<typename T, unsigned M, unsigned N>
 Xyz::Matrix<T, M, N> clean(const Xyz::Matrix<T, M, N>& matrix)
 {
     Xyz::Matrix<T, M, N> result;

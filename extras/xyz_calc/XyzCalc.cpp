@@ -5,6 +5,7 @@
 // This file is distributed under the Zero-Clause BSD License.
 // License text is included with the source distribution.
 //****************************************************************************
+#include <algorithm>
 #include <functional>
 #include <iostream>
 #include <string>
@@ -15,11 +16,15 @@
 #include "ParserTools/DelimiterFinders.hpp"
 #include "ParserTools/StringTokenizer.hpp"
 
+// Defined below the command table, which it lists.
+bool help(std::vector<ValueType>& stack);
+
 std::unordered_map<std::string, std::function<bool(std::vector<ValueType>&)>> commands = {
     {"+", addition},
     {"-", subtraction},
     {"*", multiplication},
     {"/", division},
+    {"neg", negate},
     {"pow", power},
     {"sqrt", square_root},
     {"sin", sine},
@@ -47,8 +52,38 @@ std::unordered_map<std::string, std::function<bool(std::vector<ValueType>&)>> co
     {"scale3", scale3},
     {"transpose", transpose},
     {"inv", invert},
+    {"norm", normalize},
     {"dup", duplicate},
+    {"swap", swap},
+    {"rot", rotate},
+    {"pop", pop},
+    {"clear", clear},
+    {"print", print_stack},
+    {"help", help}
 };
+
+bool help(std::vector<ValueType>&)
+{
+    std::vector<std::string_view> names;
+    for (const auto& [name, _] : commands)
+        names.push_back(name);
+    std::ranges::sort(names);
+
+    std::cout << "Commands:";
+    size_t column = 9;
+    for (const auto& name : names)
+    {
+        if (column + 1 + name.size() > 78)
+        {
+            std::cout << "\n   ";
+            column = 3;
+        }
+        std::cout << ' ' << name;
+        column += 1 + name.size();
+    }
+    std::cout << "\n";
+    return false;
+}
 
 void complete_command(ic_completion_env_t* cenv, const char* word)
 {
@@ -88,7 +123,7 @@ void parse_commands(std::string_view line, std::vector<ValueType>& stack)
             catch (const std::exception& e)
             {
                 std::cerr << "Error executing command '"
-                          << token << "': " << e.what() << "\n";
+                        << token << "': " << e.what() << "\n";
             }
         }
         else
@@ -101,7 +136,7 @@ void parse_commands(std::string_view line, std::vector<ValueType>& stack)
             catch (const std::exception&)
             {
                 std::cerr << "Unknown command or invalid number: "
-                          << token << "\n";
+                        << token << "\n";
             }
         }
     }
