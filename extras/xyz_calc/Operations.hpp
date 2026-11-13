@@ -532,3 +532,36 @@ public:
 private:
     const std::unordered_map<std::string, const Operation*>& commands_;
 };
+
+
+// Stores a value in a variable: value name !
+class Store : public Operation
+{
+public:
+    explicit Store(Variables& variables)
+        : Operation("!"),
+          variables_(variables)
+    {
+    }
+
+    void operator()(std::vector<ValueType>& stack) const override;
+
+private:
+    Variables& variables_;
+};
+
+// Pushes the value of a variable onto the stack: name @
+class Fetch : public Operation
+{
+public:
+    explicit Fetch(const Variables& variables)
+        : Operation("@"),
+          variables_(variables)
+    {
+    }
+
+    void operator()(std::vector<ValueType>& stack) const override;
+
+private:
+    const Variables& variables_;
+};

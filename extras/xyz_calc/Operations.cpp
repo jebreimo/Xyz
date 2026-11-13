@@ -46,6 +46,11 @@ namespace
         return result;
     }
 
+    const std::string& clean(const std::string& value)
+    {
+        return value;
+    }
+
     ValueType clean(ValueType value)
     {
         return std::visit([](auto& v) -> ValueType
@@ -541,4 +546,45 @@ void Help::operator()(std::vector<ValueType>&) const
         column += 1 + command_name.size();
     }
     std::cout << "\n";
+}
+
+namespace
+{
+    std::string pop_variable_name(std::vector<ValueType>& stack,
+                                  const std::string& op_name)
+    {
+        if (stack.empty())
+            XYZ_THROW("Not enough values on stack for " + op_name + ".");
+
+        if (!std::holds_alternative<std::string>(stack.back()))
+            XYZ_THROW("Expected a variable name on top of the stack for " + op_name + ".");
+
+        auto var_name = std::get<std::string>(stack.back());
+        stack.pop_back();
+        return var_name;
+    }
+}
+
+void Store::operator()(std::vector<ValueType>& stack) const
+{
+    if (stack.size() < 2)
+        XYZ_THROW("Not enough values on stack for " + name + ".");
+
+    const auto var_name = pop_variable_name(stack, name);
+    const auto& value = variables_.insert_or_assign(var_name, stack.back()).first->second;
+    stack.pop_back();
+
+    std::cout << var_name << " = ";
+    print(value);
+}
+
+void Fetch::operator()(std::vector<ValueType>& stack) const
+{
+    const auto var_name = pop_variable_name(stack, name);
+    const auto it = variables_.find(var_name);
+    if (it == variables_.end())
+        XYZ_THROW("Unknown variable: " + var_name + ".");
+
+    stack.push_back(it->second);
+    print(stack.back());
 }

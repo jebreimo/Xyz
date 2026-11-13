@@ -6,6 +6,7 @@
 // License text is included with the source distribution.
 //****************************************************************************
 #include <algorithm>
+#include <charconv>
 #include <functional>
 #include <iostream>
 #include <memory>
@@ -19,6 +20,7 @@
 
 struct Data
 {
+    Variables variables;
     std::vector<std::unique_ptr<Operation>> operations;
     std::unordered_map<std::string, const Operation*> commands;
 
@@ -63,6 +65,8 @@ struct Data
         operations.emplace_back(std::make_unique<Pop>());
         operations.emplace_back(std::make_unique<Clear>());
         operations.emplace_back(std::make_unique<PrintStack>());
+        operations.emplace_back(std::make_unique<Store>(variables));
+        operations.emplace_back(std::make_unique<Fetch>(variables));
         operations.emplace_back(std::make_unique<Help>(commands));
 
         for (const auto& op : operations)
@@ -77,6 +81,11 @@ void complete_command(ic_completion_env_t* cenv, const char* word)
     if (word[0] == '\0')
         return;
     for (const auto& [name, _] : data.commands)
+    {
+        if (ic_starts_with(name.c_str(), word))
+            ic_add_completion(cenv, name.c_str());
+    }
+    for (const auto& [name, _] : data.variables)
     {
         if (ic_starts_with(name.c_str(), word))
             ic_add_completion(cenv, name.c_str());
@@ -111,16 +120,15 @@ void parse_commands(std::string_view line, std::vector<ValueType>& stack)
         }
         else
         {
-            try
-            {
-                double value = std::stod(std::string(token));
+            // Tokens that are neither commands nor numbers are strings,
+            // e.g. variable names.
+            double value;
+            const auto end = token.data() + token.size();
+            const auto [ptr, ec] = std::from_chars(token.data(), end, value);
+            if (ec == std::errc() && ptr == end)
                 stack.emplace_back(value);
-            }
-            catch (const std::exception&)
-            {
-                std::cerr << "Unknown command or invalid number: "
-                        << token << "\n";
-            }
+            else
+                stack.emplace_back(std::string(token));
         }
     }
 }
