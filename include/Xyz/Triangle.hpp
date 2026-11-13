@@ -35,7 +35,7 @@ namespace Xyz
             return points[i];
         }
 
-        Vector<T, N> points[3];
+        Vector<T, N> points[3] = {};
     };
 
     template <typename T>

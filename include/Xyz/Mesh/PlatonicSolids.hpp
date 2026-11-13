@@ -13,26 +13,12 @@
 
 namespace Xyz
 {
-    enum class TetrahedronTextureLayout
-    {
-        SINGLE_TRIANGLE,
-        MULTI_TRIANGLE,
-        SPLIT_TRIANGLES
-    };
-
-    template <std::floating_point T>
-    struct TetrahedronTextureMapping
-    {
-        Rectangle<T> rect = {{0, 0}, {1, 1}};
-        TetrahedronTextureLayout type = TetrahedronTextureLayout::SINGLE_TRIANGLE;
-    };
-
     template <ResizableBuffer BufferType,
     std::floating_point ValueType,
     std::integral IndexType>
     void build_tetrahedron(MeshBuilder<BufferType, ValueType, IndexType>& builder,
                            ValueType radius = 1,
-                           TetrahedronTextureMapping<ValueType> mapping = {},
+                           std::span<Triangle<ValueType, 2>> tex_maps = {},
                            std::type_identity_t<IndexType> base_index = {})
     {
         const auto sqrt_3 = std::sqrt(ValueType(3));
@@ -48,11 +34,18 @@ namespace Xyz
         const auto p2 = Vector<ValueType, 3>{ValueType(0), d, -c};
         const auto p3 = Vector<ValueType, 3>{ValueType(0), ValueType(0), radius};
 
+        auto tex_tri = [&tex_maps](size_t i)
+        {
+            if (tex_maps.empty())
+                return Triangle<ValueType, 2>{};
+            return tex_maps[i % tex_maps.size()];
+        };
 
-        build_mesh(builder, Triangle<ValueType, 3>{p0, p1, p2}, {}, base_index);
-        build_mesh(builder, Triangle<ValueType, 3>{p0, p1, p3}, {}, base_index);
-        build_mesh(builder, Triangle<ValueType, 3>{p1, p2, p3}, {}, base_index);
-        build_mesh(builder, Triangle<ValueType, 3>{p2, p0, p3}, {}, base_index);
+        using Tri3 = Triangle<ValueType, 3>;
+
+        build_mesh(builder, Tri3{p0, p1, p2}, tex_tri(0), base_index);
+        build_mesh(builder, Tri3{p0, p1, p3}, tex_tri(1), base_index);
+        build_mesh(builder, Tri3{p1, p2, p3}, tex_tri(2), base_index);
+        build_mesh(builder, Tri3{p2, p0, p3}, tex_tri(3), base_index);
     }
-
 }
