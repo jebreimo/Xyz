@@ -12,84 +12,100 @@
 #include <unordered_map>
 
 #include <isocline.h>
-#include "Operations.hpp"
+#include "NewOperations.hpp"
 #include "ParserTools/DelimiterFinders.hpp"
 #include "ParserTools/StringTokenizer.hpp"
 
 bool help(std::vector<ValueType>& stack);
 
-std::unordered_map<std::string, std::function<bool(std::vector<ValueType>&)>> commands = {
-    {"+", addition},
-    {"-", subtraction},
-    {"*", multiplication},
-    {"/", division},
-    {"neg", negate},
-    {"pow", power},
-    {"sqrt", square_root},
-    {"sin", sine},
-    {"cos", cosine},
-    {"tan", tangent},
-    {"asin", arcsine},
-    {"acos", arccosine},
-    {"atan", arctangent},
-    {"atan2", arctangent2},
-    {"log", logarithm},
-    {"dot", inner_product},
-    {"cross", cross_product},
-    {"vec3", vec3},
-    {"vec4", vec4},
-    {"mat3", matrix3},
-    {"id3", identity3},
-    {"id4", identity4},
-    {"rot2", rotate2},
-    {"rot_x", rotate_x},
-    {"rot_y", rotate_y},
-    {"rot_z", rotate_z},
-    {"trans2", translate2},
-    {"trans3", translate3},
-    {"scale2", scale2},
-    {"scale3", scale3},
-    {"transpose", transpose},
-    {"inv", invert},
-    {"norm", normalize},
-    {"dup", duplicate},
-    {"swap", swap},
-    {"rot", rotate},
-    {"pop", pop},
-    {"clear", clear},
-    {"print", print_stack},
-    {"help", help}
+struct Data
+{
+    std::vector<std::unique_ptr<Operation>> operations;
+    std::unordered_map<std::string, const Operation*> commands;
+
+    Data()
+    {
+        operations.emplace_back(std::make_unique<Addition>());
+        operations.emplace_back(std::make_unique<Subtraction>());
+        operations.emplace_back(std::make_unique<Vector3>());
+
+        for (const auto& op : operations)
+            commands.emplace(op->name, op.get());
+    }
 };
 
-bool help(std::vector<ValueType>&)
-{
-    std::vector<std::string_view> names;
-    names.reserve(commands.size());
-    for (const auto& [name, _] : commands)
-        names.push_back(name);
-    std::ranges::sort(names);
+Data data;
 
-    std::cout << "Commands:";
-    size_t column = 9;
-    for (const auto& name : names)
-    {
-        if (column + 1 + name.size() > 78)
-        {
-            std::cout << "\n   ";
-            column = 3;
-        }
-        std::cout << ' ' << name;
-        column += 1 + name.size();
-    }
-    std::cout << "\n";
-    return false;
-}
+    // {"+", addition},
+    // {"-", subtraction},
+    // {"*", multiplication},
+    // {"/", division},
+    // {"neg", negate},
+    // {"pow", power},
+    // {"sqrt", square_root},
+    // {"sin", sine},
+    // {"cos", cosine},
+    // {"tan", tangent},
+    // {"asin", arcsine},
+    // {"acos", arccosine},
+    // {"atan", arctangent},
+    // {"atan2", arctangent2},
+    // {"log", logarithm},
+    // {"dot", inner_product},
+    // {"cross", cross_product},
+    // {"vec3", vec3},
+    // {"vec4", vec4},
+    // {"mat3", matrix3},
+    // {"id3", identity3},
+    // {"id4", identity4},
+    // {"rot2", rotate2},
+    // {"rot_x", rotate_x},
+    // {"rot_y", rotate_y},
+    // {"rot_z", rotate_z},
+    // {"trans2", translate2},
+    // {"trans3", translate3},
+    // {"scale2", scale2},
+    // {"scale3", scale3},
+    // {"transpose", transpose},
+    // {"inv", invert},
+    // {"norm", normalize},
+    // {"dup", duplicate},
+    // {"swap", swap},
+    // {"rot", rotate},
+    // {"pop", pop},
+    // {"clear", clear},
+    // {"print", print_stack},
+    // {"help", help}
+
+// bool help(std::vector<ValueType>&)
+// {
+//     std::vector<std::string_view> names;
+//     names.reserve(commands.size());
+//     for (const auto& [name, _] : commands)
+//         names.push_back(name);
+//     std::ranges::sort(names);
+//
+//     std::cout << "Commands:";
+//     size_t column = 9;
+//     for (const auto& name : names)
+//     {
+//         if (column + 1 + name.size() > 78)
+//         {
+//             std::cout << "\n   ";
+//             column = 3;
+//         }
+//         std::cout << ' ' << name;
+//         column += 1 + name.size();
+//     }
+//     std::cout << "\n";
+//     return false;
+// }
 
 void complete_command(ic_completion_env_t* cenv, const char* word)
 {
     if (word[0] == '\0')
         return;
-    for (const auto& [name, _] : commands)
+    for (const auto& [name, _] : data.commands)
     {
         if (ic_starts_with(name.c_str(), word))
             ic_add_completion(cenv, name.c_str());
@@ -109,16 +125,12 @@ void parse_commands(std::string_view line, std::vector<ValueType>& stack)
         auto token = word.string();
         if (token.empty())
             continue;
-        auto cmd_it = commands.find(std::string(token));
-        if (cmd_it != commands.end())
+        auto cmd_it = data.commands.find(std::string(token));
+        if (cmd_it != data.commands.end())
         {
             try
             {
-                if (cmd_it->second(stack))
-                {
-                    print(std::cout, stack.back());
-                    std::cout << "\n";
-                }
+                (*cmd_it->second)(stack);
             }
             catch (const std::exception& e)
             {

@@ -32,6 +32,9 @@ add_executable(xyz_calc
     Operations.cpp
     Operations.hpp
     ParserTools/StringTokenizer.hpp
+        NewOperations.hpp
+        NewOperations.cpp
+        TypeDefs.hpp
 )
 
 target_link_libraries(xyz_calc
