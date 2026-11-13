@@ -1,92 +1,534 @@
 //****************************************************************************
 // Copyright © 2026 Jan Erik Breimo. All rights reserved.
-// Created by Jan Erik Breimo on 2026-02-01.
+// Created by Jan Erik Breimo on 2026-11-13.
 //
 // This file is distributed under the Zero-Clause BSD License.
 // License text is included with the source distribution.
 //****************************************************************************
 #pragma once
+#include <string>
+#include <unordered_map>
+#include <utility>
 #include <vector>
 #include "TypeDefs.hpp"
 
-bool addition(std::vector<ValueType>& stack);
+class Operation
+{
+public:
+    std::string name;
 
-bool subtraction(std::vector<ValueType>& stack);
 
-bool multiplication(std::vector<ValueType>& stack);
+    virtual ~Operation() = default;
 
-bool division(std::vector<ValueType>& stack);
+    virtual void operator()(std::vector<ValueType>& stack) const = 0;
 
-bool negate(std::vector<ValueType>& stack);
+protected:
+    Operation(std::string  name)
+        : name(std::move(name))
+    {}
+};
 
-bool square_root(std::vector<ValueType>& stack);
+class UnaryOperation : public Operation
+{
+public:
+    void operator()(std::vector<ValueType>& stack) const override;
 
-bool power(std::vector<ValueType>& stack);
+protected:
+    using Operation::Operation;
 
-bool sine(std::vector<ValueType>& stack);
+    virtual bool execute(const ValueType& a, std::vector<ValueType>& stack) const = 0;
 
-bool cosine(std::vector<ValueType>& stack);
+    template <typename T, typename Op>
+    bool unary_op(const ValueType& a,
+                  const Op& op,
+                  std::vector<ValueType>& stack) const;
+};
 
-bool tangent(std::vector<ValueType>& stack);
+class BinaryOperation : public Operation
+{
+public:
+    void operator()(std::vector<ValueType>& stack) const override;
 
-bool arcsine(std::vector<ValueType>& stack);
+protected:
+    using Operation::Operation;
 
-bool arccosine(std::vector<ValueType>& stack);
+    virtual bool execute(const ValueType& a,
+                         const ValueType& b,
+                         std::vector<ValueType>& stack) const = 0;
 
-bool arctangent(std::vector<ValueType>& stack);
+    template <typename T, typename U, typename Op>
+    bool binary_op(const ValueType& a,
+                   const ValueType& b,
+                   const Op& op,
+                   std::vector<ValueType>& stack) const;
+};
 
-bool arctangent2(std::vector<ValueType>& stack);
+class Addition : public BinaryOperation
+{
+public:
+    Addition() : BinaryOperation("+")
+    {
+    }
 
-bool logarithm(std::vector<ValueType>& stack);
+protected:
+    bool execute(const ValueType& a,
+                 const ValueType& b,
+                 std::vector<ValueType>& stack) const override;
+};
 
-bool inner_product(std::vector<ValueType>& stack);
+class Subtraction : public BinaryOperation
+{
+public:
+    Subtraction() : BinaryOperation("-")
+    {
+    }
 
-bool cross_product(std::vector<ValueType>& stack);
+protected:
+    bool execute(const ValueType& a,
+                 const ValueType& b,
+                 std::vector<ValueType>& stack) const override;
+};
 
-bool vec2(std::vector<ValueType>& stack);
+class Constructor : public Operation
+{
+public:
+    void operator()(std::vector<ValueType>& stack) const override;
 
-bool vec3(std::vector<ValueType>& stack);
+protected:
+    Constructor(std::string name, size_t num_args)
+        : Operation(std::move(name)),
+          num_args_(num_args)
+    {
+    }
 
-bool vec4(std::vector<ValueType>& stack);
+    virtual void execute(const std::vector<double>& values, std::vector<ValueType>& stack) const = 0;
+private:
+    size_t num_args_;
+};
 
-bool identity3(std::vector<ValueType>& stack);
+class Vector3 : public Constructor
+{
+public:
+    Vector3() : Constructor("vec3", 3)
+    {
+    }
 
-bool identity4(std::vector<ValueType>& stack);
+protected:
+    void execute(const std::vector<double>& values, std::vector<ValueType>& stack) const override;
+};
 
-bool rotate2(std::vector<ValueType>& stack);
+class Multiplication : public BinaryOperation
+{
+public:
+    Multiplication() : BinaryOperation("*")
+    {
+    }
 
-bool rotate_x(std::vector<ValueType>& stack);
+protected:
+    bool execute(const ValueType& a,
+                 const ValueType& b,
+                 std::vector<ValueType>& stack) const override;
+};
 
-bool rotate_y(std::vector<ValueType>& stack);
+class Division : public BinaryOperation
+{
+public:
+    Division() : BinaryOperation("/")
+    {
+    }
 
-bool rotate_z(std::vector<ValueType>& stack);
+protected:
+    bool execute(const ValueType& a,
+                 const ValueType& b,
+                 std::vector<ValueType>& stack) const override;
+};
 
-bool translate2(std::vector< ValueType>& stack);
+class Power : public BinaryOperation
+{
+public:
+    Power() : BinaryOperation("pow")
+    {
+    }
 
-bool translate3(std::vector< ValueType>& stack);
+protected:
+    bool execute(const ValueType& a,
+                 const ValueType& b,
+                 std::vector<ValueType>& stack) const override;
+};
 
-bool scale2(std::vector<ValueType>& stack);
+class Arctangent2 : public BinaryOperation
+{
+public:
+    Arctangent2() : BinaryOperation("atan2")
+    {
+    }
 
-bool scale3(std::vector<ValueType>& stack);
+protected:
+    bool execute(const ValueType& a,
+                 const ValueType& b,
+                 std::vector<ValueType>& stack) const override;
+};
 
-bool transpose(std::vector<ValueType>& stack);
+class InnerProduct : public BinaryOperation
+{
+public:
+    InnerProduct() : BinaryOperation("dot")
+    {
+    }
 
-bool invert(std::vector<ValueType>& stack);
+protected:
+    bool execute(const ValueType& a,
+                 const ValueType& b,
+                 std::vector<ValueType>& stack) const override;
+};
 
-bool normalize(std::vector<ValueType>& stack);
+class CrossProduct : public BinaryOperation
+{
+public:
+    CrossProduct() : BinaryOperation("cross")
+    {
+    }
 
-bool duplicate(std::vector<ValueType>& stack);
+protected:
+    bool execute(const ValueType& a,
+                 const ValueType& b,
+                 std::vector<ValueType>& stack) const override;
+};
 
-bool swap(std::vector<ValueType>& stack);
+class Negate : public UnaryOperation
+{
+public:
+    Negate() : UnaryOperation("neg")
+    {
+    }
 
-bool rotate(std::vector<ValueType>& stack);
+protected:
+    bool execute(const ValueType& a, std::vector<ValueType>& stack) const override;
+};
 
-bool pop(std::vector<ValueType>& stack);
+class SquareRoot : public UnaryOperation
+{
+public:
+    SquareRoot() : UnaryOperation("sqrt")
+    {
+    }
 
-bool clear(std::vector<ValueType>& stack);
+protected:
+    bool execute(const ValueType& a, std::vector<ValueType>& stack) const override;
+};
 
-bool print_stack(std::vector<ValueType>& stack);
+class Sine : public UnaryOperation
+{
+public:
+    Sine() : UnaryOperation("sin")
+    {
+    }
 
-bool matrix3(std::vector<ValueType>& stack);
+protected:
+    bool execute(const ValueType& a, std::vector<ValueType>& stack) const override;
+};
 
-bool print(std::ostream& stream, const ValueType& value);
+class Cosine : public UnaryOperation
+{
+public:
+    Cosine() : UnaryOperation("cos")
+    {
+    }
+
+protected:
+    bool execute(const ValueType& a, std::vector<ValueType>& stack) const override;
+};
+
+class Tangent : public UnaryOperation
+{
+public:
+    Tangent() : UnaryOperation("tan")
+    {
+    }
+
+protected:
+    bool execute(const ValueType& a, std::vector<ValueType>& stack) const override;
+};
+
+class Arcsine : public UnaryOperation
+{
+public:
+    Arcsine() : UnaryOperation("asin")
+    {
+    }
+
+protected:
+    bool execute(const ValueType& a, std::vector<ValueType>& stack) const override;
+};
+
+class Arccosine : public UnaryOperation
+{
+public:
+    Arccosine() : UnaryOperation("acos")
+    {
+    }
+
+protected:
+    bool execute(const ValueType& a, std::vector<ValueType>& stack) const override;
+};
+
+class Arctangent : public UnaryOperation
+{
+public:
+    Arctangent() : UnaryOperation("atan")
+    {
+    }
+
+protected:
+    bool execute(const ValueType& a, std::vector<ValueType>& stack) const override;
+};
+
+class Logarithm : public UnaryOperation
+{
+public:
+    Logarithm() : UnaryOperation("log")
+    {
+    }
+
+protected:
+    bool execute(const ValueType& a, std::vector<ValueType>& stack) const override;
+};
+
+class Transpose : public UnaryOperation
+{
+public:
+    Transpose() : UnaryOperation("transpose")
+    {
+    }
+
+protected:
+    bool execute(const ValueType& a, std::vector<ValueType>& stack) const override;
+};
+
+class Invert : public UnaryOperation
+{
+public:
+    Invert() : UnaryOperation("inv")
+    {
+    }
+
+protected:
+    bool execute(const ValueType& a, std::vector<ValueType>& stack) const override;
+};
+
+class Normalize : public UnaryOperation
+{
+public:
+    Normalize() : UnaryOperation("norm")
+    {
+    }
+
+protected:
+    bool execute(const ValueType& a, std::vector<ValueType>& stack) const override;
+};
+
+class Vector4 : public Constructor
+{
+public:
+    Vector4() : Constructor("vec4", 4)
+    {
+    }
+
+protected:
+    void execute(const std::vector<double>& values, std::vector<ValueType>& stack) const override;
+};
+
+class Identity3 : public Constructor
+{
+public:
+    Identity3() : Constructor("id3", 0)
+    {
+    }
+
+protected:
+    void execute(const std::vector<double>& values, std::vector<ValueType>& stack) const override;
+};
+
+class Identity4 : public Constructor
+{
+public:
+    Identity4() : Constructor("id4", 0)
+    {
+    }
+
+protected:
+    void execute(const std::vector<double>& values, std::vector<ValueType>& stack) const override;
+};
+
+class Rotate2 : public Constructor
+{
+public:
+    Rotate2() : Constructor("rot2", 1)
+    {
+    }
+
+protected:
+    void execute(const std::vector<double>& values, std::vector<ValueType>& stack) const override;
+};
+
+class RotateX : public Constructor
+{
+public:
+    RotateX() : Constructor("rot_x", 1)
+    {
+    }
+
+protected:
+    void execute(const std::vector<double>& values, std::vector<ValueType>& stack) const override;
+};
+
+class RotateY : public Constructor
+{
+public:
+    RotateY() : Constructor("rot_y", 1)
+    {
+    }
+
+protected:
+    void execute(const std::vector<double>& values, std::vector<ValueType>& stack) const override;
+};
+
+class RotateZ : public Constructor
+{
+public:
+    RotateZ() : Constructor("rot_z", 1)
+    {
+    }
+
+protected:
+    void execute(const std::vector<double>& values, std::vector<ValueType>& stack) const override;
+};
+
+class Translate2 : public Constructor
+{
+public:
+    Translate2() : Constructor("trans2", 2)
+    {
+    }
+
+protected:
+    void execute(const std::vector<double>& values, std::vector<ValueType>& stack) const override;
+};
+
+class Translate3 : public Constructor
+{
+public:
+    Translate3() : Constructor("trans3", 3)
+    {
+    }
+
+protected:
+    void execute(const std::vector<double>& values, std::vector<ValueType>& stack) const override;
+};
+
+class Scale2 : public Constructor
+{
+public:
+    Scale2() : Constructor("scale2", 2)
+    {
+    }
+
+protected:
+    void execute(const std::vector<double>& values, std::vector<ValueType>& stack) const override;
+};
+
+class Scale3 : public Constructor
+{
+public:
+    Scale3() : Constructor("scale3", 3)
+    {
+    }
+
+protected:
+    void execute(const std::vector<double>& values, std::vector<ValueType>& stack) const override;
+};
+
+class Matrix3 : public Operation
+{
+public:
+    Matrix3() : Operation("mat3")
+    {
+    }
+
+    void operator()(std::vector<ValueType>& stack) const override;
+};
+
+class Duplicate : public Operation
+{
+public:
+    Duplicate() : Operation("dup")
+    {
+    }
+
+    void operator()(std::vector<ValueType>& stack) const override;
+};
+
+class Swap : public Operation
+{
+public:
+    Swap() : Operation("swap")
+    {
+    }
+
+    void operator()(std::vector<ValueType>& stack) const override;
+};
+
+class Rotate : public Operation
+{
+public:
+    Rotate() : Operation("rot")
+    {
+    }
+
+    void operator()(std::vector<ValueType>& stack) const override;
+};
+
+class Pop : public Operation
+{
+public:
+    Pop() : Operation("pop")
+    {
+    }
+
+    void operator()(std::vector<ValueType>& stack) const override;
+};
+
+class Clear : public Operation
+{
+public:
+    Clear() : Operation("clear")
+    {
+    }
+
+    void operator()(std::vector<ValueType>& stack) const override;
+};
+
+class PrintStack : public Operation
+{
+public:
+    PrintStack() : Operation("print")
+    {
+    }
+
+    void operator()(std::vector<ValueType>& stack) const override;
+};
+
+class Help : public Operation
+{
+public:
+    explicit Help(const std::unordered_map<std::string, const Operation*>& commands)
+        : Operation("help"),
+          commands_(commands)
+    {
+    }
+
+    void operator()(std::vector<ValueType>& stack) const override;
+
+private:
+    const std::unordered_map<std::string, const Operation*>& commands_;
+};

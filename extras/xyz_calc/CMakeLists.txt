@@ -29,11 +29,9 @@ target_include_directories(isocline
 
 add_executable(xyz_calc
     XyzCalc.cpp
-    Operations.cpp
-    Operations.hpp
     ParserTools/StringTokenizer.hpp
-        NewOperations.hpp
-        NewOperations.cpp
+        Operations.hpp
+        Operations.cpp
         TypeDefs.hpp
 )
 

@@ -8,15 +8,14 @@
 #include <algorithm>
 #include <functional>
 #include <iostream>
+#include <memory>
 #include <string>
 #include <unordered_map>
 
 #include <isocline.h>
-#include "NewOperations.hpp"
+#include "Operations.hpp"
 #include "ParserTools/DelimiterFinders.hpp"
 #include "ParserTools/StringTokenizer.hpp"
-
-bool help(std::vector<ValueType>& stack);
 
 struct Data
 {
@@ -27,7 +26,44 @@ struct Data
     {
         operations.emplace_back(std::make_unique<Addition>());
         operations.emplace_back(std::make_unique<Subtraction>());
+        operations.emplace_back(std::make_unique<Multiplication>());
+        operations.emplace_back(std::make_unique<Division>());
+        operations.emplace_back(std::make_unique<Negate>());
+        operations.emplace_back(std::make_unique<Power>());
+        operations.emplace_back(std::make_unique<SquareRoot>());
+        operations.emplace_back(std::make_unique<Sine>());
+        operations.emplace_back(std::make_unique<Cosine>());
+        operations.emplace_back(std::make_unique<Tangent>());
+        operations.emplace_back(std::make_unique<Arcsine>());
+        operations.emplace_back(std::make_unique<Arccosine>());
+        operations.emplace_back(std::make_unique<Arctangent>());
+        operations.emplace_back(std::make_unique<Arctangent2>());
+        operations.emplace_back(std::make_unique<Logarithm>());
+        operations.emplace_back(std::make_unique<InnerProduct>());
+        operations.emplace_back(std::make_unique<CrossProduct>());
         operations.emplace_back(std::make_unique<Vector3>());
+        operations.emplace_back(std::make_unique<Vector4>());
+        operations.emplace_back(std::make_unique<Matrix3>());
+        operations.emplace_back(std::make_unique<Identity3>());
+        operations.emplace_back(std::make_unique<Identity4>());
+        operations.emplace_back(std::make_unique<Rotate2>());
+        operations.emplace_back(std::make_unique<RotateX>());
+        operations.emplace_back(std::make_unique<RotateY>());
+        operations.emplace_back(std::make_unique<RotateZ>());
+        operations.emplace_back(std::make_unique<Translate2>());
+        operations.emplace_back(std::make_unique<Translate3>());
+        operations.emplace_back(std::make_unique<Scale2>());
+        operations.emplace_back(std::make_unique<Scale3>());
+        operations.emplace_back(std::make_unique<Transpose>());
+        operations.emplace_back(std::make_unique<Invert>());
+        operations.emplace_back(std::make_unique<Normalize>());
+        operations.emplace_back(std::make_unique<Duplicate>());
+        operations.emplace_back(std::make_unique<Swap>());
+        operations.emplace_back(std::make_unique<Rotate>());
+        operations.emplace_back(std::make_unique<Pop>());
+        operations.emplace_back(std::make_unique<Clear>());
+        operations.emplace_back(std::make_unique<PrintStack>());
+        operations.emplace_back(std::make_unique<Help>(commands));
 
         for (const auto& op : operations)
             commands.emplace(op->name, op.get());
@@ -35,71 +71,6 @@ struct Data
 };
 
 Data data;
-
-    // {"+", addition},
-    // {"-", subtraction},
-    // {"*", multiplication},
-    // {"/", division},
-    // {"neg", negate},
-    // {"pow", power},
-    // {"sqrt", square_root},
-    // {"sin", sine},
-    // {"cos", cosine},
-    // {"tan", tangent},
-    // {"asin", arcsine},
-    // {"acos", arccosine},
-    // {"atan", arctangent},
-    // {"atan2", arctangent2},
-    // {"log", logarithm},
-    // {"dot", inner_product},
-    // {"cross", cross_product},
-    // {"vec3", vec3},
-    // {"vec4", vec4},
-    // {"mat3", matrix3},
-    // {"id3", identity3},
-    // {"id4", identity4},
-    // {"rot2", rotate2},
-    // {"rot_x", rotate_x},
-    // {"rot_y", rotate_y},
-    // {"rot_z", rotate_z},
-    // {"trans2", translate2},
-    // {"trans3", translate3},
-    // {"scale2", scale2},
-    // {"scale3", scale3},
-    // {"transpose", transpose},
-    // {"inv", invert},
-    // {"norm", normalize},
-    // {"dup", duplicate},
-    // {"swap", swap},
-    // {"rot", rotate},
-    // {"pop", pop},
-    // {"clear", clear},
-    // {"print", print_stack},
-    // {"help", help}
-
-// bool help(std::vector<ValueType>&)
-// {
-//     std::vector<std::string_view> names;
-//     names.reserve(commands.size());
-//     for (const auto& [name, _] : commands)
-//         names.push_back(name);
-//     std::ranges::sort(names);
-//
-//     std::cout << "Commands:";
-//     size_t column = 9;
-//     for (const auto& name : names)
-//     {
-//         if (column + 1 + name.size() > 78)
-//         {
-//             std::cout << "\n   ";
-//             column = 3;
-//         }
-//         std::cout << ' ' << name;
-//         column += 1 + name.size();
-//     }
-//     std::cout << "\n";
-//     return false;
-// }
 
 void complete_command(ic_completion_env_t* cenv, const char* word)
 {
