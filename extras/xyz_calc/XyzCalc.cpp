@@ -16,7 +16,6 @@
 #include "ParserTools/DelimiterFinders.hpp"
 #include "ParserTools/StringTokenizer.hpp"
 
-// Defined below the command table, which it lists.
 bool help(std::vector<ValueType>& stack);
 
 std::unordered_map<std::string, std::function<bool(std::vector<ValueType>&)>> commands = {
@@ -65,6 +64,7 @@ std::unordered_map<std::string, std::function<bool(std::vector<ValueType>&)>> co
 bool help(std::vector<ValueType>&)
 {
     std::vector<std::string_view> names;
+    names.reserve(commands.size());
     for (const auto& [name, _] : commands)
         names.push_back(name);
     std::ranges::sort(names);

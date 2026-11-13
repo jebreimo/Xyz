@@ -11,45 +11,121 @@
 #include <iostream>
 #include <vector>
 
+namespace
+{
+    double clean(double value)
+    {
+        if (value == -0.0)
+            value = 0.0;
+
+        const auto whole = std::round(value);
+        if (std::fabs(value - whole) < 1e-10)
+            return whole;
+        return value;
+    }
+
+    template<typename T, unsigned N>
+    Xyz::Vector<T, N> clean(const Xyz::Vector<T, N>& vector)
+    {
+        Xyz::Vector<T, N> result;
+        for (unsigned i = 0; i < N; ++i)
+        {
+            result.values[i] = clean(vector.values[i]);
+        }
+        return result;
+    }
+
+    template<typename T, unsigned M, unsigned N>
+    Xyz::Matrix<T, M, N> clean(const Xyz::Matrix<T, M, N>& matrix)
+    {
+        Xyz::Matrix<T, M, N> result;
+        for (unsigned i = 0; i < M * N; ++i)
+        {
+            result.values[i] = clean(matrix.values[i]);
+        }
+        return result;
+    }
+
+    ValueType clean(ValueType value)
+    {
+        return std::visit([](auto& v) -> ValueType
+        {
+            return clean(v);
+        }, value);
+    }
+
+    template <typename ValueT1, typename ValueT2, typename ResultT>
+    void print_op(const ValueT1& a, const ValueT2& b, const ResultT& result, const std::string& op_name)
+    {
+        std::cout << clean(a) << " " << op_name << " " << clean(b) << " = " << clean(result) << std::endl;
+    }
+
+    template <typename ValueT1, typename ResultT>
+    void print_op(const ValueT1& a, const ResultT& result, const std::string& op_name)
+    {
+        std::cout << op_name << " " << clean(a) << " = " << clean(result) << std::endl;
+    }
+
+    template <typename T, typename U, typename Operation>
+    bool binary_op(const ValueType& a,
+                   const ValueType& b,
+                   const Operation& op,
+                   const std::string& op_name,
+                   std::vector<ValueType>& stack)
+    {
+        if (std::holds_alternative<T>(a) && std::holds_alternative<U>(b))
+        {
+            const auto& lhs = std::get<T>(a);
+            const auto& rhs = std::get<U>(b);
+            auto result = op(lhs, rhs);
+            print_op(lhs, rhs, result, op_name);
+            stack.emplace_back(result);
+            return true;
+        }
+        return false;
+    }
+
+    template <typename T, typename Operation>
+    bool unary_op(const ValueType& a,
+                  const Operation& op,
+                  const std::string& op_name,
+                  std::vector<ValueType>& stack)
+    {
+        if (std::holds_alternative<T>(a))
+        {
+            const auto& value = std::get<T>(a);
+            auto result = op(value);
+            print_op(value, result, op_name);
+            stack.emplace_back(result);
+            return true;
+        }
+        return false;
+    }
+}
+
 bool addition(std::vector<ValueType>& stack)
 {
     if (stack.size() < 2)
         XYZ_THROW("Not enough values on stack for addition.");
 
-    auto b = stack.back();
+    const auto b = stack.back();
     stack.pop_back();
-    auto a = stack.back();
+    const auto a = stack.back();
     stack.pop_back();
 
-    if (std::holds_alternative<double>(a) && std::holds_alternative<double>(b))
-    {
-        stack.emplace_back(std::get<double>(a) + std::get<double>(b));
-    }
-    else if (std::holds_alternative<Xyz::Vector3D>(a) &&
-             std::holds_alternative<Xyz::Vector3D>(b))
-    {
-        stack.emplace_back(std::get<Xyz::Vector3D>(a) + std::get<Xyz::Vector3D>(b));
-    }
-    else if (std::holds_alternative<Xyz::Vector4D>(a) &&
-             std::holds_alternative<Xyz::Vector4D>(b))
-    {
-        stack.emplace_back(std::get<Xyz::Vector4D>(a) + std::get<Xyz::Vector4D>(b));
-    }
-    else if (std::holds_alternative<Xyz::Matrix3D>(a) &&
-             std::holds_alternative<Xyz::Matrix3D>(b))
-    {
-        stack.emplace_back(std::get<Xyz::Matrix3D>(a) + std::get<Xyz::Matrix3D>(b));
-    }
-    else if (std::holds_alternative<Xyz::Matrix4D>(a) &&
-             std::holds_alternative<Xyz::Matrix4D>(b))
-    {
-        stack.emplace_back(std::get<Xyz::Matrix4D>(a) + std::get<Xyz::Matrix4D>(b));
-    }
-    else
-    {
-        XYZ_THROW("Incompatible types for addition.");
-    }
-    return true;
+    auto op = [](auto&& x, auto&& y) { return x + y; };
+
+    if (binary_op<double, double>(a, b, op, "+", stack))
+        return true;
+    if (binary_op<Xyz::Vector3D, Xyz::Vector3D>(a, b, op, "+", stack))
+        return true;
+    if (binary_op<Xyz::Vector4D, Xyz::Vector4D>(a, b, op, "+", stack))
+        return true;
+    if (binary_op<Xyz::Matrix3D, Xyz::Matrix3D>(a, b, op, "+", stack))
+        return true;
+    if (binary_op<Xyz::Matrix4D, Xyz::Matrix4D>(a, b, op, "+", stack))
+        return true;
+    XYZ_THROW("Incompatible types for addition.");
 }
 
 bool subtraction(std::vector<ValueType>& stack)
@@ -57,40 +133,25 @@ bool subtraction(std::vector<ValueType>& stack)
     if (stack.size() < 2)
         XYZ_THROW("Not enough values on stack for subtraction.");
 
-    auto b = stack.back();
+    const auto b = stack.back();
     stack.pop_back();
-    auto a = stack.back();
+    const auto a = stack.back();
     stack.pop_back();
 
-    if (std::holds_alternative<double>(a) && std::holds_alternative<double>(b))
-    {
-        stack.emplace_back(std::get<double>(a) - std::get<double>(b));
-    }
-    else if (std::holds_alternative<Xyz::Vector3D>(a) &&
-             std::holds_alternative<Xyz::Vector3D>(b))
-    {
-        stack.emplace_back(std::get<Xyz::Vector3D>(a) - std::get<Xyz::Vector3D>(b));
-    }
-    else if (std::holds_alternative<Xyz::Vector4D>(a) &&
-             std::holds_alternative<Xyz::Vector4D>(b))
-    {
-        stack.emplace_back(std::get<Xyz::Vector4D>(a) - std::get<Xyz::Vector4D>(b));
-    }
-    else if (std::holds_alternative<Xyz::Matrix3D>(a) &&
-             std::holds_alternative<Xyz::Matrix3D>(b))
-    {
-        stack.emplace_back(std::get<Xyz::Matrix3D>(a) - std::get<Xyz::Matrix3D>(b));
-    }
-    else if (std::holds_alternative<Xyz::Matrix4D>(a) &&
-             std::holds_alternative<Xyz::Matrix4D>(b))
-    {
-        stack.emplace_back(std::get<Xyz::Matrix4D>(a) - std::get<Xyz::Matrix4D>(b));
-    }
-    else
-    {
-        XYZ_THROW("Incompatible types for subtraction.");
-    }
-    return true;
+    auto op = [](auto&& x, auto&& y) { return x - y; };
+
+    if (binary_op<double, double>(a, b, op, "-", stack))
+        return true;
+    if (binary_op<Xyz::Vector3D, Xyz::Vector3D>(a, b, op, "-", stack))
+        return true;
+    if (binary_op<Xyz::Vector4D, Xyz::Vector4D>(a, b, op, "-", stack))
+        return true;
+    if (binary_op<Xyz::Matrix3D, Xyz::Matrix3D>(a, b, op, "-", stack))
+        return true;
+    if (binary_op<Xyz::Matrix4D, Xyz::Matrix4D>(a, b, op, "-", stack))
+        return true;
+
+    XYZ_THROW("Incompatible types for subtraction.");
 }
 
 bool multiplication(std::vector<ValueType>& stack)
@@ -98,60 +159,36 @@ bool multiplication(std::vector<ValueType>& stack)
     if (stack.size() < 2)
         XYZ_THROW("Not enough values on stack for multiplication.");
 
-    auto b = stack.back();
+    const auto b = stack.back();
     stack.pop_back();
-    auto a = stack.back();
+    const auto a = stack.back();
     stack.pop_back();
 
-    if (std::holds_alternative<double>(a) && std::holds_alternative<double>(b))
-    {
-        stack.emplace_back(std::get<double>(a) * std::get<double>(b));
-    }
-    else if (std::holds_alternative<Xyz::Vector3D>(a) && std::holds_alternative<double>(b))
-    {
-        stack.emplace_back(std::get<Xyz::Vector3D>(a) * std::get<double>(b));
-    }
-    else if (std::holds_alternative<double>(a) && std::holds_alternative<Xyz::Vector3D>(b))
-    {
-        stack.emplace_back(std::get<double>(a) * std::get<Xyz::Vector3D>(b));
-    }
-    else if (std::holds_alternative<Xyz::Vector4D>(a) && std::holds_alternative<double>(b))
-    {
-        stack.emplace_back(std::get<Xyz::Vector4D>(a) * std::get<double>(b));
-    }
-    else if (std::holds_alternative<double>(a) && std::holds_alternative<Xyz::Vector4D>(b))
-    {
-        stack.emplace_back(std::get<double>(a) * std::get<Xyz::Vector4D>(b));
-    }
-    else if (std::holds_alternative<Xyz::Vector3D>(a) && std::holds_alternative<Xyz::Vector3D>(b))
-    {
-        stack.emplace_back(std::get<Xyz::Vector3D>(a) * std::get<Xyz::Vector3D>(b));
-    }
-    else if (std::holds_alternative<Xyz::Vector4D>(a) && std::holds_alternative<Xyz::Vector4D>(b))
-    {
-        stack.emplace_back(std::get<Xyz::Vector4D>(a) * std::get<Xyz::Vector4D>(b));
-    }
-    else if (std::holds_alternative<Xyz::Matrix3D>(a) && std::holds_alternative<Xyz::Matrix3D>(b))
-    {
-        stack.emplace_back(std::get<Xyz::Matrix3D>(a) * std::get<Xyz::Matrix3D>(b));
-    }
-    else if (std::holds_alternative<Xyz::Matrix4D>(a) && std::holds_alternative<Xyz::Matrix4D>(b))
-    {
-        stack.emplace_back(std::get<Xyz::Matrix4D>(a) * std::get<Xyz::Matrix4D>(b));
-    }
-    else if (std::holds_alternative<Xyz::Matrix3D>(a) && std::holds_alternative<Xyz::Vector3D>(b))
-    {
-        stack.emplace_back(std::get<Xyz::Matrix3D>(a) * std::get<Xyz::Vector3D>(b));
-    }
-    else if (std::holds_alternative<Xyz::Matrix4D>(a) && std::holds_alternative<Xyz::Vector4D>(b))
-    {
-        stack.emplace_back(std::get<Xyz::Matrix4D>(a) * std::get<Xyz::Vector4D>(b));
-    }
-    else
-    {
-        XYZ_THROW("Incompatible types for multiplication.");
-    }
-    return true;
+    auto op = [](auto&& x, auto&& y) { return x * y; };
+
+    if (binary_op<double, double>(a, b, op, "*", stack))
+        return true;
+    if (binary_op<Xyz::Vector3D, double>(a, b, op, "*", stack))
+        return true;
+    if (binary_op<double, Xyz::Vector3D>(a, b, op, "*", stack))
+        return true;
+    if (binary_op<Xyz::Vector4D, double>(a, b, op, "*", stack))
+        return true;
+    if (binary_op<double, Xyz::Vector4D>(a, b, op, "*", stack))
+        return true;
+    if (binary_op<Xyz::Vector3D, Xyz::Vector3D>(a, b, op, "*", stack))
+        return true;
+    if (binary_op<Xyz::Vector4D, Xyz::Vector4D>(a, b, op, "*", stack))
+        return true;
+    if (binary_op<Xyz::Matrix3D, Xyz::Matrix3D>(a, b, op, "*", stack))
+        return true;
+    if (binary_op<Xyz::Matrix4D, Xyz::Matrix4D>(a, b, op, "*", stack))
+        return true;
+    if (binary_op<Xyz::Matrix3D, Xyz::Vector3D>(a, b, op, "*", stack))
+        return true;
+    if (binary_op<Xyz::Matrix4D, Xyz::Vector4D>(a, b, op, "*", stack))
+        return true;
+    XYZ_THROW("Incompatible types for multiplication.");
 }
 
 
@@ -160,46 +197,29 @@ bool division(std::vector<ValueType>& stack)
     if (stack.size() < 2)
         XYZ_THROW("Not enough values on stack for division.");
 
-    auto b = stack.back();
+    const auto b = stack.back();
     stack.pop_back();
-    auto a = stack.back();
+    const auto a = stack.back();
     stack.pop_back();
 
-    if (std::holds_alternative<double>(a) && std::holds_alternative<double>(b))
-    {
-        stack.emplace_back(std::get<double>(a) / std::get<double>(b));
-    }
-    else if (std::holds_alternative<Xyz::Vector3D>(a) && std::holds_alternative<double>(b))
-    {
-        stack.emplace_back(std::get<Xyz::Vector3D>(a) / std::get<double>(b));
-    }
-    else if (std::holds_alternative<Xyz::Vector4D>(a) && std::holds_alternative<double>(b))
-    {
-        stack.emplace_back(std::get<Xyz::Vector4D>(a) / std::get<double>(b));
-    }
-    else if (std::holds_alternative<Xyz::Matrix3D>(a) && std::holds_alternative<double>(b))
-    {
-        stack.emplace_back(std::get<Xyz::Matrix3D>(a) / std::get<double>(b));
-    }
-    else if (std::holds_alternative<Xyz::Matrix4D>(a) && std::holds_alternative<double>(b))
-    {
-        stack.emplace_back(std::get<Xyz::Matrix4D>(a) / std::get<double>(b));
-    }
-    else if (std::holds_alternative<Xyz::Vector3D>(a) && std::holds_alternative<Xyz::Vector3D>(b))
-    {
-        stack.emplace_back(std::get<Xyz::Vector3D>(a) / std::get<Xyz::Vector3D>(b));
-    }
-    else if (std::holds_alternative<Xyz::Vector4D>(a) && std::holds_alternative<Xyz::Vector4D>(b))
-    {
-        stack.emplace_back(std::get<Xyz::Vector4D>(a) / std::get<Xyz::Vector4D>(b));
-    }
-    else
-    {
-        XYZ_THROW("Incompatible types for division.");
-    }
-    return true;
+    auto op = [](auto&& x, auto&& y) { return x / y; };
+
+    if (binary_op<double, double>(a, b, op, "/", stack))
+        return true;
+    if (binary_op<Xyz::Vector3D, double>(a, b, op, "/", stack))
+        return true;
+    if (binary_op<Xyz::Vector4D, double>(a, b, op, "/", stack))
+        return true;
+    if (binary_op<Xyz::Matrix3D, double>(a, b, op, "/", stack))
+        return true;
+    if (binary_op<Xyz::Matrix4D, double>(a, b, op, "/", stack))
+        return true;
+    if (binary_op<Xyz::Vector3D, Xyz::Vector3D>(a, b, op, "/", stack))
+        return true;
+    if (binary_op<Xyz::Vector4D, Xyz::Vector4D>(a, b, op, "/", stack))
+        return true;
+    XYZ_THROW("Incompatible types for division.");
 }
-
 
 bool negate(std::vector<ValueType>& stack)
 {
@@ -209,31 +229,20 @@ bool negate(std::vector<ValueType>& stack)
     const auto a = stack.back();
     stack.pop_back();
 
-    if (std::holds_alternative<double>(a))
-    {
-        stack.emplace_back(-std::get<double>(a));
-    }
-    else if (std::holds_alternative<Xyz::Vector3D>(a))
-    {
-        stack.emplace_back(-std::get<Xyz::Vector3D>(a));
-    }
-    else if (std::holds_alternative<Xyz::Vector4D>(a))
-    {
-        stack.emplace_back(-std::get<Xyz::Vector4D>(a));
-    }
-    else if (std::holds_alternative<Xyz::Matrix3D>(a))
-    {
-        stack.emplace_back(-std::get<Xyz::Matrix3D>(a));
-    }
-    else if (std::holds_alternative<Xyz::Matrix4D>(a))
-    {
-        stack.emplace_back(-std::get<Xyz::Matrix4D>(a));
-    }
-    else
-    {
-        XYZ_THROW("Incompatible type for negate.");
-    }
-    return true;
+    auto op = [](auto&& x) { return -x; };
+
+    if (unary_op<double>(a, op, "neg", stack))
+        return true;
+
+    if (unary_op<Xyz::Vector3D>(a, op, "neg", stack))
+        return true;
+    if (unary_op<Xyz::Vector4D>(a, op, "neg", stack))
+        return true;
+    if (unary_op<Xyz::Matrix3D>(a, op, "neg", stack))
+        return true;
+    if (unary_op<Xyz::Matrix4D>(a, op, "neg", stack))
+        return true;
+    XYZ_THROW("Incompatible type for negate.");
 }
 
 bool square_root(std::vector<ValueType>& stack)
@@ -244,15 +253,10 @@ bool square_root(std::vector<ValueType>& stack)
     const auto a = stack.back();
     stack.pop_back();
 
-    if (std::holds_alternative<double>(a))
-    {
-        stack.emplace_back(std::sqrt(std::get<double>(a)));
-    }
-    else
-    {
-        XYZ_THROW("Incompatible type for square root.");
-    }
-    return true;
+    if (unary_op<double>(a, [](auto&& x) { return std::sqrt(x); }, "sqrt", stack))
+        return true;
+
+    XYZ_THROW("Incompatible type for square root.");
 }
 
 bool power(std::vector<ValueType>& stack)
@@ -260,20 +264,14 @@ bool power(std::vector<ValueType>& stack)
     if (stack.size() < 2)
         XYZ_THROW("Not enough values on stack for power.");
 
-    auto b = stack.back();
+    const auto b = stack.back();
     stack.pop_back();
-    auto a = stack.back();
+    const auto a = stack.back();
     stack.pop_back();
 
-    if (std::holds_alternative<double>(a) && std::holds_alternative<double>(b))
-    {
-        stack.emplace_back(std::pow(std::get<double>(a), std::get<double>(b)));
-    }
-    else
-    {
-        XYZ_THROW("Incompatible types for power.");
-    }
-    return true;
+    if (binary_op<double, double>(a, b, [](auto&& x, auto&& y) { return std::pow(x, y); }, "pow", stack))
+        return true;
+    XYZ_THROW("Incompatible types for power.");
 }
 
 bool sine(std::vector<ValueType>& stack)
@@ -284,15 +282,10 @@ bool sine(std::vector<ValueType>& stack)
     const auto a = stack.back();
     stack.pop_back();
 
-    if (std::holds_alternative<double>(a))
-    {
-        stack.emplace_back(std::sin(std::get<double>(a)));
-    }
-    else
-    {
-        XYZ_THROW("Incompatible type for sine.");
-    }
-    return true;
+    if (unary_op<double>(a, [](auto&& x) { return std::sin(x); }, "sin", stack))
+        return true;
+
+    XYZ_THROW("Incompatible type for sine.");
 }
 
 bool cosine(std::vector<ValueType>& stack)
@@ -303,15 +296,10 @@ bool cosine(std::vector<ValueType>& stack)
     const auto a = stack.back();
     stack.pop_back();
 
-    if (std::holds_alternative<double>(a))
-    {
-        stack.emplace_back(std::cos(std::get<double>(a)));
-    }
-    else
-    {
-        XYZ_THROW("Incompatible type for cosine.");
-    }
-    return true;
+    if (unary_op<double>(a, [](auto&& x) { return std::cos(x); }, "cos", stack))
+        return true;
+
+    XYZ_THROW("Incompatible type for cosine.");
 }
 
 bool tangent(std::vector<ValueType>& stack)
@@ -322,15 +310,10 @@ bool tangent(std::vector<ValueType>& stack)
     const auto a = stack.back();
     stack.pop_back();
 
-    if (std::holds_alternative<double>(a))
-    {
-        stack.emplace_back(std::tan(std::get<double>(a)));
-    }
-    else
-    {
-        XYZ_THROW("Incompatible type for tangent.");
-    }
-    return true;
+    if (unary_op<double>(a, [](auto&& x) { return std::tan(x); }, "tan", stack))
+        return true;
+
+    XYZ_THROW("Incompatible type for tangent.");
 }
 
 bool arcsine(std::vector<ValueType>& stack)
@@ -341,15 +324,10 @@ bool arcsine(std::vector<ValueType>& stack)
     const auto a = stack.back();
     stack.pop_back();
 
-    if (std::holds_alternative<double>(a))
-    {
-        stack.emplace_back(std::asin(std::get<double>(a)));
-    }
-    else
-    {
-        XYZ_THROW("Incompatible type for arcsine.");
-    }
-    return true;
+    if (unary_op<double>(a, [](auto&& x) { return std::asin(x); }, "asin", stack))
+        return true;
+
+    XYZ_THROW("Incompatible type for arcsine.");
 }
 
 bool arccosine(std::vector<ValueType>& stack)
@@ -360,15 +338,10 @@ bool arccosine(std::vector<ValueType>& stack)
     const auto a = stack.back();
     stack.pop_back();
 
-    if (std::holds_alternative<double>(a))
-    {
-        stack.emplace_back(std::acos(std::get<double>(a)));
-    }
-    else
-    {
-        XYZ_THROW("Incompatible type for arccosine.");
-    }
-    return true;
+    if (unary_op<double>(a, [](auto&& x) { return std::acos(x); }, "acos", stack))
+        return true;
+
+    XYZ_THROW("Incompatible type for arccosine.");
 }
 
 bool arctangent(std::vector<ValueType>& stack)
@@ -379,15 +352,10 @@ bool arctangent(std::vector<ValueType>& stack)
     const auto a = stack.back();
     stack.pop_back();
 
-    if (std::holds_alternative<double>(a))
-    {
-        stack.emplace_back(std::atan(std::get<double>(a)));
-    }
-    else
-    {
-        XYZ_THROW("Incompatible type for arctangent.");
-    }
-    return true;
+    if (unary_op<double>(a, [](auto&& x) { return std::atan(x); }, "atan", stack))
+        return true;
+
+    XYZ_THROW("Incompatible type for arctangent.");
 }
 
 bool arctangent2(std::vector<ValueType>& stack)
@@ -395,20 +363,15 @@ bool arctangent2(std::vector<ValueType>& stack)
     if (stack.size() < 2)
         XYZ_THROW("Not enough values on stack for arctangent2.");
 
-    auto b = stack.back();
+    const auto b = stack.back();
     stack.pop_back();
-    auto a = stack.back();
+    const auto a = stack.back();
     stack.pop_back();
 
-    if (std::holds_alternative<double>(a) && std::holds_alternative<double>(b))
-    {
-        stack.emplace_back(std::atan2(std::get<double>(a), std::get<double>(b)));
-    }
-    else
-    {
-        XYZ_THROW("Incompatible types for arctangent2.");
-    }
-    return true;
+    if (binary_op<double, double>(a, b, [](auto&& y, auto&& x) { return std::atan2(y, x); }, "atan2", stack))
+        return true;
+
+    XYZ_THROW("Incompatible types for arctangent2.");
 }
 
 bool logarithm(std::vector<ValueType>& stack)
@@ -419,15 +382,10 @@ bool logarithm(std::vector<ValueType>& stack)
     const auto a = stack.back();
     stack.pop_back();
 
-    if (std::holds_alternative<double>(a))
-    {
-        stack.emplace_back(std::log(std::get<double>(a)));
-    }
-    else
-    {
-        XYZ_THROW("Incompatible type for logarithm.");
-    }
-    return true;
+    if (unary_op<double>(a, [](auto&& x) { return std::log(x); }, "log", stack))
+        return true;
+
+    XYZ_THROW("Incompatible type for logarithm.");
 }
 
 bool inner_product(std::vector<ValueType>& stack)
@@ -435,28 +393,18 @@ bool inner_product(std::vector<ValueType>& stack)
     if (stack.size() < 2)
         XYZ_THROW("Not enough values on stack for inner product.");
 
-    auto b = stack.back();
+    const auto b = stack.back();
     stack.pop_back();
-    auto a = stack.back();
+    const auto a = stack.back();
     stack.pop_back();
 
-    if (std::holds_alternative<Xyz::Vector3D>(a)
-        && std::holds_alternative<Xyz::Vector3D>(b))
-    {
-        stack.emplace_back(Xyz::dot(std::get<Xyz::Vector3D>(a),
-                                    std::get<Xyz::Vector3D>(b)));
-    }
-    else if (std::holds_alternative<Xyz::Vector4D>(a)
-             && std::holds_alternative<Xyz::Vector4D>(b))
-    {
-        stack.emplace_back(Xyz::dot(std::get<Xyz::Vector4D>(a),
-                                    std::get<Xyz::Vector4D>(b)));
-    }
-    else
-    {
-        XYZ_THROW("Incompatible types for inner product.");
-    }
-    return true;
+    auto op = [](auto&& x, auto&& y) { return Xyz::dot(x, y); };
+
+    if (binary_op<Xyz::Vector3D, Xyz::Vector3D>(a, b, op, "dot", stack))
+        return true;
+    if (binary_op<Xyz::Vector4D, Xyz::Vector4D>(a, b, op, "dot", stack))
+        return true;
+    XYZ_THROW("Incompatible types for inner product.");
 }
 
 bool cross_product(std::vector<ValueType>& stack)
@@ -469,16 +417,11 @@ bool cross_product(std::vector<ValueType>& stack)
     const auto a = stack.back();
     stack.pop_back();
 
-    if (std::holds_alternative<Xyz::Vector3D>(a) && std::holds_alternative<Xyz::Vector3D>(b))
-    {
-        stack.emplace_back(Xyz::cross(std::get<Xyz::Vector3D>(a),
-                                      std::get<Xyz::Vector3D>(b)));
-    }
-    else
-    {
-        XYZ_THROW("Incompatible types for cross product.");
-    }
-    return true;
+    auto op = [](auto&& x, auto&& y) { return Xyz::cross(x, y); };
+
+    if (binary_op<Xyz::Vector3D, Xyz::Vector3D>(a, b, op, "cross", stack))
+        return true;
+    XYZ_THROW("Incompatible types for cross product.");
 }
 
 namespace
@@ -739,47 +682,6 @@ bool print_stack(std::vector<ValueType>& stack)
         std::cout << "\n";
     }
     return false;
-}
-
-double clean(double value)
-{
-    if (value == -0.0)
-        value = 0.0;
-
-    const auto whole = std::round(value);
-    if (std::fabs(value - whole) < 1e-10)
-        return whole;
-    return value;
-}
-
-template<typename T, unsigned N>
-Xyz::Vector<T, N> clean(const Xyz::Vector<T, N>& vector)
-{
-    Xyz::Vector<T, N> result;
-    for (unsigned i = 0; i < N; ++i)
-    {
-        result.values[i] = clean(vector.values[i]);
-    }
-    return result;
-}
-
-template<typename T, unsigned M, unsigned N>
-Xyz::Matrix<T, M, N> clean(const Xyz::Matrix<T, M, N>& matrix)
-{
-    Xyz::Matrix<T, M, N> result;
-    for (unsigned i = 0; i < M * N; ++i)
-    {
-        result.values[i] = clean(matrix.values[i]);
-    }
-    return result;
-}
-
-ValueType clean(ValueType value)
-{
-    return std::visit([](auto& v) -> ValueType
-    {
-        return clean(v);
-    }, value);
 }
 
 bool print(std::ostream& stream, const ValueType& value)
