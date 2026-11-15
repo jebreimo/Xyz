@@ -7,6 +7,8 @@
 //****************************************************************************
 #pragma once
 
+#include <tuple>
+#include <vector>
 #include "Vector.hpp"
 
 namespace Xyz
@@ -126,17 +128,31 @@ namespace Xyz
     [[nodiscard]]
     std::vector<Rectangle<T>> split(const Rectangle<T>& rect, size_t rows, size_t cols)
     {
+        if (rows == 0 || cols == 0)
+            return {};
+
+        // Compute each cell's edges from the rectangle's total size rather
+        // than from a fixed cell size. This ensures that the cells tile the
+        // rectangle exactly, also when T is an integer type and the size
+        // isn't divisible by the number of rows or columns.
+        const auto edge = [](T origin, T size, size_t i, size_t n)
+        {
+            if (i == n)
+                return origin + size;
+            return origin + T(size * T(i) / T(n));
+        };
+
         std::vector<Rectangle<T>> result;
         result.reserve(rows * cols);
-        const auto cell_size = rect.size / Vector<T, 2>(cols, rows);
         for (size_t r = 0; r < rows; ++r)
         {
+            const T y0 = edge(rect.origin[1], rect.size[1], r, rows);
+            const T y1 = edge(rect.origin[1], rect.size[1], r + 1, rows);
             for (size_t c = 0; c < cols; ++c)
             {
-                result.push_back({
-                    rect.origin + Vector<T, 2>(c, r) * cell_size,
-                    cell_size
-                });
+                const T x0 = edge(rect.origin[0], rect.size[0], c, cols);
+                const T x1 = edge(rect.origin[0], rect.size[0], c + 1, cols);
+                result.push_back({{x0, y0}, {T(x1 - x0), T(y1 - y0)}});
             }
         }
         return result;

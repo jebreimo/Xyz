@@ -119,3 +119,72 @@ TEST_CASE("Rectangle: get_subrect")
     const R rel_subrect({0.2f, 0.3f}, {0.5f, 0.4f});
     REQUIRE(get_subrect(rect, rel_subrect) == R({4.f, -3.f}, {5.f, -4.f}));
 }
+
+TEST_CASE("Rectangle: split (float)")
+{
+    using R = Xyz::RectangleF;
+    const R rect({1.f, 2.f}, {6.f, 4.f});
+    const auto cells = split(rect, 2, 3);
+    REQUIRE(cells.size() == 6);
+    // Row-major order: row 0 first, columns left to right.
+    REQUIRE(cells[0] == R({1.f, 2.f}, {2.f, 2.f}));
+    REQUIRE(cells[1] == R({3.f, 2.f}, {2.f, 2.f}));
+    REQUIRE(cells[2] == R({5.f, 2.f}, {2.f, 2.f}));
+    REQUIRE(cells[3] == R({1.f, 4.f}, {2.f, 2.f}));
+    REQUIRE(cells[4] == R({3.f, 4.f}, {2.f, 2.f}));
+    REQUIRE(cells[5] == R({5.f, 4.f}, {2.f, 2.f}));
+}
+
+TEST_CASE("Rectangle: split (int, even)")
+{
+    using R = Xyz::RectangleI;
+    const auto cells = split(R({0, 0}, {10, 20}), 2, 2);
+    REQUIRE(cells.size() == 4);
+    REQUIRE(cells[0] == R({0, 0}, {5, 10}));
+    REQUIRE(cells[1] == R({5, 0}, {5, 10}));
+    REQUIRE(cells[2] == R({0, 10}, {5, 10}));
+    REQUIRE(cells[3] == R({5, 10}, {5, 10}));
+}
+
+TEST_CASE("Rectangle: split (int, uneven) covers the whole rectangle")
+{
+    using R = Xyz::RectangleI;
+    const R rect({1, 1}, {10, 7});
+    const auto cells = split(rect, 2, 3);
+    REQUIRE(cells.size() == 6);
+    // Cells must tile the rectangle without gaps or overlaps.
+    REQUIRE(cells[0] == R({1, 1}, {3, 3}));
+    REQUIRE(cells[1] == R({4, 1}, {3, 3}));
+    REQUIRE(cells[2] == R({7, 1}, {4, 3}));
+    REQUIRE(cells[3] == R({1, 4}, {3, 4}));
+    REQUIRE(cells[4] == R({4, 4}, {3, 4}));
+    REQUIRE(cells[5] == R({7, 4}, {4, 4}));
+    REQUIRE(get_max(cells.back()) == get_max(rect));
+}
+
+TEST_CASE("Rectangle: split with negative size")
+{
+    using R = Xyz::RectangleI;
+    const auto cells = split(R({10, 10}, {-10, -4}), 2, 2);
+    REQUIRE(cells.size() == 4);
+    REQUIRE(cells[0] == R({10, 10}, {-5, -2}));
+    REQUIRE(cells[1] == R({5, 10}, {-5, -2}));
+    REQUIRE(cells[2] == R({10, 8}, {-5, -2}));
+    REQUIRE(cells[3] == R({5, 8}, {-5, -2}));
+}
+
+TEST_CASE("Rectangle: split into single cell")
+{
+    using R = Xyz::RectangleI;
+    const R rect({3, 4}, {5, 6});
+    const auto cells = split(rect, 1, 1);
+    REQUIRE(cells.size() == 1);
+    REQUIRE(cells[0] == rect);
+}
+
+TEST_CASE("Rectangle: split with zero rows or columns")
+{
+    using R = Xyz::RectangleI;
+    REQUIRE(split(R({0, 0}, {10, 10}), 0, 3).empty());
+    REQUIRE(split(R({0, 0}, {10, 10}), 3, 0).empty());
+}
