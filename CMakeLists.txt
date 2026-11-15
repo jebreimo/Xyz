@@ -60,12 +60,13 @@ add_library(Xyz STATIC
     include/Xyz/LuDecomposition.hpp
     include/Xyz/Matrix.hpp
     include/Xyz/MatrixDeterminant.hpp
-    include/Xyz/Mesh/BuildMesh.hpp
+    include/Xyz/Mesh/CuboidMesh.hpp
     include/Xyz/Mesh/MeshAttributeBuilder.hpp
     include/Xyz/Mesh/MeshBuilder.hpp
     include/Xyz/Mesh/MeshIndexBuilder.hpp
     include/Xyz/Mesh/MeshUtilities.hpp
-    include/Xyz/Mesh/PlatonicSolids.hpp
+    include/Xyz/Mesh/QuadMesh.hpp
+    include/Xyz/Mesh/TriangleMesh.hpp
     include/Xyz/Mesh/ResizableBuffer.hpp
     include/Xyz/Orientation.hpp
     include/Xyz/OrientedCuboid.hpp

@@ -16,7 +16,7 @@
 #include "LineLineIntersection.hpp"
 #include "LineSegment.hpp"
 #include "Matrix.hpp"
-#include "Mesh/BuildMesh.hpp"
+#include "Mesh/CuboidMesh.hpp"
 #include "Mesh/MeshUtilities.hpp"
 #include "Pgram.hpp"
 #include "ProjectionMatrix.hpp"

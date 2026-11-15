@@ -15,10 +15,11 @@ FetchContent_Declare(catch
 FetchContent_MakeAvailable(catch)
 
 add_executable(CatchXyzTest
-    test_BBox.cpp
     test_Approx.cpp
+    test_BBox.cpp
     test_ComplexApprox.cpp
     test_CoordinateSystem.cpp
+    test_CuboidMesh.cpp
     test_Interpolation.cpp
     test_Intersections.cpp
     test_InvertMatrix.cpp
@@ -26,20 +27,20 @@ add_executable(CatchXyzTest
     test_LineClipping.cpp
     test_Matrix.cpp
     test_MatrixDeterminant.cpp
+    test_MeshAttributeBuilder.cpp
+    test_MeshUtilities.cpp
     test_Orientation.cpp
+    test_OrientedRectangle.cpp
     test_Pgram.cpp
     test_Plane.cpp
     test_Projections.cpp
+    test_QuadMesh.cpp
     test_QuadraticEquation.cpp
     test_Quaternion.cpp
-    test_OrientedRectangle.cpp
     test_Rectangle.cpp
     test_Transformations.cpp
     test_Triangle.cpp
     test_Vector.cpp
-    test_MeshAttributeBuilder.cpp
-    test_BuildMesh.cpp
-    test_MeshUtilities.cpp
 )
 
 target_link_libraries(CatchXyzTest

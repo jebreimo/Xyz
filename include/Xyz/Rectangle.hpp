@@ -106,16 +106,40 @@ namespace Xyz
         return (abs_pos - rect.origin) / rect.size;
     }
 
+    /**
+     * @brief Returns the rectangle that corresponds to the relative rectangle
+     *  @a rel_subrect in the absolute coordinates of @a rect.
+     */
     template <typename T>
     [[nodiscard]]
     constexpr Rectangle<T>
-    get_rel_rectangle(const Rectangle<T>& rect,
-                      const Rectangle<std::type_identity_t<T>>& rel_subrect)
+    get_subrect(const Rectangle<T>& rect,
+                const Rectangle<std::type_identity_t<T>>& rel_subrect)
     {
         return {
             rel_to_abs(rect, rel_subrect.origin),
             rel_subrect.size * rect.size
         };
+    }
+
+    template <typename T>
+    [[nodiscard]]
+    std::vector<Rectangle<T>> split(const Rectangle<T>& rect, size_t rows, size_t cols)
+    {
+        std::vector<Rectangle<T>> result;
+        result.reserve(rows * cols);
+        const auto cell_size = rect.size / Vector<T, 2>(cols, rows);
+        for (size_t r = 0; r < rows; ++r)
+        {
+            for (size_t c = 0; c < cols; ++c)
+            {
+                result.push_back({
+                    rect.origin + Vector<T, 2>(c, r) * cell_size,
+                    cell_size
+                });
+            }
+        }
+        return result;
     }
 
     template <typename T>
