@@ -8,7 +8,7 @@
 #pragma once
 #include <functional>
 
-#include "BuildMesh.hpp"
+#include "CuboidMesh.hpp"
 #include "Xyz/Rectangle.hpp"
 
 namespace Xyz

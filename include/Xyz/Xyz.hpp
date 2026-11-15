@@ -18,6 +18,7 @@
 #include "Matrix.hpp"
 #include "Mesh/CuboidMesh.hpp"
 #include "Mesh/MeshUtilities.hpp"
+#include "Mesh/TetrahedronMesh.hpp"
 #include "Pgram.hpp"
 #include "ProjectionMatrix.hpp"
 #include "QuadraticEquation.hpp"
