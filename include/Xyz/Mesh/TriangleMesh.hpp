@@ -21,7 +21,6 @@ namespace Xyz
                     const Triangle<ValueType, 2>& tex_triangle = {},
                     std::type_identity_t<IndexType> base_index = {})
     {
-        const auto [x, y] = get_vectors(triangle);
         builder.coords.reserve(builder.coords.size() + 3);
         builder.coords.add(triangle[0]);
         builder.coords.add(triangle[1]);
@@ -46,14 +45,12 @@ namespace Xyz
         if (builder.tex_coords)
         {
             builder.tex_coords->reserve(builder.tex_coords->size() + 3);
-            const auto [tx, ty] = get_vectors(tex_triangle);
-            builder.tex_coords->add(tex_triangle.origin);
-            builder.tex_coords->add(tex_triangle.origin + tx);
-            builder.tex_coords->add(tex_triangle.origin + tex_triangle.size);
-            builder.tex_coords->add(tex_triangle.origin + ty);
+            builder.tex_coords->add(tex_triangle[0]);
+            builder.tex_coords->add(tex_triangle[1]);
+            builder.tex_coords->add(tex_triangle[2]);
         }
 
         builder.indexes.reserve(builder.indexes.size() + 3);
-        builder.indexes.add(base_index + 0, base_index + 2, base_index + 3);
+        builder.indexes.add(base_index + 0, base_index + 1, base_index + 2);
     }
 }

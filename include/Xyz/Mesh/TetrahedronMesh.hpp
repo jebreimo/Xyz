@@ -21,8 +21,8 @@ namespace Xyz
                            std::span<Triangle<ValueType, 2>> tex_maps = {},
                            std::type_identity_t<IndexType> base_index = {})
     {
-        const auto sqrt_3 = std::sqrt(ValueType(3));
         const auto sqrt_2 = std::sqrt(ValueType(2));
+        const auto sqrt_3 = std::sqrt(ValueType(3));
 
         const auto a = radius * sqrt_2 / sqrt_3;
         const auto b = radius * sqrt_2 / ValueType(3);
@@ -43,9 +43,9 @@ namespace Xyz
 
         using Tri3 = Triangle<ValueType, 3>;
 
-        build_mesh(builder, Tri3{p0, p1, p2}, tex_tri(0), base_index);
-        build_mesh(builder, Tri3{p0, p1, p3}, tex_tri(1), base_index);
-        build_mesh(builder, Tri3{p1, p2, p3}, tex_tri(2), base_index);
-        build_mesh(builder, Tri3{p2, p0, p3}, tex_tri(3), base_index);
+        build_mesh(builder, Tri3{p0, p2, p1}, tex_tri(0), base_index);
+        build_mesh(builder, Tri3{p0, p1, p3}, tex_tri(1), base_index + 3);
+        build_mesh(builder, Tri3{p1, p2, p3}, tex_tri(2), base_index + 6);
+        build_mesh(builder, Tri3{p2, p0, p3}, tex_tri(3), base_index + 9);
     }
 }

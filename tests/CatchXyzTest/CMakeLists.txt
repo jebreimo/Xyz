@@ -38,6 +38,7 @@ add_executable(CatchXyzTest
     test_QuadraticEquation.cpp
     test_Quaternion.cpp
     test_Rectangle.cpp
+    test_TetrahedronMesh.cpp
     test_Transformations.cpp
     test_Triangle.cpp
     test_Vector.cpp
