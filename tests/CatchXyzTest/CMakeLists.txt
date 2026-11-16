@@ -50,4 +50,6 @@ target_link_libraries(CatchXyzTest
 
 Xyz_enable_all_warnings(CatchXyzTest)
 
-add_test(NAME CatchXyzTest COMMAND CatchXyzTest)
+# --durations prints each test case's name as it completes, which makes it
+# possible to tell which test case hangs.
+add_test(NAME CatchXyzTest COMMAND CatchXyzTest --durations yes)
