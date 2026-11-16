@@ -60,3 +60,17 @@ TEST_CASE("LineClipping: Test line clipping", "[LineClipping]")
         clip_succeeds({0.5, 1.3}, {0.5, 0.1}, 0.25, 1.0);
     }
 }
+
+TEST_CASE("LineClipping: rounding errors don't cause an infinite loop",
+          "[LineClipping]")
+{
+    // Clipping this line used to produce a point marginally outside the
+    // clipped edge, so its outcode never changed and the loop never ended.
+    const auto ts = Xyz::get_clipping_positions(
+        Xyz::Vector2F(-1.90855861f, -1.8291434f),
+        Xyz::Vector2F(1.75072145f, 1.12015009f));
+    REQUIRE(ts.has_value());
+    CHECK(0 <= ts->first);
+    CHECK(ts->first <= ts->second);
+    CHECK(ts->second <= 1);
+}

@@ -83,7 +83,19 @@ namespace Xyz
             else
                 t = (1 - get<0>(start)) / get<0>(vector);
 
+            // Snap the clipped coordinate to the edge. Rounding errors can
+            // otherwise leave the point marginally outside the edge, in
+            // which case the outcode never changes and the loop never ends.
             auto point = start + t * vector;
+            if (code & OUTCODE_TOP)
+                point[1] = 1;
+            else if (code & OUTCODE_BOTTOM)
+                point[1] = 0;
+            else if (code & OUTCODE_LEFT)
+                point[0] = 0;
+            else
+                point[0] = 1;
+
             if (code == start_code)
             {
                 t_start = t;
