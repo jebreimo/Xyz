@@ -17,6 +17,7 @@
 #include "LineSegment.hpp"
 #include "Matrix.hpp"
 #include "Mesh/CuboidMesh.hpp"
+#include "Mesh/IcosahedronMesh.hpp"
 #include "Mesh/MeshUtilities.hpp"
 #include "Mesh/OctahedronMesh.hpp"
 #include "Mesh/TetrahedronMesh.hpp"

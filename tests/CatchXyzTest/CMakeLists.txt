@@ -20,6 +20,7 @@ add_executable(CatchXyzTest
     test_ComplexApprox.cpp
     test_CoordinateSystem.cpp
     test_CuboidMesh.cpp
+    test_IcosahedronMesh.cpp
     test_Interpolation.cpp
     test_Intersections.cpp
     test_InvertMatrix.cpp
@@ -29,10 +30,10 @@ add_executable(CatchXyzTest
     test_MatrixDeterminant.cpp
     test_MeshAttributeBuilder.cpp
     test_MeshUtilities.cpp
+    test_OctahedronMesh.cpp
     test_Orientation.cpp
     test_OrientedRectangle.cpp
     test_Pgram.cpp
-    test_OctahedronMesh.cpp
     test_Plane.cpp
     test_Projections.cpp
     test_QuadMesh.cpp
