@@ -8,6 +8,7 @@
 #pragma once
 
 #include "Approx.hpp"
+#include "FloatType.hpp"
 #include "Vector.hpp"
 
 namespace Xyz

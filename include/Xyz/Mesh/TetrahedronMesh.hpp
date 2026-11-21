@@ -6,21 +6,28 @@
 // License text is included with the source distribution.
 //****************************************************************************
 #pragma once
-#include <functional>
-
-#include "CuboidMesh.hpp"
-#include "Xyz/Rectangle.hpp"
+#include "TriangleMesh.hpp"
+#include "Xyz/Orientation.hpp"
 
 namespace Xyz
 {
+    template <std::floating_point T>
+    struct OrientedRegularPolyhedron
+    {
+        Vector<T, 3> center;
+        T radius = 1;
+        Orientation<T, 3> orientation = {};
+    };
+
     template <ResizableBuffer BufferType,
-    std::floating_point ValueType,
-    std::integral IndexType>
+        std::floating_point ValueType,
+        std::integral IndexType>
     void build_tetrahedron(MeshBuilder<BufferType, ValueType, IndexType>& builder,
-                           ValueType radius = 1,
+                           const OrientedRegularPolyhedron<ValueType>& polyhedron = {},
                            std::span<Triangle<ValueType, 2>> tex_maps = {},
                            std::type_identity_t<IndexType> base_index = {})
     {
+        const auto radius = polyhedron.radius;
         const auto sqrt_2 = std::sqrt(ValueType(2));
         const auto sqrt_3 = std::sqrt(ValueType(3));
 
@@ -29,10 +36,16 @@ namespace Xyz
         const auto c = radius * ValueType(1) / ValueType(3);
         const auto d = ValueType(2) * b;
 
-        const auto p0 = Vector<ValueType, 3>{-a, -b, -c};
-        const auto p1 = Vector<ValueType, 3>{a, -b, -c};
-        const auto p2 = Vector<ValueType, 3>{ValueType(0), d, -c};
-        const auto p3 = Vector<ValueType, 3>{ValueType(0), ValueType(0), radius};
+        const auto rotation = linear::to_matrix(polyhedron.orientation);
+        auto transform = [&](const Vector<ValueType, 3>& p)
+        {
+            return polyhedron.center + rotation * p;
+        };
+
+        const auto p0 = transform({-a, -b, -c});
+        const auto p1 = transform({a, -b, -c});
+        const auto p2 = transform({ValueType(0), d, -c});
+        const auto p3 = transform({ValueType(0), ValueType(0), radius});
 
         auto tex_tri = [&tex_maps](size_t i)
         {

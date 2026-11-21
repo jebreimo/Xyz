@@ -58,7 +58,7 @@ TEST_CASE("TetrahedronMesh: geometry")
     constexpr double radius = 2.5;
     TetrahedronBuffers buffers;
     auto builder = buffers.make_builder();
-    Xyz::build_tetrahedron(builder, radius);
+    Xyz::build_tetrahedron(builder, {.radius = radius});
 
     // All vertexes lie on the circumscribed sphere.
     for (size_t i = 0; i < 12; ++i)
@@ -83,6 +83,43 @@ TEST_CASE("TetrahedronMesh: geometry")
 
     // The top vertex is on the z-axis.
     REQUIRE(Xyz::are_equal(builder.coords.get(5), Xyz::Vector3D(0, 0, radius)));
+}
+
+TEST_CASE("TetrahedronMesh: center and orientation")
+{
+    constexpr double radius = 2.0;
+    const Xyz::Vector3D center(1, -2, 3);
+    // Pitching by 90 degrees turns the z-axis into the x-axis.
+    const Xyz::OrientedRegularPolyhedron<double> polyhedron{
+        .center = center,
+        .radius = radius,
+        .orientation = {.pitch = Xyz::Constants<double>::PI / 2}
+    };
+
+    TetrahedronBuffers buffers;
+    auto builder = buffers.make_builder();
+    Xyz::build_tetrahedron(builder, polyhedron);
+
+    for (size_t i = 0; i < 12; ++i)
+    {
+        CAPTURE(i);
+        REQUIRE(Xyz::get_length(builder.coords.get(i) - center) == Xyz::Approx(radius));
+    }
+
+    // The top vertex has been rotated onto the x-axis through the center.
+    REQUIRE(Xyz::are_equal(builder.coords.get(5), center + Xyz::Vector3D(radius, 0, 0)));
+
+    // Normals still point outwards from the center.
+    for (size_t face = 0; face < 4; ++face)
+    {
+        CAPTURE(face);
+        const auto a = builder.coords.get(face * 3);
+        const auto b = builder.coords.get(face * 3 + 1);
+        const auto c = builder.coords.get(face * 3 + 2);
+        const auto centroid = (a + b + c) / 3.0;
+        REQUIRE(Xyz::are_equal(builder.normals->get(face * 3),
+                               Xyz::normalize(centroid - center)));
+    }
 }
 
 TEST_CASE("TetrahedronMesh: normals point outwards")
@@ -136,7 +173,7 @@ TEST_CASE("TetrahedronMesh: base_index offsets indexes")
 {
     TetrahedronBuffers buffers;
     auto builder = buffers.make_builder();
-    Xyz::build_tetrahedron(builder, 1.0, {}, 100);
+    Xyz::build_tetrahedron(builder, {}, {}, 100);
 
     REQUIRE(buffers.indexes.size() == 12);
     for (int32_t i = 0; i < 12; ++i)
@@ -153,7 +190,7 @@ TEST_CASE("TetrahedronMesh: texture coordinates")
 
     TetrahedronBuffers buffers;
     auto builder = buffers.make_builder();
-    Xyz::build_tetrahedron(builder, 1.0, std::span<Tri2>(tex_maps));
+    Xyz::build_tetrahedron(builder, {}, std::span<Tri2>(tex_maps));
 
     REQUIRE(buffers.tex_coords.size() == 12 * 2);
 
