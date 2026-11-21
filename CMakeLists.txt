@@ -43,6 +43,7 @@ endfunction()
 configure_file(src/Xyz/XyzVersion.hpp.in XyzVersion.hpp @ONLY)
 
 add_library(Xyz STATIC
+    include/Xyz/Approx.hpp
     include/Xyz/BBox.hpp
     include/Xyz/Clamp.hpp
     include/Xyz/ComplexApprox.hpp
@@ -72,6 +73,7 @@ add_library(Xyz STATIC
     include/Xyz/Orientation.hpp
     include/Xyz/OrientedCuboid.hpp
     include/Xyz/OrientedRectangle.hpp
+    include/Xyz/OrientedRegularPolyhedron.hpp
     include/Xyz/Pgram.hpp
     include/Xyz/Placement.hpp
     include/Xyz/Plane.hpp

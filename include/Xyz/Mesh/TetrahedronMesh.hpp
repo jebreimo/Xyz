@@ -7,18 +7,10 @@
 //****************************************************************************
 #pragma once
 #include "TriangleMesh.hpp"
-#include "Xyz/Orientation.hpp"
+#include "Xyz/OrientedRegularPolyhedron.hpp"
 
 namespace Xyz
 {
-    template <std::floating_point T>
-    struct OrientedRegularPolyhedron
-    {
-        Vector<T, 3> center;
-        T radius = 1;
-        Orientation<T, 3> orientation = {};
-    };
-
     template <ResizableBuffer BufferType,
         std::floating_point ValueType,
         std::integral IndexType>
