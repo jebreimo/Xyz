@@ -32,6 +32,7 @@ add_executable(CatchXyzTest
     test_Orientation.cpp
     test_OrientedRectangle.cpp
     test_Pgram.cpp
+    test_OctahedronMesh.cpp
     test_Plane.cpp
     test_Projections.cpp
     test_QuadMesh.cpp

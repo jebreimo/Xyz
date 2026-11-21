@@ -66,6 +66,7 @@ add_library(Xyz STATIC
     include/Xyz/Mesh/MeshBuilder.hpp
     include/Xyz/Mesh/MeshIndexBuilder.hpp
     include/Xyz/Mesh/MeshUtilities.hpp
+    include/Xyz/Mesh/OctahedronMesh.hpp
     include/Xyz/Mesh/QuadMesh.hpp
     include/Xyz/Mesh/TetrahedronMesh.hpp
     include/Xyz/Mesh/TriangleMesh.hpp
