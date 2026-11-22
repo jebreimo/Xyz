@@ -20,6 +20,7 @@ add_executable(CatchXyzTest
     test_ComplexApprox.cpp
     test_CoordinateSystem.cpp
     test_CuboidMesh.cpp
+    test_DodecahedronMesh.cpp
     test_IcosahedronMesh.cpp
     test_Interpolation.cpp
     test_Intersections.cpp

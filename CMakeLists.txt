@@ -62,12 +62,14 @@ add_library(Xyz STATIC
     include/Xyz/Matrix.hpp
     include/Xyz/MatrixDeterminant.hpp
     include/Xyz/Mesh/CuboidMesh.hpp
+    include/Xyz/Mesh/DodecahedronMesh.hpp
     include/Xyz/Mesh/IcosahedronMesh.hpp
     include/Xyz/Mesh/MeshAttributeBuilder.hpp
     include/Xyz/Mesh/MeshBuilder.hpp
     include/Xyz/Mesh/MeshIndexBuilder.hpp
     include/Xyz/Mesh/MeshUtilities.hpp
     include/Xyz/Mesh/OctahedronMesh.hpp
+    include/Xyz/Mesh/PentagonMesh.hpp
     include/Xyz/Mesh/QuadMesh.hpp
     include/Xyz/Mesh/TetrahedronMesh.hpp
     include/Xyz/Mesh/TriangleMesh.hpp
@@ -76,6 +78,7 @@ add_library(Xyz STATIC
     include/Xyz/OrientedCuboid.hpp
     include/Xyz/OrientedRectangle.hpp
     include/Xyz/OrientedRegularPolyhedron.hpp
+    include/Xyz/Pentagon.hpp
     include/Xyz/Pgram.hpp
     include/Xyz/Placement.hpp
     include/Xyz/Plane.hpp
