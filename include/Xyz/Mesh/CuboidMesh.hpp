@@ -12,6 +12,7 @@
 #include "Xyz/Pgram.hpp"
 #include "Xyz/Rectangle.hpp"
 #include "QuadMesh.hpp"
+#include "Xyz/OrientedRegularPolyhedron.hpp"
 
 namespace Xyz
 {
@@ -24,7 +25,7 @@ namespace Xyz
      * @param cuboid The OrientedCuboid to build a mesh for.
      * @param tex_rects A span of texture rectangles for each face of the cuboid.
      *        If not provided, the texture coordinates will be set to (0, 0).
-     *        The order of the faces is: left, front, right, back, top, bottom.
+     *        The order of the faces is: left, front, right, back, bottom, top.
      *        If fewer than 6 rectangles are provided, they will be repeated in order.
      * @param base_index The base index to use for the mesh indices.
      */
@@ -77,5 +78,25 @@ namespace Xyz
                    P(cuboid.placement.origin + z, x, y),
                    tex_rect(5),
                    base_index + 20);
+    }
+
+    template <ResizableBuffer BufferType,
+        std::floating_point ValueType,
+        std::integral IndexType>
+    void build_cube(MeshBuilder<BufferType, ValueType, IndexType>& builder,
+                    const OrientedRegularPolyhedron<ValueType>& shape,
+                    std::span<Rectangle<ValueType>> tex_rects = {},
+                    std::type_identity_t<IndexType> base_index = {})
+    {
+        const auto [x, y, z] = get_vectors(shape.orientation);
+        const auto factor = shape.radius / std::sqrt(ValueType(3));
+        const auto cuboid = OrientedCuboid<ValueType>{
+            .placement = {
+                .origin = shape.center - factor * (x + y + z),
+                .orientation = shape.orientation
+            },
+            .size = {2 * factor, 2 * factor, 2 * factor}
+        };
+        build_mesh(builder, cuboid, tex_rects, base_index);
     }
 }
